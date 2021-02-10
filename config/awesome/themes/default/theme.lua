@@ -71,7 +71,7 @@ theme.taglist_squares_unsel = theme_assets.taglist_squares_unsel(
 
 -- Variables set for theming notifications:
 -- notification_font
--- notification_[bg|fg]
+theme.notification_bg = theme.xcolor0 .. "99"
 -- notification_[width|height|margin]
 -- notification_[border_color|border_width|shape|opacity]
 theme.notification_font = "monospace 9"
