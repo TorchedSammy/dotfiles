@@ -1,11 +1,11 @@
+-- TODO: Make it more MacOS :)
+-- actually make it 2 bars
 local awful = require("awful")
 local naughty = require("naughty")
 local wibox = require("wibox")
 local gears = require("gears")
 local beautiful = require("beautiful")
-local configvars = require("vars")
 local text_taglist = require("taglist")
-modkey = vars.modkey
 
 -- {{{ Wibar
 -- Create a textclock widget
@@ -91,62 +91,6 @@ awful.screen.connect_for_each_screen(function(s)
 		buttons = taglist_buttons
 	}
 
-	-- Create a tasklist widget
-	s.mytasklist = awful.widget.tasklist {
-		screen   = s,
-		filter   = awful.widget.tasklist.filter.currenttags,
-		buttons  = tasklist_buttons,
-		layout   = {
-			spacing = 1,
-			layout  = wibox.layout.fixed.horizontal
-		},
-		widget_template = {
-			{
-				wibox.widget.base.make_widget(),
-				id            = 'background_role',
-				widget        = wibox.container.background,
-			},
-			{
-				{
-					id     = 'clienticon',
-					widget = awful.widget.clienticon,
-				},
-				margins = 2,
-				widget  = wibox.container.margin
-			},
-			nil,
-			create_callback = function(self, c, index, objects) --luacheck: no unused args
-				self:get_children_by_id('clienticon')[1].client = c
-			end,
-			layout = wibox.layout.align.vertical,
-		},
-	}
-
-	s.focusedclient = awful.widget.tasklist {
-		screen  = s,
-		filter  = awful.widget.tasklist.filter.focused,
-		--buttons = tasklist_buttons
-	}
-
-	-- Topbar
-	-- Create the wibox
-	s.topbar = awful.wibar({ position = "top", screen = s, height = 18 })
-
-	-- Add widgets to the wibox
-	s.topbar:setup {
-		layout = wibox.layout.align.horizontal,
-		{ -- Left widgets
-			layout = wibox.layout.fixed.horizontal,
-			mylauncher,
-			s.mypromptbox,
-		},
-		s.focusedclient, -- Middle widget
-		{ -- Right widgets
-			layout = wibox.layout.fixed.horizontal,
-			wibox.widget.systray(),
-			textclock,
-		},
-	}
 
 	-- Create the wibox
 	s.mywibox = awful.wibar({ screen = s, height = 24, width = s.geometry.width - 36, shape = gears.shape.rounded_rect })
@@ -165,10 +109,7 @@ awful.screen.connect_for_each_screen(function(s)
 			halign = "center",
 			layout = wibox.container.place
 		}, -- Middle widget
-		{ -- Right widgets
-			layout = wibox.layout.fixed.horizontal,
-			wibox.widget.systray(),
-		},
+		nil, -- Right widgets
 	}
 end)
 -- }}}

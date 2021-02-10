@@ -1,1 +1,1 @@
-require("bars/macos-insp")
+require("bars/woolen")
