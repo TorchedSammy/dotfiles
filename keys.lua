@@ -1,9 +1,7 @@
 local gears = require("gears")
 local awful = require("awful")
 local hotkeys_popup = require("awful.hotkeys_popup")
-local configvars = require("vars")
-
-modkey = configvars.modkey
+local switcher = require("awesome-switcher")
 
 -- {{{ Key bindings
 globalkeys = gears.table.join(
@@ -30,6 +28,8 @@ globalkeys = gears.table.join(
     ),
     awful.key({ modkey,           }, "w", function () mymainmenu:show() end,
               {description = "show main menu", group = "awesome"}),
+    awful.key({ "Control",           }, "Print", function () awful.spawn("sharenix-section") end,
+              {description = "take region screenshot", group = "awesome"}),
 
     -- Layout manipulation
     awful.key({ modkey, "Shift"   }, "j", function () awful.client.swap.byidx(  1)    end,
@@ -50,6 +50,8 @@ globalkeys = gears.table.join(
             end
         end,
         {description = "go back", group = "client"}),
+    awful.key({"Mod1"}, "Tab", function () switcher.switch( 1, "Mod1", "Alt_L", "Shift", "Tab") end,
+      {description = "switch window focus", group = "client"}),
 
     -- Standard program
     awful.key({ modkey,           }, "Return", function () awful.spawn(terminal) end,
