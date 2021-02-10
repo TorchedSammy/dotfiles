@@ -7,7 +7,7 @@ local wibox = require("wibox")
 
 local helpers = require("helpers")
 
-local ntags = 10
+local ntags = 9
 
 local function taglist(s)
     -- Create textboxes and set their buttons
@@ -52,7 +52,6 @@ local function taglist(s)
       tag_text[7],
       tag_text[8],
       tag_text[9],
-      tag_text[10],
       layout = wibox.layout.fixed.horizontal
     }
 
@@ -85,7 +84,7 @@ local function taglist(s)
         ce = beautiful.taglist_text_color_empty
     else
        -- Fallback values
-        tf = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"}
+        tf = {"1", "2", "3", "4", "5", "6", "7", "8", "9"}
         tu = tf
         to = tf
         te = tf
