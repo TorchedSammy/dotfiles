@@ -5,7 +5,6 @@ local wibox = require("wibox")
 local gears = require("gears")
 local beautiful = require("beautiful")
 local text_taglist = require("taglist")
-local volume = require("volume")
 local xresources = require("beautiful.xresources")
 local dpi = xresources.apply_dpi
 
