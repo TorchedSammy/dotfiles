@@ -98,11 +98,11 @@ theme.lock_screen_bg = theme.xbackground.."BF"
 theme.lock_screen_fg = theme.xforeground
 theme.exit_screen_bg = theme.lock_screen_bg
 theme.exit_screen_fg = theme.lock_screen_fg
-theme.wibar_height = dpi(30)
+theme.wibar_height = dpi(26)
 theme.wibar_spacing = dpi(10)
 theme.systray_icon_size = dpi(18)
 theme.corner_radius = dpi(6)
-theme.wibar_bg = theme.bg_normal
+theme.wibar_bg = theme.bg_normal .. "99"
 theme.bg_systray = theme.wibar_bg
 
 -- Wibar

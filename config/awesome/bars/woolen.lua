@@ -40,6 +40,10 @@ awful.widget.watch("cat /proc/meminfo", 5, function(widget, stdout)
   widget.value = used_kb / total * 100
 end, ram_bar)
 
+
+local mysystray = wibox.widget.systray({  })
+mysystray:set_base_size(beautiful.systray_icon_size)
+
 time = wibox.widget.textclock()
 time.format = "%I:%M %p"
 
@@ -122,7 +126,7 @@ awful.screen.connect_for_each_screen(function(s)
 	}
 
 	-- Create the wibox
-	s.bar = awful.wibar({ screen = s, height = 26, width = s.geometry.width - 28, shape = gears.shape.rounded_rect, bg = beautiful.wibar_bg .. "99" })
+	s.bar = awful.wibar({ screen = s, position = "bottom", height = beautiful.wibar_height, width = s.geometry.width - 28, shape = gears.shape.rounded_rect, bg = beautiful.wibar_bg })
 	s.bar.y = s.geometry.height-36
 
 	-- Add widgets to the wibox
@@ -144,8 +148,7 @@ awful.screen.connect_for_each_screen(function(s)
 			{ -- Right widgets
 				layout = wibox.layout.fixed.horizontal,
 				spacing = beautiful.wibar_spacing,
-				--mysystray_container,
-				volume_bar,
+				mysystray,
 				ram_bar,
 				time
 			},
