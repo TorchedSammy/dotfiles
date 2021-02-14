@@ -8,6 +8,8 @@ local text_taglist = require("taglist")
 local xresources = require("beautiful.xresources")
 local dpi = xresources.apply_dpi
 
+local systray_margin = (beautiful.wibar_height-beautiful.systray_icon_size)/2
+
 local function rounded_bar(color)
     return wibox.widget {
         max_value     = 100,
@@ -43,6 +45,13 @@ end, ram_bar)
 
 local mysystray = wibox.widget.systray()
 mysystray:set_base_size(beautiful.systray_icon_size)
+
+systraycontainer = {
+	mysystray,
+    top = systray_margin,
+    bottom = systray_margin,
+    widget = wibox.container.margin
+}
 
 time = wibox.widget.textclock()
 time.format = "%I:%M %p"
@@ -150,7 +159,7 @@ awful.screen.connect_for_each_screen(function(s)
 			{ -- Right widgets
 				layout = wibox.layout.fixed.horizontal,
 				spacing = beautiful.wibar_spacing,
-				s.systray,
+				systraycontainer,
 				ram_bar,
 				time
 			},
