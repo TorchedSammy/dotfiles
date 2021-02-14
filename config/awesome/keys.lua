@@ -31,7 +31,7 @@ globalkeys = gears.table.join(
     awful.key({ "Control",           }, "Print", function () awful.spawn("sharenix-section") end,
               {description = "take region screenshot", group = "awesome"}),
     
-    awful.key({ modkey }, "=", function ()
+    awful.key({ modkey }, "z", function ()
         awful.screen.focused().systray.visible = not awful.screen.focused().systray.visible
         end, {description = "Toggle systray visibility", group = "custom"}),
 
