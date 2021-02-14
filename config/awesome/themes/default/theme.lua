@@ -47,6 +47,7 @@ theme.border_normal = theme.bg_normal
 theme.border_focus  = theme.bg_normal
 theme.border_marked = theme.xcolor1
 
+theme.titlebar_bg = "#332b3de6"
 -- There are other variable sets
 -- overriding the default one when
 -- defined, the sets are:
