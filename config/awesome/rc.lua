@@ -2,6 +2,7 @@
 -- found (e.g. lgi). If LuaRocks is not installed, do nothing.
 pcall(require, "luarocks.loader")
 
+themename = "dark"
 -- Standard awesome library
 local gears = require("gears")
 local awful = require("awful")
@@ -21,8 +22,6 @@ require("awful.hotkeys_popup.keys")
 -- Load Debian menu entries
 local debian = require("debian.menu")
 local has_fdo, freedesktop = pcall(require, "freedesktop")
-
-awful.spawn.with_shell("~/.config/awesome/autorun.sh")
 
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
@@ -51,14 +50,14 @@ end
 
 -- {{{ Variable definitions
 -- Themes define colours, icons, font and wallpapers.
-beautiful.init('~/.config/awesome/themes/default/theme.lua')
+beautiful.init('~/.config/awesome/themes/'..themename..'/theme.lua')
 for s = 1, screen.count() do
   gears.wallpaper.maximized(beautiful.wallpaper, s, true)
 end
 require('autostart')
 
 -- This is used later as the default terminal and editor to run.
-terminal = "kitty"
+terminal = "kitty -c="..os.getenv('HOME').."/.config/kitty/kitty"..(themename and '-'..themename or '')..'.conf'
 editor = os.getenv("EDITOR") or "subl"
 editor_cmd = editor
 
@@ -100,13 +99,14 @@ myawesomemenu = {
    { "quit", function() awesome.quit() end },
 }
 
-local menu_awesome = { "awesome", myawesomemenu, beautiful.awesome_icon }
-local menu_terminal = { "open terminal", terminal }
+local menu_awesome = { "Awesome", myawesomemenu, beautiful.awesome_icon }
+local menu_terminal = { "Terminal", terminal }
+local menu_lite = { "Lite", "lite" }
 
 if has_fdo then
 	mymainmenu = freedesktop.menu.build({
 		before = { menu_awesome },
-		after =  { menu_terminal }
+		after =  { menu_terminal, menu_lite }
 	})
 else
 	mymainmenu = awful.menu({
@@ -129,7 +129,7 @@ menubar.utils.terminal = terminal -- Set the terminal for applications that requ
 -- Keyboard map indicator and switcher
 mykeyboardlayout = awful.widget.keyboardlayout()
 
-require("bars")
+require("bars/"..(beautiful.bar and beautiful.bar or 'default'))
 
 -- {{{ Mouse bindings
 root.buttons(gears.table.join(
@@ -190,7 +190,7 @@ awful.rules.rules = {
 
 	-- Add titlebars to normal clients and dialogs
 	{ rule_any = {type = { "normal", "dialog" }
-	  }, properties = { titlebars_enabled = true }
+	  }, properties = { titlebars_enabled = beautiful.titlebars }
 	},
 
 	-- Set Firefox to always map on the tag named "2" on screen 1.
