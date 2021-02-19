@@ -29,7 +29,7 @@ theme.xcolor13    = xrdb.color13    or "#A4C8DE"
 theme.xcolor14    = xrdb.color14    or "#EDCCD6"
 theme.xcolor15    = xrdb.color15    or "#ebe1e7"
 
-theme.font          = "sans 8"
+theme.font          = "Roboto Regular 8"
 
 theme.bg_normal     = theme.xbackground
 theme.bg_focus      = theme.bg_normal
@@ -41,14 +41,14 @@ theme.fg_focus      = "#ffffff"
 theme.fg_urgent     = "#ffffff"
 theme.fg_minimize   = "#ffffff"
 
-theme.useless_gap   = dpi(10)
-theme.border_width  = dpi(0)
-theme.border_normal = theme.bg_normal
-theme.border_focus  = theme.bg_normal
+theme.useless_gap   = dpi(6)
+theme.border_width  = dpi(1)
+theme.border_normal = theme.xcolor11
+theme.border_focus  = theme.xcolor7
 theme.border_marked = theme.xcolor0
 
-theme.titlebars = true
-theme.titlebar_bg = "#332b3de6"
+theme.titlebars = false
+theme.titlebar_bg = "#332b3d"
 -- There are other variable sets
 -- overriding the default one when
 -- defined, the sets are:
@@ -100,12 +100,13 @@ theme.lock_screen_bg = theme.xbackground.."BF"
 theme.lock_screen_fg = theme.xforeground
 theme.exit_screen_bg = theme.lock_screen_bg
 theme.exit_screen_fg = theme.lock_screen_fg
---theme.bar = 'bar here'
+theme.bar = 'dark'
 theme.wibar_height = dpi(26)
 theme.wibar_spacing = dpi(10)
-theme.systray_icon_size = dpi(18)
+theme.systray_icon_size = dpi(12)
+theme.systray_icon_spacing = dpi(5)
 theme.corner_radius = dpi(6)
-theme.wibar_bg = theme.bg_normal .. "99"
+theme.wibar_bg = theme.bg_normal
 theme.bg_systray = theme.wibar_bg
 
 -- Wibar
@@ -151,7 +152,7 @@ theme.titlebar_maximized_button_focus_inactive  = themes_path.."default/titlebar
 theme.titlebar_maximized_button_normal_active = themes_path.."default/titlebar/maximized_normal_active.png"
 theme.titlebar_maximized_button_focus_active  = themes_path.."default/titlebar/maximized_focus_active.png"
 
-theme.wallpaper = gfs.get_configuration_dir().."/wallpapers/primary.jpg"
+theme.wallpaper = gfs.get_configuration_dir().."/wallpapers/dark.png"
 
 -- You can use your own layout icons like this:
 theme.layout_fairh = themes_path.."default/layouts/fairhw.png"
