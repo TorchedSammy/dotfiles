@@ -9,7 +9,7 @@ local xresources = require("beautiful.xresources")
 local dpi = xresources.apply_dpi
 local helpers = require("helpers")
 
-local systray_margin = (beautiful.wibar_height-beautiful.systray_icon_size)/4
+local systray_margin = (beautiful.wibar_height-beautiful.systray_icon_size)/2
 
 local function rounded_bar(color)
     return wibox.widget {
@@ -49,8 +49,8 @@ mysystray:set_base_size(beautiful.systray_icon_size)
 
 systraycontainer = {
 	mysystray,
-		top = 6,
-    bottom = 4,
+		top = systray_margin,
+    bottom = systray_margin,
     right = 5,
     left = 5,
     widget = wibox.container.margin
