@@ -1,0 +1,1 @@
+return { path = "/home/sammy/Files/Projects/Ceta", documents = {["active_view"]=1,["views"]={[1]={["text"]=false,["filename"]="/home/sammy/Files/Projects/Ceta/src/menus/manager.js",["selection"]={[1]=106,[2]=61,[3]=106,[4]=61},["scroll"]={["x"]=0,["y"]=1800},["type"]="doc",["active"]=true}},["type"]="leaf"}, directories = {} }

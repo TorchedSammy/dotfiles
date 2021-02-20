@@ -1,0 +1,1 @@
+return {recents={[5]="/home/sammy/Files/Projects/Pinwheel",[1]="/home/sammy/dotfiles",[7]="/home/sammy/.config/lite-xl/colors",[2]="/home/sammy/.config/lite-xl",[6]="/home/sammy/Files/Projects/Ceta",[3]="/home/sammy/Files/Projects/TorchedSammy",[4]="/home/sammy/Files/Projects/Loggaby",[8]="/home/sammy"}, window={[1]=970,[2]=1028,[3]=13,[4]=13,["n"]=4}}
