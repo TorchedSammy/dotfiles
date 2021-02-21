@@ -29,7 +29,7 @@ theme.xcolor13    = xrdb.color13    or "#A4C8DE"
 theme.xcolor14    = xrdb.color14    or "#EDCCD6"
 theme.xcolor15    = xrdb.color15    or "#ebe1e7"
 
-theme.font          = "Roboto Regular 8"
+theme.font          = "SF Pro Text Medium 8"
 
 theme.bg_normal     = theme.xbackground
 theme.bg_focus      = theme.bg_normal
@@ -102,7 +102,7 @@ theme.lock_screen_fg = theme.xforeground
 theme.exit_screen_bg = theme.lock_screen_bg
 theme.exit_screen_fg = theme.lock_screen_fg
 theme.bar = 'dark'
-theme.wibar_height = dpi(26)
+theme.wibar_height = dpi(30)
 theme.wibar_spacing = dpi(10)
 theme.systray_icon_size = dpi(12)
 theme.systray_icon_spacing = dpi(5)
@@ -115,7 +115,7 @@ theme.volume_bar_color = theme.xcolor2
 theme.ram_bar_color = theme.xcolor4
 theme.battery_bar_color = theme.xcolor1
 -- Noodle Text Taglist
-theme.taglist_text_font = "Typicons 11"
+theme.taglist_text_font = "Typicons 13"
 theme.taglist_text_empty    = {"","","","","","","","",""}
 theme.taglist_text_occupied = {"","","","","","","","",""}
 theme.taglist_text_focused  = {"","","","","","","","",""}
