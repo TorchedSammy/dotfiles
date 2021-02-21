@@ -48,7 +48,8 @@ theme.border_focus  = theme.xcolor7
 theme.border_marked = theme.xcolor0
 
 theme.titlebars = false
-theme.titlebar_bg = "#332b3d"
+theme.titlebar_type = 'default'
+theme.titlebar_bg = theme.xbackground
 -- There are other variable sets
 -- overriding the default one when
 -- defined, the sets are:

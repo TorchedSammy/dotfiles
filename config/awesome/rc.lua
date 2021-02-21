@@ -215,25 +215,7 @@ client.connect_signal("manage", function (c)
 	--c.shape = gears.shape.rounded_rect
 end)
 
--- Add a titlebar if titlebars_enabled is set to true in the rules.
-client.connect_signal("request::titlebars", function(c)
-	-- buttons for the titlebar
-	local buttons = gears.table.join(
-		awful.button({ }, 1, function()
-			c:emit_signal("request::activate", "titlebar", {raise = true})
-			awful.mouse.client.move(c)
-		end),
-		awful.button({ }, 3, function()
-			c:emit_signal("request::activate", "titlebar", {raise = true})
-			awful.mouse.client.resize(c)
-		end)
-	)
-
-	awful.titlebar(c) : setup {
-		buttons = buttons,
-		layout = wibox.layout.align.horizontal
-	}
-end)
+require('titlebars/'..(beautiful.titlebar_type and beautiful.titlebar_type or 'default'))
 
 client.connect_signal("focus", function(c) c.border_color = beautiful.border_focus end)
 client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)

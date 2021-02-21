@@ -119,11 +119,9 @@ awful.screen.connect_for_each_screen(function(s)
 	set_wallpaper(s)
 
 	local l = awful.layout.suit
-	local layouts = { l.floating, l.tile, l.floating, l.floating, l.floating, l.floating, l.floating, l.floating, l.floating }
+	local layouts = { l.floating, l.spiral.dwindle, l.floating, l.tile, l.floating, l.floating, l.floating, l.floating, l.floating }
 	awful.tag({ "1", "2", "3", "4", "5", "6", "7", "8", "9" }, s, layouts)
 
-	-- Create a promptbox for each screen
-	s.mypromptbox = awful.widget.prompt()
 	-- Create an imagebox widget which will contain an icon indicating which layout we're using.
 	-- We need one layoutbox per screen.
 	s.mylayoutbox = awful.widget.layoutbox(s)
