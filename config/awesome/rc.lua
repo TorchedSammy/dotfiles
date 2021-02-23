@@ -2,7 +2,7 @@
 -- found (e.g. lgi). If LuaRocks is not installed, do nothing.
 pcall(require, "luarocks.loader")
 
-themename = "dark"
+themename = "macos"
 -- Standard awesome library
 local gears = require("gears")
 local awful = require("awful")
