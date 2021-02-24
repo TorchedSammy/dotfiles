@@ -33,17 +33,19 @@ client.connect_signal("request::titlebars", function(c)
 		}
 	end
 
-	local close = titlebarbtn("⬤", beautiful.xcolor1, function ()
-		local fc = client.focus
-		if fc then fc:kill() end
-	end)
 	local minimize = titlebarbtn("⬤", beautiful.xcolor3, function ()
-		local fc = client.focus
-		if fc then fc:kill() end
+		awful.client.next(1)
+        if client.focus then
+            client.focus:raise()
+        end
+		c.minimized = true
 	end)
 	local maximize = titlebarbtn("⬤", beautiful.xcolor2, function ()
-		local fc = client.focus
-		if fc then fc:kill() end
+		c.maximized = not c.maximized
+        c:raise()
+	end)
+	local close = titlebarbtn("⬤", beautiful.xcolor1, function ()
+		c:kill()
 	end)
 
 	awful.titlebar(c) : setup {
@@ -60,8 +62,14 @@ client.connect_signal("request::titlebars", function(c)
 			widget = wibox.container.margin,
 		},
 		{
-			layout = wibox.layout.fixed.horizontal,
-			spacing = beautiful.wibar_spacing
+			buttons = buttons,
+			{
+				layout = wibox.layout.fixed.horizontal,
+				spacing = beautiful.wibar_spacing
+			},
+			left = beautiful.wibar_spacing,
+			right = beautiful.wibar_spacing,
+			widget = wibox.container.margin,
 		},
 		{
 			{
