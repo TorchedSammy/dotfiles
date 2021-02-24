@@ -1,0 +1,41 @@
+#!/bin/sh
+
+color0='2d2d2d'
+color1='d04645'
+color2='77b755'
+color3='f4c94d'
+color4='3E89E7'
+color5='e25e9c'
+color6='5EDFE2'
+color7='f0f0f0'
+color8='999999'
+color9='DF5554'
+color10='8ACC68'
+color11='FDD565'
+color12='4993F0'
+color13='EB6AA6'
+color14='6FEBEE'
+color15='ffffff'
+
+if [ "$TERM" = "linux" ]; then
+  echo -e "
+  \e]P0$color0
+  \e]P1$color1
+  \e]P2$color2
+  \e]P3$color3
+  \e]P4$color4
+  \e]P5$color5
+  \e]P6$color6
+  \e]P7$color7
+  \e]P8$color8
+  \e]P9$color9
+  \e]PA$color10
+  \e]PB$color11
+  \e]PC$color12
+  \e]PD$color13
+  \e]PE$color14
+  \e]PF$color16
+  "
+
+  clear
+fi
