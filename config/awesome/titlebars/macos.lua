@@ -21,30 +21,31 @@ client.connect_signal("request::titlebars", function(c)
 			{
 				{
 					markup = helpers.colorize_text(char, color),
-					--font = "Typicons 17",
-					widget = wibox.widget.textbox
+					widget = wibox.widget.textbox,
 				},
 				top = 4, bottom = 4, 
 				widget = wibox.container.margin
 			},
+			bg = color,
 			widget = wibox.container.background,
 			buttons = gears.table.join(
-				awful.button({}, 1, func))
+				awful.button({}, 1, func)),
+			shape = gears.shape.circle
 		}
 	end
 
-	local minimize = titlebarbtn("⬤", beautiful.xcolor3, function ()
+	local minimize = titlebarbtn("", beautiful.xcolor3, function ()
 		awful.client.next(1)
         if client.focus then
             client.focus:raise()
         end
 		c.minimized = true
 	end)
-	local maximize = titlebarbtn("⬤", beautiful.xcolor2, function ()
+	local maximize = titlebarbtn("", beautiful.xcolor2, function ()
 		c.maximized = not c.maximized
         c:raise()
 	end)
-	local close = titlebarbtn("⬤", beautiful.xcolor1, function ()
+	local close = titlebarbtn("", beautiful.xcolor1, function ()
 		c:kill()
 	end)
 
