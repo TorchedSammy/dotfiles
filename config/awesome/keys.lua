@@ -1,5 +1,6 @@
 local gears = require("gears")
 local awful = require("awful")
+local naughty = require("naughty")
 local hotkeys_popup = require("awful.hotkeys_popup")
 local switcher = require("awesome-switcher")
 
@@ -30,6 +31,11 @@ globalkeys = gears.table.join(
               {description = "show main menu", group = "awesome"}),
     awful.key({ "Control",           }, "Print", function () awful.spawn("sharenix-section") end,
               {description = "take region screenshot", group = "awesome"}),
+    awful.key({ modkey           }, "d", function () 
+      awful.spawn.with_shell("cd "..os.getenv("HOME").."/dotfiles && cp -r config/awesome/* "..os.getenv("HOME").."/.config/awesome")
+      naughty.notify({ title = "Copied awesome config"}) 
+    end,
+    {description = "update awesome config from dotfiles folder", group = "awesome"}),
     
     awful.key({ modkey }, "z", function ()
         awful.screen.focused().systray.visible = not awful.screen.focused().systray.visible
