@@ -15,7 +15,7 @@ local theme = {}
 
 theme.xbackground = "#1d1f21"
 theme.xforeground = "#e0e0e0"
-theme.xcolor0     = "#b5bd68"
+theme.xcolor0     = "#1d1f21"
 theme.xcolor1     = "#d04645"
 theme.xcolor2     = "#77b755"
 theme.xcolor3     = "#f4c94d"
