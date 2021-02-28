@@ -22,10 +22,10 @@ local function rounded_bar(color)
           bottom = dpi(10),
         },
         shape         = gears.shape.rounded_bar,
-        border_width  = 0,
+        border_width  = 1,
         color         = color,
-        background_color = beautiful.xcolor11,
-        border_color  = beautiful.border_color,
+        background_color = beautiful.bg_normal,
+        border_color  = beautiful.border_normal,
         widget        = wibox.widget.progressbar,
     }
 end
@@ -136,20 +136,6 @@ awful.screen.connect_for_each_screen(function(s)
 		filter  = awful.widget.taglist.filter.all,
 		buttons = taglist_buttons
 	}
-	local mainmenu = wibox.widget{
-	    {
-	        {
-	            markup = helpers.colorize_text("", beautiful.fg_normal),
-	            font = "Font Awesome 11",
-	            widget = wibox.widget.textbox
-	        },
-	        top = 4, bottom = 4,
-	        widget = wibox.container.margin
-	    },
-	    widget = wibox.container.background,
-	    buttons = gears.table.join(
-			awful.button({}, 1, function () mymainmenu:toggle({ coords = {x = 0, y = s.geometry.height-beautiful.wibar_height}}) end))
-	}
 	s.systray = mysystray
 
 	-- Create the wibox
@@ -163,19 +149,27 @@ awful.screen.connect_for_each_screen(function(s)
 			{ -- Left widgets
 				layout = wibox.layout.fixed.horizontal,
 				spacing = beautiful.wibar_spacing,
-				mainmenu,
+				text_taglist(s),
 			},
 			left = beautiful.wibar_spacing,
 			right = beautiful.wibar_spacing,
 			widget = wibox.container.margin,
 		},
-		text_taglist(s), -- Middle widget
+		{
+			{ -- Middle widget
+				layout = wibox.layout.fixed.horizontal,
+				spacing = beautiful.wibar_spacing,
+				systraycontainer,
+			},
+			left = beautiful.wibar_spacing,
+			right = beautiful.wibar_spacing,
+			widget = wibox.container.margin,
+		}, -- Middle widget
 		{
 			{ -- Right widgets
 				layout = wibox.layout.fixed.horizontal,
 				spacing = beautiful.wibar_spacing,
 				ram_bar,
-				systraycontainer,
 				time,
 				{
 					s.mylayoutbox,
