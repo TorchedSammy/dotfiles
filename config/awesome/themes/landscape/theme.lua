@@ -1,7 +1,7 @@
 local theme_assets = require("beautiful.theme_assets")
 local xresources = require("beautiful.xresources")
 local dpi = xresources.apply_dpi
-local dxrdb = xresources.get_current_theme()
+local xrdb = xresources.get_current_theme()
 
 local gfs = require("gears.filesystem")
 local themes_path = gfs.get_themes_dir()
@@ -13,25 +13,24 @@ function layoutimg(name)
 end
 local theme = {}
 
--- Get colors from .Xresources and set fallback colors
-theme.xbackground = xrdb.background .. "ff" or "#110f1c"
-theme.xforeground = xrdb.foreground or "#ebe1e7"
-theme.xcolor0     = xrdb.color0     or "#110f1c"
-theme.xcolor1     = xrdb.color1     or "#72BCE0"
-theme.xcolor2     = xrdb.color2     or "#AB93A0"
-theme.xcolor3     = xrdb.color3     or "#D2A1B0"
-theme.xcolor4     = xrdb.color4     or "#E4B5CC"
-theme.xcolor5     = xrdb.color5     or "#A4C8DE"
-theme.xcolor6     = xrdb.color6     or "#EDCCD6"
-theme.xcolor7     = xrdb.color7     or "#ebe1e7"
-theme.xcolor8     = xrdb.color8     or "#a49da1"
-theme.xcolor9     = xrdb.color9     or "#72BCE0"
-theme.xcolor10    = xrdb.color10    or "#AB93A0"
-theme.xcolor11    = xrdb.color11    or "#D2A1B0"
-theme.xcolor12    = xrdb.color12    or "#E4B5CC"
-theme.xcolor13    = xrdb.color13    or "#A4C8DE"
-theme.xcolor14    = xrdb.color14    or "#EDCCD6"
-theme.xcolor15    = xrdb.color15    or "#ebe1e7"
+theme.xbackground = "#161313"
+theme.xforeground = "#e9c6cb"
+theme.xcolor0     = "#161313"
+theme.xcolor1     = "#3E5D83"
+theme.xcolor2     = "#5E6D93"
+theme.xcolor3     = "#9D7092"
+theme.xcolor4     = "#D1768A"
+theme.xcolor5     = "#748BAD"
+theme.xcolor6     = "#9B97B4"
+theme.xcolor7     = "#e9c6cb"
+theme.xcolor8     = "#a38a8e"
+theme.xcolor9     = "#3E5D83"
+theme.xcolor10    = "#5E6D93"
+theme.xcolor11    = "#9D7092"
+theme.xcolor12    = "#D1768A"
+theme.xcolor13    = "#748BAD"
+theme.xcolor14    = "#9B97B4"
+theme.xcolor15    = "#e9c6cb"
 
 theme.font          = "SF Pro Text Medium 10"
 
@@ -78,16 +77,17 @@ theme.taglist_squares_unsel = theme_assets.taglist_squares_unsel(
 
 -- Variables set for theming notifications:
 -- notification_font
-theme.notification_bg = theme.xcolor0 .. "99"
+theme.notification_bg = theme.xcolor0
 -- notification_[width|height|margin]
 -- notification_[border_color|border_width|shape|opacity]
+theme.notification_border_width = dpi(1)
+theme.notification_border_color = theme.fg_normal
 theme.notification_font = "monospace 9"
-theme.notification_shape = helpers.rrect(dpi(8))
+--theme.notification_shape = helpers.rrect(dpi(8))
 theme.notification_margin = dpi(10)
 theme.notification_padding = dpi(10)
 theme.notification_spacing = dpi(10)
-theme.notification_border_width = dpi(0)
-theme.notification_icon_size = dpi(40)
+theme.notification_icon_size = dpi(36)
 
 -- Variables set for theming the menu:
 -- menu_[bg|fg]_[normal|focus]
@@ -121,8 +121,8 @@ theme.battery_bar_color = theme.xcolor1
 -- Noodle Text Taglist
 theme.taglist_text_font = "Typicons 13"
 theme.taglist_text_empty    = {"","","","","","","","",""}
-theme.taglist_text_occupied = {"","","","","","","","",""}
-theme.taglist_text_focused  = {"","","","","","","","",""}
+theme.taglist_text_occupied  = {"","","","","","","","",""}
+theme.taglist_text_focused = {"","","","","","","","",""}
 theme.taglist_text_urgent   = {"","","","","","","","",""}
 
 theme.taglist_text_color_empty    = { theme.xcolor7, theme.xcolor7, theme.xcolor7, theme.xcolor7, theme.xcolor7, theme.xcolor7, theme.xcolor7, theme.xcolor7, theme.xcolor7, theme.xcolor7 }
