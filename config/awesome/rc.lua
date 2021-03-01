@@ -18,6 +18,8 @@ local hotkeys_popup = require("awful.hotkeys_popup")
 -- Enable hotkeys help widget for VIM and other apps
 -- when client with a matching name is opened:
 require("awful.hotkeys_popup.keys")
+local bling = require('bling')
+bling.signal.playerctl.enable()
 
 -- Load Debian menu entries
 local has_fdo, freedesktop = pcall(require, "freedesktop")
@@ -55,10 +57,11 @@ for s = 1, screen.count() do
 end
 require('autostart')
 
+term = 'termite'
 -- This is used later as the default terminal and editor to run.
-terminal = "kitty -c="..os.getenv('HOME').."/.config/kitty/kitty"..(themename and '-'..themename or '')..'.conf'
+terminal = term.." -c "..os.getenv('HOME').."/.config/"..term.."/"..term..(themename and '-'..themename or '')..'.conf'
 editor = os.getenv("EDITOR") or "subl"
-editor_cmd = editor
+editor_cmd = editor .. ' ~/dotfiles'
 
 -- Default modkey.
 -- Usually, Mod4 is the key with a logo between Control and Alt.
@@ -217,3 +220,9 @@ require('titlebars/'..(beautiful.titlebar_type and beautiful.titlebar_type or 'd
 client.connect_signal("focus", function(c) c.border_color = beautiful.border_focus end)
 client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
 -- }}}
+
+awesome.connect_signal("bling::playerctl::title_artist_album",
+                       function(title, artist, art_path)
+    naughty.notify({title = title, text = artist, image = art_path})
+    music:set_markup_silently(' '..(artist and artist..' - ' or '')..title)
+end)
