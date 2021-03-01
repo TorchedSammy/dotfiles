@@ -80,7 +80,7 @@ let g:lightline = {
       \ }
 
 function! LightlineFilename()
-  let filename = expand('%:t') !=# '' ? expand('%:t') : '[No Name]'
+  let filename = expand('%:t') !=# '' ? expand('%:t') : '...'
   let modified = &modified ? ' +' : ''
   return filename . modified
 endfunction
