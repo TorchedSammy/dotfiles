@@ -57,7 +57,7 @@ systraycontainer = {
 }
 
 time = wibox.widget.textclock()
-time.format = "%I:%M %p"
+time.format = "  %I:%M %p"
 
 date = wibox.widget.textclock()
 date.format = "%d/%m/%y"
@@ -115,6 +115,12 @@ end
 
 screen.connect_signal("property::geometry", set_wallpaper)
 
+
+music = wibox.widget {
+	markup = '  Nothing Playing',
+	widget = wibox.widget.textbox
+}
+
 awful.screen.connect_for_each_screen(function(s)
 	set_wallpaper(s)
 
@@ -140,6 +146,46 @@ awful.screen.connect_for_each_screen(function(s)
 
 	-- Create the wibox
 	s.bar = awful.wibar({ screen = s, position = "bottom", height = beautiful.wibar_height, bg = beautiful.wibar_bg })
+	s.topbar = awful.wibar({ screen = s, position = "top", height = beautiful.wibar_height, bg = beautiful.wibar_bg })
+
+	s.topbar:setup {
+		layout = wibox.layout.align.horizontal,
+		expand = "none",
+		{
+			{ -- Left widgets
+				layout = wibox.layout.fixed.horizontal,
+				spacing = beautiful.wibar_spacing,
+				music
+			},
+			left = beautiful.wibar_spacing,
+			right = beautiful.wibar_spacing,
+			widget = wibox.container.margin,
+		},
+		{
+			{ -- Middle widget
+				layout = wibox.layout.fixed.horizontal,
+				spacing = beautiful.wibar_spacing,
+			},
+			left = beautiful.wibar_spacing,
+			right = beautiful.wibar_spacing,
+			widget = wibox.container.margin,
+		}, -- Middle widget
+		{
+			{ -- Right widgets
+				layout = wibox.layout.fixed.horizontal,
+				spacing = beautiful.wibar_spacing,
+				time,
+				{
+					s.mylayoutbox,
+					top = 8, bottom = 8,
+	        widget = wibox.container.margin
+				}
+			},
+			left = beautiful.wibar_spacing,
+			right = beautiful.wibar_spacing,
+			widget = wibox.container.margin,
+		},
+	}
 
 	-- Add widgets to the wibox
 	s.bar:setup {
@@ -170,12 +216,6 @@ awful.screen.connect_for_each_screen(function(s)
 				layout = wibox.layout.fixed.horizontal,
 				spacing = beautiful.wibar_spacing,
 				ram_bar,
-				time,
-				{
-					s.mylayoutbox,
-					top = 8, bottom = 8,
-	        widget = wibox.container.margin
-				}
 			},
 			left = beautiful.wibar_spacing,
 			right = beautiful.wibar_spacing,
