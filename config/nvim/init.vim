@@ -5,18 +5,23 @@ Plug 'airblade/vim-gitgutter'
 Plug 'itchyny/lightline.vim'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
-Plug 'preservim/nerdtree' |
-            \ Plug 'Xuyuanp/nerdtree-git-plugin' |
-            \ Plug 'ryanoasis/vim-devicons'
-Plug 'ryanoasis/vim-devicons'
+Plug 'kyazdani42/nvim-tree.lua'
+Plug 'kyazdani42/nvim-web-devicons'
+Plug 'romgrk/barbar.nvim'
 Plug 'jiangmiao/auto-pairs'
 Plug 'tpope/vim-fugitive'
 Plug 'roryokane/detectindent'
+Plug 'f-person/git-blame.nvim'
+Plug 'b3nj5m1n/kommentary'
 
 call plug#end()
 
 " Neovim stuff
 set number
+
+" # Moving selected text
+vnoremap J :m '>+1<CR>gv=gv
+vnoremap K :m '<-2<CR>gv=gv
 
 " COC
 inoremap <silent><expr> <TAB>
@@ -25,7 +30,7 @@ inoremap <silent><expr> <TAB>
       \ coc#refresh()
 
 inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-" # Formatting selected code.
+" Formatting selected code.
 xmap <leader>f  <Plug>(coc-format-selected)
 nmap <leader>f  <Plug>(coc-format-selected)
 
@@ -65,7 +70,7 @@ let g:lightline = {
       \ 'colorscheme': 'wombat',
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ],
-      \             [ 'gitbranch', 'readonly', 'filename' ] ],
+      \             [ 'gitbranch', 'readonly', 'filename', 'gitdiff'] ],
       \   'right': [ [ 'lineinfo' ],
       \              [ 'percent' ],
       \              [ 'fileencoding', 'filetype', 'charvaluehex' ] ]
@@ -75,7 +80,8 @@ let g:lightline = {
       \ },
       \ 'component_function': {
       \   'gitbranch': 'FugitiveHead',
-      \   'filename': 'LightlineFilename'
+      \   'filename': 'LightlineFilename',
+      \   'gitdiff': 'GitStatus'
       \ },
       \ }
 
@@ -85,5 +91,13 @@ function! LightlineFilename()
   return filename . modified
 endfunction
 
+function! GitStatus()
+  let [a,m,r] = GitGutterGetHunkSummary()
+  return printf('+%d ~%d -%d', a, m, r)
+endfunction
+
 " Nerdtree-git
 let g:NERDTreeGitStatusUseNerdFonts = 1
+
+" Indent Guides
+let g:indent_guides_enable_on_vim_startup = 1
