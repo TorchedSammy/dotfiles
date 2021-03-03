@@ -30,6 +30,7 @@ export EDITOR='lite-xl'
 
 # Aliases
 alias cls="clear"
+alias cava="cava-wrapper"
 
 # NVM install
 export NVM_DIR="$HOME/.nvm"
