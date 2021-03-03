@@ -2,7 +2,7 @@
 -- found (e.g. lgi). If LuaRocks is not installed, do nothing.
 pcall(require, "luarocks.loader")
 
-themename = "landscape"
+themename = "rose"
 -- Standard awesome library
 local gears = require("gears")
 local awful = require("awful")
@@ -18,8 +18,6 @@ local hotkeys_popup = require("awful.hotkeys_popup")
 -- Enable hotkeys help widget for VIM and other apps
 -- when client with a matching name is opened:
 require("awful.hotkeys_popup.keys")
-local bling = require('bling')
-bling.signal.playerctl.enable()
 
 -- Load Debian menu entries
 local has_fdo, freedesktop = pcall(require, "freedesktop")
@@ -55,6 +53,8 @@ beautiful.init('~/.config/awesome/themes/'..themename..'/theme.lua')
 for s = 1, screen.count() do
   gears.wallpaper.maximized(beautiful.wallpaper, s, true)
 end
+local bling = require('bling')
+--bling.signal.playerctl.enable()
 require('autostart')
 
 term = 'termite'
