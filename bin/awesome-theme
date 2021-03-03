@@ -1,1 +1,3 @@
+#!/bin/sh
+
 echo "return themename" | awesome-client | cut -d"\"" -f 2
