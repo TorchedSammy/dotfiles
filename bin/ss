@@ -1,0 +1,15 @@
+#!/bin/sh
+# ss: minimal screenshot script for sharex hosts
+# requirements: xclip, maim, curl, jq
+
+# URL to uplaod to
+url="https://modeus.is-inside.me/upload"
+# Authentication Key
+# You should change this to a value that makes sense (this ssapikey script just echos my key)
+authtoken="$(cat $HOME/apikey)"
+# Key name of the field to use authkey
+formkey="key"
+# JSON key to image URl
+image="url"
+
+maim -s /tmp/screenshot.png; curl --request POST -H "$formkey: $authtoken" -F file=@/tmp/screenshot.png $url | jq -r ".$image" | xclip -selection clipboard

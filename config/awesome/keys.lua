@@ -29,7 +29,7 @@ globalkeys = gears.table.join(
     ),
     awful.key({ modkey,           }, "w", function () mymainmenu:show() end,
               {description = "show main menu", group = "awesome"}),
-    awful.key({ "Control",           }, "Print", function () awful.spawn("sharenix-section") end,
+    awful.key({ "Control",           }, "Print", function () awful.spawn("ss") end,
               {description = "take region screenshot", group = "awesome"}),
     awful.key({ modkey           }, "d", function () 
       awful.spawn.with_shell("cd "..os.getenv("HOME").."/dotfiles && cp -r config/awesome/* "..os.getenv("HOME").."/.config/awesome")
