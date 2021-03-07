@@ -1,4 +1,3 @@
--- Bottom Bar inspired by woolenkitten
 local awful = require("awful")
 local naughty = require("naughty")
 local wibox = require("wibox")
@@ -8,41 +7,9 @@ local text_taglist = require("taglist")
 local xresources = require("beautiful.xresources")
 local dpi = xresources.apply_dpi
 local helpers = require("helpers")
+local widgets = require('widgets')
 
 local systray_margin = (beautiful.wibar_height-beautiful.systray_icon_size)/2
-
-local function rounded_bar(color)
-    return wibox.widget {
-        max_value     = 100,
-        value         = 0,
-        forced_height = dpi(10),
-        forced_width  = dpi(60),
-        margins       = {
-          top = dpi(10),
-          bottom = dpi(10),
-        },
-        shape         = gears.shape.rounded_bar,
-        border_width  = 1,
-        color         = color,
-        background_color = beautiful.bg_normal,
-        border_color  = beautiful.border_normal,
-        widget        = wibox.widget.progressbar,
-    }
-end
-
--- Ram bar
-local ram_bar = rounded_bar(beautiful.ram_bar_color)
-
-awful.widget.watch("cat /proc/meminfo", 5, function(widget, stdout)
-  local total = stdout:match("MemTotal:%s+(%d+)")
-  local free = stdout:match("MemFree:%s+(%d+)")
-  local buffers = stdout:match("Buffers:%s+(%d+)")
-  local cached = stdout:match("Cached:%s+(%d+)")
-  local srec = stdout:match("SReclaimable:%s+(%d+)")
-  local used_kb = total - free - buffers - cached - srec
-  widget.value = used_kb / total * 100
-end, ram_bar)
-
 
 local mysystray = wibox.widget.systray()
 mysystray:set_base_size(beautiful.systray_icon_size)
@@ -55,9 +22,6 @@ systraycontainer = {
     left = 5,
     widget = wibox.container.margin
 }
-
-time = wibox.widget.textclock()
-time.format = "  %I:%M %p"
 
 date = wibox.widget.textclock()
 date.format = "%d/%m/%y"
@@ -155,7 +119,7 @@ awful.screen.connect_for_each_screen(function(s)
 			{ -- Left widgets
 				layout = wibox.layout.fixed.horizontal,
 				spacing = beautiful.wibar_spacing,
-				music
+				widgets.music
 			},
 			left = beautiful.wibar_spacing,
 			right = beautiful.wibar_spacing,
@@ -174,7 +138,7 @@ awful.screen.connect_for_each_screen(function(s)
 			{ -- Right widgets
 				layout = wibox.layout.fixed.horizontal,
 				spacing = beautiful.wibar_spacing,
-				time,
+				widgets.time,
 				{
 					s.mylayoutbox,
 					top = 8, bottom = 8,
@@ -215,7 +179,7 @@ awful.screen.connect_for_each_screen(function(s)
 			{ -- Right widgets
 				layout = wibox.layout.fixed.horizontal,
 				spacing = beautiful.wibar_spacing,
-				ram_bar,
+				widgets.ram_bar,
 			},
 			left = beautiful.wibar_spacing,
 			right = beautiful.wibar_spacing,

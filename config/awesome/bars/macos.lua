@@ -1,4 +1,3 @@
--- Bottom Bar inspired by woolenkitten
 local awful = require("awful")
 local naughty = require("naughty")
 local wibox = require("wibox")

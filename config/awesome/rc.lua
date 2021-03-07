@@ -2,7 +2,7 @@
 -- found (e.g. lgi). If LuaRocks is not installed, do nothing.
 pcall(require, "luarocks.loader")
 
-themename = "rose"
+themename = 'rose'
 -- Standard awesome library
 local gears = require("gears")
 local awful = require("awful")
@@ -54,7 +54,8 @@ for s = 1, screen.count() do
   gears.wallpaper.maximized(beautiful.wallpaper, s, true)
 end
 local bling = require('bling')
---bling.signal.playerctl.enable()
+bling.signal.playerctl.enable()
+local widgets = require('widgets')
 require('autostart')
 
 term = 'termite'
@@ -224,5 +225,5 @@ client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_n
 awesome.connect_signal("bling::playerctl::title_artist_album",
                        function(title, artist, art_path)
     naughty.notify({title = title, text = artist, image = art_path})
-    music:set_markup_silently(' '..(artist and artist..' - ' or '')..title)
+    widgets.music:set_markup_silently(' '..(artist and artist..' - ' or '')..title)
 end)
