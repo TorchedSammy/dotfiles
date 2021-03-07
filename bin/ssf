@@ -1,0 +1,16 @@
+#!/bin/sh
+# ssf: minimal screenshot script for sharex hosts - upload local file
+# requirements: xclip, maim, curl, jq
+# usage: ssf <path-to-file>
+
+# URL to uplaod to
+url="https://modeus.is-inside.me/upload"
+# Authentication Key
+# You should change this to a value that makes sense (this ssapikey script just echos my key)
+authtoken="$(cat $HOME/apikey)"
+# Key name of the field to use authkey
+formkey="key"
+# JSON key to image URl
+image="url"
+
+curl --request POST -H "$formkey: $authtoken" -F file=@$@ $url | jq -r ".$image" | xclip -selection clipboard
