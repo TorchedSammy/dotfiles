@@ -2,7 +2,7 @@
 -- found (e.g. lgi). If LuaRocks is not installed, do nothing.
 pcall(require, "luarocks.loader")
 
-themename = 'rose'
+themename = 'macos'
 -- Standard awesome library
 local gears = require("gears")
 local awful = require("awful")
@@ -58,9 +58,10 @@ bling.signal.playerctl.enable()
 local widgets = require('widgets')
 require('autostart')
 
-term = 'termite'
+term = 'alacritty'
 -- This is used later as the default terminal and editor to run.
-terminal = term.." -c "..os.getenv('HOME').."/.config/"..term.."/"..term..(themename and '-'..themename or '')..'.conf'
+terminal = term
+--terminal = term.." -c "..os.getenv('HOME').."/.config/"..term.."/"..term..(themename and '-'..themename or '')..'.conf'
 editor = os.getenv("EDITOR") or "subl"
 editor_cmd = editor .. ' ~/dotfiles'
 
