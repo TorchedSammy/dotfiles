@@ -12,4 +12,9 @@ formkey="key"
 # JSON key to image URl
 image="url"
 
-maim -s /tmp/screenshot.png; curl --request POST -H "$formkey: $authtoken" -F file=@/tmp/screenshot.png $url | jq -r ".$image" | xclip -selection clipboard
+maim -o -s /tmp/screenshot.png
+if [[ $? == 1 ]]; then exit 1; fi
+notify-send -t 2000 "Screenshot taken, uploading..."
+
+curl --request POST -H "$formkey: $authtoken" -F file=@/tmp/screenshot.png $url | jq -r ".$image" | xclip -selection clipboard
+notify-send -t 6000 "Screeshot uploaded!"
