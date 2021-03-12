@@ -29,7 +29,7 @@ theme.titlebar_bg = "#332b3d" .. "e6"
 --theme.bar = 'bar here'
 theme.wibar_bg = theme.bg_normal .. "99"
 
-theme.wallpaper = theme.config_path.."/wallpapers/blossoms.jpg"
+theme.wallpaper = theme.config_path.."/wallpapers/primary.jpg"
 
 theme.picom_conf = "blur-shadow"
 
