@@ -5,7 +5,6 @@ local beautiful = require('beautiful')
 local xresources = require("beautiful.xresources")
 local dpi = xresources.apply_dpi
 
-local widgets = {}
 local function rounded_bar(color)
     return wibox.widget {
         max_value     = 100,
@@ -25,6 +24,7 @@ local function rounded_bar(color)
     }
 end
 
+local widgets = {}
 widgets.ram_bar = rounded_bar(beautiful.ram_bar_color)
 
 awful.widget.watch("cat /proc/meminfo", 5, function(widget, stdout)
@@ -39,12 +39,43 @@ end, widgets.ram_bar)
 
 -- Music widget thatll say whats currently playing
 widgets.music = wibox.widget {
-	markup = ' Nothing Playing',
-	font = 'Typicons 11',
+	markup = ' Nothing Playing',
+	font = 'Font Awesome 5 Free Regular',
 	widget = wibox.widget.textbox
 }
 
 widgets.time = wibox.widget.textclock()
 widgets.time.format = "  %I:%M %p"
 
+widgets.date = wibox.widget.textclock()
+widgets.date.format = "%d/%m/%y"
+
+-- Systray
+local systray_margin = (beautiful.wibar_height-beautiful.systray_icon_size)/2
+widgets.raw_systray = wibox.widget.systray()
+widgets.raw_systray:set_base_size(beautiful.systray_icon_size)
+
+widgets.systray = wibox.widget {
+	widgets.raw_systray,
+	top = systray_margin,
+	bottom = systray_margin,
+	right = 5, left = 5,
+	widget = wibox.container.margin
+}
+
+local layoutbox = awful.widget.layoutbox(s)
+layoutbox:buttons(gears.table.join(
+	awful.button({ }, 1, function () awful.layout.inc( 1) end),
+	awful.button({ }, 3, function () awful.layout.inc(-1) end),
+	awful.button({ }, 4, function () awful.layout.inc( 1) end),
+	awful.button({ }, 5, function () awful.layout.inc(-1) end)
+))
+	
+widgets.layout = {
+	layoutbox,
+	top = 8, bottom = 8,
+	widget = wibox.container.margin
+}
+
 return widgets
+
