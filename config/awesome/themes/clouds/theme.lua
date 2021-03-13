@@ -41,6 +41,14 @@ theme.titlebar_type = 'default'
 
 theme.bar = 'clouds'
 theme.wibar_bg = theme.bg_normal
+theme.wibar_spacing = dpi(14)
+
+theme.notification_border_color = theme.titlebar_bg
+theme.notification_border_width = theme.border_width
+theme.notification_position = 'bottom_right'
+theme.notification_padding = dpi(45)
+theme.notification_spacing = dpi(8)
+theme.notification_shape = nil
 
 theme.taglist_text_font = 'Typicons 14'
 theme.taglist_text_color_empty    = { theme.xcolor7, theme.xcolor7, theme.xcolor7, theme.xcolor7, theme.xcolor7, theme.xcolor7, theme.xcolor7, theme.xcolor7, theme.xcolor7, theme.xcolor7 }

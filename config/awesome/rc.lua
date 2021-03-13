@@ -45,24 +45,27 @@ do
 		in_error = false
 	end)
 end
--- }}}
 
--- {{{ Variable definitions
--- Themes define colours, icons, font and wallpapers.
 beautiful.init('~/.config/awesome/themes/'..themename..'/theme.lua')
 for s = 1, screen.count() do
   gears.wallpaper.maximized(beautiful.wallpaper, s, true)
 end
+
 local bling = require('bling')
 bling.signal.playerctl.enable()
+
 local widgets = require('widgets')
 require('autostart')
 
+naughty.config.spacing = beautiful.notification_spacing
+naughty.config.padding = beautiful.notification_padding
+naughty.config.defaults.margin = beautiful.notification_margin
+naughty.config.defaults.position = beautiful.notification_position
+
 term = 'alacritty'
--- This is used later as the default terminal and editor to run.
 terminal = term
 --terminal = term.." -c "..os.getenv('HOME').."/.config/"..term.."/"..term..(themename and '-'..themename or '')..'.conf'
-editor = os.getenv("EDITOR") or "subl"
+editor = os.getenv("EDITOR") or "nvim"
 editor_cmd = editor .. ' ~/dotfiles'
 
 -- Default modkey.
@@ -72,7 +75,6 @@ editor_cmd = editor .. ' ~/dotfiles'
 -- However, you can use another modifier like Mod1, but it may interact with others.
 modkey = "Mod4"
 --require("notifications")
--- Table of layouts to cover with awful.layout.inc, order matters.
 awful.layout.layouts = {
 	awful.layout.suit.floating,
 	awful.layout.suit.tile,
@@ -205,17 +207,12 @@ awful.rules.rules = {
 }
 -- }}}
 
--- {{{ Signals
 -- Signal function to execute when a new client appears.
 client.connect_signal("manage", function (c)
-	-- Set the windows at the slave,
-	-- i.e. put it at the end of others instead of setting it master.
-	-- if not awesome.startup then awful.client.setslave(c) end
 
 	if awesome.startup
 	  and not c.size_hints.user_position
 	  and not c.size_hints.program_position then
-		-- Prevent clients from being unreachable after screen count changes.
 		awful.placement.no_offscreen(c)
 	end
 end)
@@ -225,12 +222,19 @@ require('double-borders')
 
 client.connect_signal("focus", function(c) c.border_color = beautiful.border_focus end)
 client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
--- }}}
 
-awesome.connect_signal("bling::playerctl::title_artist_album",
-                       function(title, artist, art_path)
-    naughty.notify({title = title, text = artist, image = art_path})
-    widgets.music:set_markup_silently(' '..(artist and artist..' - ' or '')..title)
+awesome.connect_signal("bling::playerctl::title_artist_album", function (title, artist, art_path)
+    
+	naughty.notify({
+		title = title,
+		text = artist,
+		image = art_path
+	})
+
+	widgets.music:set_markup_silently(
+		(artist and artist..' - ' or '')..
+		title
+	)
 end)
 
 collectgarbage("setpause", 110)
