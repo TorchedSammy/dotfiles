@@ -9,17 +9,17 @@ local function rounded_bar(color)
     return wibox.widget {
         max_value     = 100,
         value         = 0,
-        forced_height = dpi(10),
+        forced_height = dpi(14),
         forced_width  = dpi(60),
         margins       = {
-          top = dpi(10),
-          bottom = dpi(10),
+          top = dpi(8),
+          bottom = dpi(8),
         },
         shape         = gears.shape.rounded_bar,
         border_width  = 1,
         color         = color,
-        background_color = beautiful.bg_normal,
-        border_color  = beautiful.border_normal,
+        background_color = beautiful.bg_sec,
+        border_color  = color,
         widget        = wibox.widget.progressbar,
     }
 end
