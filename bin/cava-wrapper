@@ -1,3 +1,6 @@
 #!/bin/sh
 
-cava -p ~/.config/cava/config-$(awesome-theme)
+cava -p ~/.config/cava/config-$(awesome-theme 2>/dev/null) 2>/dev/null
+if [ $? == 1 ]; then
+	cava
+fi
