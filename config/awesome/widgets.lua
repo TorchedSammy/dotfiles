@@ -38,14 +38,18 @@ awful.widget.watch("cat /proc/meminfo", 5, function(widget, stdout)
 end, widgets.ram_bar)
 
 -- Music widget thatll say whats currently playing
-widgets.music = wibox.widget {
-	markup = ' Nothing Playing',
+widgets.music_icon = wibox.widget {
+	markup = '',
 	font = 'Font Awesome 5 Free Regular',
+	widget = wibox.widget.textbox
+}
+widgets.music = wibox.widget {
+	markup = 'Nothing Playing',
 	widget = wibox.widget.textbox
 }
 
 widgets.time = wibox.widget.textclock()
-widgets.time.format = "  %I:%M %p"
+widgets.time.format = " %I:%M %p"
 
 widgets.date = wibox.widget.textclock()
 widgets.date.format = "%d/%m/%y"
@@ -59,7 +63,7 @@ widgets.systray = wibox.widget {
 	widgets.raw_systray,
 	top = systray_margin,
 	bottom = systray_margin,
-	right = 5, left = 5,
+	--right = 5, left = 5,
 	widget = wibox.container.margin
 }
 
@@ -73,7 +77,7 @@ layoutbox:buttons(gears.table.join(
 	
 widgets.layout = {
 	layoutbox,
-	top = 8, bottom = 8,
+	top = 7, bottom = 7,
 	widget = wibox.container.margin
 }
 
