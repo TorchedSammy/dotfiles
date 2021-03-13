@@ -3,6 +3,7 @@ local awful = require("awful")
 local naughty = require("naughty")
 local hotkeys_popup = require("awful.hotkeys_popup")
 local switcher = require("awesome-switcher")
+local widgets = require('widgets')
 
 -- {{{ Key bindings
 globalkeys = gears.table.join(
@@ -33,12 +34,12 @@ globalkeys = gears.table.join(
               {description = "take region screenshot", group = "awesome"}),
     awful.key({ modkey           }, "d", function () 
       awful.spawn.with_shell("cd "..os.getenv("HOME").."/dotfiles && cp -r config/awesome/* "..os.getenv("HOME").."/.config/awesome")
-      naughty.notify({ title = "Copied awesome config"}) 
+      naughty.notify({ text = "Copied awesome config"}) 
     end,
     {description = "update awesome config from dotfiles folder", group = "awesome"}),
     
     awful.key({ modkey }, "z", function ()
-        awful.screen.focused().systray.visible = not awful.screen.focused().systray.visible
+        widgets.systray.visible = not widgets.systray.visible
         end, {description = "Toggle systray visibility", group = "custom"}),
 
     -- Layout manipulation
