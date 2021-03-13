@@ -13,6 +13,7 @@ end
 local theme = {}
 
 theme.gfs = gfs
+theme.dpi = dpi
 theme.config_path = config_path
 theme.themes_path = themes_path
 
@@ -35,7 +36,7 @@ theme.xcolor13    = "#A4C8DE"
 theme.xcolor14    = "#EDCCD6"
 theme.xcolor15    = "#ebe1e7"
 
-theme.font          = "SF Pro Text Regular 10"
+theme.font          = "SF Pro Text Regular 11"
 
 theme.bg_normal     = theme.xbackground
 theme.bg_focus      = theme.bg_normal
@@ -80,7 +81,7 @@ theme.taglist_squares_unsel = theme_assets.taglist_squares_unsel(
 
 -- Variables set for theming notifications:
 -- notification_font
-theme.notification_bg = theme.xcolor0 .. "ff"
+theme.notification_bg = theme.xcolor0
 -- notification_[width|height|margin]
 -- notification_[border_color|border_width|shape|opacity]
 theme.notification_font = "SF Pro Text Regular 10"
