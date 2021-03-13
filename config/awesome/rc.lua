@@ -2,7 +2,7 @@
 -- found (e.g. lgi). If LuaRocks is not installed, do nothing.
 pcall(require, "luarocks.loader")
 
-themename = 'macos'
+themename = 'clouds'
 -- Standard awesome library
 local gears = require("gears")
 local awful = require("awful")
@@ -131,6 +131,9 @@ menubar.utils.terminal = terminal -- Set the terminal for applications that requ
 
 -- Keyboard map indicator and switcher
 mykeyboardlayout = awful.widget.keyboardlayout()
+local l = awful.layout.suit
+local layouts = { l.floating, l.spiral.dwindle, l.floating, l.tile, l.floating, l.floating, l.floating, l.floating, l.floating }
+awful.tag({ "1", "2", "3", "4", "5", "6", "7", "8", "9" }, s, layouts)
 
 require("bars/"..(beautiful.bar and beautiful.bar or 'default'))
 
@@ -217,7 +220,8 @@ client.connect_signal("manage", function (c)
 	end
 end)
 
-require('titlebars/'..(beautiful.titlebar_type and beautiful.titlebar_type or 'default'))
+--require('titlebars/'..(beautiful.titlebar_type and beautiful.titlebar_type or 'default'))
+require('double-borders')
 
 client.connect_signal("focus", function(c) c.border_color = beautiful.border_focus end)
 client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
@@ -228,3 +232,6 @@ awesome.connect_signal("bling::playerctl::title_artist_album",
     naughty.notify({title = title, text = artist, image = art_path})
     widgets.music:set_markup_silently(' '..(artist and artist..' - ' or '')..title)
 end)
+
+collectgarbage("setpause", 110)
+collectgarbage("setstepmul", 1000)
