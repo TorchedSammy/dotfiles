@@ -2,7 +2,7 @@
 # ss: minimal screenshot script for sharex hosts
 # check ssf for more details
 
-maim -o -s /tmp/screenshot.png
+maim -u -o -s /tmp/screenshot.png
 if [[ $? == 1 ]]; then exit 1; fi
 notify-send -t 2000 "Screenshot taken, uploading..."
 ssf /tmp/screenshot.png
