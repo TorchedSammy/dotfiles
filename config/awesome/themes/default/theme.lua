@@ -32,6 +32,7 @@ theme.wibar_bg = theme.bg_normal .. "99"
 theme.wallpaper = theme.config_path.."/wallpapers/blossoms.jpg"
 
 theme.picom_conf = "blur-shadow"
+theme.exp_picom_bknd = true
 
 return theme
 
