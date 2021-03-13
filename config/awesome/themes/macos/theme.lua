@@ -1,7 +1,7 @@
 local xresources = require("beautiful.xresources")
 local dpi = xresources.apply_dpi
 
-local theme = {}
+local theme = require('themes.common')
 
 theme.xbackground = "#1d1f21"
 theme.xforeground = "#e0e0e0"
@@ -22,14 +22,34 @@ theme.xcolor13    = "#EB6AA6"
 theme.xcolor14    = "#6FEBEE"
 theme.xcolor15    = "#ffffff"
 
+theme.bg_normal     = theme.xbackground
+theme.bg_focus      = theme.bg_normal
+theme.bg_urgent     = theme.bg_normal
+theme.bg_minimize   = theme.bg_normal
+
+theme.fg_normal     = theme.xforeground
+theme.fg_focus      = "#ffffff"
+theme.fg_urgent     = "#ffffff"
+theme.fg_minimize   = "#ffffff"
+
 theme.useless_gap   = dpi(6)
 
+theme.titlebars = true
 theme.titlebar_type = 'macos'
+theme.titlebar_bg = theme.xcolor0
+
+theme.notification_bg = theme.xcolor0
+theme.notification_border_color = theme.xcolor7
+theme.notification_border_width = dpi(1)
 
 theme.bar = 'macos'
 theme.wibar_height = dpi(27)
 
-theme.wallpaper = gfs.get_configuration_dir().."/wallpapers/bigsur.jpg"
+theme.wibar_bg = theme.bg_normal
+theme.bg_systray = theme.wibar_bg
+
+theme.wallpaper = theme.config_path.."/wallpapers/bigsur.jpg"
+theme.picom_conf = 'picom-macos'
 
 return theme
 

@@ -2,7 +2,7 @@
 -- found (e.g. lgi). If LuaRocks is not installed, do nothing.
 pcall(require, "luarocks.loader")
 
-themename = 'clouds'
+themename = 'macos'
 -- Standard awesome library
 local gears = require("gears")
 local awful = require("awful")
@@ -217,8 +217,9 @@ client.connect_signal("manage", function (c)
 	end
 end)
 
---require('titlebars/'..(beautiful.titlebar_type and beautiful.titlebar_type or 'default'))
-require('double-borders')
+require('titlebars/'..(beautiful.titlebar_type and beautiful.titlebar_type or 'default'))
+
+if beautiful.double_borders then require('double-borders') end
 
 client.connect_signal("focus", function(c) c.border_color = beautiful.border_focus end)
 client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
