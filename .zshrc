@@ -24,13 +24,13 @@ zle -N history-beginning-search-forward-end history-search-end
 bindkey "^[[A" history-beginning-search-backward-end
 bindkey "^[[B" history-beginning-search-forward-end
 
-# User configuration
-# export LANG=en_US.UTF-8
-export EDITOR='lite-xl'
+export EDITOR='nvim'
 
 # Aliases
-alias cls="clear"
-alias cava="cava-wrapper"
+alias ls='ls -a'
+alias cls='clear'
+alias cava='cava-wrapper'
+alias nu='nvm use node'
 
 # NVM install
 export NVM_DIR="$HOME/.nvm"
