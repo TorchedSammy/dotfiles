@@ -56,7 +56,7 @@ theme.border_marked = theme.xcolor0
 
 theme.titlebars = true
 theme.titlebar_type = 'default'
-theme.titlebar_bg = "#332b3d" .. "ff"
+theme.titlebar_bg = theme.xcolor0
 -- There are other variable sets
 -- overriding the default one when
 -- defined, the sets are:
@@ -91,6 +91,7 @@ theme.notification_padding = dpi(10)
 theme.notification_spacing = dpi(10)
 theme.notification_border_width = dpi(0)
 theme.notification_icon_size = dpi(40)
+theme.notification_position = 'top_right'
 
 -- Variables set for theming the menu:
 -- menu_[bg|fg]_[normal|focus]
@@ -113,7 +114,7 @@ theme.wibar_height = dpi(26)
 theme.wibar_spacing = dpi(10)
 theme.systray_icon_size = dpi(18)
 theme.corner_radius = dpi(6)
-theme.wibar_bg = theme.bg_normal .. "99"
+theme.wibar_bg = theme.bg_normal
 theme.bg_systray = theme.wibar_bg
 
 -- Wibar

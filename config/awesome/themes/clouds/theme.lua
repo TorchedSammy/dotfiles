@@ -62,5 +62,7 @@ theme.wallpaper = theme.config_path.."/wallpapers/clouds1.jpg"
 
 theme.picom_conf = "rounded"
 
+theme.double_borders = true
+
 return theme
 
