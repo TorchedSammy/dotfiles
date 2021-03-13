@@ -7,6 +7,7 @@ local beautiful = require("beautiful")
 local text_taglist = require("taglist")
 local widgets = require('widgets')
 local helpers = require('helpers')
+
 screen.connect_signal("property::geometry", helpers.set_wallpaper)
 
 awful.screen.connect_for_each_screen(function(s)
@@ -23,9 +24,7 @@ awful.screen.connect_for_each_screen(function(s)
 
 	s.bar.y = s.geometry.height-36
 
-	local realbar = wibox.widget {{
-		layout = wibox.layout.align.horizontal,
-		expand = "none",
+	local workspaces = wibox.widget {
 		{
 			{
 				layout = wibox.layout.fixed.horizontal,
@@ -36,6 +35,14 @@ awful.screen.connect_for_each_screen(function(s)
 			widget = wibox.container.margin,
 
 		},
+		shape = s.bar.shape,
+		bg = beautiful.wibar_bg,
+		widget = wibox.container.background,
+	}
+
+	local music = wibox.widget {{
+		layout = wibox.layout.align.horizontal,
+		expand = "none",
 		{
 			{ -- Right widgets
 				layout = wibox.layout.fixed.horizontal,
@@ -46,9 +53,18 @@ awful.screen.connect_for_each_screen(function(s)
 			right = beautiful.wibar_spacing,
 			widget = wibox.container.margin,
 		},
+		},
+		shape = s.bar.shape,
+		bg = beautiful.wibar_bg,
+		widget = wibox.container.background,
+	}
+
+	local right_bar = wibox.widget {{
+		layout = wibox.layout.align.horizontal,
+		expand = "none",
 		{
-			{ -- Right widgets
-				layout = wibox.layout.fixed.horizontal,
+			{
+			layout = wibox.layout.fixed.horizontal,
 				spacing = beautiful.wibar_spacing,
 				widgets.systray,
 				widgets.ram_bar,
@@ -63,21 +79,41 @@ awful.screen.connect_for_each_screen(function(s)
 		shape = s.bar.shape,
 		bg = beautiful.wibar_bg,
 		widget = wibox.container.background,
-		forced_width = s.geometry.width
 	}
 
 	s.bar:setup {
 		layout = wibox.layout.align.horizontal,
 		expand = 'none',
 		{
-			{
+			{ -- Left widgets
 				layout = wibox.layout.fixed.horizontal,
 				spacing = beautiful.wibar_spacing,
-				realbar,
+				workspaces,
 			},
-			left = 1, right = 1,
+			left = beautiful.wibar_spacing,
+			right = beautiful.wibar_spacing,
 			widget = wibox.container.margin,
-		}
+		},
+		{
+			{ -- Middle widget
+				layout = wibox.layout.fixed.horizontal,
+				spacing = beautiful.wibar_spacing,
+				music,
+			},
+			left = beautiful.wibar_spacing,
+			right = beautiful.wibar_spacing,
+			widget = wibox.container.margin,
+		}, -- Middle widget
+		{
+			{ -- Right widgets
+				layout = wibox.layout.fixed.horizontal,
+				spacing = beautiful.wibar_spacing,
+				right_bar,
+			},
+			left = beautiful.wibar_spacing,
+			right = beautiful.wibar_spacing,
+			widget = wibox.container.margin,
+		},
 	}
 end)
-
+-- }}}
