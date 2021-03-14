@@ -17,11 +17,12 @@ and a couple other apps and tools.
 - File Manager • ranger
 - Music Player • cmus
 - Color Schemes • Base16 Horizon Terminal Dark,
-custom MacOS-inspired color scheme :cloud: MacOS colors included
+custom MacOS-inspired color scheme [:cloud: MacOS colors included](https://github.com/TorchedSammy/dotfiles/blob/master/schemes/macos/macos.yml)
 - Text/Code Editor • Neovim (nightly) :cloud: config included
 - Fetches • [Bunnyfetch](https://github.com/Luvella/bunnyfetch.sh), Neofetch :cloud: config included
 - Visualizer • cava :cloud: config included
 - Wallpapers • https://github.com/TorchedSammy/walls/
+- Base16 manager • [flavours](https://github.com/Misterio77/flavours) :cloud: config included
 
 #### Setup
 If any other (potential) Fedora users are here:
@@ -109,6 +110,7 @@ git clone https://github.com/TorchedSammy/dotfiles --recursive
 cd dotfiles
 cp config/* ~/.config -r
 cp .zshrc ~
+cp schemes/ ~/.local/share/flavours/base16/ -r # To add MacOS color scheme to flavours
 ```
 
 #### Comments
