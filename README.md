@@ -46,6 +46,11 @@ Fedora uses!!!
 sudo dnf install pulseaudio pulseaudio-utils pavucontrol cava playerctl ranger google-noto-cjk-fonts cmus neofetch unzip git
 ```
 
+#### Picom
+I use [picom](https://github.com/yshui/picom) as my compositor for rounded
+corners, blurring, all that fancy stuff. Since I'm using the git version,
+installation steps will be at that link.
+
 #### Fonts
 I use [JetBrains Mono](https://www.jetbrains.com/lp/mono/) for the terminal
 font and Apple's [San Francisco](https://github.com/blaisck/sfwin) for
