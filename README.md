@@ -21,6 +21,7 @@ custom MacOS-inspired color scheme :cloud: MacOS colors included
 - Text/Code Editor • Neovim (nightly) :cloud: config included
 - Fetches • [Bunnyfetch](https://github.com/Luvella/bunnyfetch.sh), Neofetch :cloud: config included
 - Visualizer • cava :cloud: config included
+- Wallpapers • https://github.com/TorchedSammy/walls/
 
 #### Setup
 If any other (potential) Fedora users are here:
