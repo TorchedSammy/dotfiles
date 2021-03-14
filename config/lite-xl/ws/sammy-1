@@ -1,1 +1,0 @@
-return { path = "/home/sammy", documents = {["type"]="leaf",["views"]={}}, directories = {} }

@@ -1,1 +1,0 @@
-return { path = "/home/sammy/Files/Projects/Pinwheel", documents = {["active_view"]=1,["views"]={[1]={["text"]=false,["scroll"]={["y"]=336,["x"]=0},["selection"]={[1]=48,[2]=14,[3]=48,[4]=14},["filename"]="/home/sammy/Files/Projects/Pinwheel/main.go",["active"]=true,["type"]="doc"}},["type"]="leaf"}, directories = {} }
