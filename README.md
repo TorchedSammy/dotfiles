@@ -17,7 +17,7 @@ and a couple other apps and tools.
 - File Manager • ranger
 - Music Player • cmus
 - Color Schemes • Base16 Horizon Terminal Dark,
-custom MacOS-inspired color scheme [:cloud: MacOS colors included](https://github.com/TorchedSammy/dotfiles/blob/master/schemes/macos/macos.yml)
+ustom MacOS-inspired color scheme [:cloud: MacOS colors included](https://github.com/TorchedSammy/dotfiles/blob/master/schemes/macos/macos.yaml)
 - Text/Code Editor • Neovim (nightly) :cloud: config included
 - Fetches • [Bunnyfetch](https://github.com/Luvella/bunnyfetch.sh), Neofetch :cloud: config included
 - Visualizer • cava :cloud: config included
