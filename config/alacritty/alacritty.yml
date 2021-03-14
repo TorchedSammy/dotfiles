@@ -111,7 +111,7 @@ font:
     #   - (macOS) Menlo
     #   - (Linux/BSD) monospace
     #   - (Windows) Consolas
-    family: SF Mono
+    family: JetBrains Mono
 
     # The `style` can be specified to pick a specific face.
     style: Medium
@@ -122,7 +122,7 @@ font:
     #
     # If the bold family is not specified, it will fall back to the
     # value specified for the normal font.
-    family: SF Mono
+    family: JetBrains Mono
 
     # The `style` can be specified to pick a specific face.
     #style: Bold
@@ -133,7 +133,7 @@ font:
     #
     # If the italic family is not specified, it will fall back to the
     # value specified for the normal font.
-    family: SF Mono
+    family: JetBrains Mono
 
     # The `style` can be specified to pick a specific face.
     #style: Italic
@@ -144,7 +144,7 @@ font:
     #
     # If the bold italic family is not specified, it will fall back to the
     # value specified for the normal font.
-    family: SF Mono
+    family: JetBrains Mono
 
     # The `style` can be specified to pick a specific face.
     #style: Bold Italic
@@ -172,14 +172,44 @@ font:
   # it is recommended to set `use_thin_strokes` to `false`.
   #use_thin_strokes: true
 
-# If `true`, bold text is drawn using the bright color variants.
-draw_bold_text_with_bright_colors: true
-
+# Start flavours
+# Base16 Horizon Dark - alacritty color config
+# Michaël Ball (http://github.com/michael-ball/)
 colors:
   # Default colors
   primary:
-    background: '#1d1f21'
-    foreground: '#e0e0e0'
+    background: '0x1C1E26'
+    foreground: '0xCBCED0'
+
+  # Colors the cursor will use if `custom_cursor_colors` is true
+  cursor:
+    text: '0x1C1E26'
+    cursor: '0xCBCED0'
+
+  # Normal colors
+  normal:
+    black:   '0x1C1E26'
+    red:     '0xE95678'
+    green:   '0x29D398'
+    yellow:  '0xFAC29A'
+    blue:    '0x26BBD9'
+    magenta: '0xEE64AC'
+    cyan:    '0x59E1E3'
+    white:   '0xCBCED0'
+
+  # Bright colors
+  bright:
+    black:   '0x6F6F70'
+    red:     '0xFAB795'
+    green:   '0x232530'
+    yellow:  '0x2E303E'
+    blue:    '0x9DA0A2'
+    magenta: '0xDCDFE4'
+    cyan:    '0xF09383'
+    white:   '0xE3E6EE'
+
+draw_bold_text_with_bright_colors: false
+# End flavours
 
     # Bright and dim foreground colors
     #
@@ -189,16 +219,6 @@ colors:
     # color will be used.
     #dim_foreground: '#828482'
     #bright_foreground: '#eaeaea'
-
-  # Cursor colors
-  #
-  # Colors which should be used to draw the terminal cursor.
-  #
-  # Allowed values are CellForeground/CellBackground, which reference the
-  # affected cell, or hexadecimal colors like #ff00ff.
-  #cursor:
-  #  text: CellBackground
-  #  cursor: CellForeground
 
   # Vi mode cursor colors
   #
@@ -264,28 +284,6 @@ colors:
   #selection:
   #  text: CellBackground
   #  background: CellForeground
-
-  # Normal colors
-  normal:
-    black:   '#1d1f21'
-    red:     '#d04645'
-    green:   '#77b755'
-    yellow:  '#f4c94d'
-    blue:    '#3E89E7'
-    magenta: '#e25e9c'
-    cyan:    '#5EDFE2'
-    white:   '#f0f0f0'
-
-  # Bright colors
-  bright:
-    black:   '#999999'
-    red:     '#DF5554'
-    green:   '#8ACC68'
-    yellow:  '#FDD565'
-    blue:    '#4993F0'
-    magenta: '#EB6AA6'
-    cyan:    '#6FEBEE'
-    white:   '#ffffff'
 
   # Dim colors
   #
