@@ -13,6 +13,7 @@ Plug 'tpope/vim-fugitive'
 Plug 'roryokane/detectindent'
 Plug 'f-person/git-blame.nvim'
 Plug 'b3nj5m1n/kommentary'
+Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
 
 call plug#end()
 
