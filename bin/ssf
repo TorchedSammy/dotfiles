@@ -7,7 +7,7 @@
 url="https://modeus.is-inside.me/upload"
 # Authentication Key
 # You should change this to a value that makes sense for you
-authtoken="$(cat $HOME/apikey)"
+authtoken="$(cat $HOME/.apikey)"
 # Key name of the field to use authkey
 formkey="key"
 # JSON key to image URl
