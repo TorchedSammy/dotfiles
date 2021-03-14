@@ -25,7 +25,10 @@ custom MacOS-inspired color scheme :cloud: MacOS colors included
 #### Setup
 If any other (potential) Fedora users are here:
 I recommend you (re)install from the
-[Fedora Everything installer](https://alt.fedoraproject.org/).
+[Fedora Everything installer](https://alt.fedoraproject.org/).  
+This can give you a very minimal install compared to the normal installer
+if the minimal install is selected and doesn't include GNOME/whatever
+Fedora uses!!!
 
 1. Install Awesome (of course) with your package manager  
   ```
