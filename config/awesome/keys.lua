@@ -33,7 +33,7 @@ globalkeys = gears.table.join(
     awful.key({ "Control",           }, "Print", function () awful.spawn("ss") end,
               {description = "take region screenshot", group = "awesome"}),
     awful.key({ modkey           }, "d", function () 
-      awful.spawn.with_shell("cd "..os.getenv("HOME").."/dotfiles && cp -r config/awesome/* "..os.getenv("HOME").."/.config/awesome")
+      awful.spawn.with_shell("cp dotfiles/config/awesome/ " .. os.getenv 'HOME' .. "/.config/ -r")
       naughty.notify({ text = "Copied awesome config"}) 
     end,
     {description = "update awesome config from dotfiles folder", group = "awesome"}),
@@ -65,7 +65,7 @@ globalkeys = gears.table.join(
       {description = "switch window focus", group = "client"}),
 
     -- Standard program
-    awful.key({ modkey }, "t", function () awful.spawn(terminal) end,
+    awful.key({ modkey }, "t", function () awful.spawn.easy_async(terminal) end,
               {description = "open a terminal", group = "launcher"}),
     awful.key({ modkey, "Control" }, "r", awesome.restart,
               {description = "reload awesome", group = "awesome"}),
