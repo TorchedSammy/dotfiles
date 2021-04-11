@@ -13,5 +13,5 @@ formkey="key"
 # JSON key to image URl
 image="url"
 
-curl --request POST -H "$formkey: $authtoken" -F file=@$@ $url | jq -r ".$image" | xclip -selection clipboard
+curl --request POST -H "$formkey: $authtoken" -F file=@$@ $url | jq -r -j ".$image" | xclip -selection clipboard
 notify-send "Screenshot uploaded!"
