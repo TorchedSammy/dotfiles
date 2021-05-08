@@ -1,3 +1,10 @@
-#!/bin/sh
+#! /bin/hilbish
 
-echo "return themename" | awesome-client | cut -d"\"" -f 2
+local f = io.popen 'awesome-client "return themename"'
+local content = f:read '*all'
+f:close()
+
+local splitcontent = content:split '"'
+local theme = splitcontent[2]
+
+print(theme)
