@@ -1,9 +1,0 @@
-[submodule "awesome-switcher"]
-	path = config/awesome/awesome-switcher
-	url = https://github.com/troglobit/awesome-switcher
-[submodule "config/awesome/wallpapers"]
-	path = config/awesome/wallpapers
-	url = https://github.com/TorchedSammy/walls
-[submodule "config/awesome/bling"]
-	path = config/awesome/bling
-	url = https://github.com/Nooo37/bling/
