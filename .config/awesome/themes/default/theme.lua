@@ -22,12 +22,20 @@ theme.xcolor13    = "#A4C8DE"
 theme.xcolor14    = "#EDCCD6"
 theme.xcolor15    = "#ebe1e7"
 
+theme.bg_normal     = theme.xbackground
+theme.bg_sec        = '#6F6F70'
+theme.bg_focus      = theme.bg_normal
+theme.bg_urgent     = theme.bg_normal
+theme.bg_minimize   = theme.bg_normal
+
+theme.fg_normal     = theme.xforeground
+
 theme.titlebars = true
 theme.titlebar_type = 'default'
 theme.titlebar_bg = "#332b3d" .. "e6"
 
 --theme.bar = 'bar here'
-theme.wibar_bg = theme.bg_normal .. "99"
+theme.wibar_bg = theme.bg_normal .. "d6"
 
 theme.wallpaper = theme.config_path.."/wallpapers/blossoms.jpg"
 
