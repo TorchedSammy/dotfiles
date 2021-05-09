@@ -65,9 +65,9 @@ while getopts "f:s:r:h" arg; do
 done
 ]]--
 
-exec 'tput smcup'
-exec 'tput reset'
-exec 'tput civis'
+runcmd 'tput smcup'
+runcmd 'tput reset'
+runcmd 'tput civis'
 
 while true do
 	-- New position:
@@ -88,7 +88,7 @@ while true do
 	runcmd('tput cup ' .. y .. ' ' .. x)
 	runcmd([[printf "\033[1;3%sm\xe2\x94%s]] .. v[tonumber(tostring(l) .. tostring(n))] .. '" "' .. c .. '"')
 	if t > r then
-		exec 'tput reset && tput civis'
+		runcmd 'tput reset && tput civis'
 		t = 0
 	else
 		t = t + 1
