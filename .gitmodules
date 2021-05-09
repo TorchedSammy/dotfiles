@@ -1,0 +1,3 @@
+[submodule ".config/awesome/wallpapers"]
+	path = .config/awesome/wallpapers
+	url = https://github.com/TorchedSammy/walls
