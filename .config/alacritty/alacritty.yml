@@ -1,0 +1,70 @@
+window:
+  padding:
+    x: 20
+    y: 16
+  startup_mode: Windowed
+  dynamic_title: true
+font:
+  normal:
+    family: Victor Mono
+    style: Medium Italic
+  bold:
+    family: Victor Mono
+    style: Medium Italic
+  italic:
+    family: Victor Mono
+    style: Medium Italic
+  bold_italic:
+    family: Victor Mono
+    style: Bold Italic
+  size: 8.0
+
+# Start flavours
+# Base16 Horizon Dark - alacritty color config
+# Michaël Ball (http://github.com/michael-ball/)
+colors:
+  primary:
+    background: '0x1C1E26'
+    foreground: '0xCBCED0'
+
+  cursor:
+    text: '0x1C1E26'
+    cursor: '0xCBCED0'
+
+  normal:
+    black:   '0x1C1E26'
+    red:     '0xE95678'
+    green:   '0x29D398'
+    yellow:  '0xFAC29A'
+    blue:    '0x26BBD9'
+    magenta: '0xEE64AC'
+    cyan:    '0x59E1E3'
+    white:   '0xCBCED0'
+
+  bright:
+    black:   '0x6F6F70'
+    red:     '0xFAB795'
+    green:   '0x232530'
+    yellow:  '0x2E303E'
+    blue:    '0x9DA0A2'
+    magenta: '0xDCDFE4'
+    cyan:    '0xF09383'
+    white:   '0xE3E6EE'
+
+draw_bold_text_with_bright_colors: false
+# End flavours
+selection:
+  save_to_clipboard: true
+cursor:
+  style:
+    shape: Underline
+    blinking: On
+  blink_interval: 350
+  unfocused_hollow: true
+live_config_reload: true
+
+shell:
+  program: hilbish
+  args:
+    - --login
+
