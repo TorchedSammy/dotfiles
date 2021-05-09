@@ -12,13 +12,13 @@ function helpers.rrect(radius)
 end
 
 function helpers.colorize_text(text, color)
-	return "<span foreground='" .. color .."'>" .. text .. "</span>"
+	return '<span foreground="' .. color ..'">' .. text .. '</span>'
 end
 
 function helpers.set_wallpaper(s)
 	if beautiful.wallpaper then
 		local wallpaper = beautiful.wallpaper
-		if type(wallpaper) == "function" then
+		if type(wallpaper) == 'function' then
 			wallpaper = wallpaper(s)
 		end
 		gears.wallpaper.maximized(wallpaper, s, true)
