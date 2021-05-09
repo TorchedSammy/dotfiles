@@ -43,3 +43,12 @@ alias('gcm', 'git checkout master')
 
 petals = require 'petals'
 petals.init()
+
+os.execute 'tty >/tmp/tty 2>&1'
+local f = io.open '/tmp/tty'
+local tty = f:read '*all'
+tty = tty:gsub('\n', '')
+f:close()
+
+os.setenv('GPG_TTY', tty)
+os.execute 'gpgconf --launch gpg-agent'
