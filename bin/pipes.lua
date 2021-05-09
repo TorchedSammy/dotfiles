@@ -31,12 +31,12 @@ local v = {
 	[10]=[[\x98]],
 	[11]=[[\x80]],
 	[12]=[[\x90]],
-   [21]=[[\x94]],
-   [22]=[[\x82]],
-   [23]=[[\x98]],
-   [30]=[[\x94]],
-   [32]=[[\x8c]],
-   [33]=[[\x80]]
+	[21]=[[\x94]],
+	[22]=[[\x82]],
+	[23]=[[\x98]],
+	[30]=[[\x94]],
+	[32]=[[\x8c]],
+	[33]=[[\x80]]
 }
 
 -- Heavy UTF-8 box characters
@@ -85,8 +85,9 @@ while true do
 	n = (n < 0 and 3 or n % 4)
 
 	-- Print:
-	runcmd('tput cup ' .. y .. ' ' .. x)
-	runcmd([[printf "\033[1;3%sm\xe2\x94%s]] .. v[tonumber(tostring(l) .. tostring(n))] .. '" "' .. c .. '"')
+	print(v[tonumber(tostring(l) .. tostring(n))])
+--	runcmd('tput cup ' .. y .. ' ' .. x)
+--	runcmd([[printf "\033[1;3%sm\xe2\x94%s]] .. v[tonumber(tostring(l) .. tostring(n))] .. '" "' .. c .. '"')
 	if t > r then
 		runcmd 'tput reset && tput civis'
 		t = 0
