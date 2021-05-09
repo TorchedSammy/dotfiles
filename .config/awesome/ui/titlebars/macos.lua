@@ -1,23 +1,24 @@
-local awful = require('awful')
-local wibox = require('wibox')
-local gears = require('gears')
-local helpers = require('helpers')
-local beautiful = require('beautiful')
+-- macos style titlebar
+local awful = require 'awful'
+local beautiful = require 'beautiful'
+local gears = require 'gears'
+local helpers = require 'helpers'
+local wibox = require 'wibox'
 
-client.connect_signal("request::titlebars", function(c)
+client.connect_signal('request::titlebars', function(c)
 	-- buttons for the titlebar
 	local buttons = gears.table.join(
-		awful.button({ }, 1, function()
-			c:emit_signal("request::activate", "titlebar", {raise = true})
+		awful.button({}, 1, function()
+			c:emit_signal('request::activate', 'titlebar', {raise = true})
 			awful.mouse.client.move(c)
 		end),
-		awful.button({ }, 3, function()
-			c:emit_signal("request::activate", "titlebar", {raise = true})
+		awful.button({}, 3, function()
+			c:emit_signal('request::activate', 'titlebar', {raise = true})
 			awful.mouse.client.resize(c)
 		end)
 	)
 	function titlebarbtn(char, color, func)
-		return wibox.widget{
+		return wibox.widget {
 			{
 				{
 					markup = helpers.colorize_text(char, color),
@@ -28,30 +29,28 @@ client.connect_signal("request::titlebars", function(c)
 			},
 			bg = color,
 			widget = wibox.container.background,
-			buttons = gears.table.join(
-				awful.button({}, 1, func)),
+			buttons = gears.table.join(awful.button({}, 1, func)),
 			shape = gears.shape.circle
 		}
 	end
 
-	local minimize = titlebarbtn("", beautiful.xcolor3, function ()
+	local minimize = titlebarbtn('', beautiful.xcolor3, function()
+		c.minimized = true
 		awful.client.next(1)
         if client.focus then
             client.focus:raise()
         end
-		c.minimized = true
 	end)
-	local maximize = titlebarbtn("", beautiful.xcolor2, function ()
-		c.maximized = not c.maximized
-        c:raise()
+	local maximize = titlebarbtn('', beautiful.xcolor2, function()
+        helpers.maximize(c)
 	end)
-	local close = titlebarbtn("", beautiful.xcolor1, function ()
+	local close = titlebarbtn('', beautiful.xcolor1, function()
 		c:kill()
 	end)
 
-	awful.titlebar(c) : setup {
+	awful.titlebar(c): setup {
 		layout = wibox.layout.align.horizontal,
-		expand = "none",
+		expand = 'none',
 		{
 			buttons = buttons,
 			{
@@ -86,3 +85,4 @@ client.connect_signal("request::titlebars", function(c)
 		}
 	}
 end)
+
