@@ -25,7 +25,7 @@ end
 -- Handle runtime errors after startup
 do
 	local in_error = false
-	awesome.connect_signal('debug::error', function (err)
+	awesome.connect_signal('debug::error', function(err)
 		-- Make sure we don't go into an endless error loop
 		if in_error then return end
 		in_error = true
@@ -118,7 +118,7 @@ awful.rules.rules = {
 -- }}}
 
 -- Signal function to execute when a new client appears.
-client.connect_signal('manage', function (c)
+client.connect_signal('manage', function(c)
 	if awesome.startup and not c.size_hints.user_position
 	and not c.size_hints.program_position then
 		awful.placement.no_offscreen(c)
