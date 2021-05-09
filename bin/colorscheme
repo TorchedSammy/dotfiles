@@ -1,21 +1,25 @@
-#!/bin/bash
-text=te
-echo '               40     41     42     43     44     45     46     47'
+#! /bin/hilbish
+local text = 'te'
+print '               40     41     42     43     44     45     46     47'
 
-for FGs in \
-	'    ' '1;  ' \
-	'  30' '1;30' \
-	'  31' '1;31' \
-	'  32' '1;32' \
-	'  33' '1;33' \
-	'  34' '1;34' \
-	'  35' '1;35' \
-	'  36' '1;36' \
-	'  37' '1;37'; do
-	FG=${FGs// /}
-	echo -en " $FGs \e[${FG}m  $text  \e[0m"
-	for BG in {40..47}; do
-		echo -en " \e[${FG}m\e[${BG}m  $text  \e[0m"
-	done
-	echo
-done
+
+local fgs = {
+	'    ', '1;  ',
+	'  30', '1;30',
+	'  31', '1;31',
+	'  32', '1;32',
+	'  33', '1;33',
+	'  34', '1;34',
+	'  35', '1;35',
+	'  36', '1;36',
+	'  37', '1;37'}
+
+for fgcur = 1, #fgs do
+	local fgt = fgs[fgcur]
+	local fg = fgt:gsub("%s+", "")
+	io.write(' ' .. fgt .. ' \27[' .. fg .. 'm  ' .. text .. '  \27[0m')
+	for bg = 40, 47 do
+		io.write(' \27[' .. fg .. 'm\27[' .. bg .. 'm  ' .. text .. '  \27[0m')
+	end
+	print()
+end
