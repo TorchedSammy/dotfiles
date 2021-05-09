@@ -216,7 +216,7 @@ awful.key({modkey, shift}, 'space',
 	}
 ),
 
-awful.key({ modkey, control }, 'n',
+awful.key({modkey, control}, 'n',
 	function()
 		local c = awful.client.restore()
 		-- Focus restored client
@@ -227,7 +227,7 @@ awful.key({ modkey, control }, 'n',
 		description = 'restore minimized',
 		group = 'client'
 	}
-),
+))
 
 clientkeys = gears.table.join(
 awful.key({modkey}, 'f',
@@ -239,11 +239,12 @@ awful.key({modkey}, 'f',
 		group = 'client'
 	}
 ),
-awful.key({ modkey, shift   }, 'c',
+awful.key({ modkey, shift}, 'c',
 	function(c)
 		c:kill()
-	end, {description = 'Close a client/window',
-	group = 'client'
+	end, {
+		description = 'Close a client/window',
+		group = 'client'
 	}
 ),
 awful.key({modkey, control}, 'space', awful.client.floating.toggle, {
