@@ -56,7 +56,7 @@ local function taglist(s)
 	text_taglist:buttons(gears.table.join(
 		-- Middle click - Show clients in current tag
 		awful.button({ }, 2, function()
-			awful.spawn.with_shell('rofi -show windowcd')
+			awful.spawn.with_shell 'rofi -show windowcd'
 		end)
 	))
 
