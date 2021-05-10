@@ -3,6 +3,7 @@
 	<blockquote>there ain't any place like ~</blockquote>
 </div>
 <img src='https://modeus.is-inside.me/4WFOSEqq.png' align='right' width='400px'>
+<img src='https://modeus.is-inside.me/jfaWCvE4.png' align='right' width='400px'>
 
 #### Welcome!
 Here is my very own collection of configuration files for my Linux desktop experience.
@@ -15,12 +16,12 @@ Here is my very own collection of configuration files for my Linux desktop exper
 - Compositor • Picom (blurred, rounded corners) :cloud: config included
 - Music Player • cmus
 - Color Schemes •
-  - Base16 Horizon Terminal Dark,
+  - Base16 Horizon Terminal Dark
   - Custom Dracula inspired color scheme
   - Custom MacOS-inspired color scheme [:cloud: included](https://github.com/TorchedSammy/dotfiles/blob/master/schemes/macos/macos.yaml)
 - Text/Code Editor • Neovim (nightly)
 - Fetches • 
-  - [Bunnyfetch](https://github.com/Luvella/bunnyfetch.sh),
+  - [Bunnyfetch](https://github.com/Luvella/bunnyfetch.sh)
   - Neofetch :cloud: config included
   - [Hilbifetch](https://github.com/Hilbis/Hilbifetch)
 - Visualizer • cava
