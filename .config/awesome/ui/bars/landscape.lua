@@ -11,15 +11,10 @@ local widgets = require('widgets')
 
 local systray_margin = (beautiful.wibar_height-beautiful.systray_icon_size)/2
 
-screen.connect_signal("property::geometry", set_wallpaper)
+screen.connect_signal("property::geometry", helpers.set_wallpaper)
 
 awful.screen.connect_for_each_screen(function(s)
 	helpers.set_wallpaper(s)
-
-	local l = awful.layout.suit
-	local layouts = { l.floating, l.spiral.dwindle, l.floating, l.tile, l.floating, l.floating, l.floating, l.floating, l.floating }
-	awful.tag({ "1", "2", "3", "4", "5", "6", "7", "8", "9" }, s, layouts)
-
 
 	s.bar = awful.wibar({
 		screen = s,
@@ -57,11 +52,7 @@ awful.screen.connect_for_each_screen(function(s)
 				layout = wibox.layout.fixed.horizontal,
 				spacing = beautiful.wibar_spacing,
 				widgets.time,
-				{
-					s.mylayoutbox,
-					top = 8, bottom = 8,
-	        widget = wibox.container.margin
-				}
+				widgets.layout,
 			},
 			left = beautiful.wibar_spacing,
 			right = beautiful.wibar_spacing,
