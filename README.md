@@ -2,7 +2,7 @@
 	<h4>🌺 sammyette's dots 🌺 </h4>
 	<blockquote>there ain't any place like ~</blockquote>
 </div>
-<img src='https://modeus.is-inside.me/4WFOSEqq.png' align='right' width='400px'>
+<img src='https://modeus.is-inside.me/HaO6y6Qz.png' align='right' width='400px'>
 <img src='https://modeus.is-inside.me/jfaWCvE4.png' align='right' width='400px'>
 
 #### Welcome!
