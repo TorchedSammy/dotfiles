@@ -64,8 +64,9 @@ corners, blurring, all that fancy stuff. Since I'm using the git version,
 installation steps will be at that link.
 
 #### Fonts
-I use [JetBrains Mono](https://www.jetbrains.com/lp/mono/) for the terminal
-font and Apple's [San Francisco](https://github.com/blaisck/sfwin) for
+I use [Victor Mono](https://github.com/rubjo/victor-mono) for the terminal
+(yes i actually use this, its not just for a screenshot)
+and Apple's [San Francisco](https://github.com/blaisck/sfwin) for
 anything else text.  
 
 [Typicons](https://www.s-ings.com/typicons/) and
