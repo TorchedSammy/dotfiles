@@ -1,12 +1,11 @@
--- Bottom Bar inspired by woolenkitten
-local awful = require("awful")
-local naughty = require("naughty")
-local wibox = require("wibox")
-local gears = require("gears")
-local beautiful = require("beautiful")
-local text_taglist = require("taglist")
-local widgets = require('widgets')
-local helpers = require('helpers')
+local awful = require 'awful'
+local naughty = require 'naughty'
+local wibox = require 'wibox'
+local gears = require 'gears'
+local beautiful = require 'beautiful'
+local text_taglist = require 'ui.taglist'
+local widgets = require 'ui.widgets'
+local helpers = require 'helpers'
 screen.connect_signal("property::geometry", helpers.set_wallpaper)
 
 awful.screen.connect_for_each_screen(function(s)
