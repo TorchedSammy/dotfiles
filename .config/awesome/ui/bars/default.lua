@@ -6,25 +6,25 @@ local beautiful = require 'beautiful'
 local text_taglist = require 'ui.taglist'
 local widgets = require 'ui.widgets'
 local helpers = require 'helpers'
-screen.connect_signal("property::geometry", helpers.set_wallpaper)
+screen.connect_signal('property::geometry', helpers.set_wallpaper)
 
 awful.screen.connect_for_each_screen(function(s)
 	helpers.set_wallpaper(s)
 
 	s.bar = awful.wibar({
 		screen = s,
-		position = "bottom",
+		position = 'bottom',
 		height = beautiful.wibar_height,
 		width = s.geometry.width - 28,
 		shape = gears.shape.rounded_bar,
-		bg = "#00000000"
+		bg = '#00000000'
 	})
 
-	s.bar.y = s.geometry.height-36
+	s.bar.y = s.geometry.height - 36
 
 	local realbar = wibox.widget {{
 		layout = wibox.layout.align.horizontal,
-		expand = "none",
+		expand = 'none',
 		{
 			{
 				layout = wibox.layout.fixed.horizontal,
