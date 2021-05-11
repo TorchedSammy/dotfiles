@@ -9,12 +9,25 @@ usage: ssf filepath
 upload a local image to sharex host
 ]]
 
-if #args > 0 then
+function runcmd(cmd, giveout)
+	if giveout then
+		local f = io.popen(cmd)
+		local output = f:read '*all'
+		local out = output:gsub('\n', '')
+		f:close()
+
+		return out
+	else
+		os.execute(cmd)
+	end
+end
+
+if #args < 2 then
 	print(usage)
 	os.exit(1)
 end
 
-local path = args[1]
+local path = args[2]
 -- URL to uplaod to
 local url = 'https://modeus.is-inside.me/upload'
 -- Authentication Key
@@ -25,11 +38,14 @@ local formkey = 'key'
 -- JSON key to image URl
 local image = 'url'
 
-local jsonstr = runcmd('curl --request POST -H "' .. 
-formkey ':' .. authtoken .. ' -F file=@$@ ' .. url, true)
+local jsonstr = runcmd('curl -s --request POST -H "' ..  formkey .. ':'
+.. authtoken .. '" -F file=@' .. path .. ' ' .. url, true)
+
 local obj = loadstring('return '
 .. jsonstr:gsub('("[^"]-"):', '[%1]='))()
 local url = obj[image]
+
 print(url)
+
 runcmd('echo ' .. url .. ' | xclip -selection clipboard')
 runcmd 'notify-send "ssf-lua" "Screenshot uploaded!"'
