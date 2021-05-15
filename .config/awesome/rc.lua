@@ -43,9 +43,6 @@ beautiful.init('~/.config/awesome/themes/' .. themename .. '/theme.lua')
 
 require 'conf'
 
--- }}}
-
-
 awful.screen.connect_for_each_screen(function(s)
 	local l = awful.layout.suit
 	local layouts = { l.floating, l.tile, l.floating, l.tile, l.floating, l.floating, l.floating, l.floating, l.floating }
