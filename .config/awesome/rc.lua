@@ -54,25 +54,26 @@ require 'conf'
 -- }}}
 
 -- Keyboard map indicator and switcher
-mykeyboardlayout = awful.widget.keyboardlayout()
 local l = awful.layout.suit
-local layouts = { l.floating, l.spiral.dwindle, l.floating, l.tile, l.floating, l.floating, l.floating, l.floating, l.floating }
+local layouts = { l.floating, l.tile, l.floating, l.tile, l.floating, l.floating, l.floating, l.floating, l.floating }
 awful.tag({ '1', '2', '3', '4', '5', '6', '7', '8', '9' }, s, layouts)
 
 -- {{{ Rules
 -- Rules to apply to new clients (through the 'manage' signal).
 awful.rules.rules = {
 	-- All clients will match this rule.
-	{ rule = { },
-	  properties = { border_width = beautiful.border_width,
-					 border_color = beautiful.border_normal,
-					 focus = awful.client.focus.filter,
-					 raise = true,
-					 keys = clientkeys,
-					 buttons = clientbuttons,
-					 screen = awful.screen.preferred,
-					 placement = awful.placement.no_overlap+awful.placement.no_offscreen
-	 }
+	{
+		rule = { },
+		properties = {
+			border_width = beautiful.border_width,
+			border_color = beautiful.border_normal,
+			focus = awful.client.focus.filter,
+			raise = true,
+			keys = clientkeys,
+			buttons = clientbuttons,
+			screen = awful.screen.preferred,
+			placement = awful.placement.no_overlap+awful.placement.no_offscreen
+		}
 	},
 
 	-- Floating clients.
@@ -119,6 +120,7 @@ awful.rules.rules = {
 
 -- Signal function to execute when a new client appears.
 client.connect_signal('manage', function(c)
+	if not awesome.startup then awful.client.setslave(c) end
 	if awesome.startup and not c.size_hints.user_position
 	and not c.size_hints.program_position then
 		awful.placement.no_offscreen(c)
