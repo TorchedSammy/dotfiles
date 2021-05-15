@@ -39,7 +39,7 @@ theme.titlebars = true
 theme.titlebar_type = 'default'
 theme.titlebar_bg = theme.xcolor8
 
-theme.bar = 'default'
+theme.bar = 'clouds'
 theme.wibar_bg = theme.bg_normal
 theme.wibar_spacing = dpi(14)
 
@@ -63,7 +63,6 @@ theme.bg_systray = theme.wibar_bg
 theme.wallpaper = theme.config_path.."/wallpapers/woman-sitting-at-pc.jpg"
 
 theme.picom_conf = "blur-shadow"
-theme.exp_picom_bknd = true
 
 return theme
 
