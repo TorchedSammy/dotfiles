@@ -91,7 +91,7 @@ theme.notification_margin = dpi(10)
 theme.notification_padding = dpi(10)
 theme.notification_spacing = dpi(10)
 theme.notification_border_width = dpi(0)
-theme.notification_icon_size = dpi(40)
+theme.notification_icon_size = dpi(80)
 theme.notification_position = 'top_right'
 
 -- Variables set for theming the menu:
