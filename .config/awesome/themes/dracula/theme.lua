@@ -63,6 +63,7 @@ theme.bg_systray = theme.wibar_bg
 theme.wallpaper = theme.config_path.."/wallpapers/woman-sitting-at-pc.jpg"
 
 theme.picom_conf = "blur-shadow"
+theme.exp_picom_bknd = true
 
 return theme
 
