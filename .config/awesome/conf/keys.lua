@@ -383,6 +383,6 @@ clientbuttons = gears.table.join(
 
 root.keys(globalkeys)
 root.buttons(gears.table.join(
-	awful.button({ }, 3, function() mainmenu:toggle() end),
+	awful.button({ }, 3, function() mainmenu:toggle() end)
 ))
 
