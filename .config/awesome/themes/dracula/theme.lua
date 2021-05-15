@@ -43,6 +43,8 @@ theme.bar = 'default'
 theme.wibar_bg = theme.bg_normal
 theme.wibar_spacing = dpi(14)
 
+theme.ram_bar_color = theme.xcolor2
+
 theme.notification_border_color = theme.titlebar_bg
 theme.notification_border_width = theme.border_width
 theme.notification_position = 'bottom_right'
