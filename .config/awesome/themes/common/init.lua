@@ -16,6 +16,7 @@ theme.gfs = gfs
 theme.dpi = dpi
 theme.config_path = config_path
 theme.themes_path = themes_path
+theme.master_width_factor = 0.6
 
 theme.xbackground = "#110f1c"
 theme.xforeground = "#ebe1e7"
