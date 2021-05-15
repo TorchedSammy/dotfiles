@@ -40,20 +40,11 @@ do
 end
 
 beautiful.init('~/.config/awesome/themes/' .. themename .. '/theme.lua')
-for s = 1, screen.count() do
-	gears.wallpaper.maximized(beautiful.wallpaper, s, true)
-end
 
 require 'conf'
 
-
 -- }}}
 
--- {{{ Menu
--- Create a launcher widget and a main menu
--- }}}
-
--- Keyboard map indicator and switcher
 local l = awful.layout.suit
 local layouts = { l.floating, l.tile, l.floating, l.tile, l.floating, l.floating, l.floating, l.floating, l.floating }
 awful.tag({ '1', '2', '3', '4', '5', '6', '7', '8', '9' }, s, layouts)
