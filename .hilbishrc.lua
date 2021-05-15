@@ -34,7 +34,20 @@ commander.register('ev', function()
 		if input == nil then break end
 		text = text .. '\n' .. input
 	end
-	(loadstring(text))()
+
+	local ok, err = pcall(function() (loadstring(text))() end)
+	if not ok then
+		print(err)
+		return 1
+	end
+
+	return 0
+end)
+
+commander.register('nvmnode', function()
+	exec('sh -c "export NVM_DIR="$HOME/.nvm"'
+	.. '; [ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"' 
+	.. '; nvm use node; exec hilbish"')
 end)
 
 alias('cls', 'clear')
@@ -52,3 +65,5 @@ f:close()
 
 os.setenv('GPG_TTY', tty)
 os.execute 'gpgconf --launch gpg-agent'
+
+appendPath '~/.cargo/bin'
