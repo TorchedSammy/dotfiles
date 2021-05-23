@@ -5,7 +5,7 @@ local widgets = require 'ui.widgets'
 awesome.connect_signal('bling::playerctl::title_artist_album',
 function (title, artist, art)
 	naughty.notify {
-		title = title,
+		title = 'Now Playing\n' .. title,
 		text = artist,
 		icon = gears.surface.load_uncached_silently(art)
 	}
