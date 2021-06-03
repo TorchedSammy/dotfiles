@@ -13,7 +13,7 @@ function doPrompt(fail)
 	))
 end
 
-print(lunacolors.format('Welcome {cyan}'.. _user ..
+print(lunacolors.format('Welcome {cyan}'.. hilbish.user ..
 '{reset} to {magenta}Hilbish{reset},\n' .. 
 'the nice lil shell for {blue}Lua{reset} fanatics!\n'))
 
@@ -24,7 +24,7 @@ bait.catch('command.exit', function(code)
 end)
 
 commander.register('ver', function()
-	print(_ver)
+	print(hilbish.ver)
 end)
 
 commander.register('ev', function()
