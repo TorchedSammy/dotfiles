@@ -80,14 +80,14 @@ while true do
 	y = (y > h and 0 or (y < 0 and h or y))
 
 	-- New random direction:
-	n = (math.random(0, 32767) % s) - 1
+	n = (math.random(0, 32767) % (s - 1))
 	n = ((n > 1 or n == 0) and l or l + n)
 	n = (n < 0 and 3 or n % 4)
 
 	-- Print:
-	print(v[tonumber(tostring(l) .. tostring(n))])
---	runcmd('tput cup ' .. y .. ' ' .. x)
---	runcmd([[printf "\033[1;3%sm\xe2\x94%s]] .. v[tonumber(tostring(l) .. tostring(n))] .. '" "' .. c .. '"')
+--	print(v[tonumber(l .. n)])
+	runcmd('tput cup ' .. y .. ' ' .. x)
+	runcmd([[printf "\033[1;3%sm\xe2\x94%s]] .. v[tonumber(l .. n)] .. '" "' .. c .. '"')
 	if t > r then
 		runcmd 'tput reset && tput civis'
 		t = 0
