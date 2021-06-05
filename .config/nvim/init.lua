@@ -11,7 +11,7 @@ end
 vim.cmd 'set number'
 vim.o.hidden = true
 vim.o.mouse = 'a'
-vim.o.noexpandtab = true
+vim.o.expandtab = false
 vim.o.preserveindent = true
 vim.o.softtabstop = 0
 vim.o.shiftwidth = 4
