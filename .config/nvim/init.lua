@@ -31,11 +31,10 @@ map('n', '<C-n>', '<Cmd>NvimTreeToggle<CR>')
 map('n', '<leader>r', '<Cmd>NvimTreeRefresh<CR>')
 
 -- Barbar
-map('n', '<A-z>', '<Cmd>BufferPrevious<CR>', nil)
-map('n', '<A-x>', '<Cmd>BufferNext<CR>', nil)
-map('n', '<A-c>', '<Cmd>BufferClose<CR>', nil)
+map('n', '<A-z>', '<Cmd>BufferPrevious<CR>')
+map('n', '<A-x>', '<Cmd>BufferNext<CR>')
+map('n', '<A-c>', '<Cmd>BufferClose<CR>')
 map('n', '<A-S-c>', '<Cmd>BufferClose!<CR>')
-
 -- }}}
 
 -- Colors
