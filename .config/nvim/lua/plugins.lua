@@ -26,4 +26,6 @@ return require('packer').startup(function()
 	}
 
 	use 'dstein64/nvim-scrollview'
+
+	use {'lukas-reineke/indent-blankline.nvim', branch = 'lua'}
 end)
