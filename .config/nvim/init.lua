@@ -28,3 +28,12 @@ vim.g.nvim_tree_show_icons = {
 map('n', '<A-z>', [[ <Cmd>BufferPrevious<CR> ]], nil)
 map('n', '<A-x>', [[ <Cmd>BufferNext<CR> ]], nil)
 map('n', '<A-c>', [[ <Cmd>BufferClose<CR> ]], nil)
+
+-- Colors
+vim.cmd 'hi NvimTreeVertSplit cterm=none ctermfg=0 ctermbg=0'
+vim.cmd 'hi EndOfBuffer cterm=none ctermfg=0 ctermbg=0'
+vim.cmd 'hi SignColumn cterm=none ctermfg=0 ctermbg=0'
+
+vim.cmd 'hi GitSignsAdd ctermfg=2'
+vim.cmd 'hi GitSignsRemove ctermfg=1'
+vim.cmd 'hi GitSignsChange ctermfg=4'
