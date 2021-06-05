@@ -7,10 +7,10 @@ window:
 font:
   normal:
     family: Victor Mono
-    style: Medium Italic
+    style: Medium
   bold:
     family: Victor Mono
-    style: Medium Italic
+    style: Bold
   italic:
     family: Victor Mono
     style: Medium Italic
@@ -20,36 +20,40 @@ font:
   size: 8.0
 
 # Start flavours
-# Base16 Horizon Dark - alacritty color config
-# Michaël Ball (http://github.com/michael-ball/)
+# Base16 Wist - alacritty color config
+# TorchedSammy
 colors:
+  # Default colors
   primary:
-    background: '0x1C1E26'
-    foreground: '0xCBCED0'
+    background: '0x090b14'
+    foreground: '0xf5edfa'
 
+  # Colors the cursor will use if `custom_cursor_colors` is true
   cursor:
-    text: '0x1C1E26'
-    cursor: '0xCBCED0'
+    text: '0x090b14'
+    cursor: '0xf5edfa'
 
+  # Normal colors
   normal:
-    black:   '0x1C1E26'
-    red:     '0xE95678'
-    green:   '0x29D398'
-    yellow:  '0xFAC29A'
-    blue:    '0x26BBD9'
-    magenta: '0xEE64AC'
-    cyan:    '0x59E1E3'
-    white:   '0xCBCED0'
+    black:   '0x090b14'
+    red:     '0xf04a5d'
+    green:   '0x5ae696'
+    yellow:  '0xFED06E'
+    blue:    '0x0badff'
+    magenta: '0xff5ca0'
+    cyan:    '0x00eaff'
+    white:   '0xf5edfa'
 
+  # Bright colors
   bright:
-    black:   '0x6F6F70'
-    red:     '0xFAB795'
-    green:   '0x232530'
-    yellow:  '0x2E303E'
-    blue:    '0x9DA0A2'
-    magenta: '0xDCDFE4'
-    cyan:    '0xF09383'
-    white:   '0xE3E6EE'
+    black:   '0x55516e'
+    red:     '0xff79c6'
+    green:   '0x44475a'
+    yellow:  '0x4d4f68'
+    blue:    '0x62d6e8'
+    magenta: '0xf0f2f5'
+    cyan:    '0x50fa7b'
+    white:   '0xe3e3e3'
 
 draw_bold_text_with_bright_colors: false
 # End flavours
@@ -67,4 +71,4 @@ shell:
   program: hilbish
   args:
     - --login
-
+    - -S
