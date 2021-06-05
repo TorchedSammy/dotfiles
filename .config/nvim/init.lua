@@ -25,10 +25,18 @@ vim.g.nvim_tree_show_icons = {
 	files = 1,
 }
 
+-- {{{ Keybinds
+-- NvimTree
+map('n', '<C-n>', '<Cmd>NvimTreeToggle<CR>')
+map('n', '<leader>r', '<Cmd>NvimTreeRefresh<CR>')
+
 -- Barbar
-map('n', '<A-z>', [[ <Cmd>BufferPrevious<CR> ]], nil)
-map('n', '<A-x>', [[ <Cmd>BufferNext<CR> ]], nil)
-map('n', '<A-c>', [[ <Cmd>BufferClose<CR> ]], nil)
+map('n', '<A-z>', '<Cmd>BufferPrevious<CR>', nil)
+map('n', '<A-x>', '<Cmd>BufferNext<CR>', nil)
+map('n', '<A-c>', '<Cmd>BufferClose<CR>', nil)
+map('n', '<A-S-c>', '<Cmd>BufferClose!<CR>')
+
+-- }}}
 
 -- Colors
 --[[vim.cmd 'hi NvimTreeVertSplit cterm=none ctermfg=0 ctermbg=0'
