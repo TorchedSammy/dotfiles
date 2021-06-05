@@ -9,8 +9,14 @@ end
 
 -- Neovim stuff
 vim.cmd 'set number'
---vim.cmd 'colorscheme dim'
-vim.cmd 'set noet ci pi sts=0 sw=4 ts=4'
+vim.o.hidden = true
+vim.o.mouse = 'a'
+vim.o.noexpandtab = true
+vim.o.preserveindent = true
+vim.o.softtabstop = 0
+vim.o.shiftwidth = 4
+vim.o.tabstop = 4
+vim.cmd 'set ci'
 
 -- Nvim-tree
 vim.g.nvim_tree_width = 24
