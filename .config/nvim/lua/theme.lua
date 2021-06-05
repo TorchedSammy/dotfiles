@@ -72,7 +72,10 @@ local highlights = {
 	-- GitSigns.nvim
 	GitSignsAdd = {ctfg = 14},
 	GitSignsDelete = {ctfg = 1},
-	GitSignsChange = {ctfg = 3}
+	GitSignsChange = {ctfg = 3},
+
+	-- Scrollview
+	ScrollView = {ctbg = 8}
 }
 
 for group, styles in pairs(highlights) do

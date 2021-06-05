@@ -24,4 +24,6 @@ return require('packer').startup(function()
 			}
 		end
 	}
+
+	use 'dstein64/nvim-scrollview'
 end)
