@@ -7,6 +7,11 @@ function map(mode, lhs, rhs, opts)
 	vim.api.nvim_set_keymap(mode, lhs, rhs, options)
 end
 
+function nimap(lhs, rhs, opts)
+	map('n', lhs, rhs, opts)
+	map('i', lhs, rhs, opts)
+end
+
 -- Neovim stuff
 vim.cmd 'set number'
 vim.o.hidden = true
@@ -32,6 +37,11 @@ vim.g.nvim_tree_show_icons = {
 }
 
 -- {{{ Keybinds
+-- Editor (bindings from ordinary text editors)
+nimap('<C-s>', '<Cmd>w<CR>') -- Save
+nimap('<C-z>', '<Cmd>u<CR>') -- Undo
+nimap('<C-r>', '<Cmd>r<CR>') -- Redo
+
 -- NvimTree
 map('n', '<C-n>', '<Cmd>NvimTreeToggle<CR>')
 map('n', '<leader>r', '<Cmd>NvimTreeRefresh<CR>')
