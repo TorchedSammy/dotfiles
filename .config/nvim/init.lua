@@ -21,6 +21,7 @@ vim.o.softtabstop = 0
 vim.o.shiftwidth = 4
 vim.o.tabstop = 4
 vim.o.wrap = false
+vim.o.showmode = false
 vim.cmd 'set number'
 vim.cmd 'set ci'
 
