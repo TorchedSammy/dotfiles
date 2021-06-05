@@ -1,0 +1,18 @@
+scheme: "Wist"
+author: "TorchedSammy"
+base00: "090b14" # color number 0 -- background 
+base01: "44475a" # color number 10
+base02: "4d4f68" # color number 11
+base03: "55516e" # color number 8 -- comments
+base04: "62d6e8" # color number 12
+base05: "f5edfa" # color number 7 -- foreground
+base06: "f0f2f5" # color number 13 -- lighter foreground
+base07: "e3e3e3" # color number 15 -- lighter background
+base08: "f04a5d" # color number 1 -- red
+base09: "ff79c6" # color number 9 -- pink
+base0A: "FED06E" # color number 3 -- yellow
+base0B: "5ae696" # color number 2 -- greeen
+base0C: "00eaff" # color number 6 -- cyan
+base0D: "0badff" # color number 4 -- blue
+base0E: "ff5ca0" # color number 5 -- magenta/pink
+base0F: "50fa7b" # color number 14 -- bright cyan (actually green)
