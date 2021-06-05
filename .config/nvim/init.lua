@@ -1,4 +1,5 @@
 require 'plugins'
+require 'theme'
 
 function map(mode, lhs, rhs, opts)
 	local options = { noremap = true }
@@ -8,7 +9,7 @@ end
 
 -- Neovim stuff
 vim.cmd 'set number'
-vim.cmd 'colorscheme dim'
+--vim.cmd 'colorscheme dim'
 vim.cmd 'set noet ci pi sts=0 sw=4 ts=4'
 
 -- Nvim-tree
@@ -30,10 +31,11 @@ map('n', '<A-x>', [[ <Cmd>BufferNext<CR> ]], nil)
 map('n', '<A-c>', [[ <Cmd>BufferClose<CR> ]], nil)
 
 -- Colors
-vim.cmd 'hi NvimTreeVertSplit cterm=none ctermfg=0 ctermbg=0'
+--[[vim.cmd 'hi NvimTreeVertSplit cterm=none ctermfg=0 ctermbg=0'
 vim.cmd 'hi EndOfBuffer cterm=none ctermfg=0 ctermbg=0'
 vim.cmd 'hi SignColumn cterm=none ctermfg=0 ctermbg=0'
 
 vim.cmd 'hi GitSignsAdd ctermfg=2'
 vim.cmd 'hi GitSignsRemove ctermfg=1'
 vim.cmd 'hi GitSignsChange ctermfg=4'
+]]--
