@@ -2,14 +2,15 @@
 -- found (e.g. lgi). If LuaRocks is not installed, do nothing.
 pcall(require, 'luarocks.loader')
 
-themename = 'clouds'
-picom = false -- currently we dont want picom
+themename = 'teasel'
+picom = true
 
 local awful = require 'awful'
 require 'awful.autofocus'
 require 'awful.hotkeys_popup.keys'
 local beautiful = require 'beautiful'
 local gears = require 'gears'
+local helpers = require 'helpers'
 local naughty = require 'naughty'
 
 -- Check if awesome encountered an error during startup and fell back to
@@ -104,8 +105,8 @@ awful.rules.rules = {
 	},
 
 	-- Set Firefox to always map on the tag named '2' on screen 1.
-	-- { rule = { class = 'Firefox' },
-	--   properties = { screen = 1, tag = '2' } },
+	{ rule_any = { class = {'Google-chrome', 'discord'} },
+	   properties = { maximized_vertical = true, maximized_horizontal = true } },
 }
 -- }}}
 
@@ -115,6 +116,13 @@ client.connect_signal('manage', function(c)
 	if awesome.startup and not c.size_hints.user_position
 	and not c.size_hints.program_position then
 		awful.placement.no_offscreen(c)
+	end
+	if c.maximized then
+		awful.placement.maximize(c, {
+            honor_padding = true,
+            honor_workarea = true,
+            margins = beautiful.useless_gap * 2
+        })
 	end
 end)
 
