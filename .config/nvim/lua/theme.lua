@@ -57,7 +57,7 @@ local highlights = {
 	TSLabel = {gfg = tc.gui9}, -- ::label:: in lua
 	TSMethod = {gfg = tc.gui4, ctfg = 4}, -- function calls
 --	TSNamespace = {}, -- TODO
-	TSNumber = {gfg = tc.gu11, ctfg = 1},
+	TSNumber = {gfg = tc.gui1, ctfg = 1},
 	TSOperator = {gfg = tc.gui3},
 	TSParameter = {gfg = tc.gui3, attr = 'italic'}, -- function params
 -- TSParameterReference = {}, -- TODO
