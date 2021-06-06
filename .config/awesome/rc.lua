@@ -3,6 +3,7 @@
 pcall(require, 'luarocks.loader')
 
 themename = 'wist'
+picom = false -- currently we dont want picom
 
 local awful = require 'awful'
 require 'awful.autofocus'
