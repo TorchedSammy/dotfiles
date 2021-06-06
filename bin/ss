@@ -21,5 +21,5 @@ if errcode == 1 then
 	os.exit(1)
 end
 
-runcmd 'notify-send -t 2000 "Screenshot taken, uploading..."'
+runcmd 'notify-send -i /tmp/screenshot.png -t 2000 "ssf-lua" "Screenshot taken, uploading..."'
 runcmd 'ssf /tmp/screenshot.png'
