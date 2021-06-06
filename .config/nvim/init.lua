@@ -14,7 +14,6 @@ end
 
 -- Neovim stuff
 vim.o.hidden = true
-vim.o.undofile = true
 vim.o.cursorline = true
 vim.o.preserveindent = true
 vim.o.termguicolors = true
@@ -27,8 +26,9 @@ vim.o.completeopt = 'menuone,noselect'
 vim.o.tabstop = 4
 vim.o.shiftwidth = 4
 vim.o.softtabstop = 0
-vim.cmd 'set number'
+vim.wo.number = true
 vim.cmd 'set ci'
+vim.cmd 'set undofile'
 
 -- Nvim-tree
 vim.g.nvim_tree_width = 24
