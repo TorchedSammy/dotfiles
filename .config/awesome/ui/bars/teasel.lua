@@ -37,7 +37,8 @@ awful.screen.connect_for_each_screen(function(s)
 		{
 			{ -- Right widgets
 				layout = wibox.layout.fixed.horizontal,
-				spacing = beautiful.wibar_spacing,
+				spacing = beautiful.dpi(5),
+				widgets.music_icon,
 				widgets.music,
 			},
 			left = beautiful.wibar_spacing,
