@@ -1,1 +1,1 @@
-return require 'colors.wist'
+return require 'themecolor.wist'
