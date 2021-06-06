@@ -31,7 +31,7 @@ vim.cmd 'set ci'
 
 -- Nvim-tree
 vim.g.nvim_tree_width = 24
-vim.g.nvim_tree_ignore = { '.git', 'node_modules', '.cache' }
+vim.g.nvim_tree_ignore = {'.git', 'node_modules', '.cache'}
 vim.g.nvim_tree_auto_open = 1
 vim.g.nvim_tree_auto_close = 1
 vim.g.nvim_tree_indent_markers = 1
@@ -47,6 +47,10 @@ vim.g.nvim_tree_show_icons = {
 nimap('<C-s>', '<Cmd>w<CR>') -- Save
 nimap('<C-z>', '<Cmd>u<CR>') -- Undo
 nimap('<C-r>', '<Cmd>r<CR>') -- Redo
+nimap('<C-S-Up>', '<Cmd>m .-2<CR>==')
+nimap('<C-S-Down>', '<Cmd>m .+1<CR>==')
+--map('v', '<C-S-Up>', '<Cmd>m \'>-2<CR>gv=gv')
+--map('v', '<C-S-Down>', '<Cmd>m \'>+1<CR>gv=gv')
 
 -- NvimTree
 map('n', '<C-n>', '<Cmd>NvimTreeToggle<CR>')
@@ -58,3 +62,43 @@ map('n', '<A-x>', '<Cmd>BufferNext<CR>')
 map('n', '<A-c>', '<Cmd>BufferClose<CR>')
 map('n', '<A-S-c>', '<Cmd>BufferClose!<CR>')
 -- }}}
+
+-- LSP
+local function setupServers()
+	require 'lspinstall'.setup()
+	local servers = require 'lspinstall'.installed_servers()
+	for _, server in pairs(servers) do
+		local conf = {}
+		if server == 'lua' then
+			conf =  {
+				settings = {
+					Lua = {
+						telemetry = {
+							enable = false,
+						},
+						runtime = {
+							path = vim.split(package.path, ';'),
+						},
+						diagnostics = {
+							globals = {'vim'},
+						},
+						workspace = {
+							library = {
+								[vim.fn.expand('$VIMRUNTIME/lua')] = true,
+								[vim.fn.expand('$VIMRUNTIME/lua/vim/lsp')] = true,
+							},
+						},
+					},
+				},
+			}
+		end
+		require 'lspconfig'[server].setup(conf)
+	end
+end
+
+setupServers()
+
+require 'lspinstall'.post_install_hook = function()
+	setupServers() -- reload installed servers
+	vim.cmd('bufdo e') -- this triggers the FileType autocmd that starts the server
+end
