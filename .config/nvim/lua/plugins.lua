@@ -1,4 +1,4 @@
-return require('packer').startup(function()
+return require('packer').startup(function(use)
 	-- Packer is stupid so i have to have it here too
 	use 'wbthomason/packer.nvim'
 
@@ -10,7 +10,7 @@ return require('packer').startup(function()
 
 	use {'lewis6991/gitsigns.nvim', requires = {'nvim-lua/plenary.nvim'},
 		config = function()
-			require('gitsigns').setup {
+			require 'gitsigns'.setup {
 				signs = {
 					topdelete = {
 						hl = 'GitSignsDelete',
@@ -27,5 +27,14 @@ return require('packer').startup(function()
 
 	use 'dstein64/nvim-scrollview'
 
-	use {'lukas-reineke/indent-blankline.nvim', branch = 'lua'}
+	use 'neovim/nvim-lspconfig'
+	use 'kabouzeid/nvim-lspinstall'
+
+	use {'famiu/feline.nvim',
+		config = function()
+			require('feline').setup {
+				preset = 'noicon'
+			}
+		end
+	}
 end)
