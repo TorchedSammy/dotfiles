@@ -46,7 +46,8 @@ vim.g.nvim_tree_show_icons = {
 -- Editor (bindings from ordinary text editors)
 nimap('<C-s>', '<Cmd>w<CR>') -- Save
 nimap('<C-z>', '<Cmd>u<CR>') -- Undo
-nimap('<C-r>', '<Cmd>r<CR>') -- Redo
+nimap('<C-x>', '<Cmd>redo<CR>') -- Redo
+
 nimap('<C-S-Up>', '<Cmd>m .-2<CR>==')
 nimap('<C-S-Down>', '<Cmd>m .+1<CR>==')
 --map('v', '<C-S-Up>', '<Cmd>m \'>-2<CR>gv=gv')
