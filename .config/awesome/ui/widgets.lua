@@ -40,8 +40,8 @@ end, widgets.ram_bar)
 
 -- Music widget thatll say whats currently playing
 widgets.music_icon = wibox.widget {
-	markup = '',
-	font = 'Font Awesome 5 Free Regular',
+	markup = '',
+	font = 'Font Awesome',
 	widget = wibox.widget.textbox
 }
 widgets.music = wibox.widget {
