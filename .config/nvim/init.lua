@@ -22,6 +22,7 @@ vim.o.shiftwidth = 4
 vim.o.tabstop = 4
 vim.o.wrap = false
 vim.o.showmode = false
+vim.o.cursorline = true
 vim.cmd 'set number'
 vim.cmd 'set ci'
 
