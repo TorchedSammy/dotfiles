@@ -66,33 +66,57 @@ map('n', '<A-S-c>', '<Cmd>BufferClose!<CR>')
 -- }}}
 
 -- LSP
+local lua_settings = {
+	Lua = {
+		runtime = {
+			  -- LuaJIT in the case of Neovim
+			  version = 'LuaJIT',
+			  path = vim.split(package.path, ';'),
+		},
+		diagnostics = {
+			-- Get the language server to recognize the `vim` global
+			globals = {'vim'},
+		},
+		workspace = {
+		  -- Make the server aware of Neovim runtime files
+			library = {
+				[vim.fn.expand('$VIMRUNTIME/lua')] = true,
+				[vim.fn.expand('$VIMRUNTIME/lua/vim/lsp')] = true,
+			},
+		},
+	},
+}
+
+
+local function makeConf()
+	local capabilities = vim.lsp.protocol.make_client_capabilities()
+	capabilities.textDocument.completion.completionItem.snippetSupport = true
+	capabilities.textDocument.completion.completionItem.resolveSupport = {
+		properties = {
+			'documentation',
+			'detail',
+			'additionalTextEdits',
+		}
+	}
+
+	return {
+		capabilities = capabilities,
+	}
+end
+
 local function setupServers()
 	require 'lspinstall'.setup()
 	local servers = require 'lspinstall'.installed_servers()
 	for _, server in pairs(servers) do
-		local conf = {}
+		local conf = makeConf()
+
 		if server == 'lua' then
-			conf =  {
-				settings = {
-					Lua = {
-						telemetry = {
-							enable = false,
-						},
-						runtime = {
-							path = vim.split(package.path, ';'),
-						},
-						diagnostics = {
-							globals = {'vim'},
-						},
-						workspace = {
-							library = {
-								[vim.fn.expand('$VIMRUNTIME/lua')] = true,
-								[vim.fn.expand('$VIMRUNTIME/lua/vim/lsp')] = true,
-							},
-						},
-					},
-				},
-			}
+				conf.settings = lua_settings
+				conf.root_dir = function(fname)
+					if fname:match 'lush_theme' ~= nil then return nil end
+					local util = require 'lspconfig.util'
+					return util.find_git_ancestor(fname) or util.path.dirname(fname)
+				end
 		end
 		require 'lspconfig'[server].setup(conf)
 	end
@@ -104,3 +128,4 @@ require 'lspinstall'.post_install_hook = function()
 	setupServers() -- reload installed servers
 	vim.cmd('bufdo e') -- this triggers the FileType autocmd that starts the server
 end
+
