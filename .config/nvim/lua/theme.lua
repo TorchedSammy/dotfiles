@@ -2,7 +2,6 @@ local tc = require 'themecolor'
 
 -- taken from https://github.com/norcalli/nvim-base16.lua/blob/master/lua/base16.lua
 local function highlight(group, guifg, guibg, ctermfg, ctermbg, attr, guisp)
-	local parts = {group}
 	local gfg = guifg and "guifg=#"..guifg or 'guifg=none'
 	local gbg = guibg and "guibg=#"..guibg or 'guibg=none'
 	local ctfg = ctermfg and "ctermfg="..ctermfg or 'ctermfg=none'
