@@ -123,11 +123,11 @@ theme.volume_bar_color = theme.xcolor2
 theme.ram_bar_color = theme.xcolor4
 theme.battery_bar_color = theme.xcolor1
 -- Noodle Text Taglist
-theme.taglist_text_font = "Typicons 11"
-theme.taglist_text_empty    = {"","","","","","","","",""}
-theme.taglist_text_occupied = {"","","","","","","","",""}
-theme.taglist_text_focused  = {"","","","","","","","",""}
-theme.taglist_text_urgent   = {"","","","","","","","",""}
+theme.taglist_text_font = "Font Awesome 11"
+theme.taglist_text_empty    = {"","","","","","","","",""}
+theme.taglist_text_occupied = {"","","","","","","","",""}
+theme.taglist_text_focused  = {"","","","","","","","",""}
+theme.taglist_text_urgent   = {"⚡","⚡","⚡","⚡","⚡","⚡","⚡","⚡","⚡"}
 
 theme.taglist_text_color_empty    = { theme.xcolor7, theme.xcolor7, theme.xcolor7, theme.xcolor7, theme.xcolor7, theme.xcolor7, theme.xcolor7, theme.xcolor7, theme.xcolor7, theme.xcolor7 }
 theme.taglist_text_color_occupied  = { theme.xcolor1, theme.xcolor2, theme.xcolor3, theme.xcolor4, theme.xcolor5, theme.xcolor6, theme.xcolor1, theme.xcolor2, theme.xcolor3, theme.xcolor4 }
