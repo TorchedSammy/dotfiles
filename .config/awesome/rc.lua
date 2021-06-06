@@ -2,7 +2,7 @@
 -- found (e.g. lgi). If LuaRocks is not installed, do nothing.
 pcall(require, 'luarocks.loader')
 
-themename = 'wist'
+themename = 'clouds'
 picom = false -- currently we dont want picom
 
 local awful = require 'awful'
@@ -11,7 +11,6 @@ require 'awful.hotkeys_popup.keys'
 local beautiful = require 'beautiful'
 local gears = require 'gears'
 local naughty = require 'naughty'
-local wibox = require 'wibox'
 
 -- Check if awesome encountered an error during startup and fell back to
 -- another config (This code will only ever execute for the fallback config)
