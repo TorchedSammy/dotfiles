@@ -25,16 +25,6 @@ awful.screen.connect_for_each_screen(function(s)
 		layout = wibox.layout.align.horizontal,
 		expand = 'none',
 		{
-			{
-				layout = wibox.layout.fixed.horizontal,
-				text_taglist(s)	
-			},
-			left = beautiful.wibar_spacing,
-			right = beautiful.wibar_spacing,
-			widget = wibox.container.margin,
-
-		},
-		{
 			{ -- Right widgets
 				layout = wibox.layout.fixed.horizontal,
 				spacing = beautiful.dpi(5),
@@ -44,15 +34,26 @@ awful.screen.connect_for_each_screen(function(s)
 			left = beautiful.wibar_spacing,
 			right = beautiful.wibar_spacing,
 			widget = wibox.container.margin,
+
+		},
+		{
+			{
+				layout = wibox.layout.fixed.horizontal,
+				text_taglist(s)	
+			},
+			left = beautiful.wibar_spacing,
+			right = beautiful.wibar_spacing,
+			widget = wibox.container.margin,
 		},
 		{
 			{ -- Right widgets
 				layout = wibox.layout.fixed.horizontal,
 				spacing = beautiful.wibar_spacing,
-				widgets.systray,
 				widgets.ram_bar,
 				widgets.time,
-				widgets.layout
+				widgets.date,
+				widgets.layout,
+				widgets.systray,
 			},
 			left = beautiful.wibar_spacing,
 			right = beautiful.wibar_spacing,
