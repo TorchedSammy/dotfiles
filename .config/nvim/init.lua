@@ -14,15 +14,18 @@ end
 
 -- Neovim stuff
 vim.o.hidden = true
-vim.o.mouse = 'a'
-vim.o.expandtab = false
-vim.o.preserveindent = true
-vim.o.softtabstop = 0
-vim.o.shiftwidth = 4
-vim.o.tabstop = 4
-vim.o.wrap = false
-vim.o.showmode = false
+vim.o.undofile = true
 vim.o.cursorline = true
+vim.o.termguicolors = true
+vim.o.preserveindent = true
+vim.o.wrap = false
+vim.o.ruler = false
+vim.o.showmode = false
+vim.o.expandtab = false
+vim.o.mouse = 'a'
+vim.o.tabstop = 4
+vim.o.shiftwidth = 4
+vim.o.softtabstop = 0
 vim.cmd 'set number'
 vim.cmd 'set ci'
 
