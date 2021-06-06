@@ -79,6 +79,7 @@ local highlights = {
 	TSVariableBuiltin = {gfg = tc.gui12}, -- builtin vars
 
 	-- Editor Elements
+	Normal = {gbg = tc.bg},
 	ErrorMsg = {gfg = tc.gui1, ctfg = 1, attr = 'underlineitalic'},
 	CursorColumn = {gbg = tc.gui8, ctbg = 8},
 	CursorLine = {attr = 'bold'},
