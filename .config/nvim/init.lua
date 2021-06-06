@@ -49,8 +49,8 @@ nimap('<C-s>', '<Cmd>w<CR>') -- Save
 nimap('<C-z>', '<Cmd>u<CR>') -- Undo
 nimap('<C-x>', '<Cmd>redo<CR>') -- Redo
 
-nimap('<C-S-Up>', '<Cmd>m .-2<CR>==')
-nimap('<C-S-Down>', '<Cmd>m .+1<CR>==')
+nimap('<C-S-Up>', '<Cmd>m .-2<CR>')
+nimap('<C-S-Down>', '<Cmd>m .+1<CR>')
 --map('v', '<C-S-Up>', '<Cmd>m \'>-2<CR>gv=gv')
 --map('v', '<C-S-Down>', '<Cmd>m \'>+1<CR>gv=gv')
 
