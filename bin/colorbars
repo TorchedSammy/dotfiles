@@ -1,6 +1,5 @@
 #!/bin/hilbish
 -- colorbars - smpte color bars, but in lua!
--- http://git.io/colorbars 
 
 print ''
 
