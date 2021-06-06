@@ -65,12 +65,14 @@ installation steps will be at that link.
 
 #### Fonts
 I use [Victor Mono](https://github.com/rubjo/victor-mono) for the terminal
-(yes i actually use this, its not just for a screenshot)
 and Apple's [San Francisco](https://github.com/blaisck/sfwin) for
 anything else text.  
 
-[Typicons](https://www.s-ings.com/typicons/) and
-Font Awesome 5 are required for icons.
+[Typicons](https://github.com/fontello/typicons.font) is are required for icons.
+To download:
+```sh
+wget https://github.com/fontello/typicons.font/raw/master/font/typicons.ttf -P ~/.local/share/fonts/
+```
 
 Get a [Nerd Font](https://www.nerdfonts.com/font-downloads) so the file tree in Neovim has icons.
 
