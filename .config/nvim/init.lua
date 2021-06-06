@@ -16,13 +16,14 @@ end
 vim.o.hidden = true
 vim.o.undofile = true
 vim.o.cursorline = true
-vim.o.termguicolors = true
 vim.o.preserveindent = true
+vim.o.termguicolors = true
 vim.o.wrap = false
 vim.o.ruler = false
 vim.o.showmode = false
 vim.o.expandtab = false
 vim.o.mouse = 'a'
+vim.o.completeopt = 'menuone,noselect'
 vim.o.tabstop = 4
 vim.o.shiftwidth = 4
 vim.o.softtabstop = 0
