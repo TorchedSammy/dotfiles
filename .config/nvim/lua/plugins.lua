@@ -27,13 +27,41 @@ return require('packer').startup(function(use)
 
 	use 'dstein64/nvim-scrollview'
 
-	use 'neovim/nvim-lspconfig'
-	use 'kabouzeid/nvim-lspinstall'
+	use {'hrsh7th/nvim-compe', requires = {'neovim/nvim-lspconfig', 'kabouzeid/nvim-lspinstall', 'hrsh7th/vim-vsnip'},
+		config = function()
+			require 'compe'.setup {
+				enabled = true,
+				autocomplete = true,
+				min_length = 3,
+				preselect = 'enable',
+				source = {
+					path = true,
+					buffer = true,
+					calc = true,
+					nvim_lsp = true,
+					nvim_lua = true,
+					vsnip = true,
+					ultisnips = true,
+				}
+			}
+		end
+	}
 
 	use {'famiu/feline.nvim',
 		config = function()
 			require('feline').setup {
 				preset = 'noicon'
+			}
+		end
+	}
+
+	use {'nvim-treesitter/nvim-treesitter', run = ':TSUpdate',
+		config = function()
+			require 'nvim-treesitter.configs'.setup {
+				ensure_installed = {'lua', 'go'},
+				highlight = {
+					enable = true
+				}
 			}
 		end
 	}
