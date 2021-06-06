@@ -2,7 +2,7 @@
 -- found (e.g. lgi). If LuaRocks is not installed, do nothing.
 pcall(require, 'luarocks.loader')
 
-themename = 'dracula'
+themename = 'wist'
 
 local awful = require 'awful'
 require 'awful.autofocus'
