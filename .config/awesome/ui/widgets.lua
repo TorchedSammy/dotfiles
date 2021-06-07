@@ -28,6 +28,24 @@ local widgets = {}
 
 widgets.ram_bar = rounded_bar(beautiful.ram_bar_color)
 
+widgets.ram_icon = wibox.widget {
+	markup = '',
+	font = 'JetBrains Mono Regular Nerd Font Complete Mono 16',
+	widget = wibox.widget.textbox
+}
+
+widgets.ram_percent = wibox.widget {
+	markup = '0%',
+	widget = wibox.widget.textbox
+}
+
+widgets.ram = {
+	layout = wibox.layout.fixed.horizontal,
+	spacing = beautiful.dpi(4),
+	widgets.ram_icon,
+	widgets.ram_percent
+}
+
 awful.widget.watch('cat /proc/meminfo', 5, function(widget, stdout)
   local total = stdout:match 'MemTotal:%s+(%d+)'
   local free = stdout:match 'MemFree:%s+(%d+)'
@@ -35,7 +53,12 @@ awful.widget.watch('cat /proc/meminfo', 5, function(widget, stdout)
   local cached = stdout:match 'Cached:%s+(%d+)'
   local srec = stdout:match 'SReclaimable:%s+(%d+)'
   local used_kb = total - free - buffers - cached - srec
-  widget.value = used_kb / total * 100
+  local usepercent = used_kb / total * 100
+
+  -- Set bar percent
+  widget.value = usepercent
+  -- Set text widget percent
+  widgets.ram_percent:set_markup_silently(math.floor(usepercent) .. '%')
 end, widgets.ram_bar)
 
 -- Music widget thatll say whats currently playing
