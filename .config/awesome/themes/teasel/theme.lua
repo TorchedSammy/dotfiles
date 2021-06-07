@@ -3,7 +3,7 @@ local dpi = xresources.apply_dpi
 
 local theme = require('themes.common')
 
-theme.xbackground = '#090b14'
+theme.xbackground = '#01050d'
 theme.xforeground = '#f5edfa'
 theme.xcolor0     = '#090b14'
 theme.xcolor1     = '#f04a5d'
@@ -31,12 +31,12 @@ theme.bg_minimize   = theme.bg_normal
 theme.fg_normal     = theme.xforeground
 
 theme.useless_gap   = dpi(10)
-theme.border_width  = dpi(0)
-theme.border_normal  = theme.bg_normal -- Outer Border
-theme.border_focus  = theme.bg_normal -- Outer Border
+theme.border_width  = dpi(4)
+theme.border_normal  = '#08152e'
+theme.border_focus  = '#08152e'
 
 theme.titlebars = true
-theme.titlebar_type = 'default'
+theme.titlebar_type = 'teasel'
 theme.titlebar_bg = theme.xcolor8
 
 theme.bar = 'teasel'
