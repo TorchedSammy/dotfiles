@@ -1,27 +1,13 @@
 lunacolors = require 'lunacolors'
 bait = require 'bait'
+delta = require 'delta'
 commander = require 'commander'
-
-function doPrompt(fail)
-	local res = io.popen 'git rev-parse --abbrev-ref HEAD 2> /dev/null'
-	local branch = res:read()
-	res:close()
-
-	prompt(lunacolors.format(
-		'{blue}in %D' .. (branch and ' {cyan}at {bold} ' .. branch or "") .. "\n" ..
-		'{reset}{green}%h ' .. (fail and '{red}' or '{green}') .. '∆ '
-	))
-end
 
 print(lunacolors.format('Welcome {cyan}'.. hilbish.user ..
 '{reset} to {magenta}Hilbish{reset},\n' .. 
 'the nice lil shell for {blue}Lua{reset} fanatics!\n'))
 
-doPrompt()
-
-bait.catch('command.exit', function(code)
-	doPrompt(code ~= 0)
-end)
+delta.init()
 
 commander.register('ver', function()
 	print(hilbish.ver)
@@ -44,19 +30,16 @@ commander.register('ev', function()
 	return 0
 end)
 
-commander.register('nvmnode', function()
-	exec('sh -c "export NVM_DIR="$HOME/.nvm"'
-	.. '; [ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"' 
-	.. '; nvm use node; exec hilbish"')
-end)
-
+-- Aliases
 alias('cls', 'clear')
 alias('gcd', 'git checkout dev')
 alias('gcm', 'git checkout master')
 
+-- Petals
 petals = require 'petals'
 petals.init()
 
+-- GPG
 os.execute 'tty >/tmp/tty 2>&1'
 local f = io.open '/tmp/tty'
 local tty = f:read '*all'
@@ -66,4 +49,10 @@ f:close()
 os.setenv('GPG_TTY', tty)
 os.execute 'gpgconf --launch gpg-agent'
 
+-- Cargo
 appendPath '~/.cargo/bin'
+
+-- Setup Volta
+os.setenv('VOLTA_HOME', os.getenv 'HOME' .. '/.volta')
+appendPath(os.getenv 'VOLTA_HOME' .. '/bin')
+
