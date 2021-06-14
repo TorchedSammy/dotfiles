@@ -76,7 +76,7 @@ widgets.time = wibox.widget.textclock()
 widgets.time.format = ' %I:%M %p'
 
 widgets.date = wibox.widget.textclock()
-widgets.date.format = ' %d/%m'
+widgets.date.format = ' %d %b'
 
 -- Systray
 local systray_margin = (beautiful.wibar_height - beautiful.systray_icon_size) / 2
