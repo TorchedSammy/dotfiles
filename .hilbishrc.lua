@@ -1,7 +1,8 @@
 lunacolors = require 'lunacolors'
 bait = require 'bait'
-delta = require 'delta'
 commander = require 'commander'
+delta = require 'delta'
+fs = require 'fs'
 
 print(lunacolors.format('Welcome {cyan}'.. hilbish.user ..
 '{reset} to {magenta}Hilbish{reset},\n' .. 
@@ -55,4 +56,21 @@ appendPath '~/.cargo/bin'
 -- Setup Volta
 os.setenv('VOLTA_HOME', os.getenv 'HOME' .. '/.volta')
 appendPath(os.getenv 'VOLTA_HOME' .. '/bin')
+
+-- Setup jump (https://github.com/gsamokovarov/jump)
+bait.catch('cd', function()
+	os.execute 'jump chdir'
+end)
+
+commander.register('j', function(args)
+	local d = args[1]
+	local f = io.popen('jump cd ' .. d)
+	local expdir = f:read '*all'
+	f:close()
+
+	fs.cd(expdir)
+	bait.throw('cd', expdir)
+
+	return 0
+end)
 
