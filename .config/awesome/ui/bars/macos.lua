@@ -47,16 +47,21 @@ awful.screen.connect_for_each_screen(function(s)
 		},
 		widget = wibox.container.background,
 		buttons = gears.table.join(
-			awful.button({}, 1, function () mymainmenu:toggle({ coords = {x = 0, y = s.geometry.height-beautiful.wibar_height}}) end))
+			awful.button({}, 1, function () mainmenu:toggle({ coords = {x = 0, y = s.geometry.height-beautiful.wibar_height}}) end))
 	}
 
 	-- Create the wibox
-	s.bar = awful.wibar({ screen = s, position = "top", height = beautiful.wibar_height, bg = beautiful.wibar_bg })
+	s.bar = awful.wibar {
+		screen = s,
+		position = "top",
+		height = beautiful.wibar_height,
+		bg = beautiful.wibar_bg
+	}
 
 	-- Add widgets to the wibox
 	s.bar:setup {
 		layout = wibox.layout.align.horizontal,
-		expand = "none",
+		expand = 'none',
 		{
 			{ -- Left widgets
 				layout = wibox.layout.fixed.horizontal,
@@ -78,7 +83,6 @@ awful.screen.connect_for_each_screen(function(s)
 			left = beautiful.wibar_spacing,
 			right = beautiful.wibar_spacing,
 			widget = wibox.container.margin,
-
 		}, 
 		{
 			{
