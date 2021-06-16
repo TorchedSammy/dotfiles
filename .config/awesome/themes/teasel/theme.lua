@@ -32,12 +32,12 @@ theme.fg_normal     = theme.xforeground
 
 theme.useless_gap   = dpi(10)
 theme.border_width  = dpi(4)
-theme.border_normal  = '#08152e'
-theme.border_focus  = '#08152e'
+theme.border_normal  = theme.bg_normal
+theme.border_focus  = theme.bg_normal
 
 theme.titlebars = true
 theme.titlebar_type = 'teasel'
-theme.titlebar_bg = theme.xcolor8
+theme.titlebar_bg = theme.bg_normal
 
 theme.bar = 'teasel'
 theme.wibar_height = dpi(28)
@@ -60,7 +60,7 @@ theme.taglist_text_color_urgent   = { theme.xcolor9, theme.xcolor10, theme.xcolo
 
 theme.bg_systray = theme.wibar_bg
 
-theme.wallpaper = theme.config_path.."/wallpapers/purplesky.png"
+theme.wallpaper = theme.config_path.."/wallpapers/moon.jpg"
 
 theme.picom_conf = "rounded"
 
