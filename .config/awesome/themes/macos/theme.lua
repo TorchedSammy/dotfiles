@@ -23,6 +23,7 @@ theme.xcolor14    = "#6FEBEE"
 theme.xcolor15    = "#ffffff"
 
 theme.bg_normal     = theme.xbackground
+theme.bg_sec        = '#6F6F70'
 theme.bg_focus      = theme.bg_normal
 theme.bg_urgent     = theme.bg_normal
 theme.bg_minimize   = theme.bg_normal
