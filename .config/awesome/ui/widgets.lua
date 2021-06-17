@@ -107,5 +107,19 @@ widgets.layout = {
 	widget = wibox.container.margin
 }
 
+widgets.clientclass = wibox.widget {
+		markup = 'AwesomeWM',
+		widget = wibox.widget.textbox
+}
+client.connect_signal("focus", function ()
+	local fc = client.focus
+	widgets.clientclass:set_markup_silently(fc.class)
+end)
+awful.tag.attached_connect_signal(client.screen, 'property::selected', function()
+	local fc = client.focus
+	if not fc then widgets.clientclass:set_markup_silently 'AwesomeWM' end
+end)
+
+
 return widgets
 
