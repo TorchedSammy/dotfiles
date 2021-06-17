@@ -39,8 +39,8 @@ theme.titlebars = true
 theme.titlebar_type = 'default'
 theme.titlebar_bg = theme.xcolor8
 
-theme.bar = 'clouds'
-theme.wibar_bg = theme.bg_normal .. '00'
+theme.bar = 'hibis'
+theme.wibar_bg = theme.bg_normal
 theme.wibar_spacing = dpi(14)
 
 theme.ram_bar_color = theme.xcolor2
@@ -59,7 +59,7 @@ theme.taglist_text_color_urgent   = { theme.xcolor9, theme.xcolor10, theme.xcolo
 
 theme.bg_systray = theme.wibar_bg
 
-theme.wallpaper = theme.config_path.."/wallpapers/clouds3.jpg"
+theme.wallpaper = theme.config_path.."/wallpapers/clouds2.jpg"
 
 theme.picom_conf = "blur-shadow"
 theme.exp_picom_bknd = true
