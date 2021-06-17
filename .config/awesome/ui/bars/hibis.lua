@@ -66,6 +66,24 @@ awful.screen.connect_for_each_screen(function(s)
 		bg = beautiful.wibar_bg,
 		widget = wibox.container.background,
 	}
+	local class = wibox.widget {{
+		layout = wibox.layout.align.horizontal,
+		expand = 'none',
+		{
+			{ -- Right widgets
+				layout = wibox.layout.fixed.horizontal,
+				spacing = 5,
+				widgets.clientclass,
+			},
+			left = beautiful.wibar_spacing,
+			right = beautiful.wibar_spacing,
+			widget = wibox.container.margin,
+		},
+		},
+		shape = s.bar.shape,
+		bg = beautiful.wibar_bg,
+		widget = wibox.container.background,
+	}
 
 	-- Third: other stuff (time, layout, etc)
 	local time = wibox.widget {{
@@ -129,6 +147,7 @@ awful.screen.connect_for_each_screen(function(s)
 				spacing = beautiful.wibar_spacing,
 				layout,
 				music,
+				class,
 			},
 			left = beautiful.wibar_spacing,
 			right = beautiful.wibar_spacing,
