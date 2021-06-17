@@ -47,4 +47,5 @@ bling.signal.playerctl.enable {
 }
 
 require 'conf.keys'
+require 'conf.signals'
 

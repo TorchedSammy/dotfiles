@@ -2,8 +2,10 @@ local awful = require 'awful'
 local wibox = require 'wibox'
 local gears = require 'gears'
 local beautiful = require 'beautiful'
+local volume = require 'conf.vol'
 local xresources = require 'beautiful.xresources'
 local dpi = xresources.apply_dpi
+local naughty = require 'naughty'
 
 local function rounded_bar(color)
 	return wibox.widget {
@@ -60,6 +62,27 @@ awful.widget.watch('cat /proc/meminfo', 5, function(widget, stdout)
   -- Set text widget percent
   widgets.ram_percent:set_markup_silently(math.floor(usepercent) .. '%')
 end, widgets.ram_bar)
+
+widgets.volume_bar = rounded_bar(beautiful.xcolor1)
+function update_volume_bar(vol, mute)
+    widgets.volume_bar.value = vol
+    if mute then
+        widgets.volume_bar.color = beautiful.xforeground
+    else
+        widgets.volume_bar.color = beautiful.xcolor1
+    end
+end
+
+widgets.volume_bar:buttons(gears.table.join(
+    awful.button({ }, 4, volume.up),
+    awful.button({ }, 5, volume.down),
+    awful.button({ }, 1, function() volume.mute() volume.get_volume_state(update_volume_bar) end),
+    awful.button({ }, 3, function() awful.spawn 'pavucontrol' end)))
+
+awesome.connect_signal("evil::volume", update_volume_bar)
+
+-- Init widget state
+volume.get_volume_state(update_volume_bar)
 
 -- Music widget thatll say whats currently playing
 widgets.music_icon = wibox.widget {
