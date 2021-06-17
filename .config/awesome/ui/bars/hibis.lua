@@ -138,6 +138,23 @@ awful.screen.connect_for_each_screen(function(s)
 		bg = beautiful.wibar_bg,
 		widget = wibox.container.background,
 	}
+	local volume = wibox.widget {{
+		layout = wibox.layout.align.horizontal,
+		expand = 'none',
+		{
+			{
+			layout = wibox.layout.fixed.horizontal,
+				spacing = beautiful.wibar_spacing,
+				widgets.volume_bar,
+			},
+			left = beautiful.wibar_spacing,
+			right = beautiful.wibar_spacing,
+			widget = wibox.container.margin,
+		}},
+		shape = s.bar.shape,
+		bg = beautiful.wibar_bg,
+		widget = wibox.container.background,
+	}
 	s.bar:setup {
 		layout = wibox.layout.align.horizontal,
 		expand = 'none',
@@ -147,6 +164,7 @@ awful.screen.connect_for_each_screen(function(s)
 				spacing = beautiful.wibar_spacing,
 				layout,
 				music,
+				volume,
 				class,
 			},
 			left = beautiful.wibar_spacing,
