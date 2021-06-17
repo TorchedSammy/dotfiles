@@ -13,7 +13,7 @@ theme.xcolor4     = '#0badff'
 theme.xcolor5     = '#ff5ca0'
 theme.xcolor6     = '#00eaff'
 theme.xcolor7     = '#f5edfa'
-theme.xcolor8     = '#090b14'
+theme.xcolor8     = '#55516e'
 theme.xcolor9     = '#f04a5d'
 theme.xcolor10    = '#5ae696'
 theme.xcolor11    = '#fed06e'
@@ -36,8 +36,8 @@ theme.border_normal  = theme.bg_normal -- Outer Border
 theme.border_focus  = theme.bg_normal -- Outer Border
 
 theme.titlebars = true
-theme.titlebar_type = 'default'
-theme.titlebar_bg = theme.xcolor8
+theme.titlebar_type = 'macos'
+theme.titlebar_bg = theme.bg_normal
 
 theme.bar = 'hibis'
 theme.wibar_bg = theme.bg_normal
