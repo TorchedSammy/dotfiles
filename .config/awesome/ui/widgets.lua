@@ -63,13 +63,13 @@ awful.widget.watch('cat /proc/meminfo', 5, function(widget, stdout)
   widgets.ram_percent:set_markup_silently(math.floor(usepercent) .. '%')
 end, widgets.ram_bar)
 
-widgets.volume_bar = rounded_bar(beautiful.xcolor1)
+widgets.volume_bar = rounded_bar(beautiful.xcolor2)
 function update_volume_bar(vol, mute)
     widgets.volume_bar.value = vol
     if mute then
         widgets.volume_bar.color = beautiful.xforeground
     else
-        widgets.volume_bar.color = beautiful.xcolor1
+        widgets.volume_bar.color = beautiful.xcolor2
     end
 end
 
