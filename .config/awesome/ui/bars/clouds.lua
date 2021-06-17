@@ -52,7 +52,6 @@ awful.screen.connect_for_each_screen(function(s)
 			{ -- Right widgets
 				layout = wibox.layout.fixed.horizontal,
 				spacing = 5,
-				widgets.music_icon,
 				widgets.music,
 			},
 			top = 5,
