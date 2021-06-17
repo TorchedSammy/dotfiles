@@ -14,8 +14,8 @@ local function rounded_bar(color)
 		forced_height = dpi(14),
 		forced_width  = dpi(60),
 		margins = {
-			top = dpi(8),
-			bottom = dpi(8),
+			top = dpi(10),
+			bottom = dpi(10),
 		},
 		shape = gears.shape.rounded_bar,
 		border_width = 1,
