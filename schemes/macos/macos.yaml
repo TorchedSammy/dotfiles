@@ -1,6 +1,6 @@
 scheme: "MacOS"
 author: "TorchedSammy"
-base00: "1d1f21" # Background
+base00: "0e1112" # Background
 base01: "35383b"
 base02: "4e5256"
 base03: "666b70" # Comments
@@ -10,9 +10,9 @@ base06: "f0f2f5"
 base07: "f7f8fa"
 base08: "f05959"
 base09: "e25e9c"
-base0A: "5ee26b"
-base0B: "f4d84d"
+base0A: "f3b94c"
+base0B: "5ee26b"
 base0C: "6ef0e3" 
-base0D: "4eb6f2" 
+base0D: "307cf5" 
 base0E: "f266c8" 
 base0F: "5ee26b" 
