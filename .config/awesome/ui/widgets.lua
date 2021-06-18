@@ -103,7 +103,7 @@ widgets.music = wibox.widget {
 }
 
 widgets.time = wibox.widget.textclock()
-widgets.time.format = ' %I:%M %p'
+widgets.time.format = ' %-I:%M %p'
 
 widgets.date = wibox.widget.textclock()
 widgets.date.format = ' %d %b'
