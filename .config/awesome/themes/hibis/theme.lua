@@ -61,8 +61,7 @@ theme.bg_systray = theme.wibar_bg
 
 theme.wallpaper = theme.config_path.."/wallpapers/clouds2.jpg"
 
-theme.picom_conf = "blur-shadow"
-theme.exp_picom_bknd = true
+theme.picom_conf = 'rounded'
 
 return theme
 
