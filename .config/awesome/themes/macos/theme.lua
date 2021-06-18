@@ -3,16 +3,16 @@ local dpi = xresources.apply_dpi
 
 local theme = require('themes.common')
 
-theme.xbackground = "#1d1f21"
+theme.xbackground = "#0e1112"
 theme.xforeground = "#e0e0e0"
-theme.xcolor0     = "#1d1f21"
-theme.xcolor1     = "#d04645"
-theme.xcolor2     = "#77b755"
-theme.xcolor3     = "#f4c94d"
-theme.xcolor4     = "#3E89E7"
-theme.xcolor5     = "#e25e9c"
-theme.xcolor6     = "#5EDFE2"
-theme.xcolor7     = "#f0f0f0"
+theme.xcolor0     = "#0e1112"
+theme.xcolor1     = "#ed5f5c"
+theme.xcolor2     = "#5ee26b"
+theme.xcolor3     = "#f3b94c"
+theme.xcolor4     = "#307cf5"
+theme.xcolor5     = "#e25f9b"
+theme.xcolor6     = "#6ef0e3"
+theme.xcolor7     = "#dfdfdf"
 theme.xcolor8     = "#999999"
 theme.xcolor9     = "#DF5554"
 theme.xcolor10    = "#8ACC68"
@@ -21,6 +21,8 @@ theme.xcolor12    = "#4993F0"
 theme.xcolor13    = "#EB6AA6"
 theme.xcolor14    = "#6FEBEE"
 theme.xcolor15    = "#ffffff"
+
+theme.font          = "SF Pro Text Medium 10"
 
 theme.bg_normal     = theme.xbackground
 theme.bg_sec        = '#6F6F70'
@@ -37,14 +39,14 @@ theme.useless_gap   = dpi(6)
 
 theme.titlebars = true
 theme.titlebar_type = 'macos'
-theme.titlebar_bg = theme.xcolor0
+theme.titlebar_bg = theme.bg_normal
 
 theme.notification_bg = theme.xcolor0
 theme.notification_border_color = theme.xcolor7
 theme.notification_border_width = dpi(1)
 
 theme.bar = 'macos'
-theme.wibar_height = dpi(27)
+theme.wibar_height = dpi(30)
 
 theme.wibar_bg = theme.bg_normal
 theme.bg_systray = theme.wibar_bg
