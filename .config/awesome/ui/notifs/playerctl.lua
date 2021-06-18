@@ -9,7 +9,7 @@ function (title, artist, art)
 		text = artist,
 		icon = gears.surface.load_uncached_silently(art)
 	}
-	widgets.music:set_markup_silently((artist and artist .. ' - ' or '') .. title)
+	widgets.music_name:set_markup_silently((artist and artist .. ' - ' or '') .. title)
 end)
 
 awesome.connect_signal('bling::playerctl::no_players', function()
@@ -17,6 +17,6 @@ awesome.connect_signal('bling::playerctl::no_players', function()
 		title = 'Party\'s Over!',
 		text = 'No more music playing.'
 	}
-	widgets.music:set_markup_silently 'Nothing Playing'
+	widgets.music_name:set_markup_silently 'Nothing Playing'
 end)
 

@@ -90,14 +90,16 @@ widgets.music_icon = wibox.widget {
 	font = 'Font Awesome',
 	widget = wibox.widget.textbox
 }
+widgets.music_name = wibox.widget {
+		markup = 'Nothing Playing',
+		widget = wibox.widget.textbox,
+}
+
 widgets.music = wibox.widget {
 	layout = wibox.layout.fixed.horizontal,
 	spacing = beautiful.dpi(4),
 	widgets.music_icon,
-	{
-		markup = 'Nothing Playing',
-		widget = wibox.widget.textbox,
-	}
+	widgets.music_name
 }
 
 widgets.time = wibox.widget.textclock()
