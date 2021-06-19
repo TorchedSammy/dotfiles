@@ -48,4 +48,4 @@ local url = obj[image]
 print(url)
 
 runcmd('echo -n ' .. url .. ' | xclip -selection clipboard')
-runcmd 'notify-send "ssf-lua" "Screenshot uploaded!"'
+runcmd 'notify-send -i /tmp/screenshot.png -t 6000 "ssf-lua" "Screenshot uploaded!"'
