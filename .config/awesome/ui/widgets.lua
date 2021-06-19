@@ -105,8 +105,14 @@ widgets.music = wibox.widget {
 widgets.time = wibox.widget.textclock()
 widgets.time.format = ' %-I:%M %p'
 
+widgets.macos_time = wibox.widget.textclock()
+widgets.macos_time.format = '%-I:%M %p'
+
 widgets.date = wibox.widget.textclock()
 widgets.date.format = ' %d %b'
+
+widgets.macos_date = wibox.widget.textclock()
+widgets.macos_date.format = '%a %d %b'
 
 -- Systray
 local systray_margin = (beautiful.wibar_height - beautiful.systray_icon_size) / 2
