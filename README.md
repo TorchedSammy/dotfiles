@@ -3,7 +3,7 @@
 	<blockquote>there ain't any place like ~</blockquote>
 </div>
 <img src='https://modeus.is-inside.me/qJIfUb1r.png' align='right' width='400px'>
-<img src='https://modeus.is-inside.me/R57wJAmQ.png' align='right' width='400px'>
+<img src='https://modeus.is-inside.me/5pTpbwfR.png' align='right' width='400px'>
 
 #### Welcome!
 Here is my very own collection of configuration files for my Linux desktop experience.
