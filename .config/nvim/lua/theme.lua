@@ -136,6 +136,8 @@ local highlights = {
 	NvimTreeGitRenamed = {gfg = tc.gui6, ctfg = 6, attr = 'italic'},
 	NvimTreeGitStaged = {gfg = tc.gui2, ctfg = 2},
 	NvimTreeStatusLine = {gbg = tc.bg, gfg = tc.bg, force = true},
+	NvimTreeExecFile = {gfg = tc.gui2, ctfg = 2, attr = 'underline'},
+	NvimTreeGitDeleted = {gfg = tc.gui1, ctfg = 1, attr = 'bold'},
 
 	-- GitSigns.nvim
 	GitSignsAdd = {gfg = tc.gui2, ctfg = 2},
