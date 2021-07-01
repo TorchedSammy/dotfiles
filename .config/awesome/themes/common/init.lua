@@ -8,7 +8,7 @@ local config_path = gfs.get_configuration_dir()
 local helpers = require("helpers")
 
 function layoutimg(name)
-	return config_path..'images/layouts/'..name
+	return config_path..'/images/layouts/'..name
 end
 local theme = {}
 
