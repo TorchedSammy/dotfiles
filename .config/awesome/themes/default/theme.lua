@@ -35,6 +35,7 @@ theme.titlebar_type = 'default'
 theme.titlebar_bg = "#332b3d" .. "e6"
 
 --theme.bar = 'bar here'
+theme.wibar_height = dpi(28)
 theme.wibar_bg = theme.bg_normal .. "d6"
 
 theme.wallpaper = theme.config_path.."/wallpapers/blossoms.jpg"
