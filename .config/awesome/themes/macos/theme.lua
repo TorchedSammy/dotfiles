@@ -42,6 +42,7 @@ theme.border_focus  = theme.bg_sec
 
 theme.titlebars = true
 theme.titlebar_type = 'macos'
+theme.titlebar_height = dpi(32)
 theme.titlebar_bg = theme.bg_normal
 
 theme.notification_bg = theme.xcolor0

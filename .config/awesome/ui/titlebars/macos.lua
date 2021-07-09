@@ -73,7 +73,7 @@ client.connect_signal('request::titlebars', function(c)
 		helpers.maximize(c)
 	end)
 
-	awful.titlebar(c, {size = beautiful.dpi(32)}): setup {
+	awful.titlebar(c, {size = beautiful.titlebar_height}): setup {
 		layout = wibox.layout.align.horizontal,
 		{
 			{

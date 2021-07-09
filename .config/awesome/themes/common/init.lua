@@ -57,6 +57,7 @@ theme.border_marked = theme.xcolor0
 
 theme.titlebars = true
 theme.titlebar_type = 'default'
+theme.titlebar_height = dpi(30)
 theme.titlebar_bg = theme.xcolor0
 -- There are other variable sets
 -- overriding the default one when
