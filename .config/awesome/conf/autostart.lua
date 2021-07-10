@@ -8,4 +8,4 @@ if picom then
 	.. '.conf ' .. (beautiful.exp_picom_bknd and '--experimental-backends ' or '')
 	.. '-b')
 end
-awful.spawn('flavours apply ' .. (beautiful.flavours_name or themename))
+awful.spawn('flavours apply ' .. (beautiful.flavours_name and beautiful.flavours_name or themename))
