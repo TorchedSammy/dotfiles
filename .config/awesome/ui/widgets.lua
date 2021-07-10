@@ -123,7 +123,6 @@ widgets.systray = wibox.widget {
 	widgets.raw_systray,
 	top = systray_margin,
 	bottom = systray_margin,
-	--right = 5, left = 5,
 	widget = wibox.container.margin
 }
 

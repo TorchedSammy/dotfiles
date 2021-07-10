@@ -3,15 +3,15 @@ local dpi = xresources.apply_dpi
 
 local theme = require('themes.common')
 
-theme.xbackground = '#090b14'
+theme.xbackground = '#030008'
 theme.xforeground = '#f5edfa'
 theme.xcolor0     = '#090b14'
-theme.xcolor1     = '#f04a5d'
-theme.xcolor2     = '#5ae696'
-theme.xcolor3     = '#fed06e'
-theme.xcolor4     = '#0badff'
-theme.xcolor5     = '#ff5ca0'
-theme.xcolor6     = '#00eaff'
+theme.xcolor1     = '#e64c75'
+theme.xcolor2     = '#4ce668'
+theme.xcolor3     = '#f7d643'
+theme.xcolor4     = '#33a3d6'
+theme.xcolor5     = '#d16dce'
+theme.xcolor6     = '#40dbcc'
 theme.xcolor7     = '#f5edfa'
 theme.xcolor8     = '#55516e'
 theme.xcolor9     = '#f04a5d'
@@ -23,23 +23,25 @@ theme.xcolor14    = '#00eaff'
 theme.xcolor15    = '#f5edfa'
 
 theme.bg_normal     = theme.xbackground
-theme.bg_sec        = '#6F6F70'
+theme.bg_sec        = '#100e14'
 theme.bg_focus      = theme.bg_normal
 theme.bg_urgent     = theme.bg_normal
 theme.bg_minimize   = theme.bg_normal
 
 theme.fg_normal     = theme.xforeground
 
-theme.useless_gap   = dpi(10)
-theme.border_width  = dpi(6)
+theme.useless_gap   = dpi(12)
+theme.border_width  = dpi(0)
 theme.border_normal  = theme.bg_normal -- Outer Border
 theme.border_focus  = theme.bg_normal -- Outer Border
 
-theme.titlebars = true
+theme.titlebars = false
 theme.titlebar_type = 'macos'
+theme.titlebar_height = dpi(28)
 theme.titlebar_bg = theme.bg_normal
 
-theme.bar = 'hibis'
+theme.bar = 'material'
+theme.wibar_height = dpi(34)
 theme.wibar_bg = theme.bg_normal
 theme.wibar_spacing = dpi(14)
 
@@ -59,9 +61,10 @@ theme.taglist_text_color_urgent   = { theme.xcolor9, theme.xcolor10, theme.xcolo
 
 theme.bg_systray = theme.wibar_bg
 
-theme.wallpaper = theme.config_path.."/wallpapers/clouds2.jpg"
+theme.wallpaper = theme.config_path.."/wallpapers/discord-login.jpg"
 
 theme.picom_conf = 'rounded'
+theme.flavours_name = 'peachy'
 
 return theme
 

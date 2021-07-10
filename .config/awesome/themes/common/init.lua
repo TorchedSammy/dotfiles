@@ -72,6 +72,8 @@ theme.titlebar_bg = theme.xcolor0
 -- Example:
 --theme.taglist_bg_focus = "#ff0000"
 
+theme.tasklist_plain_task_name = true 
+
 -- Generate taglist squares:
 local taglist_square_size = dpi(4)
 theme.taglist_squares_sel = theme_assets.taglist_squares_sel(
