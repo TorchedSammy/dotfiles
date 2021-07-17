@@ -64,6 +64,27 @@ map('n', '<A-x>', '<Cmd>BufferNext<CR>')
 map('n', '<A-c>', '<Cmd>BufferClose<CR>')
 map('n', '<A-S-c>', '<Cmd>BufferClose!<CR>')
 
+-- Trouble
+-- i copy pasted, ill use the map function later xd
+vim.api.nvim_set_keymap("n", "<leader>xx", "<cmd>Trouble<cr>",
+  {silent = true, noremap = true}
+)
+vim.api.nvim_set_keymap("n", "<leader>xw", "<cmd>Trouble lsp_workspace_diagnostics<cr>",
+  {silent = true, noremap = true}
+)
+vim.api.nvim_set_keymap("n", "<leader>xd", "<cmd>Trouble lsp_document_diagnostics<cr>",
+  {silent = true, noremap = true}
+)
+vim.api.nvim_set_keymap("n", "<leader>xl", "<cmd>Trouble loclist<cr>",
+  {silent = true, noremap = true}
+)
+vim.api.nvim_set_keymap("n", "<leader>xq", "<cmd>Trouble quickfix<cr>",
+  {silent = true, noremap = true}
+)
+vim.api.nvim_set_keymap("n", "gR", "<cmd>Trouble lsp_references<cr>",
+  {silent = true, noremap = true}
+)
+
 -- Completions
 local t = function(str)
 	return vim.api.nvim_replace_termcodes(str, true, true, true)
