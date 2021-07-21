@@ -1,1 +1,1 @@
-return require 'themecolor.wist'
+return require 'themecolor.macos'

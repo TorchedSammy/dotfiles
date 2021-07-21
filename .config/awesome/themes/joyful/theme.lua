@@ -1,3 +1,4 @@
+local gears = require 'gears'
 local xresources = require("beautiful.xresources")
 local dpi = xresources.apply_dpi
 
@@ -62,7 +63,7 @@ theme.wibar_height = dpi(30)
 theme.wibar_bg = theme.bg_normal
 theme.bg_systray = theme.wibar_bg
 
-theme.wallpaper = theme.config_path.."/wallpapers/bigsur.jpg"
+theme.wallpaper = function(s) gears.wallpaper.tiled(theme.config_path..'/wallpapers/circletile.png', s) end
 theme.picom_conf = 'picom-macos'
 
 return theme
