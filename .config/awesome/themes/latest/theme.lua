@@ -43,7 +43,7 @@ theme.border_focus  = theme.bg_sec
 
 theme.titlebars = true
 theme.titlebar_type = 'latest'
-theme.titlebar_height = dpi(32)
+theme.titlebar_height = dpi(36)
 theme.titlebar_bg = theme.bg_normal
 
 theme.notification_bg = theme.xcolor0
@@ -52,12 +52,17 @@ theme.notification_height = dpi(100)
 theme.notification_border_color = theme.xcolor0
 theme.notification_border_width = dpi(0)
 
-theme.taglist_text_color_empty    = { theme.xcolor7, theme.xcolor7, theme.xcolor7, theme.xcolor7, theme.xcolor7, theme.xcolor7, theme.xcolor7, theme.xcolor7, theme.xcolor7, theme.xcolor7 }
-theme.taglist_text_color_occupied  = { theme.xcolor1, theme.xcolor2, theme.xcolor3, theme.xcolor4, theme.xcolor5, theme.xcolor6, theme.xcolor1, theme.xcolor2, theme.xcolor3, theme.xcolor4 }
+theme.taglist_text_empty    = {"一","二","三","三","五","六","七","八","九"}
+theme.taglist_text_occupied = {"一","二","三","三","五","六","七","八","九"}
+theme.taglist_text_focused  = {"一","二","三","三","五","六","七","八","九"}
+theme.taglist_text_urgent   = {"⚡","⚡","⚡","⚡","⚡","⚡","⚡","⚡","⚡"}
+
+theme.taglist_text_color_empty    = { theme.bg_sec, theme.bg_sec, theme.bg_sec, theme.bg_sec, theme.bg_sec, theme.bg_sec, theme.bg_sec, theme.bg_sec, theme.bg_sec, theme.bg_sec }
+theme.taglist_text_color_occupied  = { theme.xforeground, theme.xforeground, theme.xforeground, theme.xforeground, theme.xforeground, theme.xforeground, theme.xforeground, theme.xforeground, theme.xforeground }
 theme.taglist_text_color_focused  = { theme.xcolor1, theme.xcolor2, theme.xcolor3, theme.xcolor4, theme.xcolor5, theme.xcolor6, theme.xcolor1, theme.xcolor2, theme.xcolor3, theme.xcolor4 }
 theme.taglist_text_color_urgent   = { theme.xcolor9, theme.xcolor10, theme.xcolor11, theme.xcolor12, theme.xcolor13, theme.xcolor14, theme.xcolor9, theme.xcolor10, theme.xcolor11, theme.xcolor12 }
 
-theme.bar = 'clouds'
+theme.bar = 'latest'
 theme.wibar_height = dpi(28)
 
 theme.wibar_bg = theme.bg_normal
