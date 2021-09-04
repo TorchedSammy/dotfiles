@@ -85,7 +85,7 @@ local emptybar = function(pos, c)
 		shape = round_end(pos),
 		bg = beautiful.wibar_bg,
 		widget = wibox.container.background,
-		forced_width = c.width
+		forced_width = c.screen.geometry.width,
 	}
 end
 
@@ -163,7 +163,7 @@ client.connect_signal('request::titlebars', function(c)
 		shape = round_end('top'),
 		bg = beautiful.wibar_bg,
 		widget = wibox.container.background,
-		forced_width = c.width,
+		forced_width = c.screen.geometry.width,
 	}
 end
 
