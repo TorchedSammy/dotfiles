@@ -37,12 +37,12 @@ theme.fg_urgent     = "#ffffff"
 theme.fg_minimize   = "#ffffff"
 
 theme.useless_gap   = dpi(6)
-theme.border_width  = dpi(1)
+theme.border_width  = dpi(0)
 theme.border_normal  = theme.bg_sec
 theme.border_focus  = theme.bg_sec
 
 theme.titlebars = true
-theme.titlebar_type = 'joyful'
+theme.titlebar_type = 'latest'
 theme.titlebar_height = dpi(32)
 theme.titlebar_bg = theme.bg_normal
 
@@ -57,13 +57,13 @@ theme.taglist_text_color_occupied  = { theme.xcolor1, theme.xcolor2, theme.xcolo
 theme.taglist_text_color_focused  = { theme.xcolor1, theme.xcolor2, theme.xcolor3, theme.xcolor4, theme.xcolor5, theme.xcolor6, theme.xcolor1, theme.xcolor2, theme.xcolor3, theme.xcolor4 }
 theme.taglist_text_color_urgent   = { theme.xcolor9, theme.xcolor10, theme.xcolor11, theme.xcolor12, theme.xcolor13, theme.xcolor14, theme.xcolor9, theme.xcolor10, theme.xcolor11, theme.xcolor12 }
 
-theme.bar = 'joyful'
-theme.wibar_height = dpi(30)
+theme.bar = 'clouds'
+theme.wibar_height = dpi(28)
 
 theme.wibar_bg = theme.bg_normal
 theme.bg_systray = theme.wibar_bg
 
-theme.wallpaper = function(s) gears.wallpaper.tiled(theme.config_path..'/wallpapers/circletile.png', s) end
+theme.wallpaper = theme.config_path.."/wallpapers/modeus.png"
 theme.picom_conf = 'picom-macos'
 
 return theme

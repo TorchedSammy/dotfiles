@@ -18,7 +18,7 @@ awful.screen.connect_for_each_screen(function(s)
 		screen = s,
 		position = 'bottom',
 		height = beautiful.wibar_height,
-		width = s.geometry.width - 28,
+		width = s.geometry.width - 5,
 		shape = gears.shape.rounded_bar, -- to change the shape of the bars, change here
 		bg = '#00000000' -- make it transparent black
 	}
