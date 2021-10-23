@@ -2,8 +2,8 @@
 -- found (e.g. lgi). If LuaRocks is not installed, do nothing.
 pcall(require, 'luarocks.loader')
 
-themename = 'latest'
-picom = false 
+themename = 'macos'
+picom = true
 
 local awful = require 'awful'
 require 'awful.autofocus'
