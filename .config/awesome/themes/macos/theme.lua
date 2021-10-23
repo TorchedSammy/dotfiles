@@ -57,7 +57,7 @@ theme.wibar_height = dpi(30)
 theme.wibar_bg = theme.bg_normal
 theme.bg_systray = theme.wibar_bg
 
-theme.wallpaper = theme.config_path.."/wallpapers/bigsur.jpg"
+theme.wallpaper = theme.config_path.."/wallpapers/bigsur2.jpg"
 theme.picom_conf = 'picom-macos'
 
 return theme
