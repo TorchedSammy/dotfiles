@@ -7,6 +7,6 @@
 [submodule ".config/awesome/modules/awesome-switcher"]
 	path = .config/awesome/modules/awesome-switcher
 	url = https://github.com/troglobit/awesome-switcher
-[submodule ".config/awesome/modules/freedesktop"]
-	path = .config/awesome/modules/freedesktop
+[submodule ".config/awesome/freedesktop"]
+	path = .config/awesome/freedesktop
 	url = https://github.com/lcpz/awesome-freedesktop
