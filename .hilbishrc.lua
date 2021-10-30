@@ -35,6 +35,8 @@ end)
 alias('cls', 'clear')
 alias('gcd', 'git checkout dev')
 alias('gcm', 'git checkout master')
+alias('ga', 'git add')
+alias('p', 'git push')
 
 -- GPG
 os.execute 'tty >/tmp/tty 2>&1'
