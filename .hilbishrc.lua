@@ -36,10 +36,6 @@ alias('cls', 'clear')
 alias('gcd', 'git checkout dev')
 alias('gcm', 'git checkout master')
 
--- Petals
-petals = require 'petals'
-petals.init()
-
 -- GPG
 os.execute 'tty >/tmp/tty 2>&1'
 local f = io.open '/tmp/tty'
