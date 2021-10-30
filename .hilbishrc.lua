@@ -63,6 +63,11 @@ bait.catch('cd', function()
 end)
 
 commander.register('j', function(args)
+	if not args[1] then
+		print 'missing dir to jump to'
+		return 1
+	end
+
 	local d = args[1]
 	local f = io.popen('jump cd ' .. d)
 	local expdir = f:read '*all'
