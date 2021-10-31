@@ -35,8 +35,12 @@ end)
 alias('cls', 'clear')
 alias('gcd', 'git checkout dev')
 alias('gcm', 'git checkout master')
+alias('gmm', 'git merge master')
+alias('gmd', 'git merge dev')
 alias('ga', 'git add')
+alias('gm', 'git merge')
 alias('p', 'git push')
+alias('c', 'git commit')
 
 -- GPG
 os.execute 'tty >/tmp/tty 2>&1'
