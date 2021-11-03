@@ -6,7 +6,27 @@ return require('packer').startup(function(use)
 	-- Might replace with nvim-bufferline
 	use {'romgrk/barbar.nvim', requires = 'kyazdani42/nvim-web-devicons'}
 
-	use 'kyazdani42/nvim-tree.lua'
+	use {'kyazdani42/nvim-tree.lua',
+		config = function()
+			require'nvim-tree'.setup {
+				open_on_setup = true,
+				auto_close = true,
+				update_cwd = true,
+				diagnostics = {
+				    enable = true,
+				},
+				update_focused_file = {
+					enable      = true,
+				},
+				filters = {
+					custom = {'.git', 'node_modules'}
+				},
+				view = {
+					width = 24
+				}
+			}
+		end
+	}
 
 	use {'lewis6991/gitsigns.nvim', requires = {'nvim-lua/plenary.nvim'},
 		config = function()
