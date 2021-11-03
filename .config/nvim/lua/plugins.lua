@@ -8,7 +8,7 @@ return require('packer').startup(function(use)
 
 	use {'kyazdani42/nvim-tree.lua',
 		config = function()
-			require'nvim-tree'.setup {
+			require 'nvim-tree'.setup {
 				open_on_setup = true,
 				auto_close = true,
 				update_cwd = true,
@@ -16,7 +16,7 @@ return require('packer').startup(function(use)
 				    enable = true,
 				},
 				update_focused_file = {
-					enable      = true,
+					enable = true,
 				},
 				filters = {
 					custom = {'.git', 'node_modules'}
