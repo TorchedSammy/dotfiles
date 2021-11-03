@@ -30,6 +30,9 @@ map('n', '<A-x>', '<Cmd>BufferNext<CR>')
 map('n', '<A-c>', '<Cmd>BufferClose<CR>')
 map('n', '<A-S-c>', '<Cmd>BufferClose!<CR>')
 
+-- Trouble
+map('n', '<leader>x', 'TroubleToggle')
+
 -- Completions
 local t = function(str)
 	return vim.api.nvim_replace_termcodes(str, true, true, true)
