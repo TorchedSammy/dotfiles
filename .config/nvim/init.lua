@@ -1,5 +1,6 @@
 require 'plugins'
 require 'theme'
+require 'keybinds'
 
 -- Neovim stuff
 vim.o.hidden = true
