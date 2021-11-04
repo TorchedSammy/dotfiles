@@ -67,11 +67,9 @@ return require('packer').startup(function(use)
 		end
 	}
 
-	use {'famiu/feline.nvim',
+	use {'glepnir/galaxyline.nvim', branch = 'main',
 		config = function()
-			require('feline').setup {
-				preset = 'noicon'
-			}
+			require 'statusline'
 		end
 	}
 
