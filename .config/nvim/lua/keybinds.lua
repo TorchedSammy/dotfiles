@@ -10,7 +10,7 @@ function nimap(lhs, rhs, opts)
 end
 
 -- Editor
-nimap('leader>z', '<Cmd>noh<CR>') -- Remove highlights with \z
+nimap('<leader>z', '<Cmd>noh<CR>') -- Remove highlights with \z
 nimap('<C-s>', '<Cmd>w<CR>') -- Save
 nimap('<C-z>', '<Cmd>u<CR>') -- Undo
 nimap('<C-x>', '<Cmd>redo<CR>') -- Redo
