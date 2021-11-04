@@ -172,14 +172,21 @@ gls.right = {
 }}
 
 -- inactive line
-gls.short_line_left[1] = {
+gls.short_line_left = {
+{
+	Space = {
+		provider = function() return ' ' end,
+		highlight = {colors.bg, colors.bg}
+	}	
+},
+{
   BufferType = {
     provider = 'FileTypeName',
     highlight = {colors.fg, colors.section_bg},
     separator = ' ',
     separator_highlight = {colors.section_bg, colors.bg}
   }
-}
+}}
 
 gls.short_line_right[1] = {
   BufferIcon = {
