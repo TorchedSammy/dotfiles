@@ -109,8 +109,8 @@ local highlights = {
 	FoldColumn = {gfg = tc.fg, gbg = tc.gui8, ctfg = 7, ctbg = 8},
 	Pmenu = {gfg = tc.fgli, gbg = tc.gui8, ctfg = 15, ctbg = 8},
 	PmenuSel = {gfg = tc.gui8, gbg = tc.fgli, ctfg = 8, ctbg = 15},
-	StatusLine = {gfg = tc.fgli, gbg = tc.gui8, ctfg = 15, ctbg = 8, attr = 'bold'},
-	StatusLineNC = {gfg = tc.bg, gbg = tc.bg, ctfg = 0, ctbg = 0, force = true},
+	StatusLine = {gfg = tc.bgli, gbg = tc.gui8, ctfg = 15, ctbg = 8, attr = 'bold'},
+	StatusLineNC = {gfg = tc.bgli, gbg = tc.bgli, ctfg = 0, ctbg = 0, force = true},
 	SignColumn = {},
 
 	-- Buffer Line
@@ -135,7 +135,7 @@ local highlights = {
 	NvimTreeGitNew = {gfg = tc.gui2, ctfg = 2, attr = 'italic'},
 	NvimTreeGitRenamed = {gfg = tc.gui6, ctfg = 6, attr = 'italic'},
 	NvimTreeGitStaged = {gfg = tc.gui2, ctfg = 2},
-	NvimTreeStatusLine = {gbg = tc.bg, gfg = tc.bg, force = true},
+	NvimTreeStatusLine = {gbg = tc.bgli, gfg = tc.bgli, force = true},
 	NvimTreeExecFile = {gfg = tc.gui2, ctfg = 2, attr = 'underline'},
 	NvimTreeGitDeleted = {gfg = tc.gui1, ctfg = 1, attr = 'bold'},
 
