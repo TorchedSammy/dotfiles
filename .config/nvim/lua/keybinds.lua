@@ -13,7 +13,6 @@ end
 nimap('<leader>z', '<Cmd>noh<CR>') -- Remove highlights with \z
 nimap('<C-s>', '<Cmd>w<CR>') -- Save
 nimap('<C-z>', '<Cmd>u<CR>') -- Undo
-nimap('<C-x>', '<Cmd>redo<CR>') -- Redo
 
 nimap('<C-S-Up>', '<Cmd>m .-2<CR>')
 nimap('<C-S-Down>', '<Cmd>m .+1<CR>')
@@ -31,7 +30,7 @@ map('n', '<A-c>', '<Cmd>BufferClose<CR>')
 map('n', '<A-S-c>', '<Cmd>BufferClose!<CR>')
 
 -- Trouble
-map('n', '<leader>x', 'TroubleToggle')
+map('n', '<C-x>', '<Cmd>TroubleToggle<CR>')
 
 -- Completions
 local t = function(str)
