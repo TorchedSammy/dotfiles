@@ -115,4 +115,7 @@ return require('packer').startup(function(use)
 			vim.notify = require 'notify'
 		end
 	}
+
+	-- i have copilot pog
+	use 'github/copilot.vim'
 end)
