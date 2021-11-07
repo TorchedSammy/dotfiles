@@ -51,8 +51,11 @@ return require('packer').startup(function(use)
 
 	use {'hrsh7th/nvim-cmp',
 		requires = {
+			-- LSP things
 			'neovim/nvim-lspconfig',
 			'kabouzeid/nvim-lspinstall',
+			'onsails/lspkind-nvim', -- icons
+			-- Sources
 			'hrsh7th/cmp-nvim-lsp', -- lsp
 			'hrsh7th/cmp-path', -- file paths
 			'hrsh7th/cmp-buffer',
@@ -61,11 +64,16 @@ return require('packer').startup(function(use)
 		config = function()
 			local cmp = require 'cmp'
 			local luasnip = require 'luasnip'
+			local lspkind = require 'lspkind'
+
 			cmp.setup {
 				snippet = {
 					expand = function()
 						require 'luasnip'.lsp_expand(args.body)
 					end
+				},
+				formatting = {
+					format = lspkind.cmp_format({with_text = false, maxwidth = 50})
 				},
 				sources = {
 					{ name = 'nvim_lsp' },

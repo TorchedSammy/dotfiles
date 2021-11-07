@@ -109,8 +109,8 @@ local highlights = {
 	FoldColumn = {gfg = tc.fg, gbg = tc.gui8, ctfg = 7, ctbg = 8},
 	Pmenu = {gfg = tc.fgli, gbg = tc.gui8, ctfg = 15, ctbg = 8},
 	PmenuSel = {gfg = tc.gui8, gbg = tc.fgli, ctfg = 8, ctbg = 15},
-	StatusLine = {gfg = tc.bgli, gbg = tc.gui8, ctfg = 15, ctbg = 8, attr = 'bold'},
-	StatusLineNC = {gfg = tc.bgli, gbg = tc.bgli, ctfg = 0, ctbg = 0, force = true},
+	StatusLine = {gfg = tc.bg, gbg = tc.bgli, ctfg = 15, ctbg = 8, attr = 'bold'},
+	StatusLineNC = {gfg = tc.bg, gbg = tc.bgli, ctfg = 0, ctbg = 0, force = true},
 	SignColumn = {},
 	VertSplit = {gfg = tc.bgvli, gbg = tc.bg, ctfg = 0, ctbg = 0},
 
@@ -122,6 +122,7 @@ local highlights = {
 	BufferInactiveMod = {gbg = tc.bgli, gfg = tc.gui3}, -- inactive modified (text)
 	BufferInactiveSign = {gbg = tc.bgli, gfg = tc.bgli},
 	BufferTabpageFill = {gbg = tc.bgli, gfg = tc.bgli}, -- rest of the bufferline
+	BufferVisibleSign = {gfg = tc.bgvli, gbg = tc.bg},
 
 	-- Dev Icons
 	DevIconLua = {gfg = tc.gui4},
