@@ -112,6 +112,7 @@ local highlights = {
 	StatusLine = {gfg = tc.bgli, gbg = tc.gui8, ctfg = 15, ctbg = 8, attr = 'bold'},
 	StatusLineNC = {gfg = tc.bgli, gbg = tc.bgli, ctfg = 0, ctbg = 0, force = true},
 	SignColumn = {},
+	VertSplit = {gfg = tc.bgvli, gbg = tc.bg, ctfg = 0, ctbg = 0},
 
 	-- Buffer Line
 	BufferCurrent = {gbg = tc.bg, gfg = tc.fgli, attr = 'italic'},
