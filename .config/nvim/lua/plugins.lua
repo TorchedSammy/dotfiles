@@ -9,7 +9,6 @@ return require('packer').startup(function(use)
 	use {'kyazdani42/nvim-tree.lua',
 		config = function()
 			require 'nvim-tree'.setup {
-				open_on_setup = true,
 				auto_close = true,
 				update_cwd = true,
 				diagnostics = {
@@ -22,7 +21,8 @@ return require('packer').startup(function(use)
 					custom = {'.git', 'node_modules'}
 				},
 				view = {
-					width = 24
+					width = 24,
+					auto_resize = true
 				}
 			}
 		end
@@ -44,8 +44,6 @@ return require('packer').startup(function(use)
 			}
 		end
 	}
-
-	use 'dstein64/nvim-scrollview'
 
 	use {'hrsh7th/nvim-compe', requires = {'neovim/nvim-lspconfig', 'kabouzeid/nvim-lspinstall', 'hrsh7th/vim-vsnip'},
 		config = function()
