@@ -16,6 +16,7 @@ vim.o.completeopt = 'menu,menuone,noselect'
 vim.o.tabstop = 4
 vim.o.shiftwidth = 4
 vim.o.softtabstop = 0
+vim.o.splitright = true
 vim.wo.number = true
 vim.cmd 'set ci'
 vim.cmd 'set undofile'
