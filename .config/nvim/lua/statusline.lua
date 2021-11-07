@@ -23,7 +23,8 @@ local mode_color = function()
   local mode_colors = {
     n = colors.blue,
     i = colors.green,
-    c = colors.orange,
+    c = colors.yellow,
+    t = colors.green,
     R = colors.magenta,
     V = colors.cyan,
     v = colors.cyan,
@@ -54,7 +55,8 @@ gls.left = {
         V = 'VISUAL',
         [''] = 'VISUAL',
         v = 'VISUAL',
-        R = 'REPLACE'
+        R = 'REPLACE',
+        t = 'TERMINAL'
       }
       vim.api.nvim_command('hi GalaxyViMode guibg=' .. mode_color())
       local alias_mode = alias[vim.fn.mode()]
@@ -115,7 +117,10 @@ gls.right = {
 {
   GitIcon = {
     provider = function() return '  ' end,
-    condition = condition.check_git_workspace,
+    condition = function()
+		local vcs = require 'galaxyline.provider_vcs'
+		return vcs.get_git_branch() ~= nil
+    end,
     highlight = {colors.red, colors.bg}
   }
 },
@@ -126,7 +131,10 @@ gls.right = {
       local branch_name = vcs.get_git_branch()
       return branch_name .. ' '
     end,
-    condition = condition.check_git_workspace,
+    condition = function()
+		local vcs = require 'galaxyline.provider_vcs'
+		return vcs.get_git_branch() ~= nil
+    end,
     highlight = {colors.fg, colors.bg}
   }
 },
