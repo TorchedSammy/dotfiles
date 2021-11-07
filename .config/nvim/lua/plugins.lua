@@ -46,21 +46,53 @@ return require('packer').startup(function(use)
 		end
 	}
 
-	use {'hrsh7th/nvim-compe', requires = {'neovim/nvim-lspconfig', 'kabouzeid/nvim-lspinstall', 'hrsh7th/vim-vsnip'},
+	-- Completions
+	use 'L3MON4D3/LuaSnip'
+
+	use {'hrsh7th/nvim-cmp',
+		requires = {
+			'neovim/nvim-lspconfig',
+			'kabouzeid/nvim-lspinstall',
+			'hrsh7th/cmp-nvim-lsp', -- lsp
+			'hrsh7th/cmp-path', -- file paths
+			'hrsh7th/cmp-buffer',
+			'saadparwaiz1/cmp_luasnip'
+		},
 		config = function()
-			require 'compe'.setup {
-				enabled = true,
-				autocomplete = true,
-				min_length = 3,
-				preselect = 'enable',
-				source = {
-					path = true,
-					buffer = true,
-					calc = true,
-					nvim_lsp = true,
-					nvim_lua = true,
-					vsnip = true,
-					ultisnips = true,
+			local cmp = require 'cmp'
+			local luasnip = require 'luasnip'
+			cmp.setup {
+				snippet = {
+					expand = function()
+						require 'luasnip'.lsp_expand(args.body)
+					end
+				},
+				sources = {
+					{ name = 'nvim_lsp' },
+					{ name = 'luasnip' },
+					{ name = 'buffer' },
+					{ name = 'path' }
+				},
+				mapping = {
+					['<CR>'] = cmp.mapping.confirm {select = true},
+					['Tab'] = function(cb)
+						if cmp.visible() then
+							cmp.select_next_item()
+						elseif luasnip.expand_or_jumpable() then
+							luasnip.expand_or_jump()
+						else
+							cb()
+						end
+					end,
+					['<S-Tab>'] = function(cb)
+						if cmp.visible() then
+							cmp.select_prev_item()
+						elseif luasnip.jumpable(-1) then
+							luasnip.jump(-1)
+						else
+							cb()
+						end
+					end
 				}
 			}
 		end

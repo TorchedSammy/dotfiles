@@ -12,7 +12,7 @@ vim.o.ruler = false
 vim.o.showmode = false
 vim.o.expandtab = false
 vim.o.mouse = 'a'
-vim.o.completeopt = 'menuone,noselect'
+vim.o.completeopt = 'menu,menuone,noselect'
 vim.o.tabstop = 4
 vim.o.shiftwidth = 4
 vim.o.softtabstop = 0
@@ -45,14 +45,7 @@ local lua_settings = {
 
 local function makeConf()
 	local capabilities = vim.lsp.protocol.make_client_capabilities()
-	capabilities.textDocument.completion.completionItem.snippetSupport = true
-	capabilities.textDocument.completion.completionItem.resolveSupport = {
-		properties = {
-			'documentation',
-			'detail',
-			'additionalTextEdits',
-		}
-	}
+	capabilities = require 'cmp_nvim_lsp'.update_capabilities(capabilities)
 
 	return {
 		capabilities = capabilities,
