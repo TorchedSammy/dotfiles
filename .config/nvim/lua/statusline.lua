@@ -81,9 +81,24 @@ gls.left = {
   FileName = {
     provider = 'FileName',
     highlight = {colors.fg, colors.section_bg},
-    separator = ' ',
-    separator_highlight = {colors.section_bg, colors.bg}
   }
+},
+{
+	Breadcrumbs = {
+		provider = function()
+			local gps = require 'nvim-gps'
+			local location = ''
+			if gps.get_location() ~= '' then
+				location = '> ' .. gps.get_location()
+			end
+			return location
+		end,
+		condition = function()
+			local gps = require 'nvim-gps'
+			return gps.is_available()
+		end,
+		highlight = {colors.fg, colors.section_bg},
+	}
 },
 {
   DiagnosticError = {

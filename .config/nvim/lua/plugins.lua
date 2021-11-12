@@ -157,4 +157,10 @@ return require('packer').startup(function(use)
 
 	-- i have copilot pog
 	use 'github/copilot.vim'
+
+	use{'SmiteshP/nvim-gps',
+		config = function()
+			require 'nvim-gps'.setup {}
+		end
+	}
 end)

@@ -103,6 +103,9 @@ awful.rules.rules = {
 	{ rule_any = {type = { 'normal', 'dialog' }
 	  }, properties = { titlebars_enabled = beautiful.titlebars }
 	},
+	{ rule_any = {class = { 'osu!.exe' }
+	  }, properties = { titlebars_enabled = false }
+	},
 
 	-- Set Firefox to always map on the tag named '2' on screen 1.
 	{ rule_any = { class = {'Google-chrome', 'discord'} },
