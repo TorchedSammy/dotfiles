@@ -79,52 +79,48 @@ gls.left = {
 },
 {
   FileName = {
-    provider = 'FileName',
+    provider = function ()
+    	local fileinfo = require 'galaxyline.provider_fileinfo'
+    	-- get file name and remove space at the end
+    	-- galaxyline is kinda dumb and having this extra space with the separator is annoying
+    	local fileName = string.gsub(fileinfo.get_current_file_name(), '^%s*(.-)%s*$', '%1')
+
+    	local gps = require 'nvim-gps'
+    	local crumbs = ''
+    	if gps.get_location() ~= '' then
+			crumbs = ' > ' .. gps.get_location()
+		end
+
+    	return fileName .. crumbs
+    end,
+    separator = ' ',
+    separator_highlight = {colors.section_bg, colors.section_bg},
     highlight = {colors.fg, colors.section_bg},
   }
 },
 {
-	Breadcrumbs = {
-		provider = function()
-			local gps = require 'nvim-gps'
-			local location = ''
-			if gps.get_location() ~= '' then
-				location = '> ' .. gps.get_location()
-			end
-			return location
-		end,
-		condition = function()
-			local gps = require 'nvim-gps'
-			return gps.is_available()
-		end,
-		highlight = {colors.fg, colors.section_bg},
-	}
-},
-{
   DiagnosticError = {
     provider = 'DiagnosticError',
-    icon = ' ',
+    icon = '  ',
     highlight = {colors.red, colors.bg}
   }
 }, {
   DiagnosticWarn = {
     provider = 'DiagnosticWarn',
-    icon = ' ',
+    icon = '  ',
     highlight = {colors.orange, colors.bg}
   }
 }, {
   DiagnosticHint = {
     provider = 'DiagnosticHint',
-    icon = ' ',
+    icon = '  ',
     highlight = {colors.fg, colors.bg}
   }
 }, {
   DiagnosticInfo = {
     provider = 'DiagnosticInfo',
-    icon = ' ',
+    icon = '  ',
     highlight = {colors.blue, colors.bg},
-    separator = ' ',
-    separator_highlight = {colors.bg, colors.bg}
   }
 }}
 
@@ -179,9 +175,13 @@ gls.right = {
 }, 
 {
    LineInfo = {
-     provider = 'LinePercent',
+     provider = function()
+     	 local fileinfo = require 'galaxyline.provider_fileinfo'
+     	 -- i hate the default lineinfo formatting
+     	 return vim.fn.line '.' .. ':' .. vim.fn.col '.' .. ' ' .. fileinfo.current_line_percent()
+     end,
      highlight = {colors.fg, colors.section_bg},
-     separator = '█',
+     separator = ' ',
      separator_highlight = {colors.bg, colors.section_bg},
    },
  },
