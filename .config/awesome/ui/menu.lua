@@ -1,7 +1,7 @@
 local awful = require 'awful'
 local beautiful = require 'beautiful'
 local hotkeys_popup = require 'awful.hotkeys_popup'
-local has_fdo, freedesktop = pcall(require, 'modules.freedesktop')
+local has_fdo, freedesktop = pcall(require, 'freedesktop')
 
 awesomemenu = {
 	{
