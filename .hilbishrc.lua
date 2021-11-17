@@ -5,7 +5,7 @@ delta = require 'delta'
 fs = require 'fs'
 
 print(lunacolors.format('Welcome {cyan}'.. hilbish.user ..
-'{reset} to {magenta}Hilbish{reset},\n' .. 
+'{reset} to {magenta}Hilbish{reset},\n' ..
 'the nice lil shell for {blue}Lua{reset} fanatics!\n'))
 
 delta.init()
@@ -15,9 +15,9 @@ commander.register('ver', function()
 end)
 
 commander.register('ev', function()
-	text = ''
+	local text = ''
 	while true do
-		input = io.read()
+		local input = io.read()
 		if input == nil then break end
 		text = text .. '\n' .. input
 	end
@@ -71,8 +71,8 @@ commander.register('j', function(args)
 	end
 
 	local d = args[1]
-	local f = io.popen('jump cd ' .. d)
-	local expdir = f:read '*all'
+	local out = io.popen('jump cd ' .. d)
+	local expdir = out:read '*all'
 	f:close()
 
 	fs.cd(expdir)
