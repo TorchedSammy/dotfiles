@@ -68,7 +68,7 @@ return require('packer').startup(function(use)
 
 			cmp.setup {
 				snippet = {
-					expand = function()
+					expand = function(args)
 						require 'luasnip'.lsp_expand(args.body)
 					end
 				},
@@ -131,12 +131,12 @@ return require('packer').startup(function(use)
 				auto_update	= true,
 				neovim_image_text = 'The One True Text Editor',
 				main_image = 'file',
-				log_level = 'debug',
+				log_level = 'error',
 				debounce_timeout = 10,
 				enable_line_number	= false,
 				editing_text = 'Working on %s',
 				file_explorer_text	= 'Browsing %s',
-				git_commit_text = 'Committing Changes', 
+				git_commit_text = 'Committing Changes',
 				plugin_manager_text = 'Managing Plugins',
 				reading_text = 'Looking at %s',
 				workspace_text = 'Workspace: %s',
