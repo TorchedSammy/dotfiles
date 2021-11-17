@@ -100,6 +100,16 @@ return require('packer').startup(function(use)
 						else
 							cb()
 						end
+					end,
+					['<Esc>'] = function()
+						if cmp.visible() then
+							cmp.close()
+						else
+							vim.cmd 'stopinsert'
+						end
+					end,
+					['<C-Esc>'] = function ()
+						vim.cmd 'stopinsert'
 					end
 				}
 			}
