@@ -43,7 +43,7 @@ gls.left = {
 	Space = {
 		provider = function() return ' ' end,
 		highlight = {colors.bg, colors.bg}
-	}	
+	}
 },
 {
   ViMode = {
@@ -172,7 +172,7 @@ gls.right = {
     icon = '-',
     highlight = {colors.red, colors.bg}
   }
-}, 
+},
 {
    LineInfo = {
      provider = function()
@@ -200,7 +200,7 @@ gls.short_line_left = {
 	Space = {
 		provider = function() return ' ' end,
 		highlight = {colors.bg, colors.bg}
-	}	
+	}
 },
 {
   BufferType = {
