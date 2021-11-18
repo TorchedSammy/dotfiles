@@ -36,12 +36,13 @@ _G.OpenTerm = function(name, side)
 		if side then vim.cmd 'vsplit' end
 		vim.cmd 'term'
 		vim.cmd('f ' .. name)
+		vim.wo.foldcolumn = '1' -- set left padding basically
 	end
 end
 
-map('n', '<M-`>', ':call v:lua.OpenTerm("TerminalSide", v:true)<CR>') -- Toggle a side terminal
+map('n', '<M-`>', '<Cmd>:call v:lua.OpenTerm("TerminalSide", v:true)<CR>') -- Toggle a side terminal
 map('t', '<M-`>', '<C-\\><C-n>:call v:lua.OpenTerm("TerminalSide", v:true)<CR>') -- Map in terminal mode
-map('n', '<M-CR>', ':call v:lua.OpenTerm("Terminal", v:false)<CR>')
+map('n', '<M-CR>', '<Cmd>:call v:lua.OpenTerm("Terminal", v:false)<CR>')
 map('n', '<M-CR>', '<C-\\><C-n>:call v:lua.OpenTerm("Terminal", v:false)<CR>')
 
 -- Go to normal mode
