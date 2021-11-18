@@ -106,7 +106,7 @@ local highlights = {
 	Visual = {gbg = tc.bgvli},
 	ColorColumn = {gfg = tc.fg, gbg = tc.gui8, ctfg = 7, ctbg = 8},
 	Folded = {gfg = tc.fg, gbg = tc.gui8, ctfg = 7, ctbg = 8},
-	FoldColumn = {gfg = tc.fg, gbg = tc.gui8, ctfg = 7, ctbg = 8},
+	FoldColumn = {gfg = tc.bgvli, gbg = tc.bg, ctfg = 7, ctbg = 0},
 	Pmenu = {gfg = tc.fgli, gbg = tc.gui8, ctfg = 15, ctbg = 8},
 	PmenuSel = {gfg = tc.gui8, gbg = tc.fgli, ctfg = 8, ctbg = 15},
 	StatusLine = {gfg = tc.bg, gbg = tc.bgli, ctfg = 15, ctbg = 8, attr = 'bold'},
