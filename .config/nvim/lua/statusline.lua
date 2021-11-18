@@ -85,10 +85,12 @@ gls.left = {
     	-- galaxyline is kinda dumb and having this extra space with the separator is annoying
     	local fileName = string.gsub(fileinfo.get_current_file_name(), '^%s*(.-)%s*$', '%1')
 
-    	local gps = require 'nvim-gps'
+   		local gps = require 'nvim-gps'
     	local crumbs = ''
-    	if gps.get_location() ~= '' then
-			crumbs = ' > ' .. gps.get_location()
+		if gps.is_available() then
+    		if gps.get_location() ~= '' then
+				crumbs = ' > ' .. gps.get_location()
+			end
 		end
 
     	return fileName .. crumbs
