@@ -20,6 +20,9 @@ vim.o.splitright = true
 vim.wo.number = true
 vim.opt.ci = true
 vim.opt.undofile = true
+vim.opt.guicursor:append('i:blinkwait700-blinkon400-blinkoff250') -- set insert mode cursor to blink
+
+vim.cmd 'autocmd TermOpen * setlocal nonumber norelativenumber foldcolumn=3' -- remove line numbers from terminal
 
 -- LSP
 local lua_settings = {
