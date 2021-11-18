@@ -18,8 +18,8 @@ vim.o.shiftwidth = 4
 vim.o.softtabstop = 0
 vim.o.splitright = true
 vim.wo.number = true
-vim.cmd 'set ci'
-vim.cmd 'set undofile'
+vim.opt.ci = true
+vim.opt.undofile = true
 
 -- LSP
 local lua_settings = {
