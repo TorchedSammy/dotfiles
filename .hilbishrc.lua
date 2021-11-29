@@ -10,6 +10,10 @@ print(lunacolors.format('Welcome {cyan}'.. hilbish.user ..
 
 delta.init()
 
+prependPath '~/bin/'
+appendPath '/usr/local/go/bin/'
+appendPath '~/go/bin/'
+
 commander.register('ver', function()
 	print(hilbish.ver)
 end)
