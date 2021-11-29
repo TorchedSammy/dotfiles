@@ -6,16 +6,16 @@ window:
   dynamic_title: true
 font:
   normal:
-    family: Victor Mono
+    family: Victor Mono Nerd Font
     style: Medium
   bold:
-    family: Victor Mono
+    family: Victor Mono Nerd Font
     style: Bold
   italic:
-    family: Victor Mono
+    family: Victor Mono Nerd Font
     style: Medium Italic
   bold_italic:
-    family: Victor Mono
+    family: Victor Mono Nerd Font
     style: Bold Italic
   size: 8.0
 
