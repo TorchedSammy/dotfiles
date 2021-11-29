@@ -53,7 +53,7 @@ return require('packer').startup(function(use)
 		requires = {
 			-- LSP things
 			'neovim/nvim-lspconfig',
-			'kabouzeid/nvim-lspinstall',
+			'williamboman/nvim-lsp-installer',
 			'onsails/lspkind-nvim', -- icons
 			-- Sources
 			'hrsh7th/cmp-nvim-lsp', -- lsp

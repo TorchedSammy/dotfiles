@@ -38,7 +38,8 @@ local lua_settings = {
 				'vim',
 				'hilbish',
 				'alias',
-				'appendPath'
+				'appendPath',
+				'prependPath'
 			},
 		},
 		workspace = {
@@ -51,38 +52,26 @@ local lua_settings = {
 	},
 }
 
-
 local function makeConf()
 	local capabilities = vim.lsp.protocol.make_client_capabilities()
 	capabilities = require 'cmp_nvim_lsp'.update_capabilities(capabilities)
 
-	return {
-		capabilities = capabilities,
-	}
+	return {capabilities = capabilities}
 end
 
-local function setupServers()
-	require 'lspinstall'.setup()
-	local servers = require 'lspinstall'.installed_servers()
-	for _, server in pairs(servers) do
-		local conf = makeConf()
+local lspinst = require("nvim-lsp-installer")
 
-		if server == 'lua' then
-				conf.settings = lua_settings
-				conf.root_dir = function(fname)
-					if fname:match 'lush_theme' ~= nil then return nil end
-					local util = require 'lspconfig.util'
-					return util.find_git_ancestor(fname) or util.path.dirname(fname)
-				end
+lspinst.on_server_ready(function(server)
+	local opts = makeConf()
+
+	if server.name == "sumneko_lua" then
+		opts.settings = lua_settings
+		opts.root_dir = function(fname)
+			local util = require 'lspconfig.util'
+			return util.find_git_ancestor(fname) or util.path.dirname(fname)
 		end
-		require 'lspconfig'[server].setup(conf)
 	end
-end
 
-setupServers()
-
-require 'lspinstall'.post_install_hook = function()
-	setupServers() -- reload installed servers
-	vim.cmd('bufdo e') -- this triggers the FileType autocmd that starts the server
-end
+	server:setup(opts)
+end)
 
