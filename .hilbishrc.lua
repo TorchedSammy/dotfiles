@@ -77,7 +77,7 @@ commander.register('j', function(args)
 	local d = args[1]
 	local out = io.popen('jump cd ' .. d)
 	local expdir = out:read '*all'
-	f:close()
+	out:close()
 
 	fs.cd(expdir)
 	bait.throw('cd', expdir)
