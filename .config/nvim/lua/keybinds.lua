@@ -10,7 +10,6 @@ function nimap(lhs, rhs, opts)
 end
 
 -- Editor
-nimap('<leader>z', '<Cmd>noh<CR>') -- Remove highlights with \z
 nimap('<C-s>', '<Cmd>silent w<CR>') -- Save
 nimap('<C-z>', '<Cmd>u<CR>') -- Undo
 nimap('<C-S-Up>', '<Cmd>m .-2<CR>') -- Move line up
