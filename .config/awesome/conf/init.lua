@@ -22,7 +22,7 @@ awful.layout.layouts = {
 
 require 'conf.autostart'
 
-terminal = 'alacritty'
+terminal = 'tym'
 terminalname = terminal:gsub('^%l', string.upper)
 
 editor = os.getenv 'EDITOR' or 'nvim'
