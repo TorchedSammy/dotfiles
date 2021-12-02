@@ -173,4 +173,6 @@ return require('packer').startup(function(use)
 			require 'nvim-gps'.setup {}
 		end
 	}
+
+	use 'wakatime/vim-wakatime'
 end)
