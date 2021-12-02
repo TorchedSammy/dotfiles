@@ -15,6 +15,10 @@ nimap('<C-z>', '<Cmd>u<CR>') -- Undo
 nimap('<C-S-Up>', '<Cmd>m .-2<CR>') -- Move line up
 nimap('<C-S-Down>', '<Cmd>m .+1<CR>') -- Move line down
 
+map('v', '<RightMouse>', "y")
+nimap('<RightMouse>', 'p')
+map('v', '<S-RightMouse>', "p")
+
 -- Toggle a terminal buffer
 _G.OpenTerm = function(name, side)
 	local term = vim.api.nvim_eval(string.format('bufwinnr("%s")', name))
