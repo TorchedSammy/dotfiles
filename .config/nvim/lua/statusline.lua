@@ -189,7 +189,7 @@ gls.right = {
  },
  {
    Heart = {
-     provider = function() return ' ' end,
+     provider = function() return '  ' end,
      highlight = {colors.red, colors.section_bg},
      separator = ' ',
      separator_highlight = {colors.bg, colors.section_bg},
