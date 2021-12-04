@@ -9,7 +9,8 @@ function (title, artist, art)
 		text = artist,
 		icon = gears.surface.load_uncached_silently(art)
 	}
-	widgets.music_name:set_markup_silently((artist and artist .. ' - ' or '') .. title)
+	local text = (artist and artist .. ' - ' or '') .. title
+	widgets.music_name:set_markup_silently(gears.string.xml_escape(text))
 end)
 
 awesome.connect_signal('bling::playerctl::no_players', function()
