@@ -56,6 +56,12 @@ return require('packer').startup(function(use)
 		end
 	}
 
+	-- i have copilot pog
+	use {'github/copilot.vim', config = function ()
+		vim.g.copilot_no_tab_map = true
+		vim.g.copilot_assume_mapped = true
+	end}
+
 	use {'hrsh7th/nvim-cmp',
 		requires = {
 			-- LSP things
@@ -182,9 +188,6 @@ return require('packer').startup(function(use)
 			vim.notify = require 'notify'
 		end
 	}
-
-	-- i have copilot pog
-	use 'github/copilot.vim'
 
 	use{'SmiteshP/nvim-gps',
 		config = function()

@@ -19,6 +19,8 @@ map('v', '<RightMouse>', "y")
 nimap('<RightMouse>', 'p')
 map('v', '<S-RightMouse>', "p")
 
+vim.cmd [[imap <silent><script><expr> <C-d> copilot#Accept("\<CR>")]]
+
 -- Toggle a terminal buffer
 _G.OpenTerm = function(name, side)
 	local term = vim.api.nvim_eval(string.format('bufwinnr("%s")', name))
