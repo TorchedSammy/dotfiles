@@ -33,8 +33,11 @@ local lua_settings = {
 			  path = vim.split(package.path, ';'),
 		},
 		diagnostics = {
-			-- Get the language server to recognize the `vim` global
 			globals = {
+				'awesome',
+				'client',
+				'screen',
+				'root',
 				'vim',
 				'hilbish',
 				'alias',
