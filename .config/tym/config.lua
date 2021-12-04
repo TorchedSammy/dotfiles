@@ -12,3 +12,6 @@ tym.set_config {
 	color_window_background = thm.color_background
 }
 
+tym.set_hook('selected', function ()
+	tym.copy_selection()
+end)
