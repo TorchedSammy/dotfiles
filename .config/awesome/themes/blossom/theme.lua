@@ -38,7 +38,7 @@ theme.titlebar_bg = "#332b3d" .. "e6"
 theme.wibar_height = dpi(28)
 theme.wibar_bg = theme.bg_normal .. "d6"
 
-theme.wallpaper = theme.config_path.."/wallpapers/blossoms.jpg"
+theme.wallpaper = theme.config_path.."/wallpapers/blossoms2.jpg"
 
 theme.picom_conf = "blur-shadow"
 theme.exp_picom_bknd = true
