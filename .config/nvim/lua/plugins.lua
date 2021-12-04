@@ -13,7 +13,7 @@ return require('packer').startup(function(use)
 				open_on_setup = true,
 				update_cwd = true,
 				diagnostics = {
-				    enable = true,
+					enable = true,
 				},
 				update_focused_file = {
 					enable = true,
@@ -65,6 +65,16 @@ return require('packer').startup(function(use)
 			local cmp = require 'cmp'
 			local luasnip = require 'luasnip'
 			local lspkind = require 'lspkind'
+			local fn = vim.fn
+
+			local function t(str)
+				return vim.api.nvim_replace_termcodes(str, true, true, true)
+			end
+
+			local check_back_space = function()
+				local col = vim.fn.col '.' - 1
+				return col == 0 or vim.fn.getline('.'):sub(col, col):match '%s' ~= nil
+			end
 
 			cmp.setup {
 				snippet = {
@@ -79,28 +89,30 @@ return require('packer').startup(function(use)
 					{ name = 'nvim_lsp' },
 					{ name = 'luasnip' },
 					{ name = 'buffer' },
-					{ name = 'path' }
+					{ name = 'path' },
+					{ name = 'copilot' }
 				},
 				mapping = {
-					['<CR>'] = cmp.mapping.confirm {select = true},
-					['Tab'] = function(cb)
-						if cmp.visible() then
-							cmp.select_next_item()
-						elseif luasnip.expand_or_jumpable() then
+					['<Tab>'] = cmp.mapping(function (cb)
+						if luasnip.expand_or_jumpable() then
 							luasnip.expand_or_jump()
+						elseif cmp.visible() then
+							cmp.select_next_item()
+						elseif check_back_space() then
+							fn.feedkeys(t '<tab>', 'n')
 						else
 							cb()
 						end
-					end,
-					['<S-Tab>'] = function(cb)
-						if cmp.visible() then
+					end, { 'i', 's' }),
+					['<S-Tab>'] = cmp.mapping(function (cb)
+						if luasnip.jumpable(-1) then
+							fn.feedkeys(t '<Plug>luasnip-jump-prev', '')
+						elseif cmp.visible() then
 							cmp.select_prev_item()
-						elseif luasnip.jumpable(-1) then
-							luasnip.jump(-1)
 						else
 							cb()
 						end
-					end,
+					end, { 'i', 's' }),
 					['<Esc>'] = function()
 						if cmp.visible() then
 							cmp.close()
@@ -108,9 +120,8 @@ return require('packer').startup(function(use)
 							vim.cmd 'stopinsert'
 						end
 					end,
-					['<C-Esc>'] = function ()
-						vim.cmd 'stopinsert'
-					end
+					['<C-Esc>'] = function () vim.cmd 'stopinsert' end,
+					['<CR>'] = cmp.mapping.confirm {select = true},
 				}
 			}
 		end
