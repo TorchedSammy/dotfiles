@@ -18,5 +18,7 @@ return {
 	gui12 = '666b70',
 	gui13 = 'f0f2f5',
 	gui14 = '5ee26b',
+
+	CursorLine = {bg = '14181a'}
 }
 
