@@ -110,8 +110,8 @@ local highlights = {
 	ColorColumn = {gfg = tc.fg, gbg = tc.gui8, ctfg = 7, ctbg = 8},
 	Folded = {gfg = tc.fg, gbg = tc.gui8, ctfg = 7, ctbg = 8},
 	FoldColumn = {gfg = tc.bgvli, gbg = tc.bg, ctfg = 7, ctbg = 0},
-	StatusLine = {gfg = tc.bg, gbg = tc.bgli, ctfg = 15, ctbg = 8, attr = 'bold'},
-	StatusLineNC = {gfg = tc.bg, gbg = tc.bgli, ctfg = 0, ctbg = 0, force = true},
+	StatusLine = {gfg = tc.bg, gbg = tc.bg, ctfg = 0, ctbg = 0, attr = 'bold'},
+	StatusLineNC = {gfg = tc.bg, gbg = tc.bg, ctfg = 0, ctbg = 0, force = true},
 	SignColumn = {},
 	VertSplit = {gfg = tc.bgvli, gbg = tc.bg, ctfg = 0, ctbg = 0},
 
@@ -162,5 +162,11 @@ local highlights = {
 }
 
 for group, styles in pairs(highlights) do
+	-- if theme has styles for a specific group, use them instead of the defaults
+	if tc[group] then
+		styles.gbg = tc[group].bg
+		styles.gfg = tc[group].fg
+		styles.attr = tc[group].attr
+	end
     highlight(group, styles.gfg, styles.gbg, styles.ctfg, styles.ctbg, styles.attr, nil, styles.force)
 end
