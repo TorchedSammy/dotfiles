@@ -133,7 +133,6 @@ return require('packer').startup(function(use)
 					{ name = 'luasnip' },
 					{ name = 'buffer' },
 					{ name = 'path' },
-					{ name = 'copilot' }
 				},
 				mapping = {
 					['<Tab>'] = cmp.mapping(function (cb)
