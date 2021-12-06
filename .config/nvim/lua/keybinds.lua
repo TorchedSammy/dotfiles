@@ -73,3 +73,6 @@ map('n', '<C-x>', '<Cmd>TroubleToggle<CR>')
 -- Lspsaga
 nimap('<C-f>', '<Cmd>Lspsaga lsp_finder<CR>')
 nimap('<C-e>', '<Cmd>Lspsaga hover_doc<CR>')
+nimap('<C-g>', '<Cmd>Lspsaga rename<CR>')
+map('n', '[e', '<Cmd>Lspsaga diagnostic_jump_next<CR>')
+map('n', ']e', '<Cmd>Lspsaga diagnostic_jump_prev<CR>')
