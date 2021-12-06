@@ -146,6 +146,19 @@ local highlights = {
 	GitSignsAdd = {gfg = tc.gui2, ctfg = 2},
 	GitSignsDelete = {gfg = tc.gui1, ctfg = 1},
 	GitSignsChange = {gfg = tc.gui4, ctfg = 4},
+
+	-- Completion Menu (cmp)
+	CmpItemAbbrDeprecated = {gfg = tc.gui1, ctfg = 1, attr = 'strikethrough'}, -- deprecated
+	CmpItemAbbrMatch = {gfg = tc.gui4, ctfg = 4}, -- matched text in menu
+	CmpItemAbbrMatchFuzzy = {gfg = tc.gui4, ctfg = 4}, -- ^ fuzzy match
+	CmpItemKindVariable = {gfg = tc.gui6, ctfg = 6},
+	CmpItemKindInterface = {gfg = tc.gui6, ctfg = 6},
+	CmpItemKindText = {gfg = tc.gui6, ctfg = 6},
+	CmpItemKindFunction = {gfg = tc.gui3, ctfg = 3},
+	CmpItemKindMethod = {gfg = tc.gui2, ctfg = 2},
+	CmpItemKindKeyword = {gfg = tc.gui3, ctfg = 3},
+	CmpItemKindProperty = {gfg = tc.gui4, ctfg = 4},
+	CmpItemKindUnit = {gfg = tc.fgli, ctfg = 7},
 }
 
 for group, styles in pairs(highlights) do
