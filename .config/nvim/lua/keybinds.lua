@@ -69,3 +69,7 @@ map('n', '<A-S-c>', '<Cmd>BufferClose!<CR>')
 
 -- Trouble
 map('n', '<C-x>', '<Cmd>TroubleToggle<CR>')
+
+-- Lspsaga
+nimap('<C-f>', '<Cmd>Lspsaga lsp_finder<CR>')
+nimap('<C-e>', '<Cmd>Lspsaga hover_doc<CR>')

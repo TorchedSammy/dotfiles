@@ -62,6 +62,8 @@ return require('packer').startup(function(use)
 		vim.g.copilot_assume_mapped = true
 	end}
 
+	use 'tami5/lspsaga.nvim'
+
 	use {'hrsh7th/nvim-cmp',
 		requires = {
 			-- LSP things
