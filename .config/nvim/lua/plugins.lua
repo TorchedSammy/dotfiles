@@ -149,7 +149,7 @@ return require('packer').startup(function(use)
 					end, { 'i', 's' }),
 					['<S-Tab>'] = cmp.mapping(function (cb)
 						if luasnip.jumpable(-1) then
-							fn.feedkeys(t '<Plug>luasnip-jump-prev', '')
+							luasnip.jump(-1)
 						elseif cmp.visible() then
 							cmp.select_prev_item()
 						else
