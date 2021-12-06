@@ -56,7 +56,8 @@ gls.left = {
         [''] = 'VISUAL',
         v = 'VISUAL',
         R = 'REPLACE',
-        t = 'TERMINAL'
+        t = 'TERMINAL',
+        s = 'SNIPPET'
       }
       vim.api.nvim_command('hi GalaxyViMode guibg=' .. mode_color())
       local alias_mode = alias[vim.fn.mode()]
