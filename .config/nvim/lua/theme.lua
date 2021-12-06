@@ -80,10 +80,10 @@ local highlights = {
 	TSVariableBuiltin = {gfg = tc.gui12, ctfg = 12}, -- builtin vars
 
 	-- Editor Elements
-	Normal = {gbg = tc.bg},
+	Normal = {gbg = tc.bg, ctbg = 0},
 	ErrorMsg = {gfg = tc.gui1, ctfg = 1, attr = 'underlineitalic'},
 	CursorColumn = {gbg = tc.gui8, ctbg = 8},
-	CursorLine = {attr = 'bold'},
+	CursorLine = {gbg = tc.bgli, ctbg = 10},
 	CursorLineNr = {gfg = tc.fgli, ctfg = 15},
 	LineNr = {gfg = tc.gui8, ctfg = 11},
 	MoreMsg = {gfg = tc.gui6, ctfg = 6},
