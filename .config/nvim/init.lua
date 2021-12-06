@@ -25,14 +25,21 @@ vim.opt.guicursor:append('i:blinkwait700-blinkon400-blinkoff250') -- set insert 
 vim.cmd 'autocmd TermOpen * setlocal nonumber norelativenumber foldcolumn=3' -- remove line numbers from terminal
 
 -- LSP
+local runtime_path = vim.split(package.path, ';')
+table.insert(runtime_path, "lua/?.lua")
+table.insert(runtime_path, "lua/?/init.lua")
+
 local lua_settings = {
 	Lua = {
 		runtime = {
 			  -- LuaJIT in the case of Neovim
 			  version = 'LuaJIT',
-			  path = vim.split(package.path, ';'),
+			  path = runtime_path,
 		},
 		diagnostics = {
+			neededFileStatus = {
+				['lowercase-global'] = 'None'
+			},
 			globals = {
 				'awesome',
 				'client',
@@ -47,10 +54,7 @@ local lua_settings = {
 		},
 		workspace = {
 		  -- Make the server aware of Neovim runtime files
-			library = {
-				[vim.fn.expand('$VIMRUNTIME/lua')] = true,
-				[vim.fn.expand('$VIMRUNTIME/lua/vim/lsp')] = true,
-			},
+		  library = vim.api.nvim_get_runtime_file("", true)
 		},
 	},
 }
