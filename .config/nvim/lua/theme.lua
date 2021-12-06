@@ -33,50 +33,51 @@ local highlights = {
 	Comment = {gfg = tc.gui8, ctfg = 8, attr = 'italic'},
 
 	-- Treesitter :despair:
-	TSAttribute = {gfg = tc.gui3, attr = 'bold'},
-	TSAnnotation = {gfg = tc.gui3, attr = 'bold'}, -- basically decorators? ie @deprecated
-	TSBoolean = {gfg = tc.gui1},
-	TSCharacter = {gfg = tc.gui2}, -- a character lol
-	TSComment = {gfg = tc.gui8, attr = 'italic'},
-	TSConditional = {gfg = tc.gui3}, -- if, else
-	TSConstant = {gfg = tc.gui1}, -- const variables; those in all caps
-	TSConstBuiltin = {gfg = tc.gui3, attr = 'italic'}, -- already provided global consts, nil as example
-	TSConstMacro = {gfg = tc.gui1, attr = 'italic'}, -- consts that are macros, like NULL in c
-	TSConstructor = {gfg = tc.gui1},
-	TSError = {gfg = tc.gui1, attr = 'italic'}, -- lsp errors
+	TSAttribute = {gfg = tc.gui3, ctfg = 3, attr = 'bold'},
+	TSAnnotation = {gfg = tc.gui3, ctfg = 3, attr = 'bold'}, -- basically decorators? ie @deprecated
+	TSBoolean = {gfg = tc.gui1, ctfg = 1},
+	TSCharacter = {gfg = tc.gui2, ctfg = 2}, -- a character lol
+	TSComment = {gfg = tc.gui8, ctfg = 8, attr = 'italic'},
+	TSConditional = {gfg = tc.gui3, ctfg = 3}, -- if, else
+	TSConstant = {gfg = tc.gui1, ctfg = 1}, -- const variables; those in all caps
+	TSConstBuiltin = {gfg = tc.gui3, ctfg = 3, attr = 'italic'}, -- already provided global consts, nil as example
+	TSConstMacro = {gfg = tc.gui1, ctfg = 1, attr = 'italic'}, -- consts that are macros, like NULL in c
+	TSConstructor = {gfg = tc.gui1, ctfg = 1},
+	TSError = {gfg = tc.gui1, ctfg = 1, attr = 'italic'}, -- lsp errors
 --	TSException = {}, -- TODO
-	TSField = {gfg = tc.fg}, -- lua: tbl = {FIELD = 'thing'}, highlights FIELD
+	TSField = {gfg = tc.fg, ctfg = 7}, -- lua: tbl = {FIELD = 'thing'}, highlights FIELD
 	TSFloat = {gfg = tc.gui1, ctfg = 5},
-	TSFunction = {gfg = tc.gui4}, -- function declaration and use
-	TSFuncBuiltin = {gfg = tc.gui6, attr = 'italic'},
-	TSFuncMacro = {gfg = tc.gui12, attr = 'italic'}, -- macro functions and decls, println! in rust
-	TSInclude = {gfg = tc.gui12, attr = 'italic'}, -- require, #include
-	TSKeyword = {gfg = tc.gui5}, -- normal keywrds
-	TSKeywordFunction = {gfg = tc.gui12}, -- keyword to define function (function in lua)
-	TSKeywordOperator = {gfg = tc.gui3, attr = 'italic'}, -- word operators (or/and)
-	TSLabel = {gfg = tc.gui9}, -- ::label:: in lua
+	TSFunction = {gfg = tc.gui4, ctfg = 4}, -- function declaration and use
+	TSFuncBuiltin = {gfg = tc.gui6, ctfg = 6, attr = 'italic'},
+	TSFuncMacro = {gfg = tc.gui12, ctfg = 12, attr = 'italic'}, -- macro functions and decls, println! in rust
+	TSInclude = {gfg = tc.gui12, ctfg = 12, attr = 'italic'}, -- require, #include
+	TSKeyword = {gfg = tc.gui5, ctfg = 5}, -- normal keywrds
+	TSKeywordFunction = {gfg = tc.gui12, ctfg = 12}, -- keyword to define function (function in lua)
+	TSKeywordOperator = {gfg = tc.gui3, ctfg = 3, attr = 'italic'}, -- word operators (or/and)
+
+	TSLabel = {gfg = tc.gui9, ctfg = 9}, -- ::label:: in lua
 	TSMethod = {gfg = tc.gui4, ctfg = 4}, -- function calls
 --	TSNamespace = {}, -- TODO
 	TSNumber = {gfg = tc.gui1, ctfg = 1},
-	TSOperator = {gfg = tc.gui3},
-	TSParameter = {gfg = tc.gui3, attr = 'italic'}, -- function params
+	TSOperator = {gfg = tc.gui3, ctfg = 3},
+	TSParameter = {gfg = tc.gui3, ctfg = 3, attr = 'italic'}, -- function params
 -- TSParameterReference = {}, -- TODO
-	TSProperty = {gfg = tc.gui4}, -- access properties: thing.Property
+	TSProperty = {gfg = tc.gui4, ctfg = 4}, -- access properties: thing.Property
 	TSPunctDelimiter = {gfg = tc.fg, ctfg = 7}, -- dot/colon accessors to properties?
-	TSPunctBracket = {gfg = tc.fg},
-	TSPunctSpecial = {gfg = tc.fg},
-	TSRepeat = {gfg = tc.gui9, attr = 'italic'}, -- keywords for loops, while, for, do in lua
+	TSPunctBracket = {gfg = tc.fg, ctfg = 7},
+	TSPunctSpecial = {gfg = tc.fg, ctfg = 7},
+	TSRepeat = {gfg = tc.gui9, ctfg = 9, attr = 'italic'}, -- keywords for loops, while, for, do in lua
 	TSString = {gfg = tc.gui2, ctfg = 2},
-	TSStringRegex = {gfg = tc.gui12, attr = 'italic'},
+	TSStringRegex = {gfg = tc.gui12, ctfg = 12, attr = 'italic'},
 	TSStringEscape = {gfg = tc.gui1, ctfg = 1},
-	TSTag = {gfg = tc.gui3}, -- html tag names
-	TSTagDelimiter = {gfg = tc.gui12}, -- < /> in html
-	TSURI = {gfg = tc.gui6, attr = 'underline'}, -- email/url (should be)
-	TSWarning = {gfg = tc.gui3},
-	TSDanger = {gfg = tc.gui1, attr = 'bold'},
+	TSTag = {gfg = tc.gui3, ctfg = 3}, -- html tag names
+	TSTagDelimiter = {gfg = tc.gui12, ctfg = 12}, -- < /> in html
+	TSURI = {gfg = tc.gui6, ctfg = 6, attr = 'underline'}, -- email/url (should be)
+	TSWarning = {gfg = tc.gui3, ctfg = 3},
+	TSDanger = {gfg = tc.gui1, ctfg = 1, attr = 'bold'},
 	TSType = {gfg = tc.gui2, ctfg = 2}, -- custom types
 	TSTypeBuiltin = {gfg = tc.gui2, ctfg = 2, attr = 'italic'}, -- default types
-	TSVariableBuiltin = {gfg = tc.gui12}, -- builtin vars
+	TSVariableBuiltin = {gfg = tc.gui12, ctfg = 12}, -- builtin vars
 
 	-- Editor Elements
 	Normal = {gbg = tc.bg},
