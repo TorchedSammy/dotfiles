@@ -4,6 +4,7 @@ return {
 	bgvli = '171b30', -- Much lighter background
 	fg = 'f5edfa', -- Foreground/Text
 	fgli = 'e3e3e3', -- Lighter foreground
+	fgdim = 'c7c7c7', -- Dimmed foreground
 	gui1 = 'f04a5d', -- Red
 	gui2 = '5ae696', -- Green
 	gui3 = 'FED06E', -- Yellow
