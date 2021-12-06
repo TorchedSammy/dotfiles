@@ -67,7 +67,6 @@ return require('packer').startup(function(use)
 			-- LSP things
 			'neovim/nvim-lspconfig',
 			'williamboman/nvim-lsp-installer',
-			'onsails/lspkind-nvim', -- icons
 			-- Sources
 			'hrsh7th/cmp-nvim-lsp', -- lsp
 			'hrsh7th/cmp-path', -- file paths
@@ -77,7 +76,6 @@ return require('packer').startup(function(use)
 		config = function()
 			local cmp = require 'cmp'
 			local luasnip = require 'luasnip'
-			local lspkind = require 'lspkind'
 			local fn = vim.fn
 
 			local function t(str)
@@ -89,6 +87,34 @@ return require('packer').startup(function(use)
 				return col == 0 or vim.fn.getline('.'):sub(col, col):match '%s' ~= nil
 			end
 
+			local cmp_kinds = {
+				Text = '  ',
+				Method = '  ',
+				Function = '  ',
+				Constructor = '  ',
+				Field = '  ',
+				Variable = '  ',
+				Class = '  ',
+				Interface = '  ',
+				Module = '  ',
+				Property = '  ',
+				Unit = '  ',
+				Value = '  ',
+				Enum = '  ',
+				Keyword = '  ',
+				Snippet = '  ',
+				Color = '  ',
+				File = '  ',
+				Reference = '  ',
+				Folder = '  ',
+				EnumMember = '  ',
+				Constant = '  ',
+				Struct = '  ',
+				Event = '  ',
+				Operator = '  ',
+				TypeParameter = '  ',
+			}
+
 			cmp.setup {
 				snippet = {
 					expand = function(args)
@@ -96,7 +122,11 @@ return require('packer').startup(function(use)
 					end
 				},
 				formatting = {
-					format = lspkind.cmp_format({with_text = false, maxwidth = 50})
+					fields = { 'abbr', 'kind' },
+					format = function(_, item)
+						item.kind = (cmp_kinds[item.kind] or '') .. item.kind
+						return item
+					end,
 				},
 				sources = {
 					{ name = 'nvim_lsp' },
