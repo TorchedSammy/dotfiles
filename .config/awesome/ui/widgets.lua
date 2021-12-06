@@ -5,7 +5,6 @@ local beautiful = require 'beautiful'
 local volume = require 'conf.vol'
 local xresources = require 'beautiful.xresources'
 local dpi = xresources.apply_dpi
-local naughty = require 'naughty'
 
 local function rounded_bar(color)
 	return wibox.widget {
