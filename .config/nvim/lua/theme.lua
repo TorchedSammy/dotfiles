@@ -93,8 +93,8 @@ local highlights = {
 	Conceal = {gfg = tc.bg, gbg = tc.bg, ctbg = 7, ctfg = 7},
 	Search = {gbg = tc.bgvli, ctbg = 11},
 	IncSearch = {gbg = tc.bgvli, ctbg = 8},
-	Pmenu = {gfg = tc.fgli, gbg = tc.gui8, ctfg = 15, ctbg = 8},
-	PmenuSel = {gfg = tc.gui8, gbg = tc.fgli, ctfg = 8, ctbg = 15},
+	Pmenu = {gfg = tc.fgdim, gbg = tc.bgli, ctfg = 15, ctbg = 8},
+	PmenuSel = {gfg = tc.bgli, gbg = tc.fgdim, ctfg = 8, ctbg = 15},
 	PmenuSbar = {gbg = tc.gui8, ctbg = 8},
 	PmenuThumb = {gbg = tc.bg, ctbg = 0},
 	WildMenu = {gbg = tc.bgvli, ctbg = 11},
@@ -145,9 +145,6 @@ local highlights = {
 	GitSignsAdd = {gfg = tc.gui2, ctfg = 2},
 	GitSignsDelete = {gfg = tc.gui1, ctfg = 1},
 	GitSignsChange = {gfg = tc.gui4, ctfg = 4},
-
-	-- Scrollview
-	ScrollView = {gbg = tc.gui8, ctbg = 8}
 }
 
 for group, styles in pairs(highlights) do
