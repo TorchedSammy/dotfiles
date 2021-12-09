@@ -220,11 +220,19 @@ return require('packer').startup(function(use)
 		end
 	}
 
-	use{'SmiteshP/nvim-gps',
+	use {'SmiteshP/nvim-gps',
 		config = function()
 			require 'nvim-gps'.setup {}
 		end
 	}
 
 	use 'wakatime/vim-wakatime'
+
+	use {'gbprod/cutlass.nvim',
+		config = function()
+			require 'cutlass'.setup {
+				cut_key = 'd'
+			}
+		end
+	}
 end)
