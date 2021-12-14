@@ -73,7 +73,7 @@ gls.left = {
   FileIcon = {
     provider = 'FileIcon',
     highlight = {
-      require 'galaxyline.provider_fileinfo'.get_file_icon_color,
+      require 'galaxyline.providers.fileinfo'.get_file_icon_color,
       colors.section_bg
     }
   }
@@ -81,7 +81,7 @@ gls.left = {
 {
   FileName = {
     provider = function ()
-    	local fileinfo = require 'galaxyline.provider_fileinfo'
+    	local fileinfo = require 'galaxyline.providers.fileinfo'
     	-- get file name and remove space at the end
     	-- galaxyline is kinda dumb and having this extra space with the separator is annoying
     	local fileName = string.gsub(fileinfo.get_current_file_name(), '^%s*(.-)%s*$', '%1')
@@ -136,7 +136,7 @@ gls.right = {
   GitIcon = {
     provider = function() return '  ' end,
     condition = function()
-		local vcs = require 'galaxyline.provider_vcs'
+		local vcs = require 'galaxyline.providers.vcs'
 		return vcs.get_git_branch() ~= nil
     end,
     highlight = {colors.red, colors.bg}
@@ -145,12 +145,12 @@ gls.right = {
 {
   GitBranch = {
     provider = function()
-      local vcs = require 'galaxyline.provider_vcs'
+      local vcs = require 'galaxyline.providers.vcs'
       local branch_name = vcs.get_git_branch()
       return branch_name .. ' '
     end,
     condition = function()
-		local vcs = require 'galaxyline.provider_vcs'
+		local vcs = require 'galaxyline.providers.vcs'
 		return vcs.get_git_branch() ~= nil
     end,
     highlight = {colors.fg, colors.bg}
@@ -183,7 +183,7 @@ gls.right = {
 {
    LineInfo = {
      provider = function()
-     	 local fileinfo = require 'galaxyline.provider_fileinfo'
+     	 local fileinfo = require 'galaxyline.providers.fileinfo'
      	 -- i hate the default lineinfo formatting
      	 return vim.fn.line '.' .. ':' .. vim.fn.col '.' .. ' ' .. fileinfo.current_line_percent()
      end,
