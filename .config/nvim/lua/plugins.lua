@@ -212,8 +212,6 @@ return require('packer').startup(function(use)
 
 	use {'folke/trouble.nvim', requires = 'kyazdani42/nvim-web-devicons'}
 
-	use {'folke/todo-comments.nvim', requires = 'nvim-lua/plenary.nvim'}
-
 	use {'rcarriga/nvim-notify',
 		config = function()
 			vim.notify = require 'notify'
