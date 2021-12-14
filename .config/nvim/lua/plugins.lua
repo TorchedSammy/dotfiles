@@ -171,7 +171,7 @@ return require('packer').startup(function(use)
 		end
 	}
 
-	use {'glepnir/galaxyline.nvim', branch = 'main',
+	use {'CosmicNvim/galaxyline.nvim', branch = 'main',
 		config = function()
 			require 'statusline'
 		end
