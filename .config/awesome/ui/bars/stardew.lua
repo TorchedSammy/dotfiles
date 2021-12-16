@@ -97,7 +97,7 @@ awful.screen.connect_for_each_screen(function(s)
 		layout = wibox.layout.fixed.vertical
 	}
 	stardew_time.visible = true
-	awful.placement.top_right(stardew_time, { margins = { top = dpi(beautiful.wibar_height + 12), right = dpi(10) }, parent = s })
+	awful.placement.top_right(stardew_time, { margins = { top = dpi(beautiful.wibar_height + 12), right = dpi(12) }, parent = s })
 
 	awful.tag.attached_connect_signal(s, 'property::selected', function (t)
 		indicate_icons = {'❶', '❷', '❸', '❹', '❺', '❻', '❼', '❽', '❾'}
