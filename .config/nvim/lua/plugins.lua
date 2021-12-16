@@ -1,6 +1,8 @@
-return require('packer').startup(function(use)
+return require 'packer'.startup {function(use)
 	-- Packer is stupid so i have to have it here too
 	use 'wbthomason/packer.nvim'
+
+	use 'lewis6991/impatient.nvim'
 
 	-- Buffer line
 	-- Might replace with nvim-bufferline
@@ -57,10 +59,13 @@ return require('packer').startup(function(use)
 	}
 
 	-- i have copilot pog
-	use {'github/copilot.vim', config = function ()
-		vim.g.copilot_no_tab_map = true
-		vim.g.copilot_assume_mapped = true
-	end}
+	use {'github/copilot.vim',
+--		event = 'BufEnter',
+		config = function ()
+			vim.g.copilot_no_tab_map = true
+			vim.g.copilot_assume_mapped = true
+		end
+	}
 
 	use 'tami5/lspsaga.nvim'
 
@@ -177,7 +182,9 @@ return require('packer').startup(function(use)
 		end
 	}
 
-	use {'nvim-treesitter/nvim-treesitter', run = ':TSUpdate',
+	use {'nvim-treesitter/nvim-treesitter',
+		run = ':TSUpdate',
+--		event = 'BufRead',
 		config = function()
 			require 'nvim-treesitter.configs'.setup {
 				ensure_installed = {'lua', 'go'},
@@ -191,6 +198,7 @@ return require('packer').startup(function(use)
 	use 'jiangmiao/auto-pairs'
 
 	use {'andweeb/presence.nvim',
+--		event = 'BufRead',
 		config = function()
 			require 'presence':setup {
 				auto_update	= true,
@@ -233,4 +241,7 @@ return require('packer').startup(function(use)
 			}
 		end
 	}
-end)
+end, config = {
+		compile_path = vim.fn.stdpath 'config' .. '/lua/packer_compiled.lua'
+	}
+}
