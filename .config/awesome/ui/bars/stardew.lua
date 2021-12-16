@@ -39,34 +39,65 @@ end
 awful.screen.connect_for_each_screen(function(s)
 	helpers.set_wallpaper(s)
 
-	--[[
 	local stardew_time = wibox {
-		width = dpi(175),
+		width = dpi(150),
 		height = dpi(100),
+		bg = '#00000000',
 		visible = true,
 	}
 
 	stardew_time:setup {
 		{
-			widget = wibox.container.margin,
-			top = dpi(5),
 			{
-				widget = wibox.widget.textclock,
-				format = '%-I:%M %P',
-				align = 'center',
-				font = 'SF Pro Text Medium 16',
-			}
+				{
+					{
+						widget = wibox.widget.textclock,
+						format = '%-I:%M %P',
+						font = 'SF Pro Text Medium 16',
+						align = 'center',
+					},
+					top = dpi(5),
+					widget = wibox.container.margin,
+				},
+				{
+					-- line
+					widget = wibox.widget.separator,
+					color = beautiful.xforeground,
+					forced_height = dpi(2),
+					thickness = 2,
+				},
+				{
+					-- empty space
+					widget = wibox.container.margin,
+					top = dpi(33)
+				},
+				{
+					-- line
+					widget = wibox.widget.separator,
+					color = beautiful.xforeground,
+					forced_height = dpi(2),
+					thickness = 2,
+				},
+				{
+					widget = wibox.widget.textclock,
+					font = 'SF Pro Text Medium 16',
+					align = 'center',
+					format = '%a %d',
+				},
+				layout = wibox.layout.fixed.vertical
+			},
+			bg = beautiful.wibar_bg,
+			shape = helpers.rrect(2),
+			shape_border_color = beautiful.xforeground,
+			shape_border_width = 4,
+			forced_width = stardew_time.width,
+			forced_height = stardew_time.height,
+			widget = wibox.container.background,
 		},
-		bg = beautiful.xforeground,
-		shape = gears.shape.rounded_rect,
-		shape_border_color = beautiful.xforeground,
-		shape_border_width = 4,
-		widget = wibox.container.background,
 		layout = wibox.layout.fixed.vertical
 	}
 	stardew_time.visible = true
 	awful.placement.top_right(stardew_time, { margins = { top = dpi(beautiful.wibar_height + 12), right = dpi(10) }, parent = s })
-	]]--
 
 	awful.tag.attached_connect_signal(s, 'property::selected', function (t)
 		indicate_icons = {'❶', '❷', '❸', '❹', '❺', '❻', '❼', '❽', '❾'}
