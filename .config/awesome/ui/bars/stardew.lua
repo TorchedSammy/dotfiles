@@ -199,7 +199,7 @@ awful.screen.connect_for_each_screen(function(s)
 				spacing = beautiful.wibar_spacing,
 				realbar,
 			},
-			left = 1, right = 1,
+			left = dpi(5), right = dpi(5),
 			widget = wibox.container.margin,
 		}
 	}
