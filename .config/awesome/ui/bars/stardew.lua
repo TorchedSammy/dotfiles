@@ -27,7 +27,7 @@ client.connect_signal('focus', function ()
 	fc.screen.clientclass.text = name
 end)
 
-local function imgwidget(icon)
+local function btn(icon)
 	local ico = wibox.widget {
 		image = gears.surface.load_uncached_silently(beautiful.config_path .. '/images/' .. icon),
 		widget = wibox.widget.imagebox
@@ -42,61 +42,62 @@ awful.screen.connect_for_each_screen(function(s)
 	local stardew_time = wibox {
 		width = dpi(150),
 		height = dpi(100),
-		bg = beautiful.bg_normal,
-		shape = helpers.rrect(2),
-		border_color = beautiful.xforeground,
-		border_width = 3,
+		bg = '#00000000',
 		visible = true,
 	}
 
 	stardew_time:setup {
 		{
 			{
-				widget = wibox.widget.textclock,
-				format = '%-I:%M %P',
-				font = 'SF Pro Text Medium 16',
-				align = 'center',
+				{
+					{
+						widget = wibox.widget.textclock,
+						format = '%-I:%M %P',
+						font = 'SF Pro Text Medium 16',
+						align = 'center',
+					},
+					top = dpi(5),
+					widget = wibox.container.margin,
+				},
+				{
+					-- line
+					widget = wibox.widget.separator,
+					color = beautiful.xforeground,
+					forced_height = dpi(2),
+					thickness = 2,
+				},
+				{
+					-- empty space
+					widget = wibox.container.margin,
+					top = dpi(33)
+				},
+				{
+					-- line
+					widget = wibox.widget.separator,
+					color = beautiful.xforeground,
+					forced_height = dpi(2),
+					thickness = 2,
+				},
+				{
+					widget = wibox.widget.textclock,
+					font = 'SF Pro Text Medium 16',
+					align = 'center',
+					format = '%a %d',
+				},
+				layout = wibox.layout.fixed.vertical
 			},
-			top = dpi(5),
-			widget = wibox.container.margin,
-		},
-		{
-			-- line
-			widget = wibox.widget.separator,
-			color = beautiful.xforeground,
-			forced_height = dpi(2),
-			thickness = 2,
-		},
-		{
-			{
-				imgwidget('stardew/season-winter.png'),
-				layout = wibox.layout.align.horizontal,
-			},
+			bg = beautiful.wibar_bg,
+			shape = helpers.rrect(2),
+			shape_border_color = beautiful.xforeground,
+			shape_border_width = 4,
+			forced_width = stardew_time.width,
+			forced_height = stardew_time.height,
 			widget = wibox.container.background,
-			forced_height = dpi(33)
-		},
-		{
-			-- line
-			widget = wibox.widget.separator,
-			color = beautiful.xforeground,
-			forced_height = dpi(2),
-			thickness = 2,
-		},
-		{
-			widget = wibox.widget.textclock,
-			font = 'SF Pro Text Medium 16',
-			align = 'center',
-			format = '%a %d',
 		},
 		layout = wibox.layout.fixed.vertical
 	}
-	awful.placement.top_right(stardew_time, {
-		margins = {
-			top = dpi(beautiful.wibar_height + 12),
-			right = dpi(12)
-		},
-		parent = s
-	})
+	stardew_time.visible = true
+	awful.placement.top_right(stardew_time, { margins = { top = dpi(beautiful.wibar_height + 12), right = dpi(12) }, parent = s })
 
 	awful.tag.attached_connect_signal(s, 'property::selected', function (t)
 		indicate_icons = {'❶', '❷', '❸', '❹', '❺', '❻', '❼', '❽', '❾'}
@@ -119,7 +120,7 @@ awful.screen.connect_for_each_screen(function(s)
 			awful.button({}, 1, function () mainmenu:toggle({ coords = {x = 0, y = s.geometry.height-beautiful.wibar_height}}) end))
 	}
 	local musicbuttons = {
-		imgwidget('icons/rightarrow.png'),
+		btn('icons/rightarrow.png'),
 		layout = wibox.layout.fixed.horizontal
 	}
 
