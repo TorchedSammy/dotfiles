@@ -40,7 +40,7 @@ do
 	end)
 end
 
-beautiful.init('~/.config/awesome/themes/' .. themename .. '/theme.lua')
+beautiful.init('~/.config/awesome/themes/' .. themename .. '.lua')
 
 require 'conf'
 
