@@ -67,10 +67,10 @@ awful.screen.connect_for_each_screen(function(s)
 			{
 				{
 					{
-						widget = wibox.widget.textclock,
-						format = '%-I:%M %P',
-						font = 'SF Pro Text Medium 16',
 						align = 'center',
+						format = '%a. %d',
+						font = 'SF Pro Text Medium 16',
+						widget = wibox.widget.textclock,
 					},
 					top = dpi(5),
 					widget = wibox.container.margin,
@@ -100,10 +100,10 @@ awful.screen.connect_for_each_screen(function(s)
 					thickness = 2,
 				},
 				{
-					widget = wibox.widget.textclock,
-					font = 'SF Pro Text Medium 16',
 					align = 'center',
-					format = '%a %d',
+					format = '%-I:%M %P',
+					font = 'SF Pro Text Medium 16',
+					widget = wibox.widget.textclock,
 				},
 				layout = wibox.layout.fixed.vertical
 			},
