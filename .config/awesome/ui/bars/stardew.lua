@@ -27,7 +27,7 @@ client.connect_signal('focus', function ()
 	fc.screen.clientclass.text = name
 end)
 
-local function btn(icon)
+local function imgwidget(icon)
 	local ico = wibox.widget {
 		image = gears.surface.load_uncached_silently(beautiful.config_path .. '/images/' .. icon),
 		widget = wibox.widget.imagebox
@@ -40,13 +40,29 @@ awful.screen.connect_for_each_screen(function(s)
 	helpers.set_wallpaper(s)
 
 	local stardew_time = wibox {
-		width = dpi(150),
+		width = dpi(200),
 		height = dpi(100),
 		bg = '#00000000',
 		visible = true,
 	}
 
+	local seasonicon = imgwidget('stardew/season-winter.png')
+	local weathericon = imgwidget('stardew/weather-snow.png')
+
+	--[[
+	-- we'll update the icons every hour
+	gears.timer {
+		timeout = 60 * 60, -- seconds * minutes (1 hour)
+		autostart = true,
+		call_now = true,
+		callback = function()
+			-- code
+		end
+	}
+	]]--
+
 	stardew_time:setup {
+		imgwidget('stardew/daynightbig.png'),
 		{
 			{
 				{
@@ -67,9 +83,14 @@ awful.screen.connect_for_each_screen(function(s)
 					thickness = 2,
 				},
 				{
-					-- empty space
-					widget = wibox.container.margin,
-					top = dpi(33)
+					{
+						weathericon,
+						imgwidget('stardew/clocksep.png'),
+						seasonicon,
+						layout = wibox.layout.fixed.horizontal,
+					},
+					widget = wibox.container.background,
+					forced_height = dpi(33)
 				},
 				{
 					-- line
@@ -94,7 +115,7 @@ awful.screen.connect_for_each_screen(function(s)
 			forced_height = stardew_time.height,
 			widget = wibox.container.background,
 		},
-		layout = wibox.layout.fixed.vertical
+		layout = wibox.layout.fixed.horizontal
 	}
 	stardew_time.visible = true
 	awful.placement.top_right(stardew_time, { margins = { top = dpi(beautiful.wibar_height + 12), right = dpi(12) }, parent = s })
@@ -120,7 +141,7 @@ awful.screen.connect_for_each_screen(function(s)
 			awful.button({}, 1, function () mainmenu:toggle({ coords = {x = 0, y = s.geometry.height-beautiful.wibar_height}}) end))
 	}
 	local musicbuttons = {
-		btn('icons/rightarrow.png'),
+		imgwidget('icons/rightarrow.png'),
 		layout = wibox.layout.fixed.horizontal
 	}
 
