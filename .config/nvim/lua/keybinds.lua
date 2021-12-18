@@ -54,9 +54,7 @@ map('n', '<M-`>', '<Cmd>:call v:lua.OpenTerm("TerminalSide", v:true)<CR>') -- To
 map('t', '<M-`>', '<C-\\><C-n>:call v:lua.OpenTerm("TerminalSide", v:true)<CR>') -- Map in terminal mode
 map('n', '<M-CR>', '<Cmd>:call v:lua.OpenTerm("Terminal", v:false)<CR>')
 map('n', '<M-CR>', '<C-\\><C-n>:call v:lua.OpenTerm("Terminal", v:false)<CR>')
-
--- Go to normal mode
-map('t', '<A-x>', '<C-\\><C-n>')
+map('t', '<Esc><Esc>', '<C-\\><C-n>')
 
 --map('v', '<C-S-Up>', '<Cmd>m \'>-2<CR>gv=gv')
 --map('v', '<C-S-Down>', '<Cmd>m \'>+1<CR>gv=gv')
