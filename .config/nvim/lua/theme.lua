@@ -15,82 +15,82 @@ end
 local highlights = {
 	-- Basic Syntax Colors
 	NonText = {gfg = tc.gui12, ctfg = 12},
-	SpellBad = {gfg = tc.gui1, ctfg = 1, attr = 'underlineitalic'},
-	SpellCap = {gfg = tc.gui4, ctfg = 4, attr = 'underlineitalic'},
-	SpellLocal = {gfg = tc.gui4, ctfg = 4, attr = 'italic'},
+	SpellBad = {gfg = tc.red, ctfg = 1, attr = 'underlineitalic'},
+	SpellCap = {gfg = tc.blue, ctfg = 4, attr = 'underlineitalic'},
+	SpellLocal = {gfg = tc.blue, ctfg = 4, attr = 'italic'},
 	SpellRare = {gfg = tc.gui14, ctfg = 14, attr = 'italic'},
 	MatchParen = {gbg = tc.gui9, ctbg = 8},
-	Constant = {gfg = tc.gui2, ctfg = 2},
-	Special = {gfg = tc.gui5, ctfg = 5},
-	Identifier = {gfg = tc.gui4, ctfg = 4},
-	Statement = {gfg = tc.gui3, ctfg = 3},
-	PreProc = {gfg = tc.gui5, ctfg = 5},
-	Type = {gfg = tc.gui2, ctfg = 2},
-	Underlined = {gfg = tc.gui6, ctfg = 6, attr = 'underline'},
+	Constant = {gfg = tc.green, ctfg = 2},
+	Special = {gfg = tc.magenta, ctfg = 5},
+	Identifier = {gfg = tc.blue, ctfg = 4},
+	Statement = {gfg = tc.yellow, ctfg = 3},
+	PreProc = {gfg = tc.magenta, ctfg = 5},
+	Type = {gfg = tc.green, ctfg = 2},
+	Underlined = {gfg = tc.magenta, ctfg = 6, attr = 'underline'},
 	Ignore = {gfg = tc.fg, ctfg = 15},
 	Error = {gfg = tc.gui9, ctfg = 9, attr = 'underlineitalic'},
 	Todo = {gfg = tc.bg, gbg = tc.gui8, ctfg = 0, ctbg = 8, attr = 'underline'},
 	Comment = {gfg = tc.gui8, ctfg = 8, attr = 'italic'},
 
 	-- Treesitter :despair:
-	TSAttribute = {gfg = tc.gui3, ctfg = 3, attr = 'bold'},
-	TSAnnotation = {gfg = tc.gui3, ctfg = 3, attr = 'bold'}, -- basically decorators? ie @deprecated
-	TSBoolean = {gfg = tc.gui1, ctfg = 1},
-	TSCharacter = {gfg = tc.gui2, ctfg = 2}, -- a character lol
+	TSAttribute = {gfg = tc.yellow, ctfg = 3, attr = 'bold'},
+	TSAnnotation = {gfg = tc.yellow, ctfg = 3, attr = 'bold'}, -- basically decorators? ie @deprecated
+	TSBoolean = {gfg = tc.red, ctfg = 1},
+	TSCharacter = {gfg = tc.green, ctfg = 2}, -- a character lol
 	TSComment = {gfg = tc.gui8, ctfg = 8, attr = 'italic'},
-	TSConditional = {gfg = tc.gui3, ctfg = 3}, -- if, else
-	TSConstant = {gfg = tc.gui1, ctfg = 1}, -- const variables; those in all caps
-	TSConstBuiltin = {gfg = tc.gui3, ctfg = 3, attr = 'italic'}, -- already provided global consts, nil as example
-	TSConstMacro = {gfg = tc.gui1, ctfg = 1, attr = 'italic'}, -- consts that are macros, like NULL in c
-	TSConstructor = {gfg = tc.gui1, ctfg = 1},
-	TSError = {gfg = tc.gui1, ctfg = 1, attr = 'italic'}, -- lsp errors
+	TSConditional = {gfg = tc.yellow, ctfg = 3}, -- if, else
+	TSConstant = {gfg = tc.red, ctfg = 1}, -- const variables; those in all caps
+	TSConstBuiltin = {gfg = tc.yellow, ctfg = 3, attr = 'italic'}, -- already provided global consts, nil as example
+	TSConstMacro = {gfg = tc.red, ctfg = 1, attr = 'italic'}, -- consts that are macros, like NULL in c
+	TSConstructor = {gfg = tc.red, ctfg = 1},
+	TSError = {gfg = tc.red, ctfg = 1, attr = 'italic'}, -- lsp errors
 --	TSException = {}, -- TODO
 	TSField = {gfg = tc.fg, ctfg = 7}, -- lua: tbl = {FIELD = 'thing'}, highlights FIELD
-	TSFloat = {gfg = tc.gui1, ctfg = 5},
-	TSFunction = {gfg = tc.gui4, ctfg = 4}, -- function declaration and use
-	TSFuncBuiltin = {gfg = tc.gui6, ctfg = 6, attr = 'italic'},
+	TSFloat = {gfg = tc.red, ctfg = 5},
+	TSFunction = {gfg = tc.blue, ctfg = 4}, -- function declaration and use
+	TSFuncBuiltin = {gfg = tc.magenta, ctfg = 6, attr = 'italic'},
 	TSFuncMacro = {gfg = tc.gui12, ctfg = 12, attr = 'italic'}, -- macro functions and decls, println! in rust
 	TSInclude = {gfg = tc.gui12, ctfg = 12, attr = 'italic'}, -- require, #include
-	TSKeyword = {gfg = tc.gui5, ctfg = 5}, -- normal keywrds
+	TSKeyword = {gfg = tc.magenta, ctfg = 5}, -- normal keywrds
 	TSKeywordFunction = {gfg = tc.gui12, ctfg = 12}, -- keyword to define function (function in lua)
-	TSKeywordOperator = {gfg = tc.gui3, ctfg = 3, attr = 'italic'}, -- word operators (or/and)
+	TSKeywordOperator = {gfg = tc.yellow, ctfg = 3, attr = 'italic'}, -- word operators (or/and)
 
 	TSLabel = {gfg = tc.gui9, ctfg = 9}, -- ::label:: in lua
-	TSMethod = {gfg = tc.gui4, ctfg = 4}, -- function calls
+	TSMethod = {gfg = tc.blue, ctfg = 4}, -- function calls
 --	TSNamespace = {}, -- TODO
-	TSNumber = {gfg = tc.gui1, ctfg = 1},
-	TSOperator = {gfg = tc.gui3, ctfg = 3},
-	TSParameter = {gfg = tc.gui3, ctfg = 3, attr = 'italic'}, -- function params
+	TSNumber = {gfg = tc.red, ctfg = 1},
+	TSOperator = {gfg = tc.yellow, ctfg = 3},
+	TSParameter = {gfg = tc.yellow, ctfg = 3, attr = 'italic'}, -- function params
 -- TSParameterReference = {}, -- TODO
-	TSProperty = {gfg = tc.gui4, ctfg = 4}, -- access properties: thing.Property
+	TSProperty = {gfg = tc.blue, ctfg = 4}, -- access properties: thing.Property
 	TSPunctDelimiter = {gfg = tc.fg, ctfg = 7}, -- dot/colon accessors to properties?
 	TSPunctBracket = {gfg = tc.fg, ctfg = 7},
 	TSPunctSpecial = {gfg = tc.fg, ctfg = 7},
 	TSRepeat = {gfg = tc.gui9, ctfg = 9, attr = 'italic'}, -- keywords for loops, while, for, do in lua
-	TSString = {gfg = tc.gui2, ctfg = 2},
+	TSString = {gfg = tc.green, ctfg = 2},
 	TSStringRegex = {gfg = tc.gui12, ctfg = 12, attr = 'italic'},
-	TSStringEscape = {gfg = tc.gui1, ctfg = 1},
-	TSTag = {gfg = tc.gui3, ctfg = 3}, -- html tag names
+	TSStringEscape = {gfg = tc.red, ctfg = 1},
+	TSTag = {gfg = tc.yellow, ctfg = 3}, -- html tag names
 	TSTagDelimiter = {gfg = tc.gui12, ctfg = 12}, -- < /> in html
-	TSURI = {gfg = tc.gui6, ctfg = 6, attr = 'underline'}, -- email/url (should be)
-	TSWarning = {gfg = tc.gui3, ctfg = 3},
-	TSDanger = {gfg = tc.gui1, ctfg = 1, attr = 'bold'},
-	TSType = {gfg = tc.gui2, ctfg = 2}, -- custom types
-	TSTypeBuiltin = {gfg = tc.gui2, ctfg = 2, attr = 'italic'}, -- default types
+	TSURI = {gfg = tc.magenta, ctfg = 6, attr = 'underline'}, -- email/url (should be)
+	TSWarning = {gfg = tc.yellow, ctfg = 3},
+	TSDanger = {gfg = tc.red, ctfg = 1, attr = 'bold'},
+	TSType = {gfg = tc.green, ctfg = 2}, -- custom types
+	TSTypeBuiltin = {gfg = tc.green, ctfg = 2, attr = 'italic'}, -- default types
 	TSVariableBuiltin = {gfg = tc.gui12, ctfg = 12}, -- builtin vars
 
 	-- Editor Elements
 	Normal = {gbg = tc.bg, ctbg = 0},
-	ErrorMsg = {gfg = tc.gui1, ctfg = 1, attr = 'underlineitalic'},
+	ErrorMsg = {gfg = tc.red, ctfg = 1, attr = 'underlineitalic'},
 	CursorColumn = {gbg = tc.gui8, ctbg = 8},
 	CursorLine = {gbg = tc.bgli, ctbg = 10},
 	CursorLineNr = {gfg = tc.fgli, ctfg = 15},
 	LineNr = {gfg = tc.gui8, ctfg = 11},
-	MoreMsg = {gfg = tc.gui6, ctfg = 6},
-	ModeMsg = {gfg = tc.gui5, ctfg = 5, attr = 'bold'},
-	Question = {gfg = tc.gui2, ctfg = 2},
-	WarningMsg = {gfg = tc.gui3, ctfg = 3, attr = 'underlineitalic'},
-	Title = {gfg = tc.gui5, ctfg = 5},
+	MoreMsg = {gfg = tc.magenta, ctfg = 6},
+	ModeMsg = {gfg = tc.magenta, ctfg = 5, attr = 'bold'},
+	Question = {gfg = tc.green, ctfg = 2},
+	WarningMsg = {gfg = tc.yellow, ctfg = 3, attr = 'underlineitalic'},
+	Title = {gfg = tc.magenta, ctfg = 5},
 	Conceal = {gfg = tc.bg, gbg = tc.bg, ctbg = 7, ctfg = 7},
 	Search = {gbg = tc.bgvli, ctbg = 11},
 	IncSearch = {gbg = tc.bgvli, ctbg = 8},
@@ -102,8 +102,8 @@ local highlights = {
 	Tabline = {gfg = tc.bg, gbg = tc.fg, ctfg = 0, ctbg = 7, attr = 'underline'},
 	TablineSel = {attr = 'bold'},
 	TablineFill = {attr = 'reverse'},
-	Directory = {gfg = tc.gui4, ctfg = 4},
-	SpecialKey = {gfg = tc.gui4, ctfg = 4},
+	Directory = {gfg = tc.blue, ctfg = 4},
+	SpecialKey = {gfg = tc.blue, ctfg = 4},
 	TermCursor = {attr = 'reverse'},
 	EndOfBuffer = {gfg = tc.bg, gbg = tc.bg, ctfg = 0, ctbg = 0},
 	Visual = {gbg = tc.bgvli},
@@ -120,44 +120,44 @@ local highlights = {
 	BufferCurrentMod = {attr = 'bolditalic'}, -- current modified
 	BufferCurrentSign = {gbg = tc.bg, gfg = tc.bg}, -- seems to be some line near the buffer tab
 	BufferInactive = {gbg = tc.bgli, gfg = tc.gui8},
-	BufferInactiveMod = {gbg = tc.bgli, gfg = tc.gui3}, -- inactive modified (text)
+	BufferInactiveMod = {gbg = tc.bgli, gfg = tc.yellow}, -- inactive modified (text)
 	BufferInactiveSign = {gbg = tc.bgli, gfg = tc.bgli},
 	BufferTabpageFill = {gbg = tc.bgli, gfg = tc.bgli}, -- rest of the bufferline
 	BufferVisibleSign = {gfg = tc.bgvli, gbg = tc.bg},
 
 	-- Dev Icons
-	DevIconLua = {gfg = tc.gui4},
-	DevIconGo = {gfg = tc.gui6},
+	DevIconLua = {gfg = tc.blue},
+	DevIconGo = {gfg = tc.magenta},
 
 	-- NvimTree
 	NvimTreeEndOfBuffer = {gfg = tc.bg, gbg = tc.bg, ctfg = 0, ctbg = 0},
 	NvimTreeVertSplit = {gfg = tc.bg, gbg = tc.bg, ctfg = 0, ctbg = 0},
 	NvimTreeNormal = {gfg = tc.fgli, gbg = tc.bg, ctfg = 7, ctbg = 0},
 	NvimTreeRootFolder = {},
-	NvimTreeGitDirty = {gfg = tc.gui4, ctfg = 4},
-	NvimTreeGitNew = {gfg = tc.gui2, ctfg = 2, attr = 'italic'},
-	NvimTreeGitRenamed = {gfg = tc.gui6, ctfg = 6, attr = 'italic'},
-	NvimTreeGitStaged = {gfg = tc.gui2, ctfg = 2},
+	NvimTreeGitDirty = {gfg = tc.blue, ctfg = 4},
+	NvimTreeGitNew = {gfg = tc.green, ctfg = 2, attr = 'italic'},
+	NvimTreeGitRenamed = {gfg = tc.magenta, ctfg = 6, attr = 'italic'},
+	NvimTreeGitStaged = {gfg = tc.green, ctfg = 2},
 	NvimTreeStatusLine = {gbg = tc.bgli, gfg = tc.bgli, force = true},
-	NvimTreeExecFile = {gfg = tc.gui2, ctfg = 2, attr = 'underline'},
-	NvimTreeGitDeleted = {gfg = tc.gui1, ctfg = 1, attr = 'bold'},
+	NvimTreeExecFile = {gfg = tc.green, ctfg = 2, attr = 'underline'},
+	NvimTreeGitDeleted = {gfg = tc.red, ctfg = 1, attr = 'bold'},
 
 	-- GitSigns.nvim
-	GitSignsAdd = {gfg = tc.gui2, ctfg = 2},
-	GitSignsDelete = {gfg = tc.gui1, ctfg = 1},
-	GitSignsChange = {gfg = tc.gui4, ctfg = 4},
+	GitSignsAdd = {gfg = tc.green, ctfg = 2},
+	GitSignsDelete = {gfg = tc.red, ctfg = 1},
+	GitSignsChange = {gfg = tc.blue, ctfg = 4},
 
 	-- Completion Menu (cmp)
-	CmpItemAbbrDeprecated = {gfg = tc.gui1, ctfg = 1, attr = 'strikethrough'}, -- deprecated
-	CmpItemAbbrMatch = {gfg = tc.gui4, ctfg = 4}, -- matched text in menu
-	CmpItemAbbrMatchFuzzy = {gfg = tc.gui4, ctfg = 4}, -- ^ fuzzy match
-	CmpItemKindVariable = {gfg = tc.gui6, ctfg = 6},
-	CmpItemKindInterface = {gfg = tc.gui6, ctfg = 6},
-	CmpItemKindText = {gfg = tc.gui6, ctfg = 6},
-	CmpItemKindFunction = {gfg = tc.gui3, ctfg = 3},
-	CmpItemKindMethod = {gfg = tc.gui2, ctfg = 2},
-	CmpItemKindKeyword = {gfg = tc.gui3, ctfg = 3},
-	CmpItemKindProperty = {gfg = tc.gui4, ctfg = 4},
+	CmpItemAbbrDeprecated = {gfg = tc.red, ctfg = 1, attr = 'strikethrough'}, -- deprecated
+	CmpItemAbbrMatch = {gfg = tc.blue, ctfg = 4}, -- matched text in menu
+	CmpItemAbbrMatchFuzzy = {gfg = tc.blue, ctfg = 4}, -- ^ fuzzy match
+	CmpItemKindVariable = {gfg = tc.magenta, ctfg = 6},
+	CmpItemKindInterface = {gfg = tc.magenta, ctfg = 6},
+	CmpItemKindText = {gfg = tc.magenta, ctfg = 6},
+	CmpItemKindFunction = {gfg = tc.yellow, ctfg = 3},
+	CmpItemKindMethod = {gfg = tc.green, ctfg = 2},
+	CmpItemKindKeyword = {gfg = tc.yellow, ctfg = 3},
+	CmpItemKindProperty = {gfg = tc.blue, ctfg = 4},
 	CmpItemKindUnit = {gfg = tc.fgli, ctfg = 7},
 }
 
