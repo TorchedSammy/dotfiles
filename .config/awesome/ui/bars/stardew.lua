@@ -28,6 +28,28 @@ client.connect_signal('focus', function ()
 	fc.screen.clientclass.text = name
 end)
 
+local volslider = wibox.widget {
+	widget = wibox.widget.slider,
+	value = 100,
+	bar_shape = gears.shape.rounded_rect,
+	bar_height = dpi(4),
+	bar_color = beautiful.xforeground,
+	bar_active_color = beautiful.xforeground,
+	handle_color = beautiful.xforeground,
+	handle_shape = gears.shape.circle,
+	forced_width = 100,
+}
+
+-- get_volume_state returns the percent if its muted, we only take the percent part
+vol.get_volume_state(function(volume)
+	volslider.value = volume
+end)
+
+volslider:connect_signal('property::value', function()
+	vol.set(volslider.value)
+end)
+
+
 local function imgwidget(icon)
 	local ico = wibox.widget {
 		image = gears.surface.load_uncached_silently(beautiful.config_path .. '/images/' .. icon),
@@ -168,26 +190,6 @@ awful.screen.connect_for_each_screen(function(s)
 		font = 'SF Pro Display Regular',
 		widget = wibox.widget.textbox
 	}
-
-	local volslider = wibox.widget {
-		widget = wibox.widget.slider,
-		value = 100,
-		bar_shape = gears.shape.rounded_rect,
-		bar_height = dpi(4),
-		bar_color = beautiful.xforeground,
-		bar_active_color = beautiful.xforeground,
-		handle_color = beautiful.xforeground,
-		handle_shape = gears.shape.circle,
-		forced_width = 100,
-	}
-	-- get_volume_state returns the percent if its muted, we only take the percent part
-	vol.get_volume_state(function(volume)
-		volslider.value = volume
-	end)
-
-	volslider:connect_signal('property::value', function()
-		vol.set(volslider.value)
-	end)
 
 	local realbar = wibox.widget {{
 		layout = wibox.layout.align.horizontal,
