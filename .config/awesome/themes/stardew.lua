@@ -55,7 +55,7 @@ theme.notification_padding = dpi(13)
 theme.notification_shape = helpers.rrect(2)
 
 theme.bar = 'stardew'
-theme.wibar_height = dpi(34)
+theme.wibar_height = dpi(36)
 
 theme.wibar_bg = theme.bg_normal
 theme.bg_systray = theme.wibar_bg

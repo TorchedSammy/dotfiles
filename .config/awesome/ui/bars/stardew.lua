@@ -197,7 +197,6 @@ awful.screen.connect_for_each_screen(function(s)
 		{
 			{
 				layout = wibox.layout.fixed.horizontal,
-				taglist(s)
 			},
 			left = beautiful.wibar_spacing,
 			right = beautiful.wibar_spacing,
@@ -210,6 +209,46 @@ awful.screen.connect_for_each_screen(function(s)
 				spacing = beautiful.wibar_spacing,
 				widgets.music,
 				musicbuttons
+			},
+			left = beautiful.wibar_spacing,
+			right = beautiful.wibar_spacing,
+			widget = wibox.container.margin,
+		},
+		{
+			{ -- Right widgets
+				layout = wibox.layout.fixed.horizontal,
+				spacing = beautiful.wibar_spacing,
+			},
+			left = beautiful.wibar_spacing,
+			right = beautiful.wibar_spacing,
+			widget = wibox.container.margin,
+		},
+		},
+		shape = s.bar.shape,
+		bg = beautiful.wibar_bg,
+		widget = wibox.container.background,
+		shape_border_color = beautiful.xforeground,
+		shape_border_width = 3,
+		forced_width = s.bar.width,
+	}
+
+	local widgetsover = wibox.widget {
+		layout = wibox.layout.align.horizontal,
+		expand = 'none',
+		{
+			{
+				layout = wibox.layout.fixed.horizontal,
+				taglist(s)
+			},
+			left = beautiful.wibar_spacing,
+			right = beautiful.wibar_spacing,
+			widget = wibox.container.margin,
+
+		},
+		{
+			{ -- Middle widgets
+				layout = wibox.layout.fixed.horizontal,
+				spacing = beautiful.wibar_spacing,
 			},
 			left = beautiful.wibar_spacing,
 			right = beautiful.wibar_spacing,
@@ -232,34 +271,24 @@ awful.screen.connect_for_each_screen(function(s)
 					shape_border_width = 3,
 					bg = beautiful.bg_sec
 				},
-				widgets.systray,
-				--widgets.layout
+				widgets.layout
 			},
 			left = beautiful.wibar_spacing,
 			right = beautiful.wibar_spacing,
 			widget = wibox.container.margin,
 		},
-		},
-		shape = s.bar.shape,
-		bg = beautiful.wibar_bg,
-		widget = wibox.container.background,
-		shape_border_color = beautiful.xforeground,
-		shape_border_width = 3,
-		forced_width = s.geometry.width
 	}
 
 	s.bar:setup {
-		layout = wibox.layout.align.horizontal,
+		layout = wibox.layout.stack,
 		expand = 'none',
 		{
-			{
-				layout = wibox.layout.fixed.horizontal,
-				spacing = beautiful.wibar_spacing,
-				realbar,
-			},
-			left = dpi(5), right = dpi(5),
 			widget = wibox.container.margin,
-		}
+			top = dpi(3),
+			bottom = dpi(3),
+			realbar
+		},
+		widgetsover
 	}
 end)
 -- }}}

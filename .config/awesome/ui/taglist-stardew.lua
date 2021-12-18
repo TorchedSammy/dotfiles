@@ -66,7 +66,7 @@ local function taglist(s)
 		tagwidgets[7],
 		tagwidgets[8],
 		tagwidgets[9],
-		layout = wibox.layout.fixed.horizontal
+		layout = wibox.layout.fixed.horizontal,
     }
 
 	text_taglist:buttons(gears.table.join(
@@ -109,7 +109,8 @@ local function taglist(s)
 	local function update_widget()
 		for i = 1, ntags do
 			tagbox[i].shape_border_color = beautiful.wibar_bg
-			tagbox[i].bg = beautiful.wibar_bg
+			tagbox[i].shape_border_width = 0
+			tagbox[i].bg = '#00000000'
 			tag_text[i].markup = helpers.colorize_text(te[i], beautiful.taglist_text_color)
 			local tag_clients
 			if s.tags[i] then
@@ -117,7 +118,8 @@ local function taglist(s)
 			end
 			if s.tags[i] and s.tags[i].selected then
 				--tag_text[i].markup = helpers.colorize_text(tf[i], cf[i])
-				tagbox[i].shape_border_color = beautiful.xforeground	
+				tagbox[i].shape_border_color = beautiful.xforeground
+				tagbox[i].shape_border_width = 3
 				tagbox[i].bg = beautiful.bg_sec
 				--tag_text[i].markup = helpers.colorize_text(tf[i], cf[i])
 			elseif s.tags[i] and s.tags[i].urgent then
