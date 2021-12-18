@@ -173,7 +173,7 @@ awful.screen.connect_for_each_screen(function(s)
 		screen = s,
 		position = 'top',
 		height = beautiful.wibar_height,
-		width = s.geometry.width - dpi(12),
+		width = s.geometry.width - 22,
 		shape = helpers.rrect(2),
 		bg = '#00000000',
 	}
