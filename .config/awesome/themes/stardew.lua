@@ -42,7 +42,7 @@ theme.border_normal  = theme.bg_sec
 theme.border_focus  = theme.bg_sec
 
 theme.titlebars = true
-theme.titlebar_type = 'default'
+theme.titlebar_type = 'simple'
 theme.titlebar_height = dpi(32)
 theme.titlebar_bg = theme.bg_normal
 

@@ -48,7 +48,7 @@ local function taglist(s)
 					gears.shape.rounded_rect(cr, w, h, 4)
 				end,
 				shape_border_color = beautiful.wibar_bg,
-				shape_border_width = 4,
+				shape_border_width = 3,
 				widget = wibox.container.background
 		})
 		table.insert(tagwidgets, tagbox[i])

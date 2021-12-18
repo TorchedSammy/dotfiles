@@ -29,6 +29,11 @@ volume.down = function()
     -- awesome.emit_signal('evil::volume', next_vol, mute)
 end
 
+volume.set = function(vol)
+	awesome.spawn('pactl set-sink-volume @DEFAULT_SINK@ '..vol..'%')
+	-- awesome.emit_signal('evil::volume', next_vol, mute)
+end
+
 volume.mute = function()
     awesome.spawn('pactl set-sink-mute @DEFAULT_SINK@ toggle')
 end

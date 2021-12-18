@@ -8,6 +8,7 @@ local widgets = require 'ui.widgets'
 local wibox = require 'wibox'
 local xresources = require 'beautiful.xresources'
 local dpi = xresources.apply_dpi
+local vol = require 'conf.vol'
 
 screen.connect_signal('property::geometry', helpers.set_wallpaper)
 
@@ -168,6 +169,26 @@ awful.screen.connect_for_each_screen(function(s)
 		widget = wibox.widget.textbox
 	}
 
+	local volslider = wibox.widget {
+		widget = wibox.widget.slider,
+		value = 100,
+		bar_shape = gears.shape.rounded_rect,
+		bar_height = dpi(4),
+		bar_color = beautiful.xforeground,
+		bar_active_color = beautiful.xforeground,
+		handle_color = beautiful.xforeground,
+		handle_shape = gears.shape.circle,
+		forced_width = 100,
+	}
+	-- get_volume_state returns the percent if its muted, we only take the percent part
+	vol.get_volume_state(function(volume)
+		volslider.value = volume
+	end)
+
+	volslider:connect_signal('property::value', function()
+		vol.set(volslider.value)
+	end)
+
 	local realbar = wibox.widget {{
 		layout = wibox.layout.align.horizontal,
 		expand = 'none',
@@ -196,6 +217,19 @@ awful.screen.connect_for_each_screen(function(s)
 			{ -- Right widgets
 				layout = wibox.layout.fixed.horizontal,
 				spacing = beautiful.wibar_spacing,
+				{
+					{
+						volslider,
+						widget = wibox.container.margin,
+						left = dpi(8),
+						right = dpi(8)
+					},
+					widget = wibox.container.background,
+					shape = helpers.rrect(2),
+					shape_border_color = beautiful.xforeground,
+					shape_border_width = 3,
+					bg = beautiful.bg_sec
+				},
 				widgets.systray,
 				--widgets.layout
 			},
@@ -211,6 +245,7 @@ awful.screen.connect_for_each_screen(function(s)
 		shape_border_width = 3,
 		forced_width = s.geometry.width
 	}
+
 	s.bar:setup {
 		layout = wibox.layout.align.horizontal,
 		expand = 'none',
