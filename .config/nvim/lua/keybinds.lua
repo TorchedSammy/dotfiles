@@ -45,8 +45,9 @@ _G.OpenTerm = function(name, side)
 	else -- if term doesnt exist
 		if side then vim.cmd 'vsplit' end
 		vim.cmd 'term'
-		vim.cmd('f ' .. name)
+		vim.bo.buflisted = false
 		vim.wo.foldcolumn = '1' -- set left padding basically
+		vim.cmd('f ' .. name)
 	end
 end
 
