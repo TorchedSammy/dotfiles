@@ -63,7 +63,7 @@ awful.screen.connect_for_each_screen(function(s)
 	helpers.set_wallpaper(s)
 
 	local stardew_time = wibox {
-		width = dpi(200),
+		width = dpi(190),
 		height = dpi(100),
 		bg = '#00000000',
 		visible = true,
@@ -79,7 +79,6 @@ awful.screen.connect_for_each_screen(function(s)
 		autostart = true,
 		call_now = true,
 		callback = function()
-			-- code
 		end
 	}
 	]]--
