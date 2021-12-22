@@ -10,13 +10,13 @@ local colors = {
   bg = c(tc.bgli),
   fg = c(tc.fg),
   section_bg = c(tc.bgvli),
-  yellow = c(tc.gui3),
-  cyan = c(tc.gui6),
-  green = c(tc.gui2),
-  orange = c(tc.gui3),
-  magenta = c(tc.gui5),
-  blue = c(tc.gui4),
-  red = c(tc.gui1)
+  yellow = c(tc.yellow),
+  cyan = c(tc.cyan),
+  green = c(tc.green),
+  orange = c(tc.yellow),
+  magenta = c(tc.magenta),
+  blue = c(tc.blue),
+  red = c(tc.red)
 }
 
 local mode_color = function()
