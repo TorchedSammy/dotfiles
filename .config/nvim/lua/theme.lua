@@ -26,7 +26,7 @@ local highlights = {
 	Statement = {gfg = tc.yellow, ctfg = 3},
 	PreProc = {gfg = tc.magenta, ctfg = 5},
 	Type = {gfg = tc.green, ctfg = 2},
-	Underlined = {gfg = tc.magenta, ctfg = 6, attr = 'underline'},
+	Underlined = {gfg = tc.cyan, ctfg = 6, attr = 'underline'},
 	Ignore = {gfg = tc.fg, ctfg = 15},
 	Error = {gfg = tc.gui9, ctfg = 9, attr = 'underlineitalic'},
 	Todo = {gfg = tc.bg, gbg = tc.gui8, ctfg = 0, ctbg = 8, attr = 'underline'},
@@ -48,7 +48,7 @@ local highlights = {
 	TSField = {gfg = tc.fg, ctfg = 7}, -- lua: tbl = {FIELD = 'thing'}, highlights FIELD
 	TSFloat = {gfg = tc.red, ctfg = 5},
 	TSFunction = {gfg = tc.blue, ctfg = 4}, -- function declaration and use
-	TSFuncBuiltin = {gfg = tc.magenta, ctfg = 6, attr = 'italic'},
+	TSFuncBuiltin = {gfg = tc.cyan, ctfg = 6, attr = 'italic'},
 	TSFuncMacro = {gfg = tc.gui12, ctfg = 12, attr = 'italic'}, -- macro functions and decls, println! in rust
 	TSInclude = {gfg = tc.gui12, ctfg = 12, attr = 'italic'}, -- require, #include
 	TSKeyword = {gfg = tc.magenta, ctfg = 5}, -- normal keywrds
@@ -72,7 +72,7 @@ local highlights = {
 	TSStringEscape = {gfg = tc.red, ctfg = 1},
 	TSTag = {gfg = tc.yellow, ctfg = 3}, -- html tag names
 	TSTagDelimiter = {gfg = tc.gui12, ctfg = 12}, -- < /> in html
-	TSURI = {gfg = tc.magenta, ctfg = 6, attr = 'underline'}, -- email/url (should be)
+	TSURI = {gfg = tc.cyan, ctfg = 6, attr = 'underline'}, -- email/url (should be)
 	TSWarning = {gfg = tc.yellow, ctfg = 3},
 	TSDanger = {gfg = tc.red, ctfg = 1, attr = 'bold'},
 	TSType = {gfg = tc.green, ctfg = 2}, -- custom types
@@ -86,7 +86,7 @@ local highlights = {
 	CursorLine = {gbg = tc.bgli, ctbg = 10},
 	CursorLineNr = {gfg = tc.fgli, ctfg = 15},
 	LineNr = {gfg = tc.gui8, ctfg = 11},
-	MoreMsg = {gfg = tc.magenta, ctfg = 6},
+	MoreMsg = {gfg = tc.cyan, ctfg = 6},
 	ModeMsg = {gfg = tc.magenta, ctfg = 5, attr = 'bold'},
 	Question = {gfg = tc.green, ctfg = 2},
 	WarningMsg = {gfg = tc.yellow, ctfg = 3, attr = 'underlineitalic'},
@@ -127,7 +127,7 @@ local highlights = {
 
 	-- Dev Icons
 	DevIconLua = {gfg = tc.blue},
-	DevIconGo = {gfg = tc.magenta},
+	DevIconGo = {gfg = tc.cyan},
 
 	-- NvimTree
 	NvimTreeEndOfBuffer = {gfg = tc.bg, gbg = tc.bg, ctfg = 0, ctbg = 0},
@@ -136,7 +136,7 @@ local highlights = {
 	NvimTreeRootFolder = {},
 	NvimTreeGitDirty = {gfg = tc.blue, ctfg = 4},
 	NvimTreeGitNew = {gfg = tc.green, ctfg = 2, attr = 'italic'},
-	NvimTreeGitRenamed = {gfg = tc.magenta, ctfg = 6, attr = 'italic'},
+	NvimTreeGitRenamed = {gfg = tc.cyan, ctfg = 6, attr = 'italic'},
 	NvimTreeGitStaged = {gfg = tc.green, ctfg = 2},
 	NvimTreeStatusLine = {gbg = tc.bgli, gfg = tc.bgli, force = true},
 	NvimTreeExecFile = {gfg = tc.green, ctfg = 2, attr = 'underline'},
@@ -151,9 +151,9 @@ local highlights = {
 	CmpItemAbbrDeprecated = {gfg = tc.red, ctfg = 1, attr = 'strikethrough'}, -- deprecated
 	CmpItemAbbrMatch = {gfg = tc.blue, ctfg = 4}, -- matched text in menu
 	CmpItemAbbrMatchFuzzy = {gfg = tc.blue, ctfg = 4}, -- ^ fuzzy match
-	CmpItemKindVariable = {gfg = tc.magenta, ctfg = 6},
-	CmpItemKindInterface = {gfg = tc.magenta, ctfg = 6},
-	CmpItemKindText = {gfg = tc.magenta, ctfg = 6},
+	CmpItemKindVariable = {gfg = tc.cyan, ctfg = 6},
+	CmpItemKindInterface = {gfg = tc.cyan, ctfg = 6},
+	CmpItemKindText = {gfg = tc.cyan, ctfg = 6},
 	CmpItemKindFunction = {gfg = tc.yellow, ctfg = 3},
 	CmpItemKindMethod = {gfg = tc.green, ctfg = 2},
 	CmpItemKindKeyword = {gfg = tc.yellow, ctfg = 3},
