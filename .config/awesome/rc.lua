@@ -120,6 +120,10 @@ client.connect_signal('manage', function(c)
 	and not c.size_hints.program_position then
 		awful.placement.no_offscreen(c)
 	end
+	if beautiful.client_shape then
+		c.shape = beautiful.client_shape
+	end
+
 	if c.maximized then
 		awful.placement.maximize(c, {
             honor_padding = true,

@@ -37,9 +37,10 @@ theme.fg_urgent     = '#ffffff'
 theme.fg_minimize   = '#ffffff'
 
 theme.useless_gap   = dpi(6)
-theme.border_width  = dpi(1)
-theme.border_normal  = theme.bg_sec
-theme.border_focus  = theme.bg_sec
+theme.border_width  = 3
+theme.border_normal  = theme.fg_normal
+theme.border_focus  = theme.fg_normal
+theme.client_shape = helpers.rrect(2)
 
 theme.titlebars = true
 theme.titlebar_type = 'simple'
