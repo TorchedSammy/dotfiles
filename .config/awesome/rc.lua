@@ -99,7 +99,6 @@ awful.rules.rules = {
 		}
 	  }, properties = { floating = true }},
 
-	-- Add titlebars to normal clients and dialogs
 	{ rule_any = {type = { 'normal', 'dialog' }
 	  }, properties = { titlebars_enabled = beautiful.titlebars }
 	},
@@ -107,7 +106,6 @@ awful.rules.rules = {
 	  }, properties = { titlebars_enabled = false }
 	},
 
-	-- Set Firefox to always map on the tag named '2' on screen 1.
 	{ rule_any = { class = {'Google-chrome', 'discord'} },
 	   properties = { maximized_vertical = true, maximized_horizontal = true } },
 }
