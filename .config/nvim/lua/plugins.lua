@@ -122,6 +122,8 @@ return require 'packer'.startup(function(use)
 				TypeParameter = '  ',
 			}
 
+			-- i hate lsp
+			---@diagnostic disable-next-line: redundant-parameter
 			cmp.setup {
 				snippet = {
 					expand = function(args)
