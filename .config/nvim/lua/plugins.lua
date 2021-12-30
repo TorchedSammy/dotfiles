@@ -1,4 +1,4 @@
-return require 'packer'.startup {function(use)
+return require 'packer'.startup(function(use)
 	-- Packer is stupid so i have to have it here too
 	use 'wbthomason/packer.nvim'
 
@@ -241,7 +241,4 @@ return require 'packer'.startup {function(use)
 			}
 		end
 	}
-end, config = {
-		compile_path = vim.fn.stdpath 'config' .. '/lua/packer_compiled.lua'
-	}
-}
+end)

@@ -1,5 +1,4 @@
 require 'impatient'
-require 'packer_compiled'
 require 'plugins'
 require 'theme'
 require 'keybinds'
