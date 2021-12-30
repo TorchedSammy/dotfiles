@@ -247,4 +247,6 @@ return require 'packer'.startup(function(use)
 			}
 		end
 	}
+
+	use {'nvim-telescope/telescope.nvim', requires = {'kyazdani42/nvim-web-devicons', 'nvim-lua/plenary.nvim'}}
 end)
