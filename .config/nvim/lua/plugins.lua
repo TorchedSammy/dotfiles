@@ -195,7 +195,7 @@ return require 'packer'.startup {function(use)
 		end
 	}
 
-	use 'jiangmiao/auto-pairs'
+	use 'windwp/nvim-autopairs'
 
 	use {'andweeb/presence.nvim',
 --		event = 'BufRead',
