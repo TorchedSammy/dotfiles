@@ -17,6 +17,7 @@ end
 nimap('<C-s>', '<Cmd>silent w<CR>') -- Save
 nimap('<C-z>', '<Cmd>u<CR>') -- Undo
 map('s', '<C-z>', '<Cmd>u<CR>') -- Undo
+nimap('<C-r>', '<Cmd>redo<CR>') -- Redraw
 nimap('<C-S-Up>', '<Cmd>m .-2<CR>') -- Move line up
 nimap('<C-S-Down>', '<Cmd>m .+1<CR>') -- Move line down
 
