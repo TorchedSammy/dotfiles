@@ -106,7 +106,7 @@ awful.rules.rules = {
 	  }, properties = { titlebars_enabled = false }
 	},
 
-	{ rule_any = { class = {'Google-chrome', 'discord'} },
+	{ rule_any = { class = {'Google-chrome'}, name = {'Discord'} },
 	   properties = { maximized_vertical = true, maximized_horizontal = true } },
 }
 -- }}}
