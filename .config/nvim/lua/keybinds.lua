@@ -75,9 +75,18 @@ map('n', '<A-S-c>', '<Cmd>BufferClose!<CR>')
 map('n', '<C-x>', '<Cmd>TroubleToggle<CR>')
 
 -- Lspsaga
-nimap('<C-f>', '<Cmd>Lspsaga lsp_finder<CR>')
 nimap('<C-e>', '<Cmd>Lspsaga hover_doc<CR>')
 nimap('<C-g>', '<Cmd>Lspsaga rename<CR>')
-nimap('<C-t>', '<Cmd>Lspsaga code_action<CR>')
 map('n', '[e', '<Cmd>Lspsaga diagnostic_jump_next<CR>')
 map('n', ']e', '<Cmd>Lspsaga diagnostic_jump_prev<CR>')
+
+-- Telescope
+nimap('<C-t>', [[<Cmd>:lua require 'telescope.builtin'.lsp_code_actions(require 'telescope.themes'.get_cursor{})<CR>]])
+map('v', '<C-t>', [[<Cmd>:lua require 'telescope.builtin'.lsp_range_code_actions(require 'telescope.themes'.get_cursor{})<CR>]])
+map('n', '<leader>ff', '<Cmd>Telescope find_files<CR>')
+map('n', '<leader>gf', '<Cmd>Telescope git_files<CR>')
+map('n', '<leader>rf', '<Cmd>Telescope oldfiles<CR>') -- recent files
+map('n', '<leader>hl', '<Cmd>Telescope highlights<CR>')
+
+map('n', '<C-k>', '<Cmd>Telescope keymaps<CR>') -- look at keybinds
+map('n', '<C-f>', '<Cmd>Telescope current_buffer_fuzzy_find<CR>')
