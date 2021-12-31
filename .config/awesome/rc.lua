@@ -2,9 +2,6 @@
 -- found (e.g. lgi). If LuaRocks is not installed, do nothing.
 pcall(require, 'luarocks.loader')
 
-themename = 'stardew'
-picom = true
-
 local awful = require 'awful'
 require 'awful.autofocus'
 require 'awful.hotkeys_popup.keys'
@@ -12,6 +9,7 @@ local beautiful = require 'beautiful'
 local gears = require 'gears'
 local helpers = require 'helpers'
 local naughty = require 'naughty'
+local settings = require 'conf.settings'
 
 -- Check if awesome encountered an error during startup and fell back to
 -- another config (This code will only ever execute for the fallback config)
@@ -40,7 +38,7 @@ do
 	end)
 end
 
-beautiful.init('~/.config/awesome/themes/' .. themename .. '.lua')
+beautiful.init('~/.config/awesome/themes/' .. settings.theme .. '.lua')
 
 require 'conf'
 
