@@ -9,14 +9,14 @@ local helpers = require 'helpers'
 -- {{{ Key bindings
 globalkeys = gears.table.join(
 awful.key({modkey}, 's', hotkeys_popup.show_help, {
-	description='Show all hotkeys',
+	description = 'Show all hotkeys',
 	group = 'awesome'
 }),
 awful.key({modkey}, 'Left', awful.tag.viewprev, {
 	description = 'Go to previous tag',
 	group = 'tag'
 }),
-awful.key({modkey}, 'Right',  awful.tag.viewnext, {
+awful.key({modkey}, 'Right', awful.tag.viewnext, {
 	description = 'Go to next tag',
 	group = 'tag'
 }),
@@ -60,13 +60,12 @@ awful.key({control}, 'Print',
 awful.key({modkey}, 'd',
 	function()
 		awful.spawn.with_shell('cp ~/Files/Dotfiles/.config/awesome/ ~/.config/ -r')
-		naughty.notify({ text = 'Copied awesome config'}) 
+		naughty.notify({ text = 'Copied awesome config'})
 	end, {
 		description = 'Update awesome config from dotfiles folder',
 		group = 'awesome'
 	}
 ),
-    
 awful.key({ modkey }, 'z',
 	function()
 		widgets.systray.visible = not widgets.systray.visible
@@ -76,7 +75,7 @@ awful.key({ modkey }, 'z',
 	}
 ),
 
-    -- Layout manipulation
+-- Layout manipulation
 awful.key({modkey, shift}, 'j',
 	function()
 		awful.client.swap.byidx(1)

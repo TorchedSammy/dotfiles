@@ -6,8 +6,6 @@ local awful = require 'awful'
 require 'awful.autofocus'
 require 'awful.hotkeys_popup.keys'
 local beautiful = require 'beautiful'
-local gears = require 'gears'
-local helpers = require 'helpers'
 local naughty = require 'naughty'
 local settings = require 'conf.settings'
 
