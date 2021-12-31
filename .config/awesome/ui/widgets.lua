@@ -134,7 +134,7 @@ layoutbox:buttons(gears.table.join(
 		awful.layout.inc(-1)
 	end)
 ))
-	
+
 widgets.layout = {
 	layoutbox,
 	top = 7, bottom = 7,
