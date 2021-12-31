@@ -1,0 +1,15 @@
+{
+    "$schema": "https://raw.githubusercontent.com/sumneko/vscode-lua/master/setting/schema.json",
+    "Lua.diagnostics.globals": [
+        "awesome",
+        "client",
+        "screen",
+        "root",
+        "vim",
+        "hilbish",
+        "alias",
+        "appendPath",
+        "prependPath",
+        "s"
+    ]
+}
