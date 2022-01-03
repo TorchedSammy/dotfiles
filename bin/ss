@@ -22,4 +22,5 @@ if errcode == 1 then
 end
 
 runcmd 'notify-send -i /tmp/screenshot.png -t 4000 "ssf-lua" "Screenshot taken, uploading..."'
+runcmd 'xclip -selection clipboard -t image/png -i /tmp/screenshot.png'
 runcmd 'ssf /tmp/screenshot.png'
