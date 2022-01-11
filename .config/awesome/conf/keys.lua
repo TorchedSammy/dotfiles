@@ -25,13 +25,13 @@ awful.key({modkey}, 'Escape', awful.tag.history.restore, {
 	group = 'tag'
 }),
 
-awful.key({}, 'F2', function()
+awful.key({modkey}, 'F2', function()
 	awful.spawn 'light -U 10'
 end, {
 	description = 'Decrease brightness',
 	group = 'screen'
 }),
-awful.key({}, 'F3', function()
+awful.key({modkey}, 'F3', function()
 	awful.spawn 'light -A 10'
 end, {
 	description = 'Increase brightness',
