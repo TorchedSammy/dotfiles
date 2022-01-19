@@ -1,9 +1,10 @@
 local gears = require 'gears'
 local naughty = require 'naughty'
 local widgets = require 'ui.widgets'
+local bling = require 'modules.bling'
 
-awesome.connect_signal('bling::playerctl::title_artist_album',
-function (title, artist, art)
+local playerctl = bling.signal.playerctl.lib()
+playerctl:connect_signal('metadata', function (_, title, artist, art)
 	naughty.notify {
 		title = 'Now Playing\n' .. title,
 		text = artist,
@@ -13,7 +14,7 @@ function (title, artist, art)
 	widgets.music_name:set_markup_silently(gears.string.xml_escape(text))
 end)
 
-awesome.connect_signal('bling::playerctl::no_players', function()
+playerctl:connect_signal('no_players', function()
 	naughty.notify {
 		title = 'Party\'s Over!',
 		text = 'No more music playing.'

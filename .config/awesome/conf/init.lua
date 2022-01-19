@@ -41,11 +41,6 @@ altkey = 'Mod1'
 shift = 'Shift'
 control = 'Control'
 
-bling.signal.playerctl.enable {
-    backend = 'playerctl_lib',
-    update_on_activity = true
-}
-
 require 'conf.keys'
 require 'conf.signals'
 
