@@ -87,8 +87,8 @@ awful.screen.connect_for_each_screen(function(s)
 		{
 			imgwidget('stardew/daynightbig.png'),
 			widget = wibox.container.margin,
-			top = dpi(3),
-			bottom = dpi(3)
+			top = dpi(2),
+			bottom = dpi(2)
 		},
 		{
 			{
@@ -142,7 +142,8 @@ awful.screen.connect_for_each_screen(function(s)
 			forced_height = stardew_time.height,
 			widget = wibox.container.background,
 		},
-		layout = wibox.layout.fixed.horizontal
+		layout = wibox.layout.fixed.horizontal,
+		spacing = -2,
 	}
 	stardew_time.visible = true
 	awful.placement.top_right(stardew_time, { margins = { top = dpi(beautiful.wibar_height + 12), right = dpi(12) }, parent = s })
