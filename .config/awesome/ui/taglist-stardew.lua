@@ -131,6 +131,7 @@ local function taglist(s)
 		end
 	end
 
+	update_widget()
 
 	client.connect_signal('unmanage', function(c)
 		update_widget()

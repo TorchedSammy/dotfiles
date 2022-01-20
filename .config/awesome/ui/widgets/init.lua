@@ -2,9 +2,9 @@ local awful = require 'awful'
 local wibox = require 'wibox'
 local gears = require 'gears'
 local beautiful = require 'beautiful'
-local volume = require 'conf.vol'
 local xresources = require 'beautiful.xresources'
 local dpi = xresources.apply_dpi
+local vol = require 'conf.vol'
 
 local function rounded_bar(color)
 	return wibox.widget {
@@ -63,8 +63,8 @@ awful.widget.watch('cat /proc/meminfo', 5, function(widget, stdout)
 end, widgets.ram_bar)
 
 widgets.volume_bar = rounded_bar(beautiful.xcolor2)
-function update_volume_bar(vol, mute)
-    widgets.volume_bar.value = vol
+function update_volume_bar(volume, mute)
+    widgets.volume_bar.value = volume
     if mute then
         widgets.volume_bar.color = beautiful.xforeground
     else
@@ -73,15 +73,15 @@ function update_volume_bar(vol, mute)
 end
 
 widgets.volume_bar:buttons(gears.table.join(
-    awful.button({ }, 4, volume.up),
-    awful.button({ }, 5, volume.down),
-    awful.button({ }, 1, function() volume.mute() volume.get_volume_state(update_volume_bar) end),
+    awful.button({ }, 4, vol.up),
+    awful.button({ }, 5, vol.down),
+    awful.button({ }, 1, function() vol.mute() vol.get_volume_state(update_volume_bar) end),
     awful.button({ }, 3, function() awful.spawn 'pavucontrol' end)))
 
 awesome.connect_signal("evil::volume", update_volume_bar)
 
 -- Init widget state
-volume.get_volume_state(update_volume_bar)
+vol.get_volume_state(update_volume_bar)
 
 -- Music widget thatll say whats currently playing
 widgets.music_icon = wibox.widget {
@@ -154,6 +154,38 @@ awful.tag.attached_connect_signal(client.screen, 'property::selected', function(
 	if not fc then widgets.clientclass:set_markup_silently 'AwesomeWM' end
 end)
 
+widgets.imgwidget = function(icon, args)
+	args = args or {}
+	local w = {
+		image = gears.surface.load_uncached_silently(beautiful.config_path .. '/images/' .. icon),
+		widget = wibox.widget.imagebox
+	}
+	local wArgs = gears.table.join(w, args)
+
+	local ico = wibox.widget(wArgs)
+
+	return ico
+end
+
+widgets.volslider = wibox.widget {
+	widget = wibox.widget.slider,
+	value = 100,
+	bar_shape = gears.shape.rounded_rect,
+	bar_height = dpi(4),
+	bar_color = beautiful.xforeground,
+	bar_active_color = beautiful.xforeground,
+	handle_color = beautiful.xforeground,
+	handle_shape = gears.shape.circle,
+	forced_width = 100,
+}
+
+vol.get_volume_state(function(volume)
+	widgets.volslider.value = volume
+end)
+
+widgets.volslider:connect_signal('property::value', function()
+	vol.set(widgets.volslider.value)
+end)
 
 return widgets
 
