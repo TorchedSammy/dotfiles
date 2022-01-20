@@ -77,33 +77,15 @@ local function taglist(s)
 	))
 
 	-- Shorter names (eg. tf = text_focused) to save space
-	local tf, tu, to, te, cf, cu, co, ce;
+	local tf, te
 	-- Set fallback values if needed
 	if beautiful.taglist_text_focused then
 		tf = beautiful.taglist_text_focused
-		tu = beautiful.taglist_text_urgent
-		to = beautiful.taglist_text_occupied
 		te = beautiful.taglist_text_empty
-		cf = beautiful.taglist_text_color_focused
-		cu = beautiful.taglist_text_color_urgent
-		co = beautiful.taglist_text_color_occupied
-		ce = beautiful.taglist_text_color_empty
 	else
 		-- Fallback values
 		tf = {'1', '2', '3', '4', '5', '6', '7', '8', '9'}
-		tu = tf
-		to = tf
 		te = tf
-
-		local ff = beautiful.fg_focus
-		local fu = beautiful.fg_urgent
-		local fo = beautiful.fg_normal
-		local fe = beautiful.fg_minimize
-
-		cf = {ff, ff, ff, ff, ff, ff, ff, ff, ff, ff}
-		cu = {fu, fu, fu, fu, fu, fu, fu, fu, fu, fu}
-		co = {fo, fo, fo, fo, fo, fo, fo, fo, fo, fo}
-		ce = {fe, fe, fe, fe, fe, fe, fe, fe, fe, fe}
 	end
 
 	local function update_widget()
@@ -133,16 +115,16 @@ local function taglist(s)
 
 	update_widget()
 
-	client.connect_signal('unmanage', function(c)
+	client.connect_signal('unmanage', function()
 		update_widget()
 	end)
-	client.connect_signal('untagged', function(c)
+	client.connect_signal('untagged', function()
 		update_widget()
 	end)
-	client.connect_signal('tagged', function(c)
+	client.connect_signal('tagged', function()
 		update_widget()
 	end)
-	client.connect_signal('screen', function(c)
+	client.connect_signal('screen', function()
 		update_widget()
     end)
 	awful.tag.attached_connect_signal(s, 'property::selected', function()
