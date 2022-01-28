@@ -1,8 +1,8 @@
-lunacolors = require 'lunacolors'
-bait = require 'bait'
-commander = require 'commander'
-delta = require 'delta'
-fs = require 'fs'
+local lunacolors = require 'lunacolors'
+local bait = require 'bait'
+local commander = require 'commander'
+local delta = require 'delta'
+local fs = require 'fs'
 
 print(lunacolors.format('Welcome {cyan}'.. hilbish.user ..
 '{reset} to {magenta}Hilbish{reset},\n' ..
@@ -13,6 +13,7 @@ delta.init()
 prependPath '~/bin/'
 appendPath '/usr/local/go/bin/'
 appendPath '~/go/bin/'
+appendPath '~/.local/bin/'
 
 commander.register('ver', function()
 	print(hilbish.ver)
@@ -45,6 +46,7 @@ alias('ga', 'git add')
 alias('gm', 'git merge')
 alias('p', 'git push')
 alias('c', 'git commit')
+alias('multimc', '~/MultiMC/MultiMC -d ~/.local/share/multimc > /dev/null 2>&1 &')
 
 -- GPG
 os.execute 'tty >/tmp/tty 2>&1'
