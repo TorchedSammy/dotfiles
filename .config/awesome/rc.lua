@@ -129,7 +129,7 @@ end)
 
 require 'ui'
 
-if beautiful.double_borders then require 'ui.double-borders' end
+if beautiful.double_borders then require 'ui.components.double-borders' end
 
 client.connect_signal('focus', function(c)
 	c.border_color = beautiful.border_focus
