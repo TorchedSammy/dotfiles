@@ -1,6 +1,11 @@
 #! /bin/hilbish
 
-local f = io.popen 'awesome-client "return themename"'
+local f = io.popen [[
+	awesome-client "
+	local settings = require 'conf.settings'
+	return settings.theme
+	"
+]]
 local content = f:read '*all'
 f:close()
 
