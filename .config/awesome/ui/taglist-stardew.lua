@@ -77,16 +77,8 @@ local function taglist(s)
 	))
 
 	-- Shorter names (eg. tf = text_focused) to save space
-	local tf, te
-	-- Set fallback values if needed
-	if beautiful.taglist_text_focused then
-		tf = beautiful.taglist_text_focused
-		te = beautiful.taglist_text_empty
-	else
-		-- Fallback values
-		tf = {'1', '2', '3', '4', '5', '6', '7', '8', '9'}
-		te = tf
-	end
+	local tf = {'1', '2', '3', '4', '5', '6', '7', '8', '9'}
+	local te = tf
 
 	local function update_widget()
 		for i = 1, ntags do
