@@ -32,38 +32,22 @@ awful.screen.connect_for_each_screen(function(s)
 
 	s.bar.y = beautiful.dpi(8)
 
-	local realbar = wibox.widget {{
-		layout = wibox.layout.align.horizontal,
-		expand = 'none',
+	local streak = wibox.widget {
 		{
-			{
-				layout = wibox.layout.fixed.horizontal,
-			},
-			left = beautiful.wibar_spacing,
-			right = beautiful.wibar_spacing,
-			widget = wibox.container.margin,
+			layout = wibox.layout.align.horizontal,
+			expand = 'none',
+		},
+		shape = s.bar.shape,
+		bg = '#ede0d8' .. '99',
+		widget = wibox.container.background,
+		forced_width = s.bar.width,
+	}
 
-		},
+	local bg = wibox.widget {
 		{
-			{ -- Middle widgets
-				layout = wibox.layout.fixed.horizontal,
-				spacing = beautiful.wibar_spacing,
-				widgets.music,
-		--		musicbuttons
-			},
-			left = beautiful.wibar_spacing,
-			right = beautiful.wibar_spacing,
-			widget = wibox.container.margin,
-		},
-		{
-			{ -- Right widgets
-				layout = wibox.layout.fixed.horizontal,
-				spacing = beautiful.wibar_spacing,
-			},
-			left = beautiful.wibar_spacing,
-			right = beautiful.wibar_spacing,
-			widget = wibox.container.margin,
-		},
+			-- doesnt work without this, idk
+			layout = wibox.layout.align.horizontal,
+			expand = 'none',
 		},
 		shape = s.bar.shape,
 		bg = beautiful.wibar_bg,
@@ -71,6 +55,52 @@ awful.screen.connect_for_each_screen(function(s)
 		shape_border_color = beautiful.xforeground,
 		shape_border_width = 3,
 		forced_width = s.bar.width,
+		forced_height = s.bar.height,
+	}
+
+	local realbar = wibox.widget {
+		layout = wibox.layout.stack,
+		bg,
+		{
+			widget = wibox.container.margin,
+			top = dpi(12),
+			bottom = dpi(12),
+			left = dpi(4),
+			right = dpi(4),
+			streak
+		},
+		{
+			layout = wibox.layout.align.horizontal,
+			expand = 'none',
+			{
+				{
+					layout = wibox.layout.fixed.horizontal,
+				},
+				left = beautiful.wibar_spacing,
+				right = beautiful.wibar_spacing,
+				widget = wibox.container.margin,
+			},
+			{
+				{ -- Middle widgets
+					layout = wibox.layout.fixed.horizontal,
+					spacing = beautiful.wibar_spacing,
+					widgets.music,
+			--		musicbuttons
+				},
+				left = beautiful.wibar_spacing,
+				right = beautiful.wibar_spacing,
+				widget = wibox.container.margin,
+			},
+			{
+				{ -- Right widgets
+					layout = wibox.layout.fixed.horizontal,
+					spacing = beautiful.wibar_spacing,
+				},
+				left = beautiful.wibar_spacing,
+				right = beautiful.wibar_spacing,
+				widget = wibox.container.margin,
+			},
+		},
 	}
 
 	local widgetsover = wibox.widget {
