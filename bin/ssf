@@ -29,18 +29,29 @@ end
 
 local path = args[2]
 -- URL to uplaod to
-local url = 'https://modeus.is-inside.me/upload'
+local url = 'https://safe.kashima.moe/api/upload'
 -- Authentication Key
 -- You should change this to a value that makes sense for you
 local authtoken = '$(cat $HOME/.apikey)'
--- Key name of the field to use authkey
-local formkey = 'key'
+local formfile = 'files'
+local filearray = true
+
 -- JSON key to image URl
 local image = 'url'
+local headers = {
+	Accept = 'application/vnd.chibisafe.json',
+	Token = authtoken
+}
 
-local jsonstr = runcmd('curl -s --request POST -H "' ..  formkey .. ':'
-.. authtoken .. '" -F file=@' .. path .. ' ' .. url, true)
+local headerstr = ''
+-- format for curl
+for k, v in pairs(headers) do
+	headerstr = headerstr .. '-H "' .. k .. ': ' .. v .. '" '
+end
+local arr = (filearray and '[]' or '')
 
+local jsonstr = runcmd(string.format('curl -s --request POST -F "%s%s=@%s" %s%s', formfile, arr, path, headerstr, url), true)
+print(jsonstr)
 local obj = loadstring('return '
 .. jsonstr:gsub('("[^"]-"):', '[%1]='))()
 local url = obj[image]
