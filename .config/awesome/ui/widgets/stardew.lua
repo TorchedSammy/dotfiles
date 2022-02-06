@@ -97,7 +97,7 @@ widgets.stardew_time = function(s)
 			},
 			bg = beautiful.wibar_bg,
 			shape = helpers.rrect(2),
-			shape_border_color = beautiful.xforeground,
+			shape_border_color = beautiful.border_normal,
 			shape_border_width = 4,
 			forced_width = stardew_time.width,
 			forced_height = stardew_time.height,
