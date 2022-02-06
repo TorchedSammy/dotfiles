@@ -2,25 +2,11 @@ local xresources = require("beautiful.xresources")
 local dpi = xresources.apply_dpi
 
 local theme = require('themes.common')
+local colors = require 'themes.colors.clouds'
 
-theme.xbackground = "#1C1E26"
-theme.xforeground = "#DCDFE4"
-theme.xcolor0     = "#1C1E26"
-theme.xcolor1     = "#E95678"
-theme.xcolor2     = "#FAB795"
-theme.xcolor3     = '#29D398'
-theme.xcolor4     = "#59E1E3"
-theme.xcolor5     = "#26BBD9"
-theme.xcolor6     = "#EE64AC"
-theme.xcolor7     = "#F09383"
-theme.xcolor8     = "#a49da1"
-theme.xcolor9     = "#72BCE0"
-theme.xcolor10    = "#AB93A0"
-theme.xcolor11    = "#D2A1B0"
-theme.xcolor12    = "#E4B5CC"
-theme.xcolor13    = "#A4C8DE"
-theme.xcolor14    = "#EDCCD6"
-theme.xcolor15    = "#ebe1e7"
+-- join theme and colors
+local gears = require 'gears'
+theme = gears.table.join(theme, colors)
 
 theme.bg_normal     = theme.xbackground
 theme.bg_sec        = '#6F6F70'

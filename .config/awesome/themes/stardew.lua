@@ -3,25 +3,11 @@ local helpers = require 'helpers'
 local dpi = xresources.apply_dpi
 
 local theme = require 'themes.common'
+local colors = require 'themes.colors.stardew'
 
-theme.xbackground = '#f6ebe0'
-theme.xforeground = '#453630'
-theme.xcolor0     = '#f6ebe0'
-theme.xcolor1     = '#ed5f5c'
-theme.xcolor2     = '#5ee26b'
-theme.xcolor3     = '#f3b94c'
-theme.xcolor4     = '#307cf5'
-theme.xcolor5     = '#e25f9b'
-theme.xcolor6     = '#6ef0e3'
-theme.xcolor7     = '#dfdfdf'
-theme.xcolor8     = '#999999'
-theme.xcolor9     = '#DF5554'
-theme.xcolor10    = '#8ACC68'
-theme.xcolor11    = '#FDD565'
-theme.xcolor12    = '#4993F0'
-theme.xcolor13    = '#EB6AA6'
-theme.xcolor14    = '#6FEBEE'
-theme.xcolor15    = '#ffffff'
+-- join theme and colors
+local gears = require 'gears'
+theme = gears.table.join(theme, colors)
 
 theme.font          = 'SF Pro Text Medium 12'
 
