@@ -12,18 +12,7 @@ local function ignoreExt(...)
 end
 ignoreExt('png')
 
------------------------------- Themes ----------------------------------------
-
--- light theme:
--- core.reload_module("colors.summer")
-
---------------------------- Key bindings -------------------------------------
-
--- key binding:
--- keymap.add { ["ctrl+escape"] = "core:quit" }
-
-
-------------------------------- Fonts ----------------------------------------
+require 'colors.awesomewm'
 -- customize fonts:
 -- style.font = renderer.font.load(DATADIR .. "/fonts/FiraSans-Regular.ttf", 14 * SCALE)
 -- style.code_font = renderer.font.load(DATADIR .. "/fonts/.ttf", 10 * SCALE)
