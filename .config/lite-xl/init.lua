@@ -1,13 +1,9 @@
--- put user settings here
--- this module will be loaded after everything else when the application starts
--- it will be automatically reloaded when saved
+local core = require 'core'
+local keymap = require 'core.keymap'
+local config = require 'core.config'
+local style = require 'core.style'
 
-local core = require "core"
-local keymap = require "core.keymap"
-local config = require "core.config"
-local style = require "core.style"
-
-config.ignore_files = {'.git'}
+config.ignore_files = {'^%.git$'}
 local function ignoreExt(...)
 	local exts = {...}
 	for i in ipairs(exts) do
