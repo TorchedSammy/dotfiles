@@ -66,6 +66,7 @@ end)
 
 function RootView:draw(...)
 	rv_draw(self, ...)
+	if core.active_view == core.command_view then return end
 	renderer.draw_text(style.code_font, date, self.size.x - date_width - 25, self.size.y - (time_height * 2) - 60, style.text)
 	renderer.draw_text(style.code_font, time, self.size.x - time_width - 25, self.size.y - time_height - 60, style.text)
 end
