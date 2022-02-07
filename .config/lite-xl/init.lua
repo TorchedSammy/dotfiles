@@ -1,7 +1,13 @@
 local core = require 'core'
+local common = require 'core.common'
 local keymap = require 'core.keymap'
 local config = require 'core.config'
 local style = require 'core.style'
+local RootView = require 'core.rootview'
+local StatusView = require 'core.statusview'
+local DocView = require 'core.docview'
+
+local userDataDir = os.getenv 'HOME' .. '/.local/share'
 
 config.ignore_files = {'^%.git$'}
 local function ignoreExt(...)
@@ -10,42 +16,36 @@ local function ignoreExt(...)
 		table.insert(config.ignore_files, '[%w-.]+.' .. exts[i])
 	end
 end
+local function setFont(type, size, ...)
+	local paths = {...}
+	local fonts = {}
+	for i in ipairs(paths) do
+		local fontPath = userDataDir .. '/fonts/' .. paths[i] .. '.ttf'
+		local fnt = renderer.font.load(fontPath, size * SCALE)
+		table.insert(fonts, fnt)
+	end
+	-- if none of the fonts loaded, dont change to nothing (dunno what will happen here)
+	if #fonts ~= 0 then style[type] = renderer.font.group(fonts) end
+end
 ignoreExt('png')
+setFont('code_font', 12, 'VictorMono/Victor Mono Medium Nerd Font Complete Mono', 'seguiemj')
+setFont('font', 12, 'SFPro/TrueType/SFProDisplay-Regular', 'seguiemj')
 
 require 'colors.awesomewm'
 -- customize fonts:
--- style.font = renderer.font.load(DATADIR .. "/fonts/FiraSans-Regular.ttf", 14 * SCALE)
--- style.code_font = renderer.font.load(DATADIR .. "/fonts/.ttf", 10 * SCALE)
---
+-- style.font = renderer.font.load(DATADIR .. '/fonts/FiraSans-Regular.ttf', 14 * SCALE)
+-- style.code_font = renderer.font.load(DATADIR .. '/fonts/.ttf', 10 * SCALE)
 -- font names used by lite:
 -- style.font          : user interface
 -- style.big_font      : big text in welcome screen
 -- style.icon_font     : icons
 -- style.icon_big_font : toolbar icons
 -- style.code_font     : code
---
--- the function to load the font accept a 3rd optional argument like:
---
--- {antialiasing="grayscale", hinting="full"}
---
--- possible values are:
--- antialiasing: grayscale, subpixel
--- hinting: none, slight, full
 
------------------------------- Plugins ----------------------------------------
+config.tab_type = 'hard'
+config.indent_size = 4
+config.scroll_past_end = false
 
--- enable or disable plugin loading setting config entries:
-
--- enable plugins.trimwhitespace, otherwise it is disable by default:
--- config.plugins.trimwhitespace = true
---
--- disable detectindent, otherwise it is enabled by default
-config.plugins.detectindent = false
-config.tab_type = "hard"
-config.indent_size = 4   -- 4 spaces
-
-local common = require "core.common"
-local RootView = require "core.rootview"
 local rv_draw = RootView.draw
 local time = ''
 local date = ''
