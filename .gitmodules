@@ -10,3 +10,12 @@
 [submodule ".config/awesome/freedesktop"]
 	path = .config/awesome/freedesktop
 	url = https://github.com/lcpz/awesome-freedesktop
+[submodule ".config/lite-xl/widget"]
+	path = .config/lite-xl/widget
+	url = https://github.com/jgmdev/lite-xl-widgets
+[submodule ".config/lite-xl/plugins/console"]
+	path = .config/lite-xl/plugins/console
+	url = https://github.com/lite-xl/console
+[submodule ".config/lite-xl/plugins/finder"]
+	path = .config/lite-xl/plugins/finder
+	url = https://github.com/takase1121/lite-xl-finder
