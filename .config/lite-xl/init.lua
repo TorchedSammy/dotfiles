@@ -70,3 +70,43 @@ function RootView:draw(...)
 	renderer.draw_text(style.code_font, date, self.size.x - date_width - 25, self.size.y - (time_height * 2) - 60, style.text)
 	renderer.draw_text(style.code_font, time, self.size.x - time_width - 25, self.size.y - time_height - 60, style.text)
 end
+
+local bigCodeFont = style.code_font:copy((12 * 1.6) * SCALE)
+
+function StatusView:get_items()
+	if getmetatable(core.active_view) == DocView then
+		local dv = core.active_view
+		local line, col = dv.doc:get_selection()
+		local dirty = dv.doc:is_dirty()
+		local indent_type, indent_size, indent_confirmed = dv.doc:get_indent_info()
+		local indent_label = (indent_type == "hard") and "Tabs" or "Spaces"
+		local indent_size_str = tostring(indent_size) .. (indent_confirmed and "" or "*") or "unknown"
+		local indent = indent_size_str .. ' ' .. indent_label
+
+		return {
+			dirty and style.accent or style.text, style.icon_font, "f",
+			style.dim, style.font, self.separator2, style.text,
+			dv.doc.filename and style.text or style.dim, dv.doc:get_name(),
+		}, {
+			style.text, indent,
+			style.dim, self.separator2, style.text,
+			line, col > config.line_limit and style.accent or style.text, ":", col,
+			style.dim, self.separator2, style.text,
+			string.format("%.f%%", line / #dv.doc.lines * 100),
+			style.dim, self.separator2, style.text,
+			#dv.doc.lines, " lines", style.dim,
+			style.dim, self.separator2, style.text,
+			style.color1, bigCodeFont, "",
+			style.text, style.font, ""
+		}
+	end
+
+	return {}, {
+	--[[
+		style.icon_font, "g",
+		style.font, style.dim, self.separator2,
+		#core.docs, style.text, " / ",
+		#core.project_files, " files"
+	]]--
+	}
+end
