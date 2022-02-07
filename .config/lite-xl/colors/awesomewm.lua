@@ -8,6 +8,9 @@ local thm = dofile(themePath:gsub('~', os.getenv('HOME')))
 local bg = thm.xbackground
 local fg = thm.xforeground
 
+for i = 0, 15 do
+	style['color' .. i] = {common.color(thm['xcolor' .. i])}
+end
 style.gitdiff_padding = 4
 
 style.background = { common.color(bg) }
