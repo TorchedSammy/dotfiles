@@ -15,22 +15,22 @@ style.gitdiff_padding = 4
 
 style.background = { common.color(bg) }
 style.background2 = { common.color(bg) }
-style.background3 = { common.color(bg)}
+style.background3 = style.color9
 style.text = { common.color(fg) }
 style.caret = { common.color "#61efce" }
 style.accent = { common.color "#ffd152" }
 style.dim = { common.color "#615d5f" }
 style.divider = { common.color "#242223" }
-style.selection = { common.color "#454244" }
-style.line_number = { common.color(thm.xcolor8) }
+style.selection = style.color10
+style.line_number = style.color11
 style.line_number2 = { common.color(fg) }
-style.line_highlight = { common.color(thm.xcolor10) }
+style.line_highlight = style.color8
 style.scrollbar = { common.color "#454344" }
 style.scrollbar2 = { common.color "#524F50" }
 
 style.syntax["normal"] = { common.color(thm.xcolor1) }
 style.syntax["symbol"] = { common.color(fg) }
-style.syntax["comment"] = { common.color(thm.xcolor8) }
+style.syntax["comment"] = style.color11
 style.syntax["keyword"] = { common.color(thm.xcolor5) }
 style.syntax["keyword2"] = { common.color(thm.xcolor5) }
 style.syntax["number"] = { common.color "#ffd152" }
@@ -43,3 +43,6 @@ style.gitdiff_addition = {common.color(thm.xcolor2)}
 style.gitdiff_modification = {common.color(thm.xcolor4)}
 style.gitdiff_deletion = {common.color(thm.xcolor1)}
 
+style.gitstatus_addition = style.gitdiff_addition
+style.gitstatus_modification = style.gitdiff_modification
+style.gitstatus_deletion = style.gitdiff_deletion
