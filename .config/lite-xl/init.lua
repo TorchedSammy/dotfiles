@@ -32,6 +32,13 @@ setFont('code_font', 12, 'VictorMono/Victor Mono Medium Nerd Font Complete Mono'
 setFont('font', 12, 'SFPro/TrueType/SFProDisplay-Regular', 'seguiemj')
 
 require 'colors.awesomewm'
+
+-- funny issue: https://safe.kashima.moe/3q6397s0kxcx.png
+-- that blue line is literally the minimap since it apparently draws itself
+-- as a scrollbar on docview, and the command view is a docview ????
+-- doing this as a solution works
+core.command_view.draw_scrollbar = function() end
+
 -- customize fonts:
 -- style.font = renderer.font.load(DATADIR .. '/fonts/FiraSans-Regular.ttf', 14 * SCALE)
 -- style.code_font = renderer.font.load(DATADIR .. '/fonts/.ttf', 10 * SCALE)
