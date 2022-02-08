@@ -52,6 +52,7 @@ core.command_view.draw_scrollbar = function() end
 config.tab_type = 'hard'
 config.indent_size = 4
 config.scroll_past_end = false
+config.plugins.toolbarview = false
 
 local rv_draw = RootView.draw
 local time = ''
