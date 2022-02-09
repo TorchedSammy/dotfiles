@@ -8,7 +8,7 @@ local Object = require "core.object"
 
 -- General plugin settings
 config.plugins.minimap = {
-	enabled = true,
+	enabled = false,
 	width = 100,
 	instant_scroll = false,
 	syntax_highlight = true,
