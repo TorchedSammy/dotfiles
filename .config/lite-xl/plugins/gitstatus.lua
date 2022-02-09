@@ -6,23 +6,18 @@ local style = require "core.style"
 local DocView = require 'core.docview'
 local StatusView = require "core.statusview"
 local TreeView = require "plugins.treeview"
+local gitdiff = require "plugins.gitdiff_highlight.gitdiff"
 
 local scan_rate = config.project_scan_rate or 5
 local cached_color_for_item = {}
-
-function TreeView:draw_item_text(item, active, hovered, x, y, w, h)
-  local item_text, item_font, item_color = self:get_item_text(item, active, hovered)
-  item_color = cached_color_for_item[item.abs_filename] or item_color
-  common.draw_text(item_font, item_color, item_text, nil, x, y, 0, h)
-end
-
-
 
 local git = {
   branch = nil,
   inserts = 0,
   deletes = 0,
+  modifications = 0,
 }
+local av = nil
 
 config.gitstatus = {
   recurse_submodules = true
@@ -44,15 +39,41 @@ local function exec(cmd)
   return proc:read_stdout() or ""
 end
 
+local inspect = dofile '/usr/share/hilbish/libs/inspect/inspect.lua'
+local function update_diff(abs_path)
+  local ins, dels, mods = 0, 0, 0
+	local diff = exec {"git", "diff", "HEAD", abs_path}
+	local parsed_diff = gitdiff.changed_lines(diff)
+	print(inspect(parsed_diff))
+	for k, v in pairs(parsed_diff) do
+    local typ = parsed_diff[k]
+    if typ == 'modification' then mods = mods + 1 end
+    if typ == 'addition' then ins = ins + 1 end
+    if typ == 'deletion' then dels = dels + 1 end
+  end
+
+  --[[
+  local diff = exec {'git', 'diff', '--word-diff', '--unified=0', abs_path}
+  for line in string.gmatch(diff, "[^\n]+") do
+    local is_mod = line:match '%[%-%s+(.-)%+%}'
+    local is_del = line:match '%[%-.-%-%]'
+    local is_ins = line:match '%{%+.-%+%}'
+    local is_mod = is_del and is_ins
+    if is_mod then mods = mods + 1 end
+    if is_ins then ins = ins + 1 end
+    if is_del then dels = dels + 1 end
+  end
+  ]]--
+  git.inserts = ins
+  git.deletes = dels
+  git.modifications = mods
+end
 
 core.add_thread(function()
   while true do
     if system.get_file_info(".git") then
       -- get branch name
       git.branch = exec({"git", "rev-parse", "--abbrev-ref", "HEAD"}):match("[^\n]*")
-
-      local inserts = 0
-      local deletes = 0
 
       -- get diff
       local diff = exec({"git", "diff", "--numstat"})
@@ -74,11 +95,6 @@ core.add_thread(function()
           if path then
             local abs_path = folder .. PATHSEP .. path
             local av = core.active_view
-            if getmetatable(av) == DocView and abs_path == av.doc.abs_filename then
-              core.log_quiet('current')
-              inserts = inserts + (tonumber(ins) or 0)
-              deletes = deletes + (tonumber(dels) or 0)
-            end
             -- Color this file, and each parent folder,
             -- so you can see at a glance which folders
             -- have modified files in them.
@@ -89,10 +105,6 @@ core.add_thread(function()
           end
         end
       end
-
-      git.inserts = inserts
-      git.deletes = deletes
-
     else
       git.branch = nil
     end
@@ -100,6 +112,18 @@ core.add_thread(function()
     coroutine.yield(scan_rate)
   end
 end)
+
+local old_set_active_view = core.set_active_view
+
+function core.set_active_view(view)
+  if getmetatable(view) == DocView and view ~= av then
+    core.add_thread(function()
+      av = view
+      update_diff(view.doc.abs_filename)
+    end)
+  end
+  old_set_active_view(view)
+end
 
 
 local get_items = StatusView.get_items
@@ -111,17 +135,24 @@ function StatusView:get_items()
   local left, right = get_items(self)
 
   local t = {
-    style.dim, self.separator2,
     style.text, git.branch,
     style.dim, "  ",
+    git.modifications ~= 0 and style.gitstatus_diff_modification or style.gitstatus_diff_normal, "~", git.modifications,
+    style.dim, "  /  ",
     git.inserts ~= 0 and style.gitstatus_diff_addition or style.gitstatus_diff_normal, "+", git.inserts,
-    style.dim, " / ",
+    style.dim, "  /  ",
     git.deletes ~= 0 and style.gitstatus_diff_deletion or style.gitstatus_diff_normal, "-", git.deletes,
+    style.dim, self.separator2,
   }
-  for _, item in ipairs(t) do
-    table.insert(right, item)
+  for _, item in ipairs(right) do
+    table.insert(t, item)
   end
 
-  return left, right
+  return left, t
 end
 
+function TreeView:draw_item_text(item, active, hovered, x, y, w, h)
+  local item_text, item_font, item_color = self:get_item_text(item, active, hovered)
+  item_color = cached_color_for_item[item.abs_filename] or item_color
+  common.draw_text(item_font, item_color, item_text, nil, x, y, 0, h)
+end
