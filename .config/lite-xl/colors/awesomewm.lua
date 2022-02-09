@@ -28,7 +28,7 @@ style.line_highlight = style.color8
 style.scrollbar = { common.color "#454344" }
 style.scrollbar2 = { common.color "#524F50" }
 
-style.syntax["normal"] = { common.color(thm.xcolor1) }
+style.syntax["normal"] = { common.color(fg) }
 style.syntax["symbol"] = { common.color(fg) }
 style.syntax["comment"] = style.color11
 style.syntax["keyword"] = { common.color(thm.xcolor5) }
