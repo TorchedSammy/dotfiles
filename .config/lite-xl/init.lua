@@ -98,7 +98,7 @@ function StatusView:get_items()
 		}, {
 			style.text, indent,
 			style.dim, self.separator2, style.text,
-			line, col > config.line_limit and style.accent or style.text, ":", col,
+			line, ":", col,
 			style.dim, self.separator2, style.text,
 			string.format("%.f%%", line / #dv.doc.lines * 100),
 			style.dim, self.separator2, style.text,
