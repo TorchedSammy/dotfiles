@@ -7,6 +7,8 @@ local RootView = require 'core.rootview'
 local StatusView = require 'core.statusview'
 local DocView = require 'core.docview'
 
+local fontconfig = require 'plugins.fontconfig'
+
 local userDataDir = os.getenv 'HOME' .. '/.local/share'
 
 config.ignore_files = {'^%.git$'}
@@ -16,20 +18,23 @@ local function ignoreExt(...)
 		table.insert(config.ignore_files, '[%w-.]+.' .. exts[i])
 	end
 end
-local function setFont(type, size, ...)
-	local paths = {...}
-	local fonts = {}
-	for i in ipairs(paths) do
-		local fontPath = userDataDir .. '/fonts/' .. paths[i] .. '.ttf'
-		local fnt = renderer.font.load(fontPath, size * SCALE)
-		table.insert(fonts, fnt)
-	end
-	-- if none of the fonts loaded, dont change to nothing (dunno what will happen here)
-	if #fonts ~= 0 then style[type] = renderer.font.group(fonts) end
-end
 ignoreExt('png')
-setFont('code_font', 12, 'VictorMono/Victor Mono Medium Nerd Font Complete Mono', 'seguiemj')
-setFont('font', 12, 'SFPro/TrueType/SFProDisplay-Regular', 'seguiemj')
+fontconfig.use_blocking {
+	font = {
+		group = {
+			'SF Pro Display:style=Regular',
+			'Segoe UI Emoji'
+		},
+		size = 12 * SCALE
+	},
+	code_font = {
+		group = {
+			'VictorMono Nerd Font Mono:style=Medium',
+			'Segoe UI Emoji'
+		},
+		size = 12 * SCALE
+	}
+}
 
 require 'colors.awesomewm'
 
