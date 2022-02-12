@@ -36,7 +36,7 @@ fontconfig.use_blocking {
 	}
 }
 
-require 'colors.awesomewm'
+core.reload_module 'colors.awesomewm'
 
 -- funny issue: https://safe.kashima.moe/3q6397s0kxcx.png
 -- that blue line is literally the minimap since it apparently draws itself
