@@ -22,3 +22,6 @@
 [submodule ".config/lite-xl/plugins/gitdiff_highlight"]
 	path = .config/lite-xl/plugins/gitdiff_highlight
 	url = https://github.com/TorchedSammy/lite-xl-gitdiff-highlight
+[submodule ".config/lite-xl/plugins/litepresence"]
+	path = .config/lite-xl/plugins/litepresence
+	url = https://github.com/TorchedSammy/litepresence
