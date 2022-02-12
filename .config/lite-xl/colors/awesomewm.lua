@@ -42,6 +42,7 @@ style.syntax["function"] = { common.color(thm.xcolor4) }
 style.gitdiff_addition = {common.color(thm.xcolor2)}
 style.gitdiff_modification = {common.color(thm.xcolor4)}
 style.gitdiff_deletion = {common.color(thm.xcolor1)}
+style.gitdiff_width = 2
 
 style.gitstatus_addition = style.gitdiff_addition
 style.gitstatus_modification = style.gitdiff_modification
