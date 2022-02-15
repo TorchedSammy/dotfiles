@@ -9,8 +9,6 @@ local DocView = require 'core.docview'
 
 local fontconfig = require 'plugins.fontconfig'
 
-local userDataDir = os.getenv 'HOME' .. '/.local/share'
-
 config.ignore_files = {'^%.git$'}
 local function ignoreExt(...)
 	local exts = {...}
