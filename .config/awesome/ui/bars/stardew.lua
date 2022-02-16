@@ -52,7 +52,7 @@ awful.screen.connect_for_each_screen(function(s)
 		shape = s.bar.shape,
 		bg = beautiful.wibar_bg,
 		widget = wibox.container.background,
-		shape_border_color = beautiful.border_normal,
+		shape_border_color = beautiful.border_focus,
 		shape_border_width = 3,
 		forced_width = s.bar.width,
 		forced_height = s.bar.height,
@@ -67,7 +67,7 @@ awful.screen.connect_for_each_screen(function(s)
 			bottom = dpi(12),
 			left = dpi(4),
 			right = dpi(4),
-			streak
+			--streak
 		},
 		{
 			layout = wibox.layout.align.horizontal,

@@ -66,7 +66,7 @@ widgets.stardew_time = function(s)
 				{
 					-- line
 					widget = wibox.widget.separator,
-					color = beautiful.xforeground,
+					color = beautiful.border_normal,
 					forced_height = dpi(2),
 					thickness = 2,
 				},
@@ -83,7 +83,7 @@ widgets.stardew_time = function(s)
 				{
 					-- line
 					widget = wibox.widget.separator,
-					color = beautiful.xforeground,
+					color = beautiful.border_normal,
 					forced_height = dpi(2),
 					thickness = 2,
 				},
@@ -98,7 +98,7 @@ widgets.stardew_time = function(s)
 			bg = beautiful.wibar_bg,
 			shape = helpers.rrect(2),
 			shape_border_color = beautiful.border_normal,
-			shape_border_width = 4,
+			shape_border_width = 3,
 			forced_width = stardew_time.width,
 			forced_height = stardew_time.height,
 			widget = wibox.container.background,
