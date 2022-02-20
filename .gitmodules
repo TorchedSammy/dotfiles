@@ -25,3 +25,6 @@
 [submodule ".config/lite-xl/plugins/litepresence"]
 	path = .config/lite-xl/plugins/litepresence
 	url = https://github.com/TorchedSammy/litepresence
+[submodule ".config/lite-xl/plugins/lintplus"]
+	path = .config/lite-xl/plugins/lintplus
+	url = https://github.com/liquidev/lintplus
