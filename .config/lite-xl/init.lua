@@ -1,6 +1,4 @@
 local core = require 'core'
-local common = require 'core.common'
-local keymap = require 'core.keymap'
 local config = require 'core.config'
 local style = require 'core.style'
 local RootView = require 'core.rootview'
@@ -8,6 +6,7 @@ local StatusView = require 'core.statusview'
 local DocView = require 'core.docview'
 
 local fontconfig = require 'plugins.fontconfig'
+local lspconfig = require 'plugins.lsp.config'
 
 config.ignore_files = {'^%.git$'}
 local function ignoreExt(...)
@@ -90,34 +89,43 @@ function StatusView:get_items()
 		local line, col = dv.doc:get_selection()
 		local dirty = dv.doc:is_dirty()
 		local indent_type, indent_size, indent_confirmed = dv.doc:get_indent_info()
-		local indent_label = (indent_type == "hard") and "Tabs" or "Spaces"
-		local indent_size_str = tostring(indent_size) .. (indent_confirmed and "" or "*") or "unknown"
+		local indent_label = (indent_type == 'hard') and 'Tabs' or 'Spaces'
+		local indent_size_str = tostring(indent_size) .. (indent_confirmed and '' or '*')
 		local indent = indent_size_str .. ' ' .. indent_label
 
 		return {
-			dirty and style.accent or style.text, style.icon_font, "f",
+			dirty and style.accent or style.text, style.icon_font, 'f',
 			style.dim, style.font, self.separator2, style.text,
 			dv.doc.filename and style.text or style.dim, dv.doc:get_name(),
 		}, {
 			style.text, indent,
 			style.dim, self.separator2, style.text,
-			line, ":", col,
+			line, ':', col,
 			style.dim, self.separator2, style.text,
-			string.format("%.f%%", line / #dv.doc.lines * 100),
+			string.format('%.f%%', line / #dv.doc.lines * 100),
 			style.dim, self.separator2, style.text,
-			#dv.doc.lines, " lines", style.dim,
+			#dv.doc.lines, ' lines', style.dim,
 			style.dim, self.separator2, style.text,
-			style.color1, bigCodeFont, "",
-			style.text, style.font, ""
+			style.color1, bigCodeFont, '',
+			style.text, style.font, ''
 		}
 	end
 
 	return {}, {
 	--[[
-		style.icon_font, "g",
+		style.icon_font, 'g',
 		style.font, style.dim, self.separator2,
-		#core.docs, style.text, " / ",
-		#core.project_files, " files"
+		#core.docs, style.text, ' / ',
+		#core.project_files, ' files'
 	]]--
 	}
 end
+
+lspconfig.gopls.setup {}
+lspconfig.sumneko_lua.setup {
+	command = {
+		HOME .. '/.local/share/lite-xl/lsp/lua-language-server/bin/lua-language-server',
+		'-E',
+		HOME .. '/.local/share/lite-xl/lsp/lua-language-server/main.lua',
+	}
+}
