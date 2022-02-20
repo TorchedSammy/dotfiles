@@ -1,8 +1,5 @@
-local f = io.popen 'awesome-theme'
-local themename = f:read('*a'):gsub('\n', '')
-f:close()
-
 local awesomeDir = '~/.config/awesome'
+local themename = dofile((awesomeDir .. '/conf/settings.lua'):gsub('~', os.getenv 'HOME')).theme
 local themePath = awesomeDir .. '/themes/colors/' .. themename .. '.lua'
 local thm = dofile(themePath:gsub('~', os.getenv('HOME')))
 local bg = thm.xbackground
