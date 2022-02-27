@@ -109,6 +109,8 @@ core.add_thread(function()
       git.branch = nil
     end
 
+    update_diff(av.doc.abs_filename)
+
     coroutine.yield(scan_rate)
   end
 end)
