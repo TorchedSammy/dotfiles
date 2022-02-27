@@ -28,3 +28,6 @@
 [submodule ".config/lite-xl/plugins/lintplus"]
 	path = .config/lite-xl/plugins/lintplus
 	url = https://github.com/liquidev/lintplus
+[submodule ".config/lite-xl/plugins/lspkind"]
+	path = .config/lite-xl/plugins/lspkind
+	url = https://github.com/TorchedSammy/lite-xl-lspkind

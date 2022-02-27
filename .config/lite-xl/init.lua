@@ -7,6 +7,7 @@ local DocView = require 'core.docview'
 
 local fontconfig = require 'plugins.fontconfig'
 local lspconfig = require 'plugins.lsp.config'
+local lspkind = require 'plugins.lspkind'
 
 config.ignore_files = {'^%.git$'}
 local function ignoreExt(...)
