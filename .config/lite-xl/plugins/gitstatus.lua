@@ -144,8 +144,11 @@ function StatusView:get_items()
     git.inserts ~= 0 and style.gitstatus_diff_addition or style.gitstatus_diff_normal, '+', git.inserts,
     style.dim, '  /  ',
     git.deletes ~= 0 and style.gitstatus_diff_deletion or style.gitstatus_diff_normal, '-', git.deletes,
-    style.dim, self.separator2,
   }
+  if getmetatable(core.active_view) == DocView then
+    table.insert(t, style.dim)
+    table.insert(t, self.separator2)
+  end
   for _, item in ipairs(right) do
     table.insert(t, item)
   end
