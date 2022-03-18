@@ -52,7 +52,8 @@ core.status_view:add_item(core.active_view:is(DocView),
 	return {
 		style.color1, bigCodeFont, ''
 	}
-end)
+end, nil, -1, "<3")
+core.status_view:hide_items {'doc:line-ending', 'command:files'}
 
 lspconfig.gopls.setup {}
 
