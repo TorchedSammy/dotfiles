@@ -58,6 +58,9 @@ config.tab_type = 'hard'
 config.indent_size = 4
 config.scroll_past_end = false
 config.plugins.toolbarview = false
+config.plugins.trimwhitespace = true
+config.plugins.lsp.stop_unneeded_servers = false
+config.lint.lens_style = 'solid'
 
 local rv_draw = RootView.draw
 local time = ''
