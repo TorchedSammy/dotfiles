@@ -127,34 +127,20 @@ function core.set_active_view(view)
   old_set_active_view(view)
 end
 
+core.status_view:add_item(core.active_view:is(DocView),
+'gitstatus:stats', StatusView.Item.RIGHT, function()
+	if not git.branch then return {} end
 
-local get_items = StatusView.get_items
-
-function StatusView:get_items()
-  if not git.branch then
-    return get_items(self)
-  end
-  local left, right = get_items(self)
-
-  local t = {
-    style.text, git.branch,
-    style.dim, '  ',
-    git.modifications ~= 0 and style.gitstatus_diff_modification or style.gitstatus_diff_normal, '~', git.modifications,
-    style.dim, '  /  ',
-    git.inserts ~= 0 and style.gitstatus_diff_addition or style.gitstatus_diff_normal, '+', git.inserts,
-    style.dim, '  /  ',
-    git.deletes ~= 0 and style.gitstatus_diff_deletion or style.gitstatus_diff_normal, '-', git.deletes,
-  }
-  if getmetatable(core.active_view) == DocView then
-    table.insert(t, style.dim)
-    table.insert(t, self.separator2)
-  end
-  for _, item in ipairs(right) do
-    table.insert(t, item)
-  end
-
-  return left, t
-end
+	return {
+		style.text, git.branch,
+		style.dim, '  ',
+		git.modifications ~= 0 and style.gitstatus_diff_modification or style.gitstatus_diff_normal, '~', git.modifications,
+		style.dim, '  /  ',
+		git.inserts ~= 0 and style.gitstatus_diff_addition or style.gitstatus_diff_normal, '+', git.inserts,
+		style.dim, '  /  ',
+		git.deletes ~= 0 and style.gitstatus_diff_deletion or style.gitstatus_diff_normal, '-', git.deletes,
+	}
+end, nil, 1)
 
 function TreeView:draw_item_text(item, active, hovered, x, y, w, h)
   local item_text, item_font, item_color = self:get_item_text(item, active, hovered)
