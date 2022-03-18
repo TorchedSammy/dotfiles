@@ -21,6 +21,7 @@ fontconfig.use_blocking {
 	font = {
 		group = {
 			'SF Pro Display:style=Regular',
+			'VictorMono Nerd Font Mono:style=Medium',
 			'Segoe UI Emoji'
 		},
 		size = 12 * SCALE
@@ -34,6 +35,7 @@ fontconfig.use_blocking {
 	}
 }
 
+lspkind.setup {}
 core.reload_module 'colors.awesomewm'
 
 -- funny issue: https://safe.kashima.moe/3q6397s0kxcx.png
