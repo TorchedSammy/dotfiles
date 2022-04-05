@@ -56,12 +56,6 @@ end, nil, -1, "<3")
 core.status_view:hide_items {'doc:line-ending', 'command:files'}
 
 lspconfig.gopls.setup {}
-
-local lsputil = require 'plugins.lsp.util'
-local runtimePath = lsputil.split(package.path, ';')
-table.insert(runtimePath, DATADIR)
-print(DATADIR)
-
 lspconfig.sumneko_lua.setup {
 	command = {
 		HOME .. '/.local/share/lite-xl/lsp/lua-language-server/bin/lua-language-server',
@@ -70,8 +64,10 @@ lspconfig.sumneko_lua.setup {
 	},
 	settings = {
 		Lua = {
-			runtime = {
-				path = runtimePath
+			workspace = {
+				library = {
+					[DATADIR] = true
+				}
 			},
 			diagnostics = {
 				neededFileStatus = {
