@@ -41,7 +41,7 @@ end
 
 local function update_diff(abs_path)
   local ins, dels, mods = 0, 0, 0
-  local diff = exec {'git', 'diff', 'HEAD', abs_path}
+  local diff = exec {'git', 'diff', 'HEAD', '--word-diff', '--unified=1', '--no-color', abs_path}
   local parsed_diff = gitdiff.changed_lines(diff)
   for k, _ in pairs(parsed_diff) do
     local typ = parsed_diff[k]
@@ -50,21 +50,6 @@ local function update_diff(abs_path)
     if typ == 'deletion' then dels = dels + 1 end
   end
 
-  --[[
-  local diff = exec {'git', 'diff', '--word-diff', '--unified=0', abs_path}
-  for line in string.gmatch(diff, '[^\n]+') do
-    local is_del = line:match '%[%-.-%-%]'
-    local is_ins = line:match '%{%+.-%+%}'
-    local is_mod = is_del and is_ins
-    if is_mod then
-      mods = mods + 1
-      goto continue
-    end
-    if is_ins then ins = ins + 1 end
-    if is_del then dels = dels + 1 end
-    ::continue::
-  end
-  ]]--
   git.inserts = ins
   git.deletes = dels
   git.modifications = mods
