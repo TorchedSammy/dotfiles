@@ -21,5 +21,6 @@ for fgcur = 1, #fgs do
 	for bg = 40, 47 do
 		io.write(' \27[' .. fg .. 'm\27[' .. bg .. 'm  ' .. text .. '  \27[0m')
 	end
+	io.flush()
 	print()
 end

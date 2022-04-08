@@ -2,25 +2,11 @@
 -- ss: minimal screenshot script for sharex hosts
 -- check ssf for more details
 
-function runcmd(cmd, giveout)
-	local cmd = cmd:gsub("\\x(%x%x)",function (x) return string.char(tonumber(x,16)) end)
-	if giveout then
-		local f = io.popen(cmd)
-		local output = f:read '*all'
-		local out = output:gsub('\n', '')
-		f:close()
-
-		return out
-	else
-		return os.execute(cmd)
-	end
-end
-
-local errcode = runcmd 'maim -u -o -s /tmp/screenshot.png'
+local errcode = hilbish.run 'maim -u -o -s /tmp/screenshot.png'
 if errcode == 1 then
 	os.exit(1)
 end
 
-runcmd 'notify-send -i /tmp/screenshot.png -t 4000 "ssf-lua" "Screenshot taken, uploading..."'
-runcmd 'xclip -selection clipboard -t image/png -i /tmp/screenshot.png'
-runcmd 'ssf /tmp/screenshot.png'
+hilbish.run 'notify-send -i /tmp/screenshot.png -t 4000 "ssf-lua" "Screenshot taken, uploading..."'
+hilbish.run 'xclip -selection clipboard -t image/png -i /tmp/screenshot.png'
+hilbish.run 'ssf /tmp/screenshot.png'

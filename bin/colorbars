@@ -26,6 +26,7 @@ for _ = 0, 4 do
 	end
 	io.write '\27[0m\n'
 end
+io.flush()
 
 print ''
 

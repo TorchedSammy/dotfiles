@@ -4,16 +4,14 @@ local commander = require 'commander'
 local delta = require 'delta'
 local fs = require 'fs'
 
-print(lunacolors.format('Welcome {cyan}'.. hilbish.user ..
-'{reset} to {magenta}Hilbish{reset},\n' ..
-'the nice lil shell for {blue}Lua{reset} fanatics!\n'))
+print(lunacolors.format(hilbish.greeting))
 
 delta.init()
 
-prependPath '~/bin/'
-appendPath '/usr/local/go/bin/'
-appendPath '~/go/bin/'
-appendPath '~/.local/bin/'
+hilbish.prependPath '~/bin/'
+hilbish.appendPath '/usr/local/go/bin/'
+hilbish.appendPath '~/go/bin/'
+hilbish.appendPath '~/.local/bin/'
 
 commander.register('ver', function()
 	print(hilbish.ver)
@@ -22,48 +20,46 @@ end)
 commander.register('ev', function()
 	local text = ''
 	while true do
-		local input = io.read()
+		local input = hilbish.read('*>')
 		if input == nil then break end
 		text = text .. '\n' .. input
 	end
 
-	local ok, err = pcall(function() (loadstring(text))() end)
-	if not ok then
+	local fn, err = load(text)
+	if err then
 		print(err)
 		return 1
 	end
+	fn()
 
 	return 0
 end)
 
 -- Aliases
-alias('cls', 'clear')
-alias('gcd', 'git checkout dev')
-alias('gcm', 'git checkout master')
-alias('gmm', 'git merge master')
-alias('gmd', 'git merge dev')
-alias('ga', 'git add')
-alias('gm', 'git merge')
-alias('p', 'git push')
-alias('c', 'git commit')
-alias('multimc', '~/MultiMC/MultiMC -d ~/.local/share/multimc > /dev/null 2>&1 &')
+hilbish.alias('cls', 'clear')
+hilbish.alias('gcd', 'git checkout dev')
+hilbish.alias('gcm', 'git checkout master')
+hilbish.alias('gmm', 'git merge master')
+hilbish.alias('gmd', 'git merge dev')
+hilbish.alias('ga', 'git add')
+hilbish.alias('gm', 'git merge')
+hilbish.alias('p', 'git push')
+hilbish.alias('c', 'git commit')
+hilbish.alias('multimc', '~/MultiMC/MultiMC -d ~/.local/share/multimc > /dev/null 2>&1 &')
 
 -- GPG
-os.execute 'tty >/tmp/tty 2>&1'
-local f = io.open '/tmp/tty'
-local tty = f:read '*all'
+local _, tty = hilbish.run('tty', false)
 tty = tty:gsub('\n', '')
-f:close()
 
 os.setenv('GPG_TTY', tty)
 os.execute 'gpgconf --launch gpg-agent'
 
 -- Cargo
-appendPath '~/.cargo/bin'
+hilbish.appendPath '~/.cargo/bin'
 
 -- Setup Volta
 os.setenv('VOLTA_HOME', os.getenv 'HOME' .. '/.volta')
-appendPath(os.getenv 'VOLTA_HOME' .. '/bin')
+hilbish.appendPath(os.getenv 'VOLTA_HOME' .. '/bin')
 
 -- Setup jump (https://github.com/gsamokovarov/jump)
 bait.catch('cd', function()
@@ -77,9 +73,7 @@ commander.register('j', function(args)
 	end
 
 	local d = args[1]
-	local out = io.popen('jump cd ' .. d)
-	local expdir = out:read '*all'
-	out:close()
+	local _, expdir = hilbish.run('jump cd ' .. d, false)
 
 	fs.cd(expdir)
 	bait.throw('cd', expdir)

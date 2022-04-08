@@ -9,19 +9,6 @@ usage: ssf filepath
 upload a local image to sharex host
 ]]
 
-function runcmd(cmd, giveout)
-	if giveout then
-		local f = io.popen(cmd)
-		local output = f:read '*all'
-		local out = output:gsub('\n', '')
-		f:close()
-
-		return out
-	else
-		os.execute(cmd)
-	end
-end
-
 if #args < 2 then
 	print(usage)
 	os.exit(1)
@@ -50,13 +37,13 @@ for k, v in pairs(headers) do
 end
 local arr = (filearray and '[]' or '')
 
-local jsonstr = runcmd(string.format('curl -s --request POST -F "%s%s=@%s" %s%s', formfile, arr, path, headerstr, url), true)
+local _, jsonstr = hilbish.run(string.format('curl -s --request POST -F "%s%s=@%s" %s%s', formfile, arr, path, headerstr, url), false)
 print(jsonstr)
-local obj = loadstring('return '
+local obj = load('return '
 .. jsonstr:gsub('("[^"]-"):', '[%1]='))()
 local url = obj[image]
 
 print(url)
 
-runcmd('echo -n ' .. url .. ' | xclip -selection clipboard')
-runcmd 'notify-send -i /tmp/screenshot.png -t 6000 "ssf-lua" "Screenshot uploaded!"'
+hilbish.run('echo -n ' .. url .. ' | xclip -selection clipboard')
+hilbish.run 'notify-send -i /tmp/screenshot.png -t 6000 "ssf-lua" "Screenshot uploaded!"'

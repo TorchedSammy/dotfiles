@@ -1,13 +1,11 @@
 #! /bin/hilbish
 
-local f = io.popen [[
+local _, content = hilbish.run [[
 	awesome-client "
 	local settings = require 'conf.settings'
 	return settings.theme
 	"
 ]]
-local content = f:read '*all'
-f:close()
 
 local splitcontent = content:split '"'
 local theme = splitcontent[2]

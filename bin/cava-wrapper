@@ -1,8 +1,6 @@
 #! /bin/hilbish
 
-local f = io.popen 'awesome-theme'
-local theme = f:read '*all'
-f:close()
+local _, theme = hilbish.run 'awesome-theme'
 
 local errcode = os.execute('cava -p ~/.config/cava/config-'
 .. theme .. ' 2>/dev/null')
