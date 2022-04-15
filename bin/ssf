@@ -9,12 +9,12 @@ usage: ssf filepath
 upload a local image to sharex host
 ]]
 
-if #args < 2 then
+if #args < 1 then
 	print(usage)
 	os.exit(1)
 end
 
-local path = args[2]
+local path = args[1]
 -- URL to uplaod to
 local url = 'https://safe.kashima.moe/api/upload'
 -- Authentication Key
