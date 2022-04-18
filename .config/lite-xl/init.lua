@@ -42,18 +42,21 @@ config.tab_type = 'hard'
 config.indent_size = 4
 config.scroll_past_end = false
 config.plugins.toolbarview = false
-config.plugins.trimwhitespace = true
+--config.plugins.trimwhitespace = true
 config.plugins.lsp.stop_unneeded_servers = false
 config.lint.lens_style = 'solid'
 
 local bigCodeFont = style.code_font:copy((16 * 1.6) * SCALE)
-core.status_view:add_item(core.active_view:is(DocView),
-'icon:heart', StatusView.Item.RIGHT, function()
-	return {
-		style.color1, bigCodeFont, ''
-	}
-end, nil, -1, "<3")
+if not core.status_view:get_item 'icon:heart' then
+	core.status_view:add_item(core.active_view:is(DocView),
+	'icon:heart', StatusView.Item.RIGHT, function()
+		return {
+			style.color1, bigCodeFont, ''
+		}
+	end, nil, -1, "<3")
+end
 core.status_view:hide_items {'doc:line-ending', 'command:files'}
+core.status_view:move_item('doc:position', 3, StatusView.Item.RIGHT)
 
 lspconfig.gopls.setup {}
 lspconfig.sumneko_lua.setup {
