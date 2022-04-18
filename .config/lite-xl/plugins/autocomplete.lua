@@ -395,7 +395,7 @@ local function draw_suggestions_box(av)
     common.draw_text(font, color, s.text, "left", rx + style.padding.x, y, rw, lh)
     if s.info then
       color = (i == suggestions_idx) and style.text or style.dim
-      common.draw_text(style.font, color, s.info, "right", rx, y, rw - style.padding.x, lh)
+      common.draw_text(style.kind_font, color, s.info, "right", rx, y - 3, rw - style.padding.x, lh)
     end
     y = y + lh
     if suggestions_idx == i then
