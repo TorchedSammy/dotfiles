@@ -68,6 +68,7 @@ syntax.add {
     ["error"]       = "keyword2",
     ["complex64"]   = "keyword2",
     ["complex128"]  = "keyword2",
+    ["iota"]        = "keyword2",
     ["true"]        = "literal",
     ["false"]       = "literal",
     ["nil"]         = "literal",
