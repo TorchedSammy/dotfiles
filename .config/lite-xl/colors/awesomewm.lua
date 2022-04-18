@@ -1,14 +1,19 @@
 local style = require "core.style"
 local common = require "core.common"
 
+local oldPackagePath = package.path
+package.path = package.path .. ';' .. os.getenv 'HOME' .. '/.config/awesome/?.lua'
+
 local awesomeDir = '~/.config/awesome'
-local themename = dofile((awesomeDir .. '/conf/settings.lua'):gsub('~', os.getenv 'HOME')).theme
-local themePath = awesomeDir .. '/themes/colors/' .. themename .. '.lua'
+local awmThemename = dofile((awesomeDir .. '/conf/settings.lua'):gsub('~', os.getenv 'HOME')).theme
+local themePath = awesomeDir .. '/themes/colors/' .. awmThemename .. '.lua'
 local thm = dofile(themePath:gsub('~', os.getenv('HOME')))
 local bg = thm.xbackground
 local fg = thm.xforeground
 
-if themename == 'clouds' then
+package.path = oldPackagePath
+
+if thm.name == 'horizon' then
 	local green = thm.xcolor2
 	local yellow = thm.xcolor3
 	thm.xcolor2 = yellow
@@ -23,16 +28,16 @@ style.gitdiff_padding = 4
 
 style.background = { common.color(bg) }
 style.background2 = { common.color(bg) }
-style.background3 = style.color9
+style.background3 = style.color15
 style.text = { common.color(fg) }
 style.caret = style.color4
-style.accent = style.color3
+style.accent = style.color14
 style.dim = style.color10
-style.divider = { common.color "#242223" }
+style.divider = style.color8
 style.selection = style.color10
 style.line_number = style.color11
-style.line_number2 = { common.color(fg) }
-style.line_highlight = style.color8
+style.line_number2 = style.color7
+style.line_highlight = style.color13
 style.scrollbar = style.color10
 style.scrollbar2 = style.color11
 
@@ -47,6 +52,7 @@ style.syntax["string"] = { common.color(thm.xcolor2) }
 style.syntax["operator"] = { common.color(thm.xcolor3) }
 style.syntax["function"] = { common.color(thm.xcolor4) }
 
+style.caret_width = common.round(1.2 * SCALE)
 style.gitdiff_addition = {common.color(thm.xcolor2)}
 style.gitdiff_modification = {common.color(thm.xcolor4)}
 style.gitdiff_deletion = {common.color(thm.xcolor1)}
@@ -57,8 +63,12 @@ style.gitstatus_modification = style.gitdiff_modification
 style.gitstatus_deletion = style.gitdiff_deletion
 
 style.lint = {
-	info = style.color4,
-	hint = style.color7,
+	info = style.color14,
+	hint = style.color4,
 	warning = style.color3,
 	error = style.color1
+}
+
+style.visu = {
+	bars = style.color7
 }
