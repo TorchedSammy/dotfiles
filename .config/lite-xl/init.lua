@@ -1,10 +1,8 @@
 local core = require 'core'
 local config = require 'core.config'
 local style = require 'core.style'
-local RootView = require 'core.rootview'
 local StatusView = require 'core.statusview'
 local DocView = require 'core.docview'
-
 local fontconfig = require 'plugins.fontconfig'
 local lspconfig = require 'plugins.lsp.config'
 local lspkind = require 'plugins.lspkind'
@@ -33,6 +31,18 @@ fontconfig.use_blocking {
 		},
 		size = 12 * SCALE
 	}
+}
+local italicFont = fontconfig.load_group_blocking({
+	'VictorMono Nerd Font Mono:style=Medium Italic',
+	'Segoe UI Emoji'
+	},
+	12 * SCALE
+)
+
+style.syntax_fonts = {
+	-- currently bugged
+--	comment = italicFont,
+	keyword2 = italicFont
 }
 
 lspkind.setup {}
