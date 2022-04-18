@@ -16,8 +16,8 @@ widgets.stardew_time = function(s)
 		visible = true,
 	}
 
-	local seasonicon = w.imgwidget('stardew/season-winter.png')
-	local weathericon = w.imgwidget('stardew/weather-snow.png')
+	local seasonicon = w.imgwidget('stardew/season-spring.png')
+	local weathericon = w.imgwidget('stardew/weather-sun.png')
 	-- TODO: rotate arrowImg based on time (i cant figure out how to do this)
 	--[[
 	local arrowImg = gears.surface.load_uncached_silently(beautiful.config_path .. '/images/stardew/dial-arrowbig.png')
