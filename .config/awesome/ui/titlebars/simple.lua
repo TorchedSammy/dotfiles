@@ -1,4 +1,3 @@
--- macos style titlebar
 local awful = require 'awful'
 local beautiful = require 'beautiful'
 local gears = require 'gears'
@@ -10,14 +9,15 @@ local function titlebarbtn(c, color_focus, color_unfocus, txt)
 	local ico = wibox.widget {
 		markup = helpers.colorize_text(txt, color_focus .. 80),
 		font = 'Font Awesome 18',
-		widget = wibox.widget.textbox
+		widget = wibox.widget.textbox,
+		icon = txt
 	}
 
 	local function update()
 		if client.focus == c then
-				ico.markup = helpers.colorize_text(txt, color_focus)
+				ico.markup = helpers.colorize_text(ico.icon, color_focus)
 		else
-				ico.markup = helpers.colorize_text(txt, color_unfocus)
+				ico.markup = helpers.colorize_text(ico.icon, color_unfocus)
 		end
 	end
 	update()
@@ -27,11 +27,11 @@ local function titlebarbtn(c, color_focus, color_unfocus, txt)
 
 	ico:connect_signal('mouse::enter', function()
 		local clr = client.focus ~= c and color_focus or color_focus .. 55
-		ico.markup = helpers.colorize_text(txt, clr)
+		ico.markup = helpers.colorize_text(ico.icon, clr)
 	end)
 	ico:connect_signal('mouse::leave', function()
 		local clr = client.focus == c and color_focus or color_unfocus
-		ico.markup = helpers.colorize_text(txt, clr)
+		ico.markup = helpers.colorize_text(ico.icon, clr)
 	end)
 
 	ico.visible = true
@@ -62,9 +62,15 @@ client.connect_signal('request::titlebars', function(c)
 	end)
 
 	local maximize = titlebarbtn(c, beautiful.xforeground, beautiful.xforeground .. 55, '')
-	maximize:connect_signal('button::press', function()
+	local function maximizeSetup()
 		helpers.maximize(c)
-	end)
+		if c.maximized then
+			maximize.icon = ''
+		else
+			maximize.icon = ''
+		end
+	end
+	maximize:connect_signal('button::press', maximizeSetup)
 
 	awful.titlebar(c, {size = beautiful.titlebar_height}): setup {
 		layout = wibox.layout.align.horizontal,
