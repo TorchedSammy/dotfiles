@@ -1,3 +1,4 @@
+local core = require 'core'
 local style = require "core.style"
 local common = require "core.common"
 
@@ -13,6 +14,7 @@ local fg = thm.xforeground
 
 package.path = oldPackagePath
 
+core.log(thm.name)
 if thm.name == 'horizon' then
 	local green = thm.xcolor2
 	local yellow = thm.xcolor3
@@ -44,18 +46,18 @@ style.scrollbar2 = style.color11
 style.syntax["normal"] = { common.color(fg) }
 style.syntax["symbol"] = { common.color(fg) }
 style.syntax["comment"] = style.color11
-style.syntax["keyword"] = { common.color(thm.xcolor5) }
-style.syntax["keyword2"] = { common.color(thm.xcolor6) }
+style.syntax["keyword"] = style.color5
+style.syntax["keyword2"] = style.color6
 style.syntax["number"] = style.color1
 style.syntax["literal"] = style.color2
-style.syntax["string"] = { common.color(thm.xcolor2) }
-style.syntax["operator"] = { common.color(thm.xcolor3) }
-style.syntax["function"] = { common.color(thm.xcolor4) }
+style.syntax["string"] = style.color2
+style.syntax["operator"] = style.color3
+style.syntax["function"] = style.color4
 
 style.caret_width = common.round(1.2 * SCALE)
-style.gitdiff_addition = {common.color(thm.xcolor2)}
-style.gitdiff_modification = {common.color(thm.xcolor4)}
-style.gitdiff_deletion = {common.color(thm.xcolor1)}
+style.gitdiff_addition = style.color2
+style.gitdiff_modification = style.color4
+style.gitdiff_deletion = style.color1
 style.gitdiff_width = 2
 
 style.gitstatus_addition = style.gitdiff_addition
