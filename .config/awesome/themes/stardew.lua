@@ -39,7 +39,7 @@ theme.notification_width = dpi(340)
 theme.notification_height = dpi(100)
 theme.notification_border_color = theme.xforeground
 theme.notification_border_width = 3
-theme.notification_padding = dpi(13)
+theme.notification_padding = theme.useless_gap * 2
 theme.notification_shape = helpers.rrect(2)
 
 theme.bar = 'stardew'
