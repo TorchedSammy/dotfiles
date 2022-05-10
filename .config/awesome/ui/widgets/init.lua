@@ -31,7 +31,7 @@ widgets.ram_bar = rounded_bar(beautiful.ram_bar_color)
 
 widgets.ram_icon = wibox.widget {
 	markup = '',
-	font = 'JetBrains Mono Regular Nerd Font Complete Mono 16',
+	font = 'VictorMono Nerd Font 16',
 	widget = wibox.widget.textbox
 }
 
