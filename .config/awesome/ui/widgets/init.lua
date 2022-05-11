@@ -101,8 +101,18 @@ widgets.music = wibox.widget {
 	widgets.music_name
 }
 
-widgets.time = wibox.widget.textclock()
-widgets.time.format = ' %-I:%M %p'
+widgets.textclock = wibox.widget.textclock()
+widgets.textclock.format = '%-I:%M %p'
+widgets.time = wibox.widget {
+	layout = wibox.layout.fixed.horizontal,
+	spacing = 5,
+	{
+		widget = wibox.widget.textbox,
+		text = '',
+		font = 'Font Awesome 20'
+	},
+	widgets.textclock
+}
 
 widgets.macos_time = wibox.widget.textclock()
 widgets.macos_time.format = '%-I:%M %p'
