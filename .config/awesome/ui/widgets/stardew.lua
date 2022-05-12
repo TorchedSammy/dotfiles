@@ -5,6 +5,7 @@ local gears = require 'gears'
 local helpers = require 'helpers'
 local wibox = require 'wibox'
 local w = require 'ui.widgets'
+local cairo = require 'lgi'.cairo
 
 local widgets = {}
 
@@ -16,20 +17,16 @@ widgets.stardew_time = function(s)
 		visible = true,
 	}
 
+	local daynight, daynightImg = w.imgwidget('stardew/daynightbig.png')
 	local seasonicon = w.imgwidget('stardew/season-spring.png')
 	local weathericon = w.imgwidget('stardew/weather-sun.png')
-	-- TODO: rotate arrowImg based on time (i cant figure out how to do this)
-	--[[
 	local arrowImg = gears.surface.load_uncached_silently(beautiful.config_path .. '/images/stardew/dial-arrowbig.png')
 	local dialarrow = wibox.widget {
-		image = arrowImg,
-		halign = 'right',
+		halign = 'left',
 		valign = 'center',
 		widget = wibox.widget.imagebox
 	}
-	]]--
 
-	--[[
 	-- we'll update the icons every hour
 	gears.timer {
 		timeout = 60 * 60, -- seconds * minutes (1 hour)
@@ -38,13 +35,35 @@ widgets.stardew_time = function(s)
 		callback = function()
 		end
 	}
-	]]--
+
+	gears.timer {
+		timeout = 1,
+		autostart = true,
+		call_now = true,
+		callback = function()
+			--[[
+			local cr = cairo.Context(img)
+			local minute = os.date '%M'
+			local angle = (minute / 60) * 2 * math.pi
+			cr:translate(arrowImg.width / 2, arrowImg.height)
+			cr:rotate(math.rad(-25))
+			cr:translate(-arrowImg.width / 2, -arrowImg.height)
+			cr:translate(img.width - arrowImg.width, img.height - (arrowImg.height * 2))
+
+			cr:set_source_surface(arrowImg)
+			cr:paint()
+
+			dialarrow.image = img
+			dialarrow:emit_signal 'widget::redraw_needed'
+			]]--
+		end
+	}
 
 	stardew_time:setup {
 		{
 			{
-				w.imgwidget('stardew/daynightbig.png'),
-				--dialarrow,
+				daynight,
+				dialarrow,
 				layout = wibox.layout.stack
 			},
 			widget = wibox.container.margin,
