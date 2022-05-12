@@ -1,25 +1,23 @@
-local bg = '#16161a'
-local fg = '#DCDFE4'
 local colors = {}
 
 colors.name = 'stardew-night'
-colors.xbackground = bg
-colors.xforeground = fg
-colors.xcolor0 = bg
-colors.xcolor1 = '#ed5f5c'
-colors.xcolor2 = '#5ee26b'
-colors.xcolor3 = '#f3b94c'
-colors.xcolor4 = '#307cf5'
-colors.xcolor5 = '#e25f9b'
-colors.xcolor6 = '#6ef0e3'
-colors.xcolor7 = '#dfdfdf'
-colors.xcolor8 = fg
-colors.xcolor9 = '#DF5554'
-colors.xcolor10 = '#8ACC68'
-colors.xcolor11 = '#FDD565'
-colors.xcolor12 = '#4993F0'
-colors.xcolor13 = '#EB6AA6'
-colors.xcolor14 = '#6FEBEE'
-colors.xcolor15 = '#ffffff'
+colors.xbackground = '#16161a'
+colors.xforeground = '#DCDFE4'
+colors.xcolor0  = '#16161a'
+colors.xcolor1  = '#f25c5c'
+colors.xcolor2  = '#75bd7d'
+colors.xcolor3  = '#ff9c6a'
+colors.xcolor4  = '#7aaaff'
+colors.xcolor5  = '#ff7af1'
+colors.xcolor6  = '#b87aff'
+colors.xcolor7  = '#e9ecf2'
+colors.xcolor8  = '#212126'
+colors.xcolor9  = '#2a2a30'
+colors.xcolor10 = '#373740'
+colors.xcolor11 = '#4f4f5c'
+colors.xcolor12 = '#676778'
+colors.xcolor13 = '#212126'
+colors.xcolor14 = '#9595ab'
+colors.xcolor15 = '#18181c'
 
 return colors
