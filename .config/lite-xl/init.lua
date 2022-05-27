@@ -40,8 +40,7 @@ local italicFont = fontconfig.load_group_blocking({
 )
 
 style.syntax_fonts = {
-	-- currently bugged
---	comment = italicFont,
+	comment = italicFont,
 	keyword2 = italicFont
 }
 
