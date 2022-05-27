@@ -14,7 +14,6 @@ local fg = thm.xforeground
 
 package.path = oldPackagePath
 
-core.log(thm.name)
 if thm.name == 'horizon' then
 	local green = thm.xcolor2
 	local yellow = thm.xcolor3
