@@ -8,16 +8,16 @@ local wibox = require 'wibox'
 local function titlebarbtn(c, color_focus, color_unfocus, txt)
 	local ico = wibox.widget {
 		markup = helpers.colorize_text(txt, color_focus .. 80),
-		font = 'Font Awesome 18',
+		font = 'Microns 24',
 		widget = wibox.widget.textbox,
 		icon = txt
 	}
 
 	local function update()
 		if client.focus == c then
-				ico.markup = helpers.colorize_text(ico.icon, color_focus)
+			ico.markup = helpers.colorize_text(ico.icon, color_focus)
 		else
-				ico.markup = helpers.colorize_text(ico.icon, color_unfocus)
+			ico.markup = helpers.colorize_text(ico.icon, color_unfocus)
 		end
 	end
 	update()
@@ -51,24 +51,29 @@ client.connect_signal('request::titlebars', function(c)
 		end)
 	)
 
-	local close = titlebarbtn(c, beautiful.xforeground, beautiful.xforeground .. 55, '')
+	local close = titlebarbtn(c, beautiful.xforeground, beautiful.xforeground .. 55, '')
 	close:connect_signal('button::press', function()
 		c:kill()
 	end)
 
-	local minimize = titlebarbtn(c, beautiful.xforeground, beautiful.xforeground .. 55, '')
+	local minimize = titlebarbtn(c, beautiful.xforeground, beautiful.xforeground .. 55, '')
 	minimize:connect_signal('button::press', function()
 		c.minimized = true
 	end)
 
-	local maximize = titlebarbtn(c, beautiful.xforeground, beautiful.xforeground .. 55, '')
-	local function maximizeSetup()
-		helpers.maximize(c)
+	local function maximizeIcon()
 		if c.maximized then
-			maximize.icon = ''
+			return ''
 		else
-			maximize.icon = ''
+			return ''
 		end
+	end
+
+	local maximize = titlebarbtn(c, beautiful.xforeground, beautiful.xforeground .. 55, maximizeIcon())
+	local function maximizeSetup()
+		maximize.icon = maximizeIcon()
+		helpers.maximize(c)
+		maximize:emit_signal 'widget::redraw_needed'
 	end
 	maximize:connect_signal('button::press', maximizeSetup)
 
@@ -100,7 +105,7 @@ client.connect_signal('request::titlebars', function(c)
 				maximize,
 				close,
 				layout = wibox.layout.fixed.horizontal,
-				spacing = beautiful.wibar_spacing,
+				spacing = 5,
 			},
 			left = beautiful.wibar_spacing,
 			right = beautiful.wibar_spacing,
