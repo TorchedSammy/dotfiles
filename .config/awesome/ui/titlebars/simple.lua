@@ -8,7 +8,7 @@ local wibox = require 'wibox'
 local function titlebarbtn(c, color_focus, color_unfocus, txt)
 	local ico = wibox.widget {
 		markup = helpers.colorize_text(txt, color_focus .. 80),
-		font = 'Microns 24',
+		font = 'Microns 16',
 		widget = wibox.widget.textbox,
 		icon = txt
 	}
@@ -51,21 +51,21 @@ client.connect_signal('request::titlebars', function(c)
 		end)
 	)
 
-	local close = titlebarbtn(c, beautiful.xforeground, beautiful.xforeground .. 55, '')
+	local close = titlebarbtn(c, beautiful.xforeground, beautiful.xforeground .. 55, '')
 	close:connect_signal('button::press', function()
 		c:kill()
 	end)
 
-	local minimize = titlebarbtn(c, beautiful.xforeground, beautiful.xforeground .. 55, '')
+	local minimize = titlebarbtn(c, beautiful.xforeground, beautiful.xforeground .. 55, '')
 	minimize:connect_signal('button::press', function()
 		c.minimized = true
 	end)
 
 	local function maximizeIcon()
 		if c.maximized then
-			return ''
+			return ''
 		else
-			return ''
+			return ''
 		end
 	end
 
