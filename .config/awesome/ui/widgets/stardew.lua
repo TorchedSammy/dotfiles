@@ -1,5 +1,6 @@
 local awful = require 'awful'
 local beautiful = require 'beautiful'
+local settings = require 'conf.settings'
 local dpi = beautiful.dpi
 local gears = require 'gears'
 local helpers = require 'helpers'
@@ -17,7 +18,7 @@ widgets.stardew_time = function(s)
 		visible = true,
 	}
 
-	local daynight, daynightImg = w.imgwidget('stardew/daynightbig.png')
+	local daynight, daynightImg = w.imgwidget(settings.theme == 'stardew' and 'stardew/daynightbig.png' or 'stardew/daynight-night-big.png')
 	local seasonicon = w.imgwidget('stardew/season-spring.png')
 	local weathericon = w.imgwidget('stardew/weather-sun.png')
 	local arrowImg = gears.surface.load_uncached_silently(beautiful.config_path .. '/images/stardew/dial-arrowbig.png')
@@ -33,6 +34,7 @@ widgets.stardew_time = function(s)
 		autostart = true,
 		call_now = true,
 		callback = function()
+			-- TODO
 		end
 	}
 
@@ -92,7 +94,7 @@ widgets.stardew_time = function(s)
 				{
 					{
 						weathericon,
-						w.imgwidget('stardew/clocksep.png'),
+						w.imgwidget(settings.theme == 'stardew-night' and 'stardew/clocksep-night.png' or 'stardew/clocksep.png'),
 						seasonicon,
 						layout = wibox.layout.fixed.horizontal,
 					},
