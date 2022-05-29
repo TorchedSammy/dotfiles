@@ -43,6 +43,8 @@ style.syntax_fonts = {
 	comment = italicFont,
 	keyword2 = italicFont
 }
+style.syntax_fonts.comment:set_tab_size(4)
+style.keyword2.comment:set_tab_size(4)
 
 lspkind.setup {}
 core.reload_module 'colors.awesomewm'
