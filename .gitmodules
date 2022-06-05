@@ -31,3 +31,6 @@
 [submodule ".config/lite-xl/plugins/lspkind"]
 	path = .config/lite-xl/plugins/lspkind
 	url = https://github.com/TorchedSammy/lite-xl-lspkind
+[submodule ".config/lite-xl/plugins/treeview-menu-extended"]
+	path = .config/lite-xl/plugins/treeview-menu-extended
+	url = https://github.com/juliardi/lite-xl-treeview-menu-extender
