@@ -39,6 +39,7 @@ end
 beautiful.init('~/.config/awesome/themes/' .. settings.theme .. '.lua')
 
 require 'conf'
+require 'initialize'
 
 awful.screen.connect_for_each_screen(function(s)
 	local l = awful.layout.suit
