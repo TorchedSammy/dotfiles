@@ -32,6 +32,7 @@ widgets.volumeDisplay = function()
 
 	local displayTimer = gears.timer {
 		timeout = 2,
+		single_shot = true,
 		callback = function()
 			volumeDisplay.visible = false
 		end
