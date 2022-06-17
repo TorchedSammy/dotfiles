@@ -12,7 +12,7 @@ theme = gears.table.join(theme, colors)
 theme.font          = 'SF Pro Text Medium 12'
 
 theme.bg_normal     = theme.xbackground
-theme.bg_sec        = '#fffaf5'
+theme.bg_sec        = theme.xcolor15
 theme.bg_focus      = theme.bg_normal
 theme.bg_urgent     = theme.bg_normal
 theme.bg_minimize   = theme.bg_normal
@@ -31,7 +31,7 @@ theme.client_shape = helpers.rrect(2)
 theme.titlebars = true
 theme.titlebar_type = 'simple'
 theme.titlebar_height = dpi(32)
-theme.titlebar_bg = theme.bg_normal
+theme.titlebar_bg = theme.xcolor15
 
 theme.notification_bg = theme.xbackground
 theme.notification_position = 'bottom_right'

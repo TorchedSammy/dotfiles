@@ -6,7 +6,7 @@ local theme = require 'themes.stardew'
 theme = gears.table.join(theme, colors)
 
 theme.bg_normal     = theme.xbackground
-theme.bg_sec        = theme.xcolor8
+theme.bg_sec        = theme.xcolor13
 theme.bg_focus      = theme.bg_normal
 theme.bg_urgent     = theme.bg_normal
 theme.bg_minimize   = theme.bg_normal
@@ -20,7 +20,7 @@ theme.fg_minimize   = '#ffffff'
 theme.border_normal  = theme.xcolor9
 theme.border_focus  = theme.xcolor11
 
-theme.titlebar_bg = theme.bg_normal
+theme.titlebar_bg = theme.xcolor13
 
 theme.notification_bg = theme.bg_normal
 theme.notification_border_color = theme.bg_sec
