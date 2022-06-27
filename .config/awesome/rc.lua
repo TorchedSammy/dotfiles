@@ -42,6 +42,13 @@ require 'conf'
 require 'initialize'
 
 awful.screen.connect_for_each_screen(function(s)
+	local margin = beautiful.useless_gap
+
+	s.padding = {
+		top = margin,
+		left = margin, right = margin,
+		bottom = margin
+	}
 	local l = awful.layout.suit
 	local layouts = { l.floating, l.tile, l.floating, l.tile, l.floating, l.floating, l.floating, l.floating, l.floating }
 	awful.tag({ '1', '2', '3', '4', '5', '6', '7', '8', '9' }, s, layouts)
