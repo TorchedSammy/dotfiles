@@ -39,7 +39,6 @@ end
 beautiful.init('~/.config/awesome/themes/' .. settings.theme .. '.lua')
 
 require 'conf'
-require 'initialize'
 
 awful.screen.connect_for_each_screen(function(s)
 	local margin = beautiful.useless_gap
@@ -138,6 +137,8 @@ end)
 require 'ui'
 
 if beautiful.double_borders then require 'ui.components.double-borders' end
+
+require 'initialize'
 
 client.connect_signal('focus', function(c)
 	c.border_color = beautiful.border_focus
