@@ -56,6 +56,7 @@ config.plugins.toolbarview = false
 --config.plugins.trimwhitespace = true
 config.plugins.lsp.stop_unneeded_servers = false
 config.lint.lens_style = 'solid'
+config.skip_plugins_version = true
 
 local bigCodeFont = style.code_font:copy((16 * 1.6) * SCALE)
 if not core.status_view:get_item 'icon:heart' then
