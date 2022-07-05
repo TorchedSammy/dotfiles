@@ -148,7 +148,7 @@ awful.key({altkey}, 'Tab',
 -- Standard program
 awful.key({modkey}, 't',
 	function()
-		awful.spawn.easy_async(terminal)
+		awful.spawn(terminal)
 	end, {
 		description = 'Open a terminal',
 		group = 'launcher'
