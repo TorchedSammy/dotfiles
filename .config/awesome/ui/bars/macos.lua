@@ -15,13 +15,17 @@ client.connect_signal('focus', function ()
 	local fc = client.focus
 	local name = ''
 
-	if fc.class ~= 'Google-chrome' then
-		local function titlecase(first, rest)
-			return first:upper() .. rest:lower()
+	if fc.class then
+		if fc.class ~= 'Google-chrome' then
+			local function titlecase(first, rest)
+				return first:upper() .. rest:lower()
+			end
+			name = fc.class:gsub('[%-|%_]', ' '):gsub('(%a)([%w_\']*)', titlecase)
+		else
+			name = 'Chrome'
 		end
-		name = fc.class:gsub('[%-|%_]', ' '):gsub('(%a)([%w_\']*)', titlecase)
 	else
-		name = 'Chrome'
+		name = '<unnamed>' -- possibly use title? eh
 	end
 
 	fc.screen.clientclass.text = name
