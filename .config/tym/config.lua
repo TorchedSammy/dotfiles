@@ -9,7 +9,8 @@ tym.set_config {
 	padding_horizontal = 20,
 	padding_vertical = 16,
 	cursor_shape = 'ibeam',
-	color_window_background = thm.color_background
+	color_window_background = thm.color_background,
+	shell = [[hilbish -ic "os.setenv('SHLVL', tostring(tonumber(os.getenv 'SHLVL') - 1))"]]
 }
 
 tym.set_hook('selected', function ()
