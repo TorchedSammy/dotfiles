@@ -41,10 +41,13 @@ local italicFont = fontconfig.load_group_blocking({
 
 style.syntax_fonts = {
 	comment = italicFont,
-	keyword2 = italicFont
+	keyword2 = italicFont,
+	type_builtin = italicFont,
+	error = italicFont
 }
-style.syntax_fonts.comment:set_tab_size(4)
-style.keyword2.comment:set_tab_size(4)
+for _, font in pairs(style.syntax_fonts) do
+	font:set_tab_size(4)
+end
 
 lspkind.setup {}
 core.reload_module 'colors.awesomewm'
