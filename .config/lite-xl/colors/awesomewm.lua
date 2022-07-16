@@ -48,10 +48,26 @@ style.syntax["comment"] = style.color11
 style.syntax["keyword"] = style.color5
 style.syntax["keyword2"] = style.color6
 style.syntax["number"] = style.color1
-style.syntax["literal"] = style.color2
+style.syntax["literal"] = style.color1
 style.syntax["string"] = style.color2
 style.syntax["operator"] = style.color3
 style.syntax["function"] = style.color4
+
+style.syntax["repeat"] = style.syntax["keyword"]
+style.syntax["keyword.return"] = style.syntax["keyword"]
+style.syntax["keyword.function"] = style.syntax["keyword"]
+style.syntax["include"] = style.syntax["keyword"]
+style.syntax["boolean"] = style.color1
+style.syntax["method"] = style.color4
+style.syntax["variable"] = style.syntax["normal"]
+style.syntax["function_builtin"] = style.color6
+style.syntax["constant"] = style.color1
+style.syntax["type"] = style.color6
+style.syntax["type_builtin"] = style.color2
+style.syntax["parameter"] = style.color3
+style.syntax["conditional"] = style.color3
+style.syntax["property"] = style.color4
+style.syntax["error"] = style.color1
 
 style.caret_width = common.round(1.2 * SCALE)
 style.gitdiff_addition = style.color2
