@@ -101,8 +101,14 @@ theme.notification_position = 'top_right'
 -- menu_[bg|fg]_[normal|focus]
 -- menu_[border_color|border_width]
 theme.menu_submenu_icon = themes_path.."default/submenu.png"
-theme.menu_height = dpi(15)
-theme.menu_width  = dpi(100)
+--theme.menu_submenu_icon = gears.color.recolor_image(color.submenu, color.fg)
+theme.menu_font     = theme.font
+theme.menu_bg_normal     = theme.bg
+theme.menu_bg_focus     = theme.bg_sec
+theme.menu_fg_normal    = theme.fg
+theme.menu_fg_focus     = theme.fg
+theme.menu_height    = dpi(25)
+theme.menu_width     = dpi(100)
 
 -- You can add as many variables as
 -- you wish and access them by using
