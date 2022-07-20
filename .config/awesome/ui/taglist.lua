@@ -6,7 +6,7 @@ local gears = require 'gears'
 local wibox = require 'wibox'
 local helpers = require 'helpers'
 
-local ntags = 9
+local ntags = beautiful.taglist_number or 9
 
 local function taglist(s)
 	-- Create textboxes and set their buttons
