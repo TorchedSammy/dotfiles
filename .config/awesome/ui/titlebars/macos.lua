@@ -46,6 +46,10 @@ local function titlebarbtn(c, color_focus, color_unfocus, shp)
 end
 
 client.connect_signal('request::titlebars', function(c)
+	if c.requests_no_titlebar then
+		return
+	end
+
 	-- buttons for the titlebar
 	local buttons = gears.table.join(
 		awful.button({}, 1, function()
