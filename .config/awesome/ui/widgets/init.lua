@@ -154,7 +154,7 @@ widgets.layout = {
 widgets.imgwidget = function(icon, args)
 	args = args or {}
 	local w = {
-		image = gears.surface.load_uncached_silently(beautiful.config_path .. '/images/' .. icon),
+		image = type(icon) == 'string' and gears.surface.load_uncached_silently(beautiful.config_path .. '/images/' .. icon) or icon,
 		widget = wibox.widget.imagebox
 	}
 	local wArgs = gears.table.join(w, args)
