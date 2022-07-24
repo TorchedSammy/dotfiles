@@ -1,10 +1,7 @@
-local lunacolors = require 'lunacolors'
 local bait = require 'bait'
 local commander = require 'commander'
 local delta = require 'delta'
 local fs = require 'fs'
-
-print(lunacolors.format(hilbish.greeting))
 
 delta.init()
 
