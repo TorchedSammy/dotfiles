@@ -9,6 +9,8 @@ hilbish.prependPath '~/bin/'
 hilbish.appendPath '/usr/local/go/bin/'
 hilbish.appendPath '~/go/bin/'
 hilbish.appendPath '~/.local/bin/'
+hilbish.appendPath '~/flutter/bin'
+hilbish.appendPath '-/Android/Sdk/cmdline-tools/latest/bin'
 
 commander.register('ver', function()
 	print(hilbish.ver)
