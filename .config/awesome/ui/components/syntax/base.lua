@@ -1,0 +1,124 @@
+local beautiful = require 'beautiful'
+local cairo = require 'lgi'.cairo
+local gears = require 'gears'
+local wibox = require 'wibox'
+
+local base = {
+	width = 12,
+	radius = 6,
+	gradientColors = beautiful.gradientColors or {
+		'#86ecf0',
+		'#c3fa74'
+	},
+}
+base.shape = function(cr, w, h) return gears.shape.partially_rounded_rect(cr, w, h, false, true, false, true, base.radius) end
+base.widths = {
+	round = base.width + (base.width / 2),
+	empty = base.width / 2,
+}
+
+function base.createGradient(w, h, startN, endN)
+	w = w or base.width
+
+	local gradient = gears.color.create_pattern {
+		type  = 'linear' ,
+		from  = {
+			0,
+			0
+		},
+		to = {
+			w,
+			h
+		},
+		stops = {
+			{
+				startN or 0,
+				base.gradientColors[1]
+			},
+			{
+				endN or 1,
+				base.gradientColors[2]
+			}
+		}
+	}
+
+	return gradient
+end
+
+function base.gradientSurface(opts)
+	opts.w = opts.w or base.width
+	opts.gradient = opts.gradient or base.createGradient(opts.w, opts.h)
+
+	local img = cairo.ImageSurface.create(cairo.Format.ARGB32, opts.w, opts.h)
+	local cr = cairo.Context(img)
+	cr:set_source(opts.gradient)
+	cr:paint()
+
+	return img
+end
+
+function base.sideDecor(opts)
+	local position = opts.position or 'left'
+	local img = base.gradientSurface(opts)
+
+	local gradientBar = wibox.widget {
+		{
+			layout = wibox.layout.align.horizontal,
+			expand = 'none',
+		},
+		shape = function(crr, w, h) return gears.shape.partially_rounded_rect(crr, w, opts.enforceHeight and opts.h or h, false, false, false, true, base.radius) end,
+		bgimage = img,
+		widget = wibox.container.background,
+		forced_width = base.width
+	}
+
+	local round = wibox.widget {
+		{
+			layout = wibox.layout.align.horizontal,
+			expand = 'none',
+		},
+		shape = function(crr, w, _) return gears.shape.partially_rounded_rect(crr, w, opts.h, false, false, false, true, base.radius) end,
+		bg = opts.bg or beautiful.bg_normal,
+		widget = wibox.container.background,
+		forced_width = base.widths.round,
+		forced_height = opts.h
+	}
+
+	local empty = wibox.widget {
+		{
+			layout = wibox.layout.align.horizontal,
+			expand = 'none',
+		},
+		shape = function(cr, w, h) return gears.shape.rectangle(cr, w, h) end,
+		bg = '#00000000',
+		widget = wibox.container.background,
+		forced_width = base.widths.empty
+	}
+
+	if position == 'left' or position == 'right' then
+		local side = wibox.widget {
+			layout = wibox.layout.stack,
+			expand = 'none',
+			gradientBar,
+			{
+				layout = wibox.layout.fixed.horizontal,
+				empty,
+				round
+			}
+		}
+		if position == 'right' then
+			side = wibox.widget {
+				widget = wibox.container.mirror,
+				reflection = {
+					horizontal = true,
+					vertical = true
+				},
+				side
+			}
+		end
+
+		return side
+	end
+end
+
+return base

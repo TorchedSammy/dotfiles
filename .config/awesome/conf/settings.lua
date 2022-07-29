@@ -1,4 +1,4 @@
 return {
-	theme = 'stardew',
-	picom = false
+	theme = 'syntax',
+	picom = true
 }

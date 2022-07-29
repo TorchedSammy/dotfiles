@@ -1,0 +1,1 @@
+require 'initialize.syntax'
