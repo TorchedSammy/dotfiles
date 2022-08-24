@@ -225,18 +225,26 @@ awful.screen.connect_for_each_screen(function(s)
 			forced_width = s.topbar.width / 10,
 		},
 		{
-			layout = wibox.layout.fixed.horizontal,
+			layout = wibox.layout.stack,
 			base.sideDecor {
 				h = height,
 				enforceHeight = true
 			},
 			{
-				s.tasklist,
-				shape = function(cr, wi, _) return gears.shape.rectangle(cr, wi, height) end,
-				bg = beautiful.bg_normal,
-				widget = wibox.container.background,
-				forced_width = s.bar.width,
-				forced_height = height
+				widget = wibox.container.margin,
+				left = base.widths.round / 2,
+				{
+					{
+						widget = wibox.container.margin,
+						right = base.widths.round / 2,
+						s.tasklist
+					},
+					shape = function(cr, wi, _) return gears.shape.rectangle(cr, wi, height) end,
+					bg = beautiful.bg_normal,
+					widget = wibox.container.background,
+					forced_width = s.bar.width,
+					forced_height = height
+				}
 			}
 		}
 	}
