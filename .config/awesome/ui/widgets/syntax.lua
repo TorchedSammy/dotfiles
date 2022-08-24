@@ -7,6 +7,7 @@ local gears = require 'gears'
 local helpers = require 'helpers'
 local vol = require 'conf.vol'
 local wibox = require 'wibox'
+local w = require 'ui.widgets'
 local naughty = require 'naughty'
 
 local bgcolor = beautiful.bg_sec
@@ -360,7 +361,7 @@ end
 do
 	local powerMenu = wibox {
 		width = dpi(520),
-		height = dpi(180),
+		height = dpi(200),
 		bg = '#00000000',
 		shape = gears.shape.rectangle,
 		ontop = true,
@@ -372,22 +373,23 @@ do
 	end
 
 	local iconFont = 'Font Awesome 6 Free 58'
-	local logout = button(beautiful.fg_normal, '', iconFont)
+	local buttonColor = beautiful.fg_normal
+	local logout = button(buttonColor, '', iconFont)
 	logout:connect_signal('button::press', function()
 		awesome.quit()
 		hide()
 	end)
-	local shutdown = button(beautiful.fg_normal, '', iconFont)
+	local shutdown = button(buttonColor, '', iconFont)
 	shutdown:connect_signal('button::press', function()
 		awful.spawn 'poweroff'
 		hide()
 	end)
-	local restart = button(beautiful.fg_normal, '', iconFont)
+	local restart = button(buttonColor, '', iconFont)
 	restart:connect_signal('button::press', function()
 		awful.spawn 'reboot'
 		hide()
 	end)
-	local sleep = button(beautiful.fg_normal, '', iconFont)
+	local sleep = button(buttonColor, '', iconFont)
 	sleep:connect_signal('button::press', function()
 		awful.spawn 'systemctl suspend'
 		hide()
@@ -404,11 +406,64 @@ do
 				widget = wibox.container.margin,
 				left = dpi(base.width),
 				{
-					layout = wibox.layout.flex.horizontal,
-					logout,
-					shutdown,
-					restart,
-					sleep
+					layout = wibox.layout.align.vertical,
+					{
+						layout = wibox.container.place
+					},
+					{
+						layout = wibox.layout.flex.horizontal,
+						logout,
+						shutdown,
+						restart,
+						sleep
+					},
+					{
+						widget = wibox.container.margin,
+						bottom = 12,
+						right = dpi(base.width) / 2,
+						{
+							layout = wibox.layout.fixed.vertical,
+							spacing = 12,
+							{
+								widget = wibox.widget.separator,
+								forced_height = 1,
+								thickness = 1,
+								orientation = 'horizontal',
+								color = beautiful.fg_sec
+							},
+							{
+								layout = wibox.layout.align.horizontal,
+								expand = 'none',
+								{
+									layout = wibox.layout.fixed.horizontal,
+									spacing = 8,
+									{
+										layout = wibox.container.place,
+										valign = 'center',
+										{
+											widget = wibox.container.constraint,
+											width = 22,
+											w.imgwidget 'grey-logo.png'
+										}
+									},
+									{
+										widget = wibox.widget.textbox,
+										markup = helpers.colorize_text('Power Options Menu', beautiful.fg_sec),
+										font = 'SF Pro Display 16'
+									}
+								},
+								--[[
+								{
+									layout = wibox.container.place
+								},
+								{
+									widget = wibox.widget.textbox,
+									markup = helpers.colorize_text(string.format('Goodbye, %s. What would you like to do?', os.getenv 'USER' or user), beautiful.fg_sec)
+								}
+								]]--
+							}
+						}
+					}
 				}
 			}
 		},
