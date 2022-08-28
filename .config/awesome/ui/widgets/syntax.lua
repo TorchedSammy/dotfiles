@@ -88,7 +88,7 @@ do
 		visible = false
 	}
 
-	local progressShape = helpers.rrect(base.radius)
+	local progressShape = base.shape
 	local progress = wibox.widget {
 		widget = wibox.widget.progressbar,
 		border_color = beautiful.fg_sec,
