@@ -182,8 +182,8 @@ do
 			playPause.icon = playPauseIcons[2]
 		end
 	end)
-	playerctl:connect_signal('shuffle', function(_, shuffle)
-		if shuffle then
+	playerctl:connect_signal('shuffle', function(_, shuff)
+		if shuff then
 			shuffle.color = beautiful.xcolor2
 		else
 			shuffle.color = beautiful.fg_normal
