@@ -13,7 +13,7 @@ theme.font          = 'Nimbus Sans Regular 12'
 
 theme.bg_normal     = theme.xbackground
 theme.bg_normal_opposite = '#030303'
-theme.bg_sec        = '#f1f1f1'
+theme.bg_sec        = '#f7f7f7'
 theme.bg_sec_opposite = '#1a1a1a'
 theme.bg_tert_opposite = '#262626'
 theme.bg_focus      = theme.bg_normal
