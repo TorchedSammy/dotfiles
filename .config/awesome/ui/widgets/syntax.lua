@@ -372,13 +372,28 @@ do
 		awful.keygrabber.stop()
 	end
 
+	local powerText = wibox.widget {
+		widget = wibox.widget.textbox,
+		markup = helpers.colorize_text('Power Options Menu', beautiful.fg_sec),
+		font = 'SF Pro Display 16'
+	}
+	local function setupDisplayers(set)
+		for i, widget in ipairs(set) do
+			if i % 2 ~= 0 then
+				widget:connect_signal('mouse::enter', function() powerText.markup = helpers.colorize_text(set[i + 1], beautiful.fg_sec) end)
+			end
+		end
+	end
+
 	local iconFont = 'Font Awesome 6 Free 58'
 	local buttonColor = beautiful.fg_normal
 	local logout = button(buttonColor, '', iconFont)
+
 	logout:connect_signal('button::press', function()
 		awesome.quit()
 		hide()
 	end)
+
 	local shutdown = button(buttonColor, '', iconFont)
 	shutdown:connect_signal('button::press', function()
 		awful.spawn 'poweroff'
@@ -394,6 +409,16 @@ do
 		awful.spawn 'systemctl suspend'
 		hide()
 	end)
+	setupDisplayers {
+		logout,
+		'Logout',
+		shutdown,
+		'Shutdown',
+		restart,
+		'Restart',
+		sleep,
+		'Sleep'
+	}
 
 	local realWidget = wibox.widget {
 		layout = wibox.layout.fixed.horizontal,
@@ -446,11 +471,7 @@ do
 											w.imgwidget 'grey-logo.png'
 										}
 									},
-									{
-										widget = wibox.widget.textbox,
-										markup = helpers.colorize_text('Power Options Menu', beautiful.fg_sec),
-										font = 'SF Pro Display 16'
-									}
+									powerText
 								},
 								--[[
 								{
@@ -473,6 +494,9 @@ do
 			bg = bgcolor
 		},
 	}
+	realWidget:connect_signal('mouse::leave', function()
+		powerText.markup = helpers.colorize_text('Power Options Menu', beautiful.fg_sec)
+	end)
 
 	powerMenu:setup {
 		layout = wibox.container.place,
