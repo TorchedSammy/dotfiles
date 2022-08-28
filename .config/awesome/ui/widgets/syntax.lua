@@ -74,6 +74,10 @@ do
 		markup = '',
 		widget = wibox.widget.textbox
 	}
+	local positionText = wibox.widget {
+		markup = '',
+		widget = wibox.widget.textbox
+	}
 
 	local musicDisplay = wibox {
 		width = dpi(480),
@@ -149,12 +153,18 @@ do
 		wrappedMusicAlbum:emit_signal 'widget::redraw_needed'
 
 		albumArt.image = gears.surface.load_uncached_silently(art, beautiful.config_path .. '/images/albumPlaceholder.png')
+		positionText:set_markup_silently(helpers.colorize_text('0:00', beautiful.fg_sec))
 	end)
 	playerctl:connect_signal('position', function (_, pos, length)
 		progress.color = string.format('linear:0,0:%s,0:0,%s:%s,%s', math.floor(length), base.gradientColors[1], math.floor(length), base.gradientColors[2])
 		progress.max_value = length
 		slider.maximum = length
 		progress.value = pos
+
+		local mins = math.floor(pos / 60)
+		local secs = pos % 60
+		local time = string.format('%01d:%02d', mins, secs)
+		positionText:set_markup_silently(helpers.colorize_text(time, beautiful.fg_sec))
 	end)
 	playerctl:connect_signal('playback_status', function(_, playing)
 		if not playing then
@@ -196,7 +206,8 @@ do
 			{
 				layout = wibox.layout.fixed.horizontal,
 				spacing = beautiful.wibar_spacing,
-				--shuffle
+				--shuffle,
+				positionText
 			}
 		},
 		{
