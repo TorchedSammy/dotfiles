@@ -126,8 +126,13 @@ do
 		playerctl:cycle_shuffle()
 	end)
 
+	local position = 0
 	local prev = button(beautiful.fg_normal, '玲')
 	prev:connect_signal('button::press', function()
+		if position >= 5 then
+			playerctl:set_position(0)
+			return
+		end
 		playerctl:previous()
 	end)
 
@@ -160,6 +165,7 @@ do
 		progress.max_value = length
 		slider.maximum = length
 		progress.value = pos
+		position = pos
 
 		local mins = math.floor(pos / 60)
 		local secs = pos % 60
