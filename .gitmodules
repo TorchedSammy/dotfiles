@@ -34,3 +34,6 @@
 [submodule ".config/lite-xl/plugins/treeview-menu-extended"]
 	path = .config/lite-xl/plugins/treeview-menu-extended
 	url = https://github.com/juliardi/lite-xl-treeview-menu-extender
+[submodule ".config/awesome/modules/rubato"]
+	path = .config/awesome/modules/rubato
+	url = https://github.com/andOrlando/rubato

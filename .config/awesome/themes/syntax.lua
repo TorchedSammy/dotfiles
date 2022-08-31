@@ -72,10 +72,10 @@ theme.taglist_text_occupied = rep ''
 theme.taglist_text_focused  = rep ''
 theme.taglist_text_urgent   = rep ''
 
-theme.taglist_text_color_empty    = rep(theme.fg_normal_opposite)
+theme.taglist_text_color_empty    = rep(theme.xcolor14)
 theme.taglist_text_color_occupied  = rep(theme.fg_normal_opposite)
 theme.taglist_text_color_focused  = rep(theme.xcolor6)
-theme.taglist_text_color_urgent   = rep(theme.fg_sec)
+theme.taglist_text_color_urgent   = rep(theme.xcolor1)
 
 
 theme.wallpaper = theme.config_path..'/wallpapers/SYNTAX.png'
