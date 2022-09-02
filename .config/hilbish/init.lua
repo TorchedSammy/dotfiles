@@ -5,6 +5,8 @@ local fs = require 'fs'
 
 delta.init()
 
+os.setenv('LITE_SCALE', '1.2')
+
 hilbish.prependPath '~/bin/'
 hilbish.appendPath '/usr/local/go/bin/'
 hilbish.appendPath '~/go/bin/'
