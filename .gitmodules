@@ -13,12 +13,6 @@
 [submodule ".config/lite-xl/widget"]
 	path = .config/lite-xl/widget
 	url = https://github.com/jgmdev/lite-xl-widgets
-[submodule ".config/lite-xl/plugins/console"]
-	path = .config/lite-xl/plugins/console
-	url = https://github.com/lite-xl/console
-[submodule ".config/lite-xl/plugins/finder"]
-	path = .config/lite-xl/plugins/finder
-	url = https://github.com/takase1121/lite-xl-finder
 [submodule ".config/lite-xl/plugins/gitdiff_highlight"]
 	path = .config/lite-xl/plugins/gitdiff_highlight
 	url = https://github.com/TorchedSammy/lite-xl-gitdiff-highlight
@@ -40,3 +34,6 @@
 [submodule ".config/lite-xl/plugins/lsp"]
 	path = .config/lite-xl/plugins/lsp
 	url = https://github.com/lite-xl/lite-xl-lsp
+[submodule ".config/lite-xl/plugins/ignore-syntax"]
+	path = .config/lite-xl/plugins/ignore-syntax
+	url = https://github.com/anthonyaxenov/lite-xl-ignore-syntax

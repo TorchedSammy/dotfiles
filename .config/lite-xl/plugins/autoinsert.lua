@@ -1,20 +1,21 @@
--- mod-version:2 -- lite-xl 2.0
+-- mod-version:3
 local core = require "core"
 local translate = require "core.doc.translate"
 local config = require "core.config"
+local common = require "core.common"
 local DocView = require "core.docview"
 local command = require "core.command"
 local keymap = require "core.keymap"
 
 
-config.plugins.autoinsert = { map = {
+config.plugins.autoinsert = common.merge({ map = {
   ["["] = "]",
   ["{"] = "}",
   ["("] = ")",
   ['"'] = '"',
   ["'"] = "'",
   ["`"] = "`",
-} }
+} }, config.plugins.autoinsert)
 
 
 local function is_closer(chr)
@@ -88,9 +89,12 @@ command.add(predicate, {
   ["autoinsert:backspace"] = function()
     local doc = core.active_view.doc
     local l, c = doc:get_selection()
-    local chr = doc:get_char(l, c)
-    if config.plugins.autoinsert.map[doc:get_char(l, c - 1)] and is_closer(chr) then
-      doc:delete_to(1)
+    if c > 1 then
+      local chr = doc:get_char(l, c)
+      local mapped = config.plugins.autoinsert.map[doc:get_char(l, c - 1)]
+      if mapped and mapped == chr then
+        doc:delete_to(1)
+      end
     end
     command.perform "doc:backspace"
   end,
