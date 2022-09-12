@@ -6,6 +6,7 @@ local core = require 'core'
 local style = require 'core.style'
 local StatusView = require 'core.statusview'
 local DocView = require 'core.docview'
+local CommandView = require 'core.commandview'
 local fontconfig = require 'plugins.fontconfig'
 local lspconfig = require 'plugins.lsp.config'
 local lspkind = require 'plugins.lspkind'
@@ -65,14 +66,19 @@ config.skip_plugins_version = true
 
 local bigCodeFont = style.code_font:copy((16 * 1.6) * SCALE)
 if not core.status_view:get_item 'icon:heart' then
-	--[[
-	core.status_view:add_item(core.active_view:is(DocView),
-	'icon:heart', StatusView.Item.RIGHT, function()
-		return {
-			style.color1, bigCodeFont, ''
-		}
-	end, nil, -1, "<3")
-	]]--
+	core.status_view:add_item {
+		predicate = function()
+			return core.active_view:is(DocView) and not core.active_view:is(CommandView)
+		end,
+		name = 'icon:heart',
+		alignment = StatusView.Item.RIGHT,
+		get_item = function()
+			return {
+				style.color1, bigCodeFont, ''
+			}
+		end,
+		tooltip = '<3'
+	}
 end
 core.status_view:hide_items {'doc:line-ending', 'command:files'}
 core.status_view:move_item('doc:position', 3, StatusView.Item.RIGHT)
