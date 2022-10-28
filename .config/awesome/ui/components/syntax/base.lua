@@ -69,7 +69,8 @@ function base.sideDecor(opts)
 		shape = function(crr, w, h) return gears.shape.partially_rounded_rect(crr, w, opts.enforceHeight and opts.h or h, false, false, false, true, base.radius) end,
 		bgimage = img,
 		widget = wibox.container.background,
-		forced_width = base.width
+		forced_width = opts.noRounder and base.width / 2 or base.width,
+		forced_height = opts.h
 	}
 
 	local round = wibox.widget {
@@ -95,6 +96,7 @@ function base.sideDecor(opts)
 		forced_width = base.widths.empty
 	}
 
+	local rounder = opts.noRounder and {} or {empty, round}
 	if position == 'left' or position == 'right' then
 		local side = wibox.widget {
 			layout = wibox.layout.stack,
@@ -102,8 +104,7 @@ function base.sideDecor(opts)
 			gradientBar,
 			{
 				layout = wibox.layout.fixed.horizontal,
-				empty,
-				round
+				table.unpack(rounder)
 			}
 		}
 		if position == 'right' then

@@ -8,10 +8,11 @@ local function setupSidebar(c)
 		return
 	end
 
-	awful.titlebar(c, {size = base.width * 1.5, bg = '#00000000', position = 'left'}): setup {
+	awful.titlebar(c, {size = base.width / 2, bg = '#00000000', position = 'left'}): setup {
 		layout = wibox.layout.fixed.horizontal,
 		base.sideDecor {
-			h = c.height
+			h = c.height,
+			noRounder = true
 		}
 	}
 end
