@@ -72,8 +72,8 @@ awful.key({control}, 'Print',
 ),
 awful.key({modkey}, 'd',
 	function()
-		awful.spawn.with_shell('cp ~/Files/Dotfiles/.config/awesome/ ~/.config/ -r')
-		naughty.notify({ text = 'Copied awesome config'})
+		awful.spawn.with_shell 'rsync -ah --inplace --info=progress2 ~/Files/Dotfiles/.config/awesome/ ~/.config/awesome/'
+		naughty.notify { text = 'Copied awesome config'}
 	end, {
 		description = 'Update awesome config from dotfiles folder',
 		group = 'awesome'
