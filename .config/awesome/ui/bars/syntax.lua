@@ -288,7 +288,9 @@ awful.screen.connect_for_each_screen(function(s)
 					},
 					{
 						layout = wibox.layout.fixed.horizontal,
-						widgets.systray
+						spacing = beautiful.wibar_spacing,
+						widgets.systray,
+						widgets.layout
 					}
 				},
 				left = beautiful.wibar_spacing,
