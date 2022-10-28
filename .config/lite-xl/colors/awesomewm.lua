@@ -1,13 +1,14 @@
 local core = require 'core'
 local style = require "core.style"
 local common = require "core.common"
+getmetatable(_G).__index = function(t, k) return rawget(t, k) end
 
 local oldPackagePath = package.path
 package.path = package.path .. ';' .. os.getenv 'HOME' .. '/.config/awesome/?.lua'
 
 local awesomeDir = '~/.config/awesome'
 local awmThemename = dofile((awesomeDir .. '/conf/settings.lua'):gsub('~', os.getenv 'HOME')).theme
-local themePath = awesomeDir .. '/themes/colors/' .. awmThemename .. '.lua'
+local themePath = awesomeDir .. '/themes/' .. awmThemename .. '.lua'
 local thm = dofile(themePath:gsub('~', os.getenv('HOME')))
 local bg = thm.xbackground
 local fg = thm.xforeground
