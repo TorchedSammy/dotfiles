@@ -6,9 +6,9 @@ local awful = require 'awful'
 require 'awful.autofocus'
 require 'awful.hotkeys_popup.keys'
 local beautiful = require 'beautiful'
-local naughty = require 'naughty'
+local helpers = require 'helpers'
 local settings = require 'conf.settings'
-
+local naughty = require 'naughty'
 -- Check if awesome encountered an error during startup and fell back to
 -- another config (This code will only ever execute for the fallback config)
 if awesome.startup_errors then
@@ -44,9 +44,9 @@ awful.screen.connect_for_each_screen(function(s)
 	local margin = beautiful.useless_gap
 
 	s.padding = {
-		top = margin,
-		left = margin, right = margin,
-		bottom = margin
+		top = margin * 2,
+		left = margin * 2, right = margin * 2,
+		bottom = margin * 2
 	}
 	local l = awful.layout.suit
 	local layouts = { l.floating, l.tile, l.floating, l.tile, l.floating, l.floating, l.floating, l.floating, l.floating }
@@ -130,11 +130,7 @@ client.connect_signal('manage', function(c)
 	end
 
 	if c.maximized then
-		awful.placement.maximize(c, {
-            honor_padding = true,
-            honor_workarea = true,
-            margins = beautiful.useless_gap * 2
-        })
+		helpers.winmaxer(c)
 	end
 end)
 

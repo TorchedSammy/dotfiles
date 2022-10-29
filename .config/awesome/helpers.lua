@@ -28,14 +28,17 @@ end
 function helpers.maximize(c)
     c.maximized = not c.maximized
     if c.maximized then
-        awful.placement.maximize(c, {
-            honor_padding = true,
-            honor_workarea = true,
-            margins = beautiful.useless_gap * 2
-        })
+        helpers.winmaxer(c)
     end
     c:raise()
 end
 
+function helpers.winmaxer(c)
+  awful.placement.maximize(c, {
+    honor_padding = true,
+    honor_workarea = true,
+    margins = beautiful.useless_gap * 2
+  })
+end
 return helpers
 
