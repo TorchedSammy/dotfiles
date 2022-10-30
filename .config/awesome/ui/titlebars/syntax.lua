@@ -61,9 +61,6 @@ local function setupTitlebar(c)
 		end)
 	)
 
-	local width = 6
-	local rad = 6
-
 	local gradientBar = wibox.widget {
 		{
 			layout = wibox.layout.align.horizontal,
@@ -72,7 +69,7 @@ local function setupTitlebar(c)
 		shape = gears.shape.rectangle,
 		bg = base.gradientColors[1],
 		widget = wibox.container.background,
-		forced_width = width
+		forced_width = base.width / 2
 	}
 
 	local logo = widgets.imgwidget 'grey-logo.png'
@@ -91,16 +88,94 @@ local function setupTitlebar(c)
 	cr:set_source(buttonsGradient)
 	cr:paint()
 
+	local function titlebarbtn(c, color_focus, color_unfocus, txt)
+		local ico = wibox.widget {
+			markup = helpers.colorize_text(txt, color_focus .. 80),
+			font = 'Microns 16',
+			widget = wibox.widget.textbox,
+			icon = txt
+		}
+
+		local function update()
+			if client.focus == c then
+				ico.markup = helpers.colorize_text(ico.icon, color_focus)
+			else
+				ico.markup = helpers.colorize_text(ico.icon, color_unfocus)
+			end
+		end
+		update()
+
+		c:connect_signal('focus', update)
+		c:connect_signal('unfocus', update)
+
+		ico:connect_signal('mouse::enter', function()
+			local clr = client.focus ~= c and color_focus or color_focus .. 55
+			ico.markup = helpers.colorize_text(ico.icon, clr)
+		end)
+		ico:connect_signal('mouse::leave', function()
+			local clr = client.focus == c and color_focus or color_unfocus
+			ico.markup = helpers.colorize_text(ico.icon, clr)
+		end)
+
+		ico.visible = true
+		return ico
+	end
+	local close = titlebarbtn(c, beautiful.bg_normal, beautiful.bg_normal .. 55, '')
+	close:connect_signal('button::press', function()
+		c:kill()
+	end)
+
+	local buttonsSection
+	local minimize = titlebarbtn(c, beautiful.bg_normal, beautiful.bg_normal .. 55, '')
+	minimize:connect_signal('button::press', function()
+		c.minimized = true
+		buttonsSection:emit_signal 'mouse::leave'
+	end)
+
+	local function maximizeIcon()
+		if c.maximized then
+			return ''
+		else
+			return ''
+		end
+	end
+
+	local maximize = titlebarbtn(c, beautiful.bg_normal, beautiful.bg_normal .. 55, maximizeIcon())
+	local function maximizeSetup()
+		maximize.icon = maximizeIcon()
+		helpers.maximize(c)
+		maximize:emit_signal 'widget::redraw_needed'
+	end
+	maximize:connect_signal('button::press', maximizeSetup)
 	local imgspace = 12
-	local buttonsSection = wibox.widget {
+	buttonsSection = wibox.widget {
 		{
 			widget = wibox.container.margin,
-			left = (buttonsSectionW - imgspace) - (50 - imgspace),
+			left = (buttonsSectionW - imgspace) - 70,
 			right = imgspace,
 			{
 				widget = wibox.container.margin,
 				top = 2, bottom = 2,
-				logo
+				{
+					layout = wibox.layout.stack,
+					{
+						widget = wibox.container.margin,
+						left = 38,
+						{
+							widget = logo,
+							id = 'logo'
+						}
+					},
+					{
+						layout = wibox.layout.fixed.horizontal,
+						spacing = 4,
+						visible = false,
+						minimize,
+						maximize,
+						close,
+						id = 'winControls'
+					}
+				}
 			}
 		},
 		forced_width = buttonsSectionW,
@@ -109,6 +184,18 @@ local function setupTitlebar(c)
 		widget = wibox.container.background
 	}
 	local tailwind = widgets.imgwidget(gears.color.recolor_image(beautiful.config_path .. '/images/tailwind.png', base.createGradient(1, 36, 0.2)))
+	buttonsSection:connect_signal('mouse::enter', function()
+		local controls = buttonsSection:get_children_by_id 'winControls'[1]
+		logo.visible = false
+		controls.visible = true
+		buttonsSection:emit_signal('widget::redraw_needed')
+	end)
+	buttonsSection:connect_signal('mouse::leave', function()
+		local controls = buttonsSection:get_children_by_id 'winControls'[1]
+		logo.visible = true
+		controls.visible = false
+		buttonsSection:emit_signal('widget::redraw_needed')
+	end)
 
 	local empty = wibox.widget {
 		{
