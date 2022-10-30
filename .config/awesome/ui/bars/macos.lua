@@ -41,18 +41,10 @@ awful.screen.connect_for_each_screen(function(s)
 		if not fc then t.screen.clientclass.text = 'AwesomeWM' end
 	end)
 	local mainmenu = wibox.widget{
-		{
-			{
-				markup = helpers.colorize_text('', beautiful.fg_normal),
-				font = 'Font Awesome 13',
-				widget = wibox.widget.textbox
-			},
-			top = 4, bottom = 4, left = 6,
-			widget = wibox.container.margin
-		},
-		widget = wibox.container.background,
-		buttons = gears.table.join(
-			awful.button({}, 1, function () mainmenu:toggle({ coords = {x = 0, y = s.geometry.height-beautiful.wibar_height}}) end))
+		markup = helpers.colorize_text('', beautiful.fg_normal),
+		font = 'Font Awesome 20',
+		align = 'center',
+		widget = wibox.widget.textbox
 	}
 
 	-- Create the wibox
@@ -65,11 +57,12 @@ awful.screen.connect_for_each_screen(function(s)
 	s.clientclass = wibox.widget {
 		text = 'AwesomeWM',
 		font = 'SF Pro Display Bold',
+		align = 'center',
 		widget = wibox.widget.textbox
 	}
 	s.workspace_indicate = wibox.widget {
 		text = '❶',
-		font = 'SF Pro Display Regular',
+		font = 'SF Pro Display Regular 16',
 		widget = wibox.widget.textbox
 	}
 
@@ -80,15 +73,14 @@ awful.screen.connect_for_each_screen(function(s)
 			{
 				layout = wibox.layout.fixed.horizontal,
 				spacing = beautiful.wibar_spacing,
-				mainmenu,
 				{
-					s.clientclass,
-					top = beautiful.dpi(2),
-					left = beautiful.dpi(7),
+					mainmenu,
+					bottom = 2,
 					widget = wibox.container.margin
-				}
+				},
+				s.clientclass,
 			},
-			left = beautiful.dpi(15),
+			left = beautiful.wibar_spacing,
 			right = beautiful.wibar_spacing,
 			widget = wibox.container.margin,
 		},
@@ -106,10 +98,14 @@ awful.screen.connect_for_each_screen(function(s)
 				layout = wibox.layout.fixed.horizontal,
 				spacing = beautiful.wibar_spacing,
 				widgets.systray,
+				{
+					widget = wibox.container.margin,
+					top = 4, bottom = 4,
+					widgets.layout
+				},
 				s.workspace_indicate,
 				widgets.macos_date,
 				widgets.macos_time,
-				widgets.layout
 			},
 			left = beautiful.wibar_spacing,
 			right = beautiful.wibar_spacing,
