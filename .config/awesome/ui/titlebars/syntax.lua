@@ -74,7 +74,7 @@ local function setupTitlebar(c)
 		forced_width = base.width / 2
 	}
 
-	local logo = widgets.imgwidget 'grey-logo.png'
+	local logo = widgets.imgwidget(gears.color.recolor_image(beautiful.config_path .. '/images/gradient-logo.svg', beautiful.fg_tert))
 	local buttonsSectionW = beautiful.dpi(120)
 	local buttonsGradient = gears.color.create_pattern {
 		type  = "linear" ,
@@ -185,7 +185,7 @@ local function setupTitlebar(c)
 		shape = function(cr, w, h) return gears.shape.partially_rounded_rect(cr, w, h, true, true, false, true, rad) end,
 		widget = wibox.container.background
 	}
-	local tailwind = widgets.imgwidget(gears.color.recolor_image(beautiful.config_path .. '/images/tailwind.png', base.createGradient(1, 36, 0.2)))
+	local tailwind = widgets.imgwidget(gears.color.recolor_image(beautiful.config_path .. '/images/tailwind.svg', base.createGradient(1, 36, 0.2)))
 	buttonsSection:connect_signal('mouse::enter', function()
 		local controls = buttonsSection:get_children_by_id 'winControls'[1]
 		logo.visible = false

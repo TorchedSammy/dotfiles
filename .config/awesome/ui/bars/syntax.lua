@@ -109,7 +109,7 @@ awful.screen.connect_for_each_screen(function(s)
 		h = infoAccentHeight
 	}
 
-	local logo = widgets.imgwidget(gears.color.recolor_image(beautiful.config_path .. '/images/gradient-logo.png', base.createGradient(1, 36, 0.2)))
+	local logo = widgets.imgwidget(gears.color.recolor_image(beautiful.config_path .. '/images/gradient-logo.svg', base.createGradient(1, 36, 0.2)))
 	-- todo: make control center [look better]
 	logo:connect_signal('_button::press', function()
 		w.controlCenter.toggle()
