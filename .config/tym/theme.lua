@@ -3,7 +3,7 @@ package.path = package.path .. ';' .. os.getenv 'HOME' .. '/.config/awesome/?.lu
 
 local awesomeDir = '~/.config/awesome'
 local awmThemename = dofile((awesomeDir .. '/conf/settings.lua'):gsub('~', os.getenv 'HOME')).theme
-local themePath = awesomeDir .. '/themes/colors/' .. awmThemename .. '.lua'
+local themePath = awesomeDir .. '/themes/' .. awmThemename .. '.lua'
 local thm = dofile(themePath:gsub('~', os.getenv('HOME')))
 local bg = thm.xbackground
 local fg = thm.xforeground
