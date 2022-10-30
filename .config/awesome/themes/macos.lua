@@ -40,10 +40,13 @@ theme.notification_border_color = theme.xcolor0
 theme.notification_border_width = dpi(0)
 
 theme.bar = 'macos'
-theme.wibar_height = dpi(30)
+theme.wibar_height = dpi(38)
+theme.wibar_spacing = 16
 
 theme.wibar_bg = theme.bg_normal
 theme.bg_systray = theme.wibar_bg
+theme.systray_icon_size = 20
+theme.systray_icon_spacing = theme.wibar_spacing
 
 theme.wallpaper = theme.config_path..'/wallpapers/blossoms.jpg'
 theme.picom_conf = 'picom-macos'
