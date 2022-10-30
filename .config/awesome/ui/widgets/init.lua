@@ -121,7 +121,7 @@ widgets.date = wibox.widget.textclock()
 widgets.date.format = ' %d %b'
 
 widgets.macos_date = wibox.widget.textclock()
-widgets.macos_date.format = '%a %d %b'
+widgets.macos_date.format = '%a %b %d'
 
 -- Systray
 local systray_margin = (beautiful.wibar_height - beautiful.systray_icon_size) / 2
