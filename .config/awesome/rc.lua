@@ -132,6 +132,10 @@ client.connect_signal('manage', function(c)
 	if c.maximized then
 		helpers.winmaxer(c)
 	end
+
+	if c.floating and c.transient_for ~= nil then
+		awful.placement.centered(c, {parent = c.transient_for})
+	end
 end)
 
 require 'ui'
