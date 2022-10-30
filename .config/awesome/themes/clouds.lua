@@ -1,8 +1,10 @@
+local colors = require 'themes.colors.stardew-night'
+if not awesome then return colors end
+
 local xresources = require("beautiful.xresources")
 local dpi = xresources.apply_dpi
 
 local theme = require('themes.common')
-local colors = require 'themes.colors.clouds'
 
 -- join theme and colors
 local gears = require 'gears'

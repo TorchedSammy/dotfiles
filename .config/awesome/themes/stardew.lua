@@ -1,9 +1,11 @@
+local colors = require 'themes.colors.syntax'
+if not awesome then return colors end
+
 local xresources = require 'beautiful.xresources'
 local helpers = require 'helpers'
 local dpi = xresources.apply_dpi
 
 local theme = require 'themes.common'
-local colors = require 'themes.colors.stardew'
 
 -- join theme and colors
 local gears = require 'gears'
