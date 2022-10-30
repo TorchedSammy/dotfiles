@@ -73,6 +73,7 @@ theme.titlebar_bg = theme.xcolor0
 --theme.taglist_bg_focus = "#ff0000"
 
 theme.tasklist_plain_task_name = true 
+theme.taglist_number = 8
 
 -- Generate taglist squares:
 local taglist_square_size = dpi(4)
@@ -123,6 +124,8 @@ theme.exit_screen_fg = theme.lock_screen_fg
 theme.wibar_height = dpi(26)
 theme.wibar_spacing = dpi(10)
 theme.systray_icon_size = dpi(18)
+theme.systray_icon_spacing = theme.wibar_spacing / 2
+
 theme.corner_radius = dpi(6)
 theme.wibar_bg = theme.bg_normal
 theme.bg_systray = theme.wibar_bg
