@@ -127,4 +127,4 @@ command.add("core.docview", {
   end
 })
 
-keymap.add { ["ctrl+shift+r"] = "regex-replace-preview:find-replace-regex" }
+keymap.add { ["ctrl+alt+r"] = "regex-replace-preview:find-replace-regex" }
