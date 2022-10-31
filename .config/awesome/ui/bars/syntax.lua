@@ -109,12 +109,6 @@ awful.screen.connect_for_each_screen(function(s)
 		h = infoAccentHeight
 	}
 
-	local logo = widgets.imgwidget(gears.color.recolor_image(beautiful.config_path .. '/images/gradient-logo.svg', base.createGradient(1, 36, 0.2)))
-	-- todo: make control center [look better]
-	logo:connect_signal('_button::press', function()
-		w.controlCenter.toggle()
-	end)
-
 	local realInfoDiff = beautiful.dpi(16)
 	local realInfoWidth = infoWidth - realInfoDiff
 	local imgspace = 12
@@ -129,7 +123,7 @@ awful.screen.connect_for_each_screen(function(s)
 				{
 					widget = wibox.container.margin,
 					top = 10, bottom = 14,
-					logo
+					widgets.imgwidget(gears.color.recolor_image(beautiful.config_path .. '/images/gradient-logo.svg', base.createGradient(1, 36, 0.2)))
 				}
 			},
 			{
@@ -256,7 +250,7 @@ awful.screen.connect_for_each_screen(function(s)
 				{
 					layout = wibox.layout.fixed.horizontal,
 					spacing = beautiful.wibar_spacing,
-					widgets.imgwidget(gears.color.recolor_image(beautiful.config_path .. '/images/grey-logo.png', beautiful.fg_tert)),
+					widgets.imgwidget(gears.color.recolor_image(beautiful.config_path .. '/images/gradient-logo.svg', beautful.fg_tert))
 					{
 						taglist(s),
 						widget = wibox.container.background,
