@@ -40,5 +40,54 @@ function helpers.winmaxer(c)
     margins = beautiful.useless_gap * 2
   })
 end
+
+function helpers.hoverCursor(w, cursorType)
+  cursorType = cursorType or 'hand2'
+  local oldCursor = 'left_ptr'
+
+  w:connect_signal('mouse::enter', function()
+    local wbx = mouse.current_wibox
+    if wbx then wbx.cursor = cursorType end
+  end)
+
+  w:connect_signal('mouse::leave', function()
+    local wbx = mouse.current_wibox
+    if wbx then wbx.cursor = oldCursor end
+  end)
+end
+
+local function clamp(component)
+  return math.min(math.max(component, 0), 255)
+end
+
+function helpers.shiftColor(color, percent)
+  local num = tonumber(color:sub(2), 16)
+  local r = math.floor(num / 0x10000) + percent
+  local g = (math.floor(num / 0x100) % 0x100) + percent
+  local b = (num % 0x100) + percent
+
+  return string.format("%#x", clamp(r) * 0x10000 + clamp(g) * 0x100 + clamp(b)):gsub('0x', '#')
+end
+
+function helpers.displayClickable(w, opts)
+  opts = type(opts) == 'table' and opts or {}
+  local bgWid = w:get_children_by_id 'bg'[1]
+  helpers.hoverCursor(w, opts.cursorType)
+
+  w:connect_signal('mouse::enter', function()
+    if bgWid then
+      bgWid.bg = opts.hoverColor and opts.hoverColor or helpers.shiftColor(opts.color, opts.shiftFacor and opts.shiftFactor or -15)
+    end
+  end)
+
+  w:connect_signal('mouse::leave', function()
+    if bgWid then
+      bgWid.bg = oldBg
+    end
+  end)
+
+  return w
+end
+
 return helpers
 
