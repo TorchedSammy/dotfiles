@@ -263,7 +263,7 @@ awful.screen.connect_for_each_screen(function(s)
 				},
 				left = beautiful.dpi(24),
 				right = beautiful.dpi(24),
-				top = 6, bottom = 6,
+				top = beautiful.dpi(6), bottom = beautiful.dpi(6),
 				widget = wibox.container.margin
 			},
 			shape = gears.shape.rectangle,
