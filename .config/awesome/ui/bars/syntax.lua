@@ -58,7 +58,7 @@ awful.screen.connect_for_each_screen(function(s)
 
 	local function taskUpdate(widget, buttons, label, data, objects, args)
 		common.list_update(widget, buttons, label, data, objects, args)
-		widget:set_max_widget_size(250)
+		widget:set_max_widget_size(beautiful.dpi(250))
 	end
 
 	s.tasklist = awful.widget.tasklist {
@@ -72,7 +72,7 @@ awful.screen.connect_for_each_screen(function(s)
 			fg_normal = beautiful.fg_sec
 		},
 		layout   = {
-			spacing = 10,
+			spacing = beautiful.dpi(10),
 			layout  = wibox.layout.flex.horizontal
 		},
 		widget_template = {
@@ -111,7 +111,7 @@ awful.screen.connect_for_each_screen(function(s)
 
 	local realInfoDiff = beautiful.dpi(16)
 	local realInfoWidth = infoWidth - realInfoDiff
-	local imgspace = 12
+	local imgspace = beautiful.dpi(12)
 	local info = wibox.widget {
 		layout = wibox.layout.align.horizontal,
 		{
@@ -122,7 +122,7 @@ awful.screen.connect_for_each_screen(function(s)
 				right = imgspace,
 				{
 					widget = wibox.container.margin,
-					top = 10, bottom = 14,
+					top = beautiful.dpi(10), bottom = beautiful.dpi(10 + math.sqrt(realInfoDiff)),
 					widgets.imgwidget(gears.color.recolor_image(beautiful.config_path .. '/images/gradient-logo.svg', base.createGradient(1, 36, 0.2)))
 				}
 			},
@@ -243,6 +243,9 @@ awful.screen.connect_for_each_screen(function(s)
 		}
 	}
 
+	local logoBtn = widgets.imgwidget(gears.color.recolor_image(beautiful.config_path .. '/images/gradient-logo.svg', beautiful.fg_tert))
+	helpers.displayClickable(logoBtn)
+
 	local realbar = wibox.widget {
 		layout = wibox.layout.ratio.horizontal,
 		{
@@ -250,7 +253,7 @@ awful.screen.connect_for_each_screen(function(s)
 				{
 					layout = wibox.layout.fixed.horizontal,
 					spacing = beautiful.wibar_spacing,
-					widgets.imgwidget(gears.color.recolor_image(beautiful.config_path .. '/images/gradient-logo.svg', beautful.fg_tert))
+					logoBtn,
 					{
 						taglist(s),
 						widget = wibox.container.background,

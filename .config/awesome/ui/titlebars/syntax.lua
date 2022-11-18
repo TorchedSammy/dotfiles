@@ -16,10 +16,10 @@ local function circle(c, color_focus, color_unfocus, shp)
 	local tb = wibox.widget {
 		ico,
 		forced_width = beautiful.dpi(16),
-			forced_height = beautiful.dpi(16),
-			bg = color_focus .. 80,
-			shape = shp,
-			widget = wibox.container.background
+		forced_height = beautiful.dpi(16),
+		bg = color_focus .. 80,
+		shape = shp,
+		widget = wibox.container.background
 	}
 
 	local function update()
@@ -44,6 +44,7 @@ local function circle(c, color_focus, color_unfocus, shp)
 	end)
 
 	tb.visible = true
+
 	return tb
 end
 
@@ -149,11 +150,11 @@ local function setupTitlebar(c)
 		maximize:emit_signal 'widget::redraw_needed'
 	end
 	maximize:connect_signal('button::press', maximizeSetup)
-	local imgspace = 12
+	local imgspace = beautiful.dpi(12)
 	buttonsSection = wibox.widget {
 		{
 			widget = wibox.container.margin,
-			left = (buttonsSectionW - imgspace) - 70,
+			left = (buttonsSectionW - imgspace) - beautiful.dpi(70),
 			right = imgspace,
 			{
 				widget = wibox.container.margin,
@@ -162,7 +163,7 @@ local function setupTitlebar(c)
 					layout = wibox.layout.stack,
 					{
 						widget = wibox.container.margin,
-						left = 38,
+						left = beautiful.dpi(38),
 						{
 							widget = logo,
 							id = 'logo'
@@ -170,7 +171,7 @@ local function setupTitlebar(c)
 					},
 					{
 						layout = wibox.layout.fixed.horizontal,
-						spacing = 4,
+						spacing = beautiful.dpi(4),
 						visible = false,
 						minimize,
 						maximize,
@@ -240,7 +241,7 @@ local function setupTitlebar(c)
 						shape = function(cr, w, h) return gears.shape.partially_rounded_rect(cr, w, h, false, false, true, true, 5) end,
 						bg = '#00000000',
 						widget = wibox.container.background,
-						forced_width = 25
+						forced_width = beautiful.dpi(25)
 					},
 					buttonsSection
 				},
@@ -249,10 +250,10 @@ local function setupTitlebar(c)
 						markup = '',
 						widget = wibox.widget.textbox
 					},
-					shape = function(cr, w, h) return gears.shape.partially_rounded_rect(cr, 24, h, false, true, false, false, 16) end,
+					shape = function(cr, w, h) return gears.shape.partially_rounded_rect(cr, beautiful.dpi(24), h, false, true, false, false, 16) end,
 					bg = beautiful.titlebar_bg,
 					widget = wibox.container.background,
-					forced_width = 20
+					forced_width = beautiful.dpi(20)
 				},
 				tailwind,
 			},
