@@ -94,9 +94,9 @@ lspconfig.sumneko_lua.setup {
 		Lua = {
 			workspace = {
 				library = {
-					[DATADIR] = true,
-					['/usr/share/hilbish/emmyLuaDocs'] = true,
-					['/usr/share/hilbish/libs'] = true
+					DATADIR,
+					'/usr/share/hilbish/emmyLuaDocs',
+					'/usr/share/hilbish/libs'
 				}
 			},
 			diagnostics = {
