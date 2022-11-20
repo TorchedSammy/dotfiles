@@ -1,8 +1,5 @@
-local config = require 'core.config'
-config.ignore_files = {'^%.git$'}
-config.skip_plugins_version = true
-
 local core = require 'core'
+local config = require 'core.config'
 local style = require 'core.style'
 local StatusView = require 'core.statusview'
 local DocView = require 'core.docview'
@@ -11,6 +8,7 @@ local fontconfig = require 'plugins.fontconfig'
 local lspconfig = require 'plugins.lsp.config'
 local lspkind = require 'plugins.lspkind'
 
+config.ignore_files = {'^%.git$'}
 local function ignoreExt(...)
 	local exts = {...}
 	for i in ipairs(exts) do
@@ -52,7 +50,9 @@ for _, font in pairs(style.syntax_fonts) do
 	font:set_tab_size(4)
 end
 
-lspkind.setup {}
+lspkind.setup {
+	fontName = 'VictorMono Nerd Font Mono:style=Medium'
+}
 core.reload_module 'colors.awesomewm'
 
 config.tab_type = 'hard'
