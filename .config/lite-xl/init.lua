@@ -1,5 +1,6 @@
 local core = require 'core'
 local config = require 'core.config'
+local keymap = require 'core.keymap'
 local style = require 'core.style'
 local StatusView = require 'core.statusview'
 local DocView = require 'core.docview'
@@ -82,6 +83,10 @@ if not core.status_view:get_item 'icon:heart' then
 end
 core.status_view:hide_items {'doc:line-ending', 'command:files'}
 core.status_view:move_item('doc:position', 3, StatusView.Item.RIGHT)
+
+keymap.add_direct {
+	['ctrl+shift+r'] = 'core:restart'
+}
 
 lspconfig.gopls.setup {}
 lspconfig.sumneko_lua.setup {
