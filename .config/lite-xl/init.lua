@@ -61,9 +61,9 @@ config.indent_size = 4
 config.scroll_past_end = false
 config.plugins.toolbarview = false
 --config.plugins.trimwhitespace = true
-config.plugins.lsp.stop_unneeded_servers = false
 config.lint.lens_style = 'solid'
-config.skip_plugins_version = true
+config.plugins.lsp.stop_unneeded_servers = false
+config.plugins.plugin_manager.lpm_binary_path = HOME .. '/Downloads/lite-xl-plugin-manager/lpm'
 
 local bigCodeFont = style.code_font:copy((16 * 1.6) * SCALE)
 if not core.status_view:get_item 'icon:heart' then
