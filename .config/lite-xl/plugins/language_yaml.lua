@@ -1,4 +1,4 @@
--- mod-version:2 -- lite-xl 2.0
+-- mod-version:3
 local syntax = require "core.syntax"
 
 local yaml_bracket_list = {
@@ -77,6 +77,14 @@ syntax.add {
     },
     {
       pattern = { "^%s*{", "}" },
+      syntax = yaml_bracket_list, type = "operator"
+    },
+    {
+      pattern = { "^%s*%-%s*%[", "%]" },
+      syntax = yaml_bracket_list, type = "operator"
+    },
+    {
+      pattern = { "^%s*%-%s*{", "}" },
       syntax = yaml_bracket_list, type = "operator"
     },
     -- rule to optimize space handling

@@ -1,4 +1,4 @@
--- mod-version:2 -- lite-xl 2.0
+-- mod-version:3
 local core = require "core"
 local common = require "core.common"
 local config = require "core.config"
@@ -20,7 +20,55 @@ config.plugins.autocomplete = common.merge({
   -- Maximum amount of symbols to cache per document
   max_symbols = 4000,
   -- Font size of the description box
-  desc_font_size = 12
+  desc_font_size = 12,
+  -- The config specification used by gui generators
+  config_spec = {
+    name = "Autocomplete",
+    {
+      label = "Minimum Length",
+      description = "Amount of characters that need to be written for autocomplete to popup.",
+      path = "min_len",
+      type = "number",
+      default = 3,
+      min = 1,
+      max = 5
+    },
+    {
+      label = "Maximum Height",
+      description = "The maximum amount of visible items.",
+      path = "max_height",
+      type = "number",
+      default = 6,
+      min = 1,
+      max = 20
+    },
+    {
+      label = "Maximum Suggestions",
+      description = "The maximum amount of scrollable items.",
+      path = "max_suggestions",
+      type = "number",
+      default = 100,
+      min = 10,
+      max = 10000
+    },
+    {
+      label = "Maximum Symbols",
+      description = "Maximum amount of symbols to cache per document.",
+      path = "max_symbols",
+      type = "number",
+      default = 4000,
+      min = 1000,
+      max = 10000
+    },
+    {
+      label = "Description Font Size",
+      description = "Font size of the description box.",
+      path = "desc_font_size",
+      type = "number",
+      default = 12,
+      min = 8
+    }
+  }
 }, config.plugins.autocomplete)
 
 local autocomplete = {}
@@ -76,20 +124,35 @@ local max_symbols = config.plugins.autocomplete.max_symbols
 core.add_thread(function()
   local cache = setmetatable({}, { __mode = "k" })
 
+  local function get_syntax_symbols(symbols, doc)
+    if doc.syntax then
+      for sym in pairs(doc.syntax.symbols) do
+        symbols[sym] = true
+      end
+    end
+  end
+
   local function get_symbols(doc)
-    if doc.disable_symbols then return {} end
-    local i = 1
     local s = {}
+    get_syntax_symbols(s, doc)
+    if doc.disable_symbols then return s end
+    local i = 1
     local symbols_count = 0
-    while i < #doc.lines do
+    while i <= #doc.lines do
       for sym in doc.lines[i]:gmatch(config.symbol_pattern) do
         if not s[sym] then
           symbols_count = symbols_count + 1
           if symbols_count > max_symbols then
             s = nil
             doc.disable_symbols = true
+            local filename_message
+            if doc.filename then
+              filename_message = "document " .. doc.filename
+            else
+              filename_message = "unnamed document"
+            end
             core.status_view:show_message("!", style.accent,
-              "Too many symbols in document "..doc.filename..
+              "Too many symbols in "..filename_message..
               ": stopping auto-complete for this document according to "..
               "config.plugins.autocomplete.max_symbols."
             )
@@ -139,6 +202,7 @@ core.add_thread(function()
       for _, doc in ipairs(core.docs) do
         if not cache_is_valid(doc) then
           valid = false
+          break
         end
       end
     end
@@ -207,7 +271,7 @@ local function get_partial_symbol()
 end
 
 local function get_active_view()
-  if getmetatable(core.active_view) == DocView then
+  if core.active_view:is(DocView) then
     return core.active_view
   end
 end
@@ -218,8 +282,7 @@ local function get_suggestions_rect(av)
   end
 
   local line, col = av.doc:get_selection()
-  local x, y = av:get_line_screen_position(line)
-  x = x + av:get_col_x_offset(line, col - #partial)
+  local x, y = av:get_line_screen_position(line, col - #partial)
   y = y + av:get_line_height() + style.padding.y
   local font = av:get_font()
   local th = font:get_height()
@@ -228,7 +291,7 @@ local function get_suggestions_rect(av)
   for _, s in ipairs(suggestions) do
     local w = font:get_width(s.text)
     if s.info then
-      w = w + style.font:get_width(s.info) + style.padding.x
+      w = w + style.kind_font:get_width(s.info) + style.padding.x
     end
     max_width = math.max(max_width, w)
   end
@@ -395,7 +458,7 @@ local function draw_suggestions_box(av)
     common.draw_text(font, color, s.text, "left", rx + style.padding.x, y, rw, lh)
     if s.info then
       color = (i == suggestions_idx) and style.text or style.dim
-      common.draw_text(style.kind_font, color, s.info, "right", rx, y - 3, rw - style.padding.x, lh)
+      common.draw_text(style.kind_font, color, s.info, "right", rx, y, rw - style.padding.x, lh)
     end
     y = y + lh
     if suggestions_idx == i then
@@ -558,12 +621,13 @@ end
 -- Commands
 --
 local function predicate()
-  return get_active_view() and #suggestions > 0
+  local active_docview = get_active_view()
+  return active_docview and #suggestions > 0, active_docview
 end
 
 command.add(predicate, {
-  ["autocomplete:complete"] = function()
-    local doc = core.active_view.doc
+  ["autocomplete:complete"] = function(dv)
+    local doc = dv.doc
     local line, col = doc:get_selection()
     local item = suggestions[suggestions_idx]
     local text = item.text
@@ -589,8 +653,7 @@ command.add(predicate, {
 
   ["autocomplete:cycle"] = function()
     local newidx = suggestions_idx + 1
-    if newidx > #suggestions then newidx = 1 end
-    suggestions_idx = newidx
+    suggestions_idx = newidx > #suggestions and 1 or newidx
   end,
 
   ["autocomplete:cancel"] = function()

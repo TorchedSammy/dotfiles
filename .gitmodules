@@ -37,3 +37,9 @@
 [submodule ".config/lite-xl/plugins/ignore-syntax"]
 	path = .config/lite-xl/plugins/ignore-syntax
 	url = https://github.com/anthonyaxenov/lite-xl-ignore-syntax
+[submodule ".config/lite-xl/plugins/plugin-manager"]
+	path = .config/lite-xl/plugins/plugin-manager
+	url = https://github.com/adamharrison/lite-xl-plugin-manager
+[submodule ".config/lite-xl/plugins/lazulight.lxl"]
+	path = .config/lite-xl/plugins/lazulight.lxl
+	url = https://github.com/TorchedSammy/Lazulight.lxl

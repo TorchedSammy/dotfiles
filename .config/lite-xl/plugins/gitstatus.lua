@@ -1,4 +1,4 @@
--- mod-version:2 -- lite-xl 2.0
+-- mod-version:3
 local core = require 'core'
 local common = require 'core.common'
 local config = require 'core.config'
@@ -7,6 +7,20 @@ local DocView = require 'core.docview'
 local StatusView = require 'core.statusview'
 local TreeView = require 'plugins.treeview'
 local gitdiff = require 'plugins.gitdiff_highlight.gitdiff'
+config.plugins.gitstatus = common.merge({
+  recurse_submodules = true,
+  -- The config specification used by the settings gui
+  config_spec = {
+    name = "Git Status",
+    {
+      label = "Recurse Submodules",
+      description = "Also retrieve git stats from submodules.",
+      path = "recurse_submodules",
+      type = "toggle",
+      default = true
+    }
+  }
+}, config.plugins.gitstatus)
 
 local scan_rate = config.project_scan_rate or 5
 local cached_color_for_item = {}
@@ -19,9 +33,6 @@ local git = {
 }
 local av = nil
 
-config.gitstatus = {
-  recurse_submodules = true
-}
 style.gitstatus_addition = style.gitstatus_addition or {common.color '#587c0c'}
 style.gitstatus_modification = style.gitstatus_modification or {common.color '#0c7d9d'}
 style.gitstatus_deletion = style.gitstatus_deletion or {common.color '#94151b'}
@@ -63,7 +74,7 @@ core.add_thread(function()
 
       -- get diff
       local diff = exec({'git', 'diff', '--numstat'})
-      if config.gitstatus.recurse_submodules and system.get_file_info('.gitmodules') then
+      if config.plugins.gitstatus.recurse_submodules and system.get_file_info('.gitmodules') then
         local diff2 = exec({'git', 'submodule', 'foreach', 'git diff --numstat'})
         diff = diff .. diff2
       end
