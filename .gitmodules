@@ -13,33 +13,6 @@
 [submodule ".config/lite-xl/widget"]
 	path = .config/lite-xl/widget
 	url = https://github.com/jgmdev/lite-xl-widgets
-[submodule ".config/lite-xl/plugins/gitdiff_highlight"]
-	path = .config/lite-xl/plugins/gitdiff_highlight
-	url = https://github.com/TorchedSammy/lite-xl-gitdiff-highlight
-[submodule ".config/lite-xl/plugins/litepresence"]
-	path = .config/lite-xl/plugins/litepresence
-	url = https://github.com/TorchedSammy/litepresence
-[submodule ".config/lite-xl/plugins/lintplus"]
-	path = .config/lite-xl/plugins/lintplus
-	url = https://github.com/liquidev/lintplus
-[submodule ".config/lite-xl/plugins/lspkind"]
-	path = .config/lite-xl/plugins/lspkind
-	url = https://github.com/TorchedSammy/lite-xl-lspkind
-[submodule ".config/lite-xl/plugins/treeview-menu-extended"]
-	path = .config/lite-xl/plugins/treeview-menu-extended
-	url = https://github.com/juliardi/lite-xl-treeview-menu-extender
 [submodule ".config/awesome/modules/rubato"]
 	path = .config/awesome/modules/rubato
 	url = https://github.com/andOrlando/rubato
-[submodule ".config/lite-xl/plugins/lsp"]
-	path = .config/lite-xl/plugins/lsp
-	url = https://github.com/lite-xl/lite-xl-lsp
-[submodule ".config/lite-xl/plugins/ignore-syntax"]
-	path = .config/lite-xl/plugins/ignore-syntax
-	url = https://github.com/anthonyaxenov/lite-xl-ignore-syntax
-[submodule ".config/lite-xl/plugins/plugin-manager"]
-	path = .config/lite-xl/plugins/plugin-manager
-	url = https://github.com/adamharrison/lite-xl-plugin-manager
-[submodule ".config/lite-xl/plugins/lazulight.lxl"]
-	path = .config/lite-xl/plugins/lazulight.lxl
-	url = https://github.com/TorchedSammy/Lazulight.lxl

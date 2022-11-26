@@ -64,6 +64,23 @@ config.plugins.toolbarview = false
 config.lint.lens_style = 'solid'
 config.plugins.lsp.stop_unneeded_servers = false
 config.plugins.plugin_manager.lpm_binary_path = HOME .. '/Downloads/lite-xl-plugin-manager/lpm'
+config.plugins.scale.mode = 'ui'
+config.plugins.miq.lpm_prefix = HOME .. '/Downloads/lite-xl-plugin-manager/'
+config.plugins.miq.debug = true
+config.plugins.miq.plugins = {
+	-- let miq manage itself from my dev dir
+	'~/Files/Projects/Miq',
+	'TorchedSammy/Feathertime',
+	'TorchedSammy/Litepresence',
+	'TorchedSammy/Lazulight.lxl',
+	'TorchedSammy/lite-xl-gitdiff-highlight',
+	'lite-xl/lite-xl-lsp',
+	'TorchedSammy/lite-xl-lspkind',
+	-- others
+	'anthonyaxenov/lite-xl-ignore-syntax',
+	'juliardi/lite-xl-treeview-menu-extender',
+	'liquidev/lintplus'
+}
 
 local bigCodeFont = style.code_font:copy((16 * 1.6) * SCALE)
 if not core.status_view:get_item 'icon:heart' then
