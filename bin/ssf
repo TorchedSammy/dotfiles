@@ -19,7 +19,9 @@ local path = args[1]
 local url = 'https://safe.kashima.moe/api/upload'
 -- Authentication Key
 -- You should change this to a value that makes sense for you
-local authtoken = '$(cat $HOME/.apikey)'
+local authpath = string.format('%s/%s', hilbish.home, '.apikey')
+local authfile = io.open(authpath)
+local authtoken = authfile:read '*a'
 local formfile = 'files'
 local filearray = true
 
@@ -27,7 +29,7 @@ local filearray = true
 local image = 'url'
 local headers = {
 	Accept = 'application/vnd.chibisafe.json',
-	Token = authtoken
+	Token = authtoken:gsub('\n', '')
 }
 
 local headerstr = ''
@@ -37,7 +39,8 @@ for k, v in pairs(headers) do
 end
 local arr = (filearray and '[]' or '')
 
-local _, jsonstr = hilbish.run(string.format('curl -s --request POST -F "%s%s=@%s" %s%s', formfile, arr, path, headerstr, url), false)
+local cmd = string.format('curl -s --request POST -F "%s%s=@%s" %s%s', formfile, arr, path, headerstr, url)
+local _, jsonstr = hilbish.run(cmd, false)
 print(jsonstr)
 local obj = load('return '
 .. jsonstr:gsub('("[^"]-"):', '[%1]='))()
