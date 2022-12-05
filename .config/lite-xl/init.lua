@@ -104,9 +104,6 @@ config.plugins.scale.mode = 'ui'
 local bigCodeFont = style.code_font:copy((16 * 1.6) * SCALE)
 if not core.status_view:get_item 'icon:heart' then
 	core.status_view:add_item {
-		predicate = function()
-			return core.active_view:is(DocView) and not core.active_view:is(CommandView)
-		end,
 		name = 'icon:heart',
 		alignment = StatusView.Item.RIGHT,
 		get_item = function()
@@ -114,7 +111,8 @@ if not core.status_view:get_item 'icon:heart' then
 				style.color1, bigCodeFont, ''
 			}
 		end,
-		tooltip = '<3'
+		tooltip = '<3',
+		separator = StatusView.separator2
 	}
 end
 core.status_view:hide_items {'doc:line-ending', 'command:files'}
