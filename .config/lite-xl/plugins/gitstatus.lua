@@ -126,25 +126,32 @@ function core.set_active_view(view)
 end
 
 core.status_view:add_item {
-  predicate = function()
-    return core.active_view:is(DocView)
-  end,
   name = 'gitstatus:status',
   alignment = StatusView.Item.RIGHT,
   get_item = function()
     if not git.branch then return {} end
 
-    return {
+    local status = {
       style.text, git.branch,
-      style.dim, '  ',
-      git.modifications ~= 0 and style.gitstatus_diff_modification or style.gitstatus_diff_normal, '~', git.modifications,
-      style.dim, '  /  ',
-      git.inserts ~= 0 and style.gitstatus_diff_addition or style.gitstatus_diff_normal, '+', git.inserts,
-      style.dim, '  /  ',
-      git.deletes ~= 0 and style.gitstatus_diff_deletion or style.gitstatus_diff_normal, '-', git.deletes,
     }
+    if core.active_view:is(DocView) then
+      status = {
+        style.text, git.branch,
+        style.dim, '  ',
+        table.unpack {
+          git.modifications ~= 0 and style.gitstatus_diff_modification or style.gitstatus_diff_normal, '~', git.modifications,
+          style.dim, '  /  ',
+          git.inserts ~= 0 and style.gitstatus_diff_addition or style.gitstatus_diff_normal, '+', git.inserts,
+          style.dim, '  /  ',
+          git.deletes ~= 0 and style.gitstatus_diff_deletion or style.gitstatus_diff_normal, '-', git.deletes,
+        }
+      }
+    end
+
+    return status
   end,
-  position = 1
+  position = 1,
+  separator = StatusView.separator2
 }
 
 function TreeView:draw_item_text(item, active, hovered, x, y, w, h)
