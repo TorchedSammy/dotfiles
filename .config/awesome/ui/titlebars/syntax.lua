@@ -241,6 +241,7 @@ local function setupTitlebar(c)
 				bg = beautiful.titlebar_bg,
 				widget = wibox.container.background,
 				forced_width = c.width - beautiful.dpi(120),
+				buttons = buttons,
 			},
 			{
 				layout = wibox.layout.stack,
@@ -266,7 +267,7 @@ local function setupTitlebar(c)
 					shape = function(cr, w, h) return gears.shape.partially_rounded_rect(cr, beautiful.dpi(24), h, false, true, false, false, 16) end,
 					bg = beautiful.titlebar_bg,
 					widget = wibox.container.background,
-					forced_width = beautiful.dpi(20)
+					forced_width = beautiful.dpi(20),
 				},
 				tailwind,
 			},
@@ -275,7 +276,6 @@ local function setupTitlebar(c)
 
 	awful.titlebar(c, {size = beautiful.titlebar_height, bg = '#00000000'}): setup {
 		layout = wibox.layout.fixed.vertical,
-		buttons = buttons,
 		realbar
 	}
 end
