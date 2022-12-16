@@ -13,24 +13,24 @@ theme = gears.table.join(theme, colors)
 
 theme.font          = 'Nimbus Sans Regular 12'
 
-theme.gradientColors = {'#4ab2b6', '#69d66c'}
-theme.bg_normal     = theme.xbackground
-theme.bg_normal_opposite = '#d8d8d8'
-theme.bg_sec        = theme.xcolor15
-theme.bg_sec_opposite = '#e5e5e5'
-theme.bg_tert_opposite = '#bababa'
-theme.bg_focus      = theme.bg_normal
-theme.bg_urgent     = theme.bg_normal
-theme.bg_minimize   = theme.bg_normal
+theme.gradientColors = {'#491979', '#0e5a75'}
+theme.bg_normal = theme.xbackground
+theme.bg_sec = helpers.shiftColor(theme.bg_normal, 8)
+theme.bg_normal_opposite = '#030303'
+theme.bg_sec_opposite = '#1a1a1a'
+theme.bg_tert_opposite = '#262626'
+theme.bg_focus = theme.bg_normal
+theme.bg_urgent = theme.bg_normal
+theme.bg_minimize = theme.bg_normal
 
-theme.fg_normal     = theme.xforeground
-theme.fg_normal_opposite = '#262626'
-theme.fg_sec = '#878484'
-theme.fg_tert = '#525151'
-theme.fg_sec_opposite = '#e4e4e4'
-theme.fg_focus      = theme.fg_normal
-theme.fg_urgent     = theme.fg_normal
-theme.fg_minimize   = theme.fg_sec
+theme.fg_normal = theme.xforeground
+theme.fg_sec = helpers.shiftColor(theme.xcolor12, 8)
+theme.fg_normal_opposite = helpers.invertColor(theme.bg_normal_opposite)
+theme.fg_sec_opposite = helpers.invertColor(theme.bg_sec_opposite)
+theme.fg_tert = theme.xcolor12
+theme.fg_focus = theme.fg_normal
+theme.fg_urgent = theme.fg_normal
+theme.fg_minimize = theme.fg_sec
 
 theme.useless_gap   = dpi(6)
 theme.border_width  = 0
@@ -75,10 +75,10 @@ theme.taglist_text_occupied = rep ''
 theme.taglist_text_focused  = rep ''
 theme.taglist_text_urgent   = rep ''
 
-theme.taglist_text_color_empty    = rep(theme.fg_normal_opposite)
+theme.taglist_text_color_empty    = rep(theme.xcolor14)
 theme.taglist_text_color_occupied  = rep(theme.fg_normal_opposite)
 theme.taglist_text_color_focused  = rep(theme.xcolor6)
-theme.taglist_text_color_urgent   = rep(theme.fg_sec)
+theme.taglist_text_color_urgent   = rep(theme.xcolor1)
 
 
 theme.wallpaper = theme.config_path..'/wallpapers/SYNTAX-dark.png'

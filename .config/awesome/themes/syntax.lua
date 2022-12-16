@@ -13,23 +13,23 @@ theme = gears.table.join(theme, colors)
 
 theme.font          = 'Nimbus Sans Regular 12'
 
-theme.bg_normal     = theme.xbackground
+theme.bg_normal = theme.xbackground
+theme.bg_sec = helpers.shiftColor(theme.bg_normal, 8)
 theme.bg_normal_opposite = '#030303'
-theme.bg_sec        = '#f7f7f7'
 theme.bg_sec_opposite = '#1a1a1a'
 theme.bg_tert_opposite = '#262626'
-theme.bg_focus      = theme.bg_normal
-theme.bg_urgent     = theme.bg_normal
-theme.bg_minimize   = theme.bg_normal
+theme.bg_focus = theme.bg_normal
+theme.bg_urgent = theme.bg_normal
+theme.bg_minimize = theme.bg_normal
 
-theme.fg_normal     = theme.xforeground
-theme.fg_normal_opposite = '#ffffff'
-theme.fg_sec = '#878484'
-theme.fg_tert = '#959494'
-theme.fg_sec_opposite = '#e4e4e4'
-theme.fg_focus      = theme.fg_normal
-theme.fg_urgent     = theme.fg_normal
-theme.fg_minimize   = theme.fg_sec
+theme.fg_normal = theme.xforeground
+theme.fg_sec = helpers.shiftColor(theme.xcolor12, 8)
+theme.fg_normal_opposite = helpers.invertColor(theme.bg_normal_opposite)
+theme.fg_sec_opposite = helpers.invertColor(theme.bg_sec_opposite)
+theme.fg_tert = theme.xcolor12
+theme.fg_focus = theme.fg_normal
+theme.fg_urgent = theme.fg_normal
+theme.fg_minimize = theme.fg_sec
 
 theme.useless_gap   = dpi(6)
 theme.border_width  = 0
