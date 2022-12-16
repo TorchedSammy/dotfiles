@@ -133,8 +133,12 @@ client.connect_signal('manage', function(c)
 		helpers.winmaxer(c)
 	end
 
-	if c.floating and c.transient_for ~= nil then
-		awful.placement.centered(c, {parent = c.transient_for})
+	if c.floating then
+		if c.transient_for ~= nil then
+			awful.placement.centered(c, {parent = c.transient_for})
+		else
+			awful.placement.centered(c)
+		end
 	end
 end)
 
