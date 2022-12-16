@@ -136,13 +136,13 @@ local function setupTitlebar(c)
 		ico.visible = true
 		return ico
 	end
-	local close = titlebarbtn(c, beautiful.bg_normal, beautiful.bg_normal .. 55, '')
+	local close = titlebarbtn(c, beautiful.fg_normal_opposite, beautiful.fg_normal_opposite .. 55, '')
 	close:connect_signal('button::press', function()
 		c:kill()
 	end)
 
 	local buttonsSection
-	local minimize = titlebarbtn(c, beautiful.bg_normal, beautiful.bg_normal .. 55, '')
+	local minimize = titlebarbtn(c, beautiful.fg_normal_opposite, beautiful.fg_normal_opposite .. 55, '')
 	minimize:connect_signal('button::press', function()
 		c.minimized = true
 		buttonsSection:emit_signal 'mouse::leave'
@@ -156,7 +156,7 @@ local function setupTitlebar(c)
 		end
 	end
 
-	local maximize = titlebarbtn(c, beautiful.bg_normal, beautiful.bg_normal .. 55, maximizeIcon())
+	local maximize = titlebarbtn(c, beautiful.fg_normal_opposite, beautiful.fg_normal_opposite .. 55, maximizeIcon())
 	local function maximizeSetup()
 		maximize.icon = maximizeIcon()
 		helpers.maximize(c)
