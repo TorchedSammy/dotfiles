@@ -51,7 +51,7 @@ end
 local function setupTitlebar(c)
 	-- this seems confusing, but the value of this property is flipped to what
 	-- it should actually be for some reason
-	if c.requests_no_titlebar or c.class == 'mpv' then
+	if c.requests_no_titlebar then
 		return
 	end
 
@@ -74,6 +74,19 @@ local function setupTitlebar(c)
 		widget = wibox.container.background,
 		forced_width = base.width / 2
 	}
+
+	if c.class == 'mpv' then
+		gradientBar = wibox.widget {
+			widget = wibox.container.mirror,
+			reflection = {
+				vertical = true
+			},
+			base.sideDecor {
+				h = beautiful.titlebar_height,
+				noRounder = true,
+			},
+		}
+	end
 
 	local logo = widgets.imgwidget(gears.color.recolor_image(beautiful.config_path .. '/images/gradient-logo.svg', beautiful.fg_tert))
 	local buttonsSectionW = beautiful.dpi(120)
