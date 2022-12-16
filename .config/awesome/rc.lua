@@ -43,10 +43,11 @@ require 'conf'
 awful.screen.connect_for_each_screen(function(s)
 	local margin = beautiful.useless_gap
 
+	local mul = beautiful.dpi(2)
 	s.padding = {
-		top = margin * 2,
-		left = margin * 2, right = margin * 2,
-		bottom = margin * 2
+		top = margin * mul,
+		left = margin * mul, right = margin * mul,
+		bottom = margin * mul
 	}
 	local l = awful.layout.suit
 	local layouts = { l.floating, l.tile, l.floating, l.tile, l.floating, l.floating, l.floating, l.floating, l.floating }
@@ -114,7 +115,9 @@ awful.rules.rules = {
 	},
 
 	{ rule_any = { class = {'Google-chrome'}, name = {'Discord'} },
-	   properties = { maximized_vertical = true, maximized_horizontal = true } },
+	   callback = function(c)
+		helpers.winmaxer(c)
+     end},
 }
 -- }}}
 
