@@ -29,6 +29,7 @@ widgets.stardew_time = function(s)
 	}
 
 	-- we'll update the icons every hour
+	--[[
 	gears.timer {
 		timeout = 60 * 60, -- seconds * minutes (1 hour)
 		autostart = true,
@@ -43,7 +44,6 @@ widgets.stardew_time = function(s)
 		autostart = true,
 		call_now = true,
 		callback = function()
-			--[[
 			local cr = cairo.Context(img)
 			local minute = os.date '%M'
 			local angle = (minute / 60) * 2 * math.pi
@@ -57,9 +57,9 @@ widgets.stardew_time = function(s)
 
 			dialarrow.image = img
 			dialarrow:emit_signal 'widget::redraw_needed'
-			]]--
 		end
 	}
+	]]--
 
 	stardew_time:setup {
 		{
@@ -119,7 +119,7 @@ widgets.stardew_time = function(s)
 			bg = beautiful.wibar_bg,
 			shape = helpers.rrect(2),
 			shape_border_color = beautiful.border_normal,
-			shape_border_width = 3,
+			shape_border_width = dpi(3),
 			forced_width = stardew_time.width,
 			forced_height = stardew_time.height,
 			widget = wibox.container.background,
@@ -129,7 +129,7 @@ widgets.stardew_time = function(s)
 	}
 
 	stardew_time.visible = true
-	awful.placement.top_right(stardew_time, { margins = { top = dpi(beautiful.wibar_height + 12), right = dpi(12) }, parent = s })
+	awful.placement.top_right(stardew_time, { margins = { top = beautiful.wibar_height + dpi(12), right = dpi(12) }, parent = s })
 end
 
 return widgets

@@ -102,7 +102,7 @@ awful.screen.connect_for_each_screen(function(s)
 	}
 
 	local infoAccentHeight = height + beautiful.dpi(4)
-	local infoAccentGradient = base.createGradient(nil, infoAccentHeight, nil, 0.86)
+	local infoAccentGradient = base.createGradient(nil, infoAccentHeight, nil, 1)
 	local infoAccent = base.gradientSurface {
 		gradient = infoAccentGradient,
 		w = infoWidth,
@@ -244,6 +244,11 @@ awful.screen.connect_for_each_screen(function(s)
 	}
 
 	local logoBtn = widgets.imgwidget(gears.color.recolor_image(beautiful.config_path .. '/images/gradient-logo.svg', beautiful.fg_tert))
+	logoBtn.buttons = {
+		awful.button({}, 1, function()
+			w.startMenu.toggle()
+		end)
+	}
 	helpers.displayClickable(logoBtn)
 
 	local realbar = wibox.widget {

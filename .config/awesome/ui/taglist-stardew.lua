@@ -48,7 +48,7 @@ local function taglist(s)
 					gears.shape.rounded_rect(cr, w, h, 4)
 				end,
 				shape_border_color = beautiful.wibar_bg,
-				shape_border_width = 3,
+				shape_border_width = dpi(3),
 				widget = wibox.container.background
 		})
 		table.insert(tagwidgets, tagbox[i])
@@ -92,7 +92,7 @@ local function taglist(s)
 			if s.tags[i] and s.tags[i].selected then
 				--tag_text[i].markup = helpers.colorize_text(tf[i], cf[i])
 				tagbox[i].shape_border_color = beautiful.border_focus
-				tagbox[i].shape_border_width = 3
+				tagbox[i].shape_border_width = dpi(3)
 				tagbox[i].bg = beautiful.bg_sec
 				tag_text[i].markup = helpers.colorize_text(te[i], beautiful.taglist_text_focused or beautiful.taglist_text_color)
 				--tag_text[i].markup = helpers.colorize_text(tf[i], cf[i])

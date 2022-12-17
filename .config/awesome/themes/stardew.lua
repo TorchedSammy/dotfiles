@@ -1,4 +1,4 @@
-local colors = require 'themes.colors.syntax'
+local colors = require 'themes.colors.stardew'
 if not awesome then return colors end
 
 local xresources = require 'beautiful.xresources'
@@ -25,7 +25,7 @@ theme.fg_urgent     = '#ffffff'
 theme.fg_minimize   = '#ffffff'
 
 theme.useless_gap   = dpi(6)
-theme.border_width  = 3
+theme.border_width  = dpi(3)
 theme.border_normal  = theme.fg_normal
 theme.border_focus  = theme.fg_normal
 theme.client_shape = helpers.rrect(2)
@@ -40,8 +40,8 @@ theme.notification_position = 'bottom_right'
 theme.notification_width = dpi(340)
 theme.notification_height = dpi(100)
 theme.notification_border_color = theme.xforeground
-theme.notification_border_width = 3
-theme.notification_padding = theme.useless_gap * 2
+theme.notification_border_width = dpi(3)
+theme.notification_padding = theme.useless_gap * dpi(2)
 theme.notification_shape = helpers.rrect(2)
 
 theme.bar = 'stardew'
