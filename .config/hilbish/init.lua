@@ -1,15 +1,36 @@
 local bait = require 'bait'
 local commander = require 'commander'
-local delta = require 'delta'
+local promptua = require 'promptua'
 local fs = require 'fs'
 
-delta.init()
+promptua.setTheme 'delta'
+promptua.init()
 
-os.setenv('LITE_SCALE', '1.2')
+local _, tty = hilbish.run('tty', false)
+tty = tty:gsub('\n', '')
+os.setenv('GPG_TTY', tty)
+hilbish.run 'gpgconf --launch gpg-agent'
+
+os.setenv('LITE_SCALE', '0.9')
+os.setenv('VOLTA_HOME', string.format('%s/volta', hilbish.userDir.data))
+os.setenv('WINEPREFIX', string.format('%s/wine', hilbish.userDir.data))
+os.setenv('RUSTUP_HOME', string.format('%s/rustup', hilbish.userDir.data))
+os.setenv('GOPATH', string.format('%s/go', hilbish.userDir.data))
+os.setenv('CARGO_HOME', string.format('%s/cargo', hilbish.userDir.data))
+os.setenv('ANDROID_HOME', string.format('%s/android', hilbish.userDir.data))
+
+os.setenv('INPUTRC', string.format('%s/readline/inputrc', hilbish.userDir.config))
+os.setenv('GTK2_RC_FILES', string.format('%s/gtk-2.0/gtkrc', hilbish.userDir.config))
+os.setenv('_JAVA_OPTIONS', string.format('-Djava.util.prefs.userRoot=%s/java', hilbish.userDir.config))
+
+os.setenv('ERRFILE', string.format('%s/.cache/X11/xsession-errors', hilbish.home))
+os.setenv('XAUTHORITY', string.format('%s/Xauthority', os.getenv 'XDG_RUNTIME_DIR'))
 
 hilbish.prependPath '~/bin/'
 hilbish.appendPath '/usr/local/go/bin/'
-hilbish.appendPath '~/go/bin/'
+hilbish.appendPath(os.getenv 'VOLTA_HOME' .. '/bin')
+hilbish.appendPath(os.getenv 'GOPATH' .. '/bin')
+hilbish.appendPath(os.getenv 'CARGO_HOME' .. '/bin')
 hilbish.appendPath '~/.local/bin/'
 hilbish.appendPath '~/flutter/bin'
 hilbish.appendPath '-/Android/Sdk/cmdline-tools/latest/bin'
@@ -47,20 +68,6 @@ hilbish.alias('gm', 'git merge')
 hilbish.alias('p', 'git push')
 hilbish.alias('c', 'git commit')
 hilbish.alias('multimc', '~/MultiMC/MultiMC -d ~/.local/share/multimc > /dev/null 2>&1 &')
-
--- GPG
-local _, tty = hilbish.run('tty', false)
-tty = tty:gsub('\n', '')
-
-os.setenv('GPG_TTY', tty)
-os.execute 'gpgconf --launch gpg-agent'
-
--- Cargo
-hilbish.appendPath '~/.cargo/bin'
-
--- Setup Volta
-os.setenv('VOLTA_HOME', os.getenv 'HOME' .. '/.volta')
-hilbish.appendPath(os.getenv 'VOLTA_HOME' .. '/bin')
 
 -- Setup jump (https://github.com/gsamokovarov/jump)
 bait.catch('cd', function()
