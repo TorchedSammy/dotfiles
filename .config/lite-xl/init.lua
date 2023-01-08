@@ -78,9 +78,9 @@ local italicFont = fontconfig.load_group_blocking({
 style.syntax_fonts = {
 	comment = italicFont,
 	keyword2 = italicFont,
-	type_builtin = italicFont,
+	['type.builtin'] = italicFont,
 	error = italicFont,
-	function_builtin = italicFont
+	['function.builtin'] = italicFont
 }
 for _, font in pairs(style.syntax_fonts) do
 	font:set_tab_size(4)
