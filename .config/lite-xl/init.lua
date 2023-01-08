@@ -22,17 +22,23 @@ if not ok then
 	end
 end
 
-config.plugins.miq.lpm_prefix = HOME .. '/Downloads/lite-xl-plugin-manager/'
 config.plugins.miq.debug = true
 config.plugins.miq.plugins = {
 	-- miq can manage itself
 	'~/Files/Projects/Miq',
+
 	'TorchedSammy/Feathertime',
+
 	{'TorchedSammy/Litepresence', run = 'go get && go build'},
-	'TorchedSammy/Lazulight.lxl',
-	{'TorchedSammy/lite-xl-gitdiff-highlight', name = 'gitdiff_highlight'},
+
+	{'TorchedSammy/Evergreen.lxl', run = 'luarocks install ltreesitter --local --dev'},
+
+	--{'TorchedSammy/lite-xl-gitdiff-highlight', name = 'gitdiff_highlight'},
+	'~/Files/Projects/lite-xl-scm',
+
 	'lite-xl/lite-xl-lsp',
 	'TorchedSammy/lite-xl-lspkind',
+
 	-- others
 	'anthonyaxenov/lite-xl-ignore-syntax',
 	'juliardi/lite-xl-treeview-menu-extender',
@@ -114,7 +120,7 @@ if not core.status_view:get_item 'icon:heart' then
 		separator = StatusView.separator2
 	}
 end
-core.status_view:hide_items {'doc:line-ending', 'command:files'}
+core.status_view:hide_items {'doc:line-ending', 'command:files', 'status:scm'}
 core.status_view:move_item('doc:position', 3, StatusView.Item.RIGHT)
 
 keymap.add_direct {
