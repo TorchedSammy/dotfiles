@@ -133,8 +133,8 @@ lspconfig.sumneko_lua.setup {
 			workspace = {
 				library = {
 					DATADIR,
-					'/usr/share/hilbish/emmyLuaDocs',
-					'/usr/share/hilbish/libs'
+					'/usr/local/share/hilbish/emmyLuaDocs',
+					'/usr/local/share/hilbish/libs'
 				}
 			},
 			diagnostics = {
