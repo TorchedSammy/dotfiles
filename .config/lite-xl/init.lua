@@ -89,7 +89,6 @@ end
 lspkind.setup {
 	fontName = 'VictorMono Nerd Font Mono:style=Medium'
 }
-core.reload_module 'colors.awesomewm'
 
 config.tab_type = 'hard'
 config.indent_size = 4
@@ -146,3 +145,5 @@ lspconfig.sumneko_lua.setup {
 		}
 	}
 }
+
+core.reload_module 'colors.awesomewm'
