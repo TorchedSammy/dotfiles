@@ -1,4 +1,4 @@
-#! /bin/hilbish
+#! /usr/bin/env hilbish
 
 local _, theme = hilbish.run 'awesome-theme'
 

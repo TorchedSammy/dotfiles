@@ -1,4 +1,4 @@
-#! /bin/hilbish
+#! /usr/bin/env hilbish
 
 local art = [[
 

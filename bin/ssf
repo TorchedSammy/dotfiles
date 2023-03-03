@@ -1,4 +1,4 @@
-#! /bin/hilbish
+#! /usr/bin/env hilbish
 -- ssf: minimal screenshot script for sharex hosts - upload local file
 -- requirements: xclip, maim, curl, jq, notify-send
 -- usage: ssf <path-to-file>

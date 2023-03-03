@@ -1,4 +1,4 @@
-#! /bin/hilbish
+#! /usr/bin/env hilbish
 local ansikit = require 'ansikit'
 
 if os.getenv 'TERM' == 'linux' then

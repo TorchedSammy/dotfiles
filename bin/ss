@@ -1,4 +1,4 @@
-#! /bin/hilbish
+#! /usr/bin/env hilbish
 -- ss: minimal screenshot script for sharex hosts
 -- check ssf for more details
 

@@ -1,4 +1,4 @@
-#! /bin/hilbish
+#! /usr/bin/env hilbish
 -- this is broken
 -- by broken, i mean it gets the wrong character to draw
 -- if u can fix, please do ill love u forever

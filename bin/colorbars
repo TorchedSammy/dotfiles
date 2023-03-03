@@ -1,4 +1,4 @@
-#!/bin/hilbish
+#!/usr/bin/env hilbish
 -- colorbars - smpte color bars, but in lua!
 
 print ''
