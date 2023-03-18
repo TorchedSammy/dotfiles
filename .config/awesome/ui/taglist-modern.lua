@@ -36,7 +36,7 @@ local function setup(s)
 		ce = {fe, fe, fe, fe, fe, fe, fe, fe, fe, fe}
 	end
 
-	local baseSize = 13
+	local baseSize = beautiful.dpi(13)
 	local taglist = awful.widget.taglist {
 		screen = s,
 		filter = awful.widget.taglist.filter.all,
