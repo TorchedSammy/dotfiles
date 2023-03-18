@@ -38,6 +38,7 @@ config.plugins.miq.plugins = {
 
 	'lite-xl/lite-xl-lsp',
 	'TorchedSammy/lite-xl-lspkind',
+	'~/Files/Projects/lspinstall.lxl',
 
 	-- others
 	'anthonyaxenov/lite-xl-ignore-syntax',
