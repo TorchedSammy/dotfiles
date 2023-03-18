@@ -1,4 +1,4 @@
-local colors = require 'themes.colors.syntax'
+local colors = require 'themes.colors.stardew-night'
 if not awesome then return colors end
 
 local xresources = require 'beautiful.xresources'
