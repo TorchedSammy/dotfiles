@@ -1,4 +1,4 @@
 return {
-	theme = 'syntax',
+	theme = 'syntax-dark',
 	picom = true
 }
