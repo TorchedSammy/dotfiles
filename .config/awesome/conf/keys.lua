@@ -26,13 +26,13 @@ awful.key({modkey}, 'Escape', awful.tag.history.restore, {
 }),
 
 awful.key({modkey}, 'F2', function()
-	awful.spawn 'light -U 10'
+	awful.spawn.easy_async('light -U 10', function() end)
 end, {
 	description = 'Decrease brightness',
 	group = 'screen'
 }),
 awful.key({modkey}, 'F3', function()
-	awful.spawn 'light -A 10'
+	awful.spawn.easy_async('light -A 10', function() end)
 end, {
 	description = 'Increase brightness',
 	group = 'screen'
