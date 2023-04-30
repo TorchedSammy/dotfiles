@@ -44,14 +44,14 @@ end
 function helpers.hoverCursor(w, cursorType)
   cursorType = cursorType or 'hand2'
   local oldCursor = 'left_ptr'
+  local wbx
 
   w:connect_signal('mouse::enter', function()
-    local wbx = mouse.current_wibox
+    wbx = mouse.current_wibox
     if wbx then wbx.cursor = cursorType end
   end)
 
   w:connect_signal('mouse::leave', function()
-    local wbx = mouse.current_wibox
     if wbx then wbx.cursor = oldCursor end
   end)
 end
