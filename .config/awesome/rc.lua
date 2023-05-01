@@ -43,7 +43,7 @@ require 'conf'
 awful.screen.connect_for_each_screen(function(s)
 	local margin = beautiful.useless_gap
 
-	local mul = beautiful.dpi(2)
+	local mul = 1-- beautiful.dpi(2)
 	s.padding = {
 		top = margin * mul,
 		left = margin * mul, right = margin * mul,
@@ -72,8 +72,21 @@ awful.rules.rules = {
 			keys = clientkeys,
 			buttons = clientbuttons,
 			screen = awful.screen.preferred,
-			placement = awful.placement.no_overlap+awful.placement.no_offscreen
-		}
+		},
+		callback = function(c)
+			local g = c:geometry()
+			local sg = c.screen.geometry
+			if (g.width >= sg.width or g.height >= sg.height) then
+				if not c.fullscreen then
+					c.fullscreen = true
+				end
+				local pf = awful.placement.no_offscreen + awful.screen.centered
+				pf(c, {parent = awful.screen.preferred()})
+			else
+				local pf = awful.placement.no_overlap+awful.placement.no_offscreen
+				pf(c, {parent = awful.screen.preferred()})
+			end
+		end
 	},
 
 	-- Floating clients.
