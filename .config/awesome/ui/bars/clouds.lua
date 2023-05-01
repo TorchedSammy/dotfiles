@@ -10,8 +10,6 @@ local wibox = require 'wibox'
 screen.connect_signal('property::geometry', helpers.set_wallpaper)
 
 awful.screen.connect_for_each_screen(function(s)
-	helpers.set_wallpaper(s)
-
 	-- Our actual bar will be transparent,
 	-- then we add the smaller bars inside of it
 	s.bar = awful.wibar {

@@ -9,8 +9,6 @@ local helpers = require 'helpers'
 screen.connect_signal('property::geometry', helpers.set_wallpaper)
 
 awful.screen.connect_for_each_screen(function(s)
-	helpers.set_wallpaper(s)
-
 	s.bar = awful.wibar({
 		screen = s,
 		position = 'bottom',

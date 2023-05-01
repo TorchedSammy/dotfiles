@@ -41,6 +41,8 @@ beautiful.init('~/.config/awesome/themes/' .. settings.theme .. '.lua')
 require 'conf'
 
 awful.screen.connect_for_each_screen(function(s)
+	helpers.set_wallpaper(s)
+
 	local margin = beautiful.useless_gap
 
 	local mul = 1-- beautiful.dpi(2)
