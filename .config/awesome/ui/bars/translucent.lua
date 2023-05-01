@@ -9,17 +9,15 @@ local helpers = require 'helpers'
 screen.connect_signal('property::geometry', helpers.set_wallpaper)
 
 awful.screen.connect_for_each_screen(function(s)
-	helpers.set_wallpaper(s)
-
 	local function rect(cr, w, h)
-		return gears.shape.rounded_rect(cr, w, h, 6)
+		return gears.shape.rounded_rect(cr, w, h, 2)
 	end
 
 	s.bar = awful.wibar({
 		screen = s,
 		position = 'bottom',
 		height = beautiful.wibar_height,
-		width = s.geometry.width - (beautiful.useless_gap * 4),
+		width = s.geometry.width,
 		shape = rect,
 		bg = '#00000000',
 	})
@@ -31,7 +29,9 @@ awful.screen.connect_for_each_screen(function(s)
 				left = 10, right = 10,
 				widget,
 			},
-			shape = rect,
+			shape = function(cr, w, h)
+				return gears.shape.rounded_rect(cr, w, h, 4)
+			end,
 			bg = beautiful.wibar_bg .. string.format('%02x', math.floor(0.6 * 255)),
 			widget = wibox.container.background,
 			forced_width = w or widget.forced_width,
@@ -91,16 +91,8 @@ awful.screen.connect_for_each_screen(function(s)
 	}
 
 	s.bar:setup {
-		layout = wibox.layout.align.horizontal,
-		expand = 'none',
-		{
-			{
-				layout = wibox.layout.fixed.horizontal,
-				realbar,
-			},
-			bottom = beautiful.useless_gap * 2,
-			widget = wibox.container.margin,
-		}
+		layout = wibox.container.place,
+		realbar
 	}
 end)
 
