@@ -401,6 +401,7 @@ do
 		for i, widget in ipairs(set) do
 			if i % 2 ~= 0 then
 				widget:connect_signal('mouse::enter', function() powerText.markup = helpers.colorize_text(set[i + 1], beautiful.fg_sec) end)
+				helpers.hoverCursor(widget)
 			end
 		end
 	end
