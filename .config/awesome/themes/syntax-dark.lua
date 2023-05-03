@@ -5,7 +5,7 @@ local xresources = require 'beautiful.xresources'
 local helpers = require 'helpers'
 local dpi = xresources.apply_dpi
 
-local theme = require 'themes.common'
+local theme = require 'themes.syntax'
 
 -- join theme and colors
 local gears = require 'gears'
@@ -44,14 +44,7 @@ theme.titlebar_bg = theme.xbackground
 theme.titlebar_bg_sec = theme.xcolor8
 theme.titlebar_bg_sec2 = theme.xcolor10
 
-theme.notification_bg = theme.xbackground
-theme.notification_position = 'bottom_right'
-theme.notification_width = dpi(340)
-theme.notification_height = dpi(100)
-theme.notification_border_color = theme.xforeground
-theme.notification_border_width = 3
-theme.notification_padding = theme.useless_gap * 2
-theme.notification_shape = helpers.rrect(2)
+theme.notification_bg = theme.bg_sec
 
 theme.bar = 'syntax'
 theme.wibar_height = dpi(32)

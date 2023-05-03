@@ -90,7 +90,6 @@ theme.notification_bg = theme.xcolor0
 -- notification_[width|height|margin]
 -- notification_[border_color|border_width|shape|opacity]
 theme.notification_font = "SF Pro Text Regular 10"
-theme.notification_shape = helpers.rrect(dpi(8))
 theme.notification_margin = dpi(10)
 theme.notification_padding = dpi(10)
 theme.notification_spacing = dpi(10)

@@ -12,6 +12,7 @@ local gears = require 'gears'
 theme = gears.table.join(theme, colors)
 
 theme.font          = 'Nimbus Sans Regular 12'
+theme.font_bold     = 'Nimbus Sans Bold 12'
 
 theme.bg_normal = theme.xbackground
 theme.bg_sec = helpers.shiftColor(theme.bg_normal, 8)
@@ -43,14 +44,14 @@ theme.titlebar_bg = theme.xbackground
 theme.titlebar_bg_sec = theme.xcolor8
 theme.titlebar_bg_sec2 = theme.xcolor10
 
-theme.notification_bg = theme.xbackground
+theme.notification_bg = theme.bg_sec
 theme.notification_position = 'bottom_right'
-theme.notification_width = dpi(340)
-theme.notification_height = dpi(100)
+theme.notification_icon_size = dpi(140)
+theme.notification_width = dpi(480)
+theme.notification_height = dpi(180)
 theme.notification_border_color = theme.xforeground
 theme.notification_border_width = 3
 theme.notification_padding = theme.useless_gap * 2
-theme.notification_shape = helpers.rrect(2)
 
 theme.bar = 'syntax'
 theme.wibar_height = dpi(32)
