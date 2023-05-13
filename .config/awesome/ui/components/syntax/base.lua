@@ -7,8 +7,8 @@ local base = {
 	width = 12,
 	radius = 6,
 	gradientColors = beautiful.gradientColors or {
-		'#86ecf0',
-		'#c3fa74'
+		'#86e0f0',
+		'#9cfa74'
 	},
 }
 base.shape = function(cr, w, h) return gears.shape.partially_rounded_rect(cr, w, h, false, true, false, true, base.radius) end
