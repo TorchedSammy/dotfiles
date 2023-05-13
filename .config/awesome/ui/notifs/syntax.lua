@@ -14,6 +14,11 @@ naughty.connect_signal('request::display', function(notification)
 			widget_template = {
 				{
 					layout = wibox.layout.fixed.horizontal,
+					base.sideDecor {
+						h = beautiful.notification_height,
+						bg = beautiful.notification_bg,
+						noRounder = true
+					},
 					{
 						{
 							{
@@ -23,22 +28,18 @@ naughty.connect_signal('request::display', function(notification)
 									halign = 'left',
 									{
 										{
-											{
 											widget = wibox.widget.textbox,
-											text = notification.title ~= '' and notification.title or '<No Title>',
+											text = notification.title or notification.title ~= '' and notification.title or '<No Title>',
 											font = beautiful.font_bold:gsub('%d+$', '16')
 										},
 										{
 											widget = wibox.widget.textbox,
-											text = notification.text ~= '' and notification.text or '<No Text>',
+											text = notification.text or notification.text ~= '' and notification.text or '<No Text>',
 											font = beautiful.font:gsub('%d+$', '16')
 										},
-											spacing = beautiful.dpi(6),
-											layout = wibox.layout.fixed.vertical,
-										},
-										spacing = beautiful.dpi(8),
-										layout = wibox.layout.fixed.horizontal,
-									}
+										spacing = beautiful.dpi(6),
+										layout = wibox.layout.fixed.vertical,
+									},
 								},
 								margins = beautiful.notification_margin,
 								widget  = wibox.container.margin,
@@ -52,12 +53,6 @@ naughty.connect_signal('request::display', function(notification)
 						widget = wibox.container.background,
 						bg = beautiful.notification_bg
 					},
-					base.sideDecor {
-						h = beautiful.notification_height,
-						bg = beautiful.notification_bg,
-						position = 'right',
-						noRounder = true
-					},
 				},
 				bg = '#00000000',
 				widget = wibox.container.background,
@@ -70,6 +65,11 @@ naughty.connect_signal('request::display', function(notification)
 			widget_template = {
 				{
 					layout = wibox.layout.fixed.horizontal,
+					base.sideDecor {
+						h = beautiful.notification_height,
+						bg = beautiful.notification_bg,
+						noRounder = true
+					},
 					{
 						{
 							{
@@ -84,15 +84,15 @@ naughty.connect_signal('request::display', function(notification)
 										},
 										{
 											{
-											widget = wibox.widget.textbox,
-											text = notification.title ~= '' and notification.title or '<No Title>',
-											font = beautiful.font_bold:gsub('%d+$', '16')
-										},
-										{
-											widget = wibox.widget.textbox,
-											text = notification.text ~= '' and notification.text or '<No Text>',
-											font = beautiful.font:gsub('%d+$', '16')
-										},
+												widget = wibox.widget.textbox,
+												text = notification.title or notification.title ~= '' and notification.title or '<No Title>',
+												font = beautiful.font_bold:gsub('%d+$', '16')
+											},
+											{
+												widget = wibox.widget.textbox,
+												text = notification.text or notification.text ~= '' and notification.text or '<No Text>',
+												font = beautiful.font:gsub('%d+$', '16')
+											},
 											spacing = beautiful.dpi(6),
 											layout = wibox.layout.fixed.vertical,
 										},
@@ -111,12 +111,6 @@ naughty.connect_signal('request::display', function(notification)
 						shape = function(crr, w, h) return gears.shape.partially_rounded_rect(crr, w, h, false, false, false, true, base.rad) end,
 						widget = wibox.container.background,
 						bg = beautiful.notification_bg
-					},
-					base.sideDecor {
-						h = beautiful.notification_height,
-						bg = beautiful.notification_bg,
-						position = 'right',
-						noRounder = true
 					},
 				},
 				bg = '#00000000',
