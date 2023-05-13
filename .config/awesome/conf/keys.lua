@@ -179,7 +179,10 @@ awful.key({modkey, control}, 'r', awesome.restart, {
 	description = 'Restart/Reload awesome',
 	group = 'awesome'
 }),
-awful.key({ modkey, shift   }, 'q', awesome.quit, {
+awful.key({ modkey, shift   }, 'q', function()
+	local exit = require 'ui.actions.syntax.exit'
+	exit()
+end, {
 	description = 'Exit awesome',
 	group = 'awesome'
 }),
