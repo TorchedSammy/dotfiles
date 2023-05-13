@@ -1,5 +1,6 @@
-local gears = require 'gears'
 local awful = require 'awful'
+local beautiful = require 'beautiful'
+local gears = require 'gears'
 local naughty = require 'naughty'
 local hotkeys_popup = require 'awful.hotkeys_popup'
 local switcher = require 'modules.awesome-switcher'
@@ -70,10 +71,30 @@ awful.key({control}, 'Print',
 		group = 'awesome'
 	}
 ),
+awful.key({control, shift}, 'Print',
+	function()
+		awful.spawn 'ss window'
+	end, {
+		description = 'Take a window screenshot',
+		group = 'awesome'
+	}
+),
+awful.key({control, shift}, 'Print',
+	function()
+		awful.spawn 'ss screen'
+	end, {
+		description = 'Take a screenshot of the whole screen',
+		group = 'awesome'
+	}
+),
 awful.key({modkey}, 'd',
 	function()
 		awful.spawn.with_shell 'rsync -ah --inplace --info=progress2 ~/Files/Dotfiles/.config/awesome/ ~/.config/awesome/'
-		naughty.notify { text = 'Copied awesome config'}
+		naughty.notification {
+			title = 'System',
+			text = 'New configuration copied.',
+			icon = beautiful.config_path .. '/images/albumPlaceholder.png'
+		}
 	end, {
 		description = 'Update awesome config from dotfiles folder',
 		group = 'awesome'
@@ -394,7 +415,5 @@ clientbuttons = gears.table.join(
 )
 
 root.keys(globalkeys)
-root.buttons(gears.table.join(
-	awful.button({ }, 3, function() mainmenu:toggle() end)
-))
+awful.mouse.append_global_mousebinding(awful.button({ }, 3, function() mainmenu:toggle() end))
 
