@@ -9,47 +9,14 @@ local vol = require 'conf.vol'
 local wibox = require 'wibox'
 local w = require 'ui.widgets'
 local naughty = require 'naughty'
+local menugen = require 'menubar.menu_gen'
+local rubato = require 'modules.rubato'
+local settings = require 'conf.settings'
 
 local bgcolor = beautiful.bg_sec
 local playerctl = bling.signal.playerctl.lib()
-local function button(color_focus, txt, font)
-	local focused = false
-	local ico = wibox.widget {
-		markup = helpers.colorize_text(txt, color_focus),
-		font = font or 'VictorMono NF 16',
-		widget = wibox.widget.textbox,
-		icon = txt,
-		align = 'center'
-	}
-
-	local function setupIcon()
-		ico.markup = helpers.colorize_text(ico.icon, focused and color_focus .. 55 or color_focus)
-	end
-
-	ico:connect_signal('mouse::enter', function()
-		focused = true
-		setupIcon()
-	end)
-	ico:connect_signal('mouse::leave', function()
-		focused = false
-		setupIcon()
-	end)
-
-	ico.visible = true
-	return setmetatable({}, {
-		__index = function(_, k)
-			return ico[k]
-		end,
-		__newindex = function(_, k, v)
-			ico[k] = v
-			if k == 'icon' then
-				setupIcon()
-			elseif k == 'color' then
-				color_focus = v
-				setupIcon()
-			end
-		end
-	})
+local function button(color_focus, icon, size, shape)
+	return w.button(icon, {bgcolor = bgcolor, shape = shape, size = size})
 end
 
 local widgets = {}
@@ -87,6 +54,7 @@ do
 		ontop = true,
 		visible = false
 	}
+	helpers.hideOnClick(musicDisplay)
 
 	local progressShape = base.shape
 	local progress = wibox.widget {
@@ -123,14 +91,15 @@ do
 	local wrappedMusicArtist = scroll(musicArtist)
 	local wrappedMusicTitle = scroll(musicTitle)
 	local wrappedMusicAlbum = scroll(musicAlbum)
+	local btnSize = beautiful.dpi(19)
 
-	local shuffle = button(beautiful.fg_normal, '列')
+	local shuffle = button(beautiful.fg_normal, 'shuffle', btnSize)
 	shuffle:connect_signal('button::press', function()
 		playerctl:cycle_shuffle()
 	end)
 
 	local position = 0
-	local prev = button(beautiful.fg_normal, '玲')
+	local prev = button(beautiful.fg_normal, 'skip-previous', btnSize)
 	prev:connect_signal('button::press', function()
 		if position >= 5 then
 			playerctl:set_position(0)
@@ -139,13 +108,13 @@ do
 		playerctl:previous()
 	end)
 
-	local playPauseIcons = {'契', ''}
-	local playPause = button(beautiful.fg_normal, playPauseIcons[2])
+	local playPauseIcons = {'play', 'pause'}
+	local playPause = button(beautiful.fg_normal, playPauseIcons[2], btnSize)
 	playPause:connect_signal('button::press', function()
 		playerctl:play_pause()
 	end)
 
-	local next = button(beautiful.fg_normal, '怜')
+	local next = button(beautiful.fg_normal, 'skip-next', btnSize)
 	next:connect_signal('button::press', function()
 		playerctl:next()
 	end)
@@ -203,11 +172,15 @@ do
 			layout = wibox.layout.align.horizontal,
 			expand = 'none',
 			{
-				layout = wibox.layout.fixed.horizontal,
-				spacing = beautiful.wibar_spacing,
-				prev,
-				playPause,
-				next
+				widget = wibox.container.margin,
+				left = -beautiful.dpi(6),
+				{
+					layout = wibox.layout.fixed.horizontal,
+					spacing = beautiful.wibar_spacing / beautiful.dpi(4),
+					prev,
+					playPause,
+					next
+				}
 			},
 			{
 				layout = wibox.container.place
@@ -401,31 +374,32 @@ do
 		for i, widget in ipairs(set) do
 			if i % 2 ~= 0 then
 				widget:connect_signal('mouse::enter', function() powerText.markup = helpers.colorize_text(set[i + 1], beautiful.fg_sec) end)
-				helpers.hoverCursor(widget)
 			end
 		end
 	end
 
-	local iconFont = 'Font Awesome 6 Free 58'
+	local function btn(bc, ic, icf)
+		return button(bc, ic, 58, helpers.rrect(base.radius))
+	end
 	local buttonColor = beautiful.fg_normal
-	local logout = button(buttonColor, '', iconFont)
+	local logout = btn(buttonColor, 'logout')
 
 	logout:connect_signal('button::press', function()
 		awesome.quit()
 		hide()
 	end)
 
-	local shutdown = button(buttonColor, '', iconFont)
+	local shutdown = btn(buttonColor, 'power2')
 	shutdown:connect_signal('button::press', function()
 		awful.spawn 'poweroff'
 		hide()
 	end)
-	local restart = button(buttonColor, '', iconFont)
+	local restart = btn(buttonColor, 'restart')
 	restart:connect_signal('button::press', function()
 		awful.spawn 'reboot'
 		hide()
 	end)
-	local sleep = button(buttonColor, '', iconFont)
+	local sleep = btn(buttonColor, 'sleep')
 	sleep:connect_signal('button::press', function()
 		awful.spawn 'systemctl suspend'
 		hide()
@@ -457,11 +431,15 @@ do
 						layout = wibox.container.place
 					},
 					{
-						layout = wibox.layout.flex.horizontal,
-						logout,
-						shutdown,
-						restart,
-						sleep
+						widget = wibox.container.margin,
+						top = beautiful.dpi(8), bottom = beautiful.dpi(8),
+						{
+							layout = wibox.layout.flex.horizontal,
+							logout,
+							shutdown,
+							restart,
+							sleep
+						}
 					},
 					{
 						widget = wibox.container.margin,

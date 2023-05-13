@@ -5,6 +5,8 @@ local beautiful = require 'beautiful'
 local xresources = require 'beautiful.xresources'
 local dpi = xresources.apply_dpi
 local vol = require 'conf.vol'
+local helpers = require 'helpers'
+local naughty = require 'naughty'
 
 local function rounded_bar(color)
 	return wibox.widget {
@@ -26,6 +28,106 @@ local function rounded_bar(color)
 end
 
 local widgets = {}
+widgets.imgwidget = function(icon, args)
+	args = args or {}
+	local w = {
+		image = type(icon) == 'string' and beautiful.config_path .. '/images/' .. icon or icon,
+		widget = wibox.widget.imagebox
+	}
+	local wArgs = gears.table.join(w, args)
+
+	local ico = wibox.widget(wArgs)
+
+	return ico
+end
+
+function widgets.icon(name, opts)
+	opts = opts or {}
+
+	return wibox.widget {
+		layout = wibox.container.place,
+		{
+			widget = wibox.container.constraint,
+			width = opts.size and opts.size or beautiful.dpi(18),
+			{
+				widget = wibox.widget.imagebox,
+				image = beautiful.config_path .. '/images/icons/' .. name .. '.svg',
+				stylesheet = string.format([[
+					* {
+						fill: %s;
+					}
+				]], beautiful.fg_normal),
+				id = 'icon'
+			}
+		}
+	}
+end
+
+function widgets.button(icon, opts)
+	opts = opts or {}
+
+	local focused = false
+	local ico = wibox.widget {
+		id = 'bg',
+		widget = wibox.container.background,
+		color = opts.bgcolor,
+		shape = opts.shape or gears.shape.circle,
+		{
+			widget = wibox.container.margin,
+			margins = beautiful.dpi(2),
+			{
+				layout = wibox.container.place,
+				{
+					widget = wibox.container.constraint,
+					width = opts.size and opts.size + 2 or beautiful.dpi(18),
+					{
+						widget = wibox.widget.imagebox,
+						image = beautiful.config_path .. '/images/icons/' .. icon .. '.svg',
+						stylesheet = string.format([[
+							* {
+								fill: %s;
+							}
+						]], beautiful.fg_normal),
+						id = 'icon'
+					}
+				}
+			}
+		}
+	}
+	helpers.displayClickable(ico, {color = opts.bgcolor})
+
+	local function setupIcon()
+		--ico:get_children_by_id'icon'[1].image = gears.color.recolor_image(ico:get_children_by_id'icon'[1].image, focused and beautiful.fg_normal .. 55 or beautiful.fg_normal)
+		ico:emit_signal 'widget::redraw_needed'
+	end
+
+	ico:connect_signal('mouse::enter', function()
+		focused = true
+		setupIcon()
+	end)
+	ico:connect_signal('mouse::leave', function()
+		focused = false
+		setupIcon()
+	end)
+
+	ico.visible = true
+	return setmetatable({}, {
+		__index = function(_, k)
+			return ico[k]
+		end,
+		__newindex = function(_, k, v)
+			ico[k] = v
+			if k == 'icon' then
+				setupIcon()
+				ico:get_children_by_id'icon'[1].image = gears.color.recolor_image(beautiful.config_path .. '/images/icons/' .. v .. '.svg', beautiful.fg_normal)
+				ico:emit_signal 'widget::redraw_needed'
+			elseif k == 'color' then
+				ico:get_children_by_id'icon'[1].image = gears.color.recolor_image(ico:get_children_by_id'icon'[1].image, beautiful.v)
+				setupIcon()
+			end
+		end
+	})
+end
 
 widgets.ram_bar = rounded_bar(beautiful.ram_bar_color)
 
@@ -128,11 +230,40 @@ local systray_margin = (beautiful.wibar_height - beautiful.systray_icon_size) / 
 widgets.raw_systray = wibox.widget.systray()
 widgets.raw_systray:set_base_size(beautiful.systray_icon_size)
 
-widgets.systray = wibox.widget {
-	widgets.raw_systray,
-	top = systray_margin,
-	bottom = systray_margin,
-	widget = wibox.container.margin
+local systrayPopup = wibox.widget {
+	{
+		widgets.raw_systray,
+		top = systray_margin,
+		bottom = systray_margin,
+		widget = wibox.container.margin	
+	},
+	widget = wibox.container.background,
+	shape = helpers.rrect(6)
+}
+
+widgets.systray = widgets.icon 'systray'
+helpers.displayClickable(widgets.systray)
+
+local popup = awful.popup {
+	widget = systrayPopup,
+	shape = helpers.rrect(6),
+	ontop = true,
+	visible = false,
+	hide_on_right_click = true,
+	placement = function(w)
+		awful.placement.bottom_right(w, {
+			margins = {
+				bottom = beautiful.dpi(beautiful.wibar_height) + beautiful.useless_gap, right = beautiful.dpi(32)
+			},
+			parent = awful.screen.focused()
+		})
+	end
+}
+helpers.hideOnClick(popup)
+widgets.systray.buttons = {
+	awful.button({}, 1, function()
+		popup.visible = not popup.visible
+	end)
 }
 
 local layoutbox = awful.widget.layoutbox(s)
@@ -150,19 +281,6 @@ widgets.layout = {
 	top = 7, bottom = 7,
 	widget = wibox.container.margin
 }
-
-widgets.imgwidget = function(icon, args)
-	args = args or {}
-	local w = {
-		image = type(icon) == 'string' and gears.surface.load_uncached_silently(beautiful.config_path .. '/images/' .. icon) or icon,
-		widget = wibox.widget.imagebox
-	}
-	local wArgs = gears.table.join(w, args)
-
-	local ico = wibox.widget(wArgs)
-
-	return ico
-end
 
 widgets.volslider = wibox.widget {
 	widget = wibox.widget.slider,
@@ -183,6 +301,7 @@ end)
 widgets.volslider:connect_signal('property::value', function()
 	vol.set(widgets.volslider.value)
 end)
+
 
 return widgets
 
