@@ -15,7 +15,7 @@ theme.font          = 'Nimbus Sans Regular 12'
 
 theme.gradientColors = {'#491979', '#0e5a75'}
 theme.bg_normal = theme.xbackground
-theme.bg_sec = helpers.shiftColor(theme.bg_normal, 8)
+theme.bg_sec = helpers.shiftColor(theme.bg_normal, 12)
 theme.bg_normal_opposite = '#030303'
 theme.bg_sec_opposite = '#1a1a1a'
 theme.bg_tert_opposite = '#262626'
