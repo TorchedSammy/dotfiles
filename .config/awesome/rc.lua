@@ -80,13 +80,19 @@ awful.rules.rules = {
 				if not c.fullscreen then
 					c.fullscreen = true
 				end
-				local pf = awful.placement.no_offscreen + awful.screen.centered
-				pf(c, {parent = awful.screen.preferred()})
-			else
-				local pf = awful.placement.no_overlap+awful.placement.no_offscreen
+				local pf = awful.placement.no_offscreen + awful.placement.centered
 				pf(c, {parent = awful.screen.preferred()})
 			end
 		end
+	},
+
+	{
+		rule_any = {
+			class = "zentity"
+		},
+		properties = {
+			placement = awful.placement.centered
+		}
 	},
 
 	-- Floating clients.
@@ -153,7 +159,7 @@ client.connect_signal('manage', function(c)
 		if c.transient_for ~= nil then
 			awful.placement.centered(c, {parent = c.transient_for})
 		else
-			awful.placement.centered(c)
+			awful.placement.centered(c, {parent = s})
 		end
 	end
 end)
@@ -174,3 +180,4 @@ end)
 collectgarbage('setpause', 110)
 collectgarbage('setstepmul', 1000)
 
+--require 'ui.setup'.start()
