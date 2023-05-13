@@ -2,6 +2,7 @@ local awful = require 'awful'
 local beautiful = require 'beautiful'
 local gears = require 'gears'
 local settings = require 'conf.settings'
+local wibox = require 'wibox'
 
 local helpers = {}
 
@@ -101,5 +102,27 @@ function helpers.displayClickable(w, opts)
   return w
 end
 
-return helpers
+function helpers.hideOnClick(w, hider)
+    hider = hider or function(widget)
+      if widget == w then
+        return
+      end
+      w.visible = false
+    end
 
+    local btn = awful.button({ }, 1, hider)
+
+    w:connect_signal('property::visible', function(w)
+      if not w.visible then
+        --wibox.disconnect_signal('button::press', hider)
+        client.disconnect_signal('button::press', hider)
+        --awful.mouse.remove_global_mousebinding(btn)
+      else
+        awful.mouse.append_global_mousebinding(btn)
+        client.connect_signal('button::press', hider)
+        --wibox.connect_signal('button::press', hider)
+      end
+    end)
+end
+
+return helpers

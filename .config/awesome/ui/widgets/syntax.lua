@@ -94,8 +94,23 @@ do
 	local btnSize = beautiful.dpi(19)
 
 	local shuffle = button(beautiful.fg_normal, 'shuffle', btnSize)
+	local shuffleState
+	local function updateShuffle()
+		if shuffleState then
+			shuffle.color = beautiful.xcolor2
+		else
+			shuffle.color = beautiful.fg_normal
+		end
+	end
+
 	shuffle:connect_signal('button::press', function()
-		playerctl:cycle_shuffle()
+		shuffleState = not shuffleState
+		playerctl:set_shuffle(shuffleState)
+		updateShuffle()
+	end)
+	playerctl:connect_signal('shuffle', function(_, shuff)
+		shuffleState = shuff
+		updateShuffle()
 	end)
 
 	local position = 0
@@ -103,6 +118,7 @@ do
 	prev:connect_signal('button::press', function()
 		if position >= 5 then
 			playerctl:set_position(0)
+			position = 0
 			return
 		end
 		playerctl:previous()
@@ -151,13 +167,6 @@ do
 			playPause.icon = playPauseIcons[2]
 		end
 	end)
-	playerctl:connect_signal('shuffle', function(_, shuff)
-		if shuff then
-			shuffle.color = beautiful.xcolor2
-		else
-			shuffle.color = beautiful.fg_normal
-		end
-	end)
 
 	local info = wibox.widget {
 		layout = wibox.layout.ratio.vertical,
@@ -188,7 +197,7 @@ do
 			{
 				layout = wibox.layout.fixed.horizontal,
 				spacing = beautiful.wibar_spacing,
-				--shuffle,
+				shuffle,
 				positionText
 			}
 		},
@@ -513,6 +522,320 @@ do
 		end
 
 		powerMenu.visible = not powerMenu.visible
+	end
+end
+
+do
+	local startMenu = wibox {
+		height = dpi(580),
+		width = dpi(460),
+		bg = '#00000000',
+		shape = gears.shape.rectangle,
+		ontop = true,
+		visible = false
+	}
+	helpers.hideOnClick(startMenu)
+
+	local result = {}
+	local allApps = {}
+	local appList = wibox.layout.overflow.vertical()
+	appList.spacing = 1
+	appList.step = 25
+	appList.scrollbar_widget = {
+		{
+			widget = wibox.widget.separator,
+			shape = gears.shape.rounded_bar,
+			color = beautiful.xcolor11
+		},
+		widget = wibox.container.margin,
+		left = dpi(5),
+	}
+	appList.scrollbar_width = dpi(14)
+
+	menugen.generate(function(entries)
+		-- Add category icons
+		for k, v in pairs(menugen.all_categories) do
+			table.insert(result, { k, {}, v.icon })
+		end
+
+		-- Get items table
+		for k, v in pairs(entries) do
+			for _, cat in pairs(result) do
+				if cat[1] == v.category then
+					table.insert(cat[2], {v.name, v.cmdline, v.icon})
+					allApps[v.name] = {v.cmdline, v.icon}
+					break
+				end
+			end
+		end
+
+		local function pairsByKeys (t, f)
+			local a = {}
+			for n in pairs(t) do table.insert(a, n) end
+			table.sort(a, f)
+			local i = 0      -- iterator variable
+			local iter = function ()   -- iterator function
+				i = i + 1
+				if a[i] == nil then return nil
+				else return a[i], t[a[i]]
+				end
+			end
+			return iter
+		end
+
+--		for i = #result, 1, -1 do
+--			local v = result[i]
+--			if #v[2] == 0 then
+--				-- Remove unused categories
+--				table.remove(result, i)
+--			else
+--				table.sort(v[2], function(a, b) return string.lower(a[1]) < string.lower(b[1]) end)
+--				v[1] = menugen.all_categories[v[1]].name
+--			end
+--		end
+
+		-- Sort categories alphabetically also
+		--table.sort(result, function(a, b) return string.byte(string.lower(a[1])) < string.byte(string.lower(b[1])) end)
+
+		for name, props in pairsByKeys(allApps, function(a, b) return string.lower(a) < string.lower(b) end) do
+			local wid = wibox.widget {
+				widget = wibox.container.background,
+				shape = helpers.rrect(base.radius),
+				id = 'bg',
+				bg = bgcolor,
+				{
+					widget = wibox.container.margin,
+					margins = dpi(4),
+					{	
+						layout = wibox.layout.fixed.horizontal,
+						spacing = dpi(8),
+						{
+							{
+								widget = wibox.widget.imagebox,
+								image = props[2]
+							},
+							widget = wibox.container.constraint,
+							strategy = 'exact',
+							width = 32,
+							height = 32
+						},
+						{
+							widget = wibox.widget.textbox,
+							align = 'center',
+							halign = 'center',
+							valign = 'center',
+							markup = name
+						}
+					}
+				}
+			}
+			wid.buttons = {
+				awful.button({}, 1, function()
+					awful.spawn(props[1])
+					widgets.startMenu.toggle()
+				end)
+			}
+			helpers.displayClickable(wid, {color = bgcolor})
+			appList:add(wid)
+		end
+	end)
+
+	local power = button(buttonColor, 'power2', beautiful.dpi(18))
+	power:connect_signal('button::press', function()
+		widgets.powerMenu.toggle()
+	end)
+
+	local realWidget = wibox.widget {
+		layout = wibox.layout.fixed.horizontal,
+		{
+			widget = wibox.container.background,
+			bg = bgcolor,
+			forced_width = startMenu.width,
+			{
+				widget = wibox.container.margin,
+				margins = dpi(5),
+				{
+					layout = wibox.layout.align.vertical,
+					{
+						widget = wibox.widget.textbox,
+						markup = helpers.colorize_text('Applications', beautiful.fg_normal),
+						font = beautiful.font:gsub('%d+$', '24')
+					},
+					{
+						widget = wibox.container.margin,
+						bottom = dpi(5),
+						appList
+					},
+					{
+						layout = wibox.layout.align.horizontal,
+						expand = 'none',
+						{
+							layout = wibox.layout.fixed.horizontal,
+							spacing = dpi(5),
+							{
+								w.imgwidget('avatar.jpg', {
+									clip_shape = gears.shape.circle
+								}),
+								widget = wibox.container.constraint,
+								strategy = 'exact',
+								width = 24,
+								height = 24
+							},
+							{
+								widget = wibox.widget.textbox,
+								text = os.getenv 'USER'
+							}
+						},
+						{
+							layout = wibox.layout.fixed.horizontal,
+						},
+						power
+					}
+				}
+			}
+		},
+	}
+
+	startMenu:setup {
+		layout = wibox.layout.stack,
+		base.sideDecor {
+			h = startMenu.height,
+			position = 'top',
+			bg = bgcolor,
+			emptyLen = base.width / dpi(2)
+		},
+		{
+			widget = wibox.container.margin,
+			top = base.width / dpi(2),
+			realWidget,
+		}
+	}
+
+	local scr = awful.screen.focused()
+	local animator = rubato.timed {
+		outro = 0.5,
+		duration = 0.7,
+		rate = 30,
+		subscribed = function(y)
+			startMenu.y = y
+		end,
+		pos = scr.geometry.height + startMenu.height,
+		easing = rubato.quadratic
+	}
+
+	
+	awful.placement.bottom_left(startMenu, {
+		margins = {
+			left = beautiful.useless_gap * dpi(2),
+			bottom = settings.noAnimate and beautiful.wibar_height + beautiful.useless_gap * dpi(2) or -startMenu.height
+		},
+		parent = awful.screen.focused()
+	})
+	if not settings.noAnimate then startMenu.visible = true end
+
+	widgets.startMenu = {}
+	function widgets.startMenu.toggle()
+		appList.scroll_factor = 0
+		if settings.noAnimate then
+			startMenu.visible = not startMenu.visible
+		else
+			if startMenu.y <= scr.geometry.height - startMenu.height then
+				animator.target = scr.geometry.height
+			else
+				animator.target = scr.geometry.height - (beautiful.wibar_height + beautiful.useless_gap * dpi(2)) - startMenu.height
+			end
+		end
+	end
+end
+
+do
+	local actionCenter = wibox {
+		height = dpi(580),
+		width = dpi(460),
+		bg = '#00000000',
+		shape = gears.shape.rectangle,
+		ontop = true,
+		visible = false
+	}
+	helpers.hideOnClick(actionCenter)
+
+	local realWidget = wibox.widget {
+		layout = wibox.layout.fixed.horizontal,
+		{
+			widget = wibox.container.background,
+			bg = bgcolor,
+			forced_width = actionCenter.width,
+			{
+				widget = wibox.container.margin,
+				margins = dpi(5),
+				{
+					layout = wibox.layout.align.vertical,
+					{
+						widget = wibox.widget.textbox,
+						markup = helpers.colorize_text('Action Center', beautiful.fg_normal),
+						font = beautiful.font:gsub('%d+$', '24')
+					},
+					{
+						widget = wibox.container.margin,
+						bottom = dpi(5),
+					},
+					{
+						layout = wibox.layout.align.horizontal,
+						expand = 'none',
+					}
+				}
+			}
+		},
+	}
+
+	actionCenter:setup {
+		layout = wibox.layout.stack,
+		base.sideDecor {
+			h = actionCenter.height,
+			position = 'top',
+			bg = bgcolor,
+			emptyLen = base.width / dpi(2)
+		},
+		{
+			widget = wibox.container.margin,
+			top = base.width / dpi(2),
+			realWidget,
+		}
+	}
+
+	local scr = awful.screen.focused()
+	local animator = rubato.timed {
+		outro = 0.5,
+		duration = 0.7,
+		rate = 30,
+		subscribed = function(y)
+			actionCenter.y = y
+		end,
+		pos = scr.geometry.height + actionCenter.height,
+		easing = rubato.quadratic
+	}
+
+	
+	awful.placement.bottom_right(actionCenter, {
+		margins = {
+			right = beautiful.useless_gap * dpi(2),
+			bottom = settings.noAnimate and beautiful.wibar_height + beautiful.useless_gap * dpi(2) or -actionCenter.height
+		},
+		parent = awful.screen.focused()
+	})
+	if not settings.noAnimate then actionCenter.visible = true end
+
+	widgets.actionCenter = {}
+	function widgets.actionCenter.toggle()
+		if settings.noAnimate then
+			actionCenter.visible = not actionCenter.visible
+		else
+			if actionCenter.y <= scr.geometry.height - actionCenter.height then
+				animator.target = scr.geometry.height
+			else
+				animator.target = scr.geometry.height - (beautiful.wibar_height + beautiful.useless_gap * dpi(2)) - actionCenter.height
+			end
+		end
 	end
 end
 

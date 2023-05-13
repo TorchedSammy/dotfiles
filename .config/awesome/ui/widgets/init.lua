@@ -116,15 +116,18 @@ function widgets.button(icon, opts)
 			return ico[k]
 		end,
 		__newindex = function(_, k, v)
-			ico[k] = v
 			if k == 'icon' then
-				setupIcon()
 				ico:get_children_by_id'icon'[1].image = gears.color.recolor_image(beautiful.config_path .. '/images/icons/' .. v .. '.svg', beautiful.fg_normal)
 				ico:emit_signal 'widget::redraw_needed'
 			elseif k == 'color' then
-				ico:get_children_by_id'icon'[1].image = gears.color.recolor_image(ico:get_children_by_id'icon'[1].image, beautiful.v)
-				setupIcon()
+				ico:get_children_by_id'icon'[1].stylesheet = string.format([[
+					* {
+						fill: %s;
+					}
+				]], v)
+				ico:emit_signal 'widget::redraw_needed'
 			end
+			ico[k] = v
 		end
 	})
 end

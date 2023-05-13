@@ -249,6 +249,13 @@ awful.screen.connect_for_each_screen(function(s)
 	}
 	helpers.displayClickable(logoBtn)
 
+	local actionBtn = widgets.button('actionCenter', {bgcolor = beautiful.bg_normal_opposite, size = beautiful.dpi(16)})
+	actionBtn.buttons = {
+		awful.button({}, 1, function()
+			w.actionCenter.toggle()
+		end)
+	}
+
 	local realbar = wibox.widget {
 		layout = wibox.layout.ratio.horizontal,
 		{
@@ -290,7 +297,8 @@ awful.screen.connect_for_each_screen(function(s)
 						layout = wibox.layout.fixed.horizontal,
 						spacing = beautiful.wibar_spacing,
 						widgets.systray,
-						widgets.layout
+						widgets.layout,
+						actionBtn
 					}
 				},
 				left = beautiful.wibar_spacing,
