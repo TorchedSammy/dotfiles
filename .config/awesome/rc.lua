@@ -7,8 +7,8 @@ require 'awful.autofocus'
 require 'awful.hotkeys_popup.keys'
 local beautiful = require 'beautiful'
 local helpers = require 'helpers'
-local settings = require 'conf.settings'
 local naughty = require 'naughty'
+
 -- Check if awesome encountered an error during startup and fell back to
 -- another config (This code will only ever execute for the fallback config)
 if awesome.startup_errors then
@@ -35,8 +35,6 @@ do
 		in_error = false
 	end)
 end
-
-beautiful.init('~/.config/awesome/themes/' .. settings.theme .. '.lua')
 
 require 'conf'
 

@@ -1,5 +1,12 @@
 local awful = require 'awful'
+local beautiful = require 'beautiful'
+local gfs = require 'gears.filesystem'
+local settings = require 'conf.settings'
 local bling = require 'modules.bling'
+local json = require 'modules.json'
+
+local f = io.open(gfs.get_xdg_data_home() .. 'awesome-config.json')
+beautiful.init('~/.config/awesome/themes/' .. settings.theme .. '.lua')
 
 awful.layout.layouts = {
 	awful.layout.suit.floating,
