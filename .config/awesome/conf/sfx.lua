@@ -1,7 +1,7 @@
 local awful = require 'awful'
 local beautiful = require 'beautiful'
 local sounds = {
-	notification = 'notify1.wav',
+	notification = 'notify2.wav',
 }
 
 local M = {}
