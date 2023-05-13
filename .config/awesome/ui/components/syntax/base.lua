@@ -81,7 +81,7 @@ function base.sideDecor(opts)
 		shape = function(crr, w, _) return gears.shape.partially_rounded_rect(crr, w, opts.h, false, false, false, true, base.radius) end,
 		bg = opts.bg or beautiful.bg_normal,
 		widget = wibox.container.background,
-		forced_width = base.widths.round,
+		forced_width = opts.emptyLen or base.widths.round,
 		forced_height = opts.h
 	}
 
@@ -97,29 +97,40 @@ function base.sideDecor(opts)
 	}
 
 	local rounder = opts.noRounder and {} or {empty, round}
-	if position == 'left' or position == 'right' then
-		local side = wibox.widget {
-			layout = wibox.layout.stack,
-			expand = 'none',
-			gradientBar,
-			{
-				layout = wibox.layout.fixed.horizontal,
-				table.unpack(rounder)
-			}
+	local side = wibox.widget {
+		layout = wibox.layout.stack,
+		expand = 'none',
+		gradientBar,
+		{
+			layout = wibox.layout.fixed.horizontal,
+			table.unpack(rounder)
 		}
-		if position == 'right' then
-			side = wibox.widget {
-				widget = wibox.container.mirror,
-				reflection = {
-					horizontal = true,
-					vertical = true
-				},
-				side
-			}
-		end
-
-		return side
+	}
+	if position == 'right' then
+		side = wibox.widget {
+			widget = wibox.container.mirror,
+			reflection = {
+				horizontal = true,
+				vertical = true
+			},
+			side
+		}
 	end
+	if position == 'top' then
+		side = wibox.widget {
+			widget = wibox.container.rotate,
+			direction = 'west', -- this is weird.
+			side
+		}
+	end
+		if position == 'bottom' then
+		side = wibox.widget {
+			widget = wibox.container.rotate,
+			direction = 'east', -- this is weird.
+			side
+		}
+	end
+	return side
 end
 
 return base
