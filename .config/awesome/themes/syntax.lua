@@ -14,6 +14,11 @@ theme = gears.table.join(theme, colors)
 theme.font          = 'Nimbus Sans Regular 12'
 theme.font_bold     = 'Nimbus Sans Bold 12'
 
+theme.gradientColors = {
+	'#86e0f0',
+	'#9cfa74'
+}
+theme.accent = theme.gradientColors[1]
 theme.bg_normal = theme.xbackground
 theme.bg_sec = helpers.shiftColor(theme.bg_normal, 8)
 theme.bg_normal_opposite = '#030303'
