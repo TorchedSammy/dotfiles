@@ -44,7 +44,7 @@ end
 function widgets.icon(name, opts)
 	opts = opts or {}
 
-	return wibox.widget {
+	local ico = wibox.widget {
 		layout = wibox.container.place,
 		{
 			widget = wibox.container.constraint,
@@ -61,6 +61,9 @@ function widgets.icon(name, opts)
 			}
 		}
 	}
+	if opts.bgcolor then helpers.displayClickable(ico, {color = opts.bgcolor}) end
+
+	return ico
 end
 
 function widgets.button(icon, opts)
@@ -245,7 +248,6 @@ local systrayPopup = wibox.widget {
 }
 
 widgets.systray = widgets.icon 'systray'
-helpers.displayClickable(widgets.systray)
 
 local popup = awful.popup {
 	widget = systrayPopup,

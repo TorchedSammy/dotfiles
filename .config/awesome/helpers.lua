@@ -89,13 +89,13 @@ function helpers.displayClickable(w, opts)
 
   w:connect_signal('mouse::enter', function()
     if bgWid then
-      bgWid.bg = opts.hoverColor and opts.hoverColor or helpers.shiftColor(opts.color, opts.shiftFactor)
+      bgWid.bg = opts.hoverColor and opts.hoverColor or helpers.shiftColor(opts.color or w.bg, opts.shiftFactor)
     end
   end)
 
   w:connect_signal('mouse::leave', function()
     if bgWid then
-      bgWid.bg = opts.color
+      bgWid.bg = opts.color or w.bg
     end
   end)
 
