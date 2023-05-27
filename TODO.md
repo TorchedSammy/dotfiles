@@ -5,5 +5,14 @@
 	- [ ] Close button
 - [ ] Stardew
 
+## Action Center
+- [ ] Caffeinate
+- [ ] Volume Slider
+
 ## Misc
 - [ ] Lock screen
+- [ ] Focus mode (in syntax action center)
+	- [ ] Filter notifications based on
+		- [ ] Title/Message
+		- [ ] Client it came from (class, instance, app title)
+
