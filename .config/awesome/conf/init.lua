@@ -2,8 +2,8 @@ local awful = require 'awful'
 local beautiful = require 'beautiful'
 local gfs = require 'gears.filesystem'
 local settings = require 'conf.settings'
-local bling = require 'modules.bling'
-local json = require 'modules.json'
+local bling = require 'libs.bling'
+local json = require 'libs.json'
 
 local f = io.open(gfs.get_xdg_data_home() .. 'awesome-config.json')
 beautiful.init('~/.config/awesome/themes/' .. settings.theme .. '.lua')
@@ -32,9 +32,9 @@ require 'conf.autostart'
 terminal = 'tym'
 terminalname = terminal:gsub('^%l', string.upper)
 
-editor = os.getenv 'EDITOR' or 'nvim'
-editorname = 'Neovim'
-editorcmd = terminal .. ' -e ' .. editor
+editor = os.getenv 'EDITOR' or 'lite-xl'
+editorname = 'Lite XL'
+editorcmd = editor
 
 musicplayer = 'cmus'
 playername = musicplayer:gsub('^%l', string.upper)

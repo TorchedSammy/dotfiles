@@ -77,6 +77,7 @@ theme.taglist_text_color_urgent   = rep(theme.xcolor1)
 
 
 theme.wallpaper = theme.config_path..'/wallpapers/SYNTAX-dark.png'
+--theme.wallpaper = theme.config_path .. '/wallpapers/DodecaPink.jpg'
 theme.picom_conf = 'picom'
 
 return theme

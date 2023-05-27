@@ -2,7 +2,7 @@ local beautiful = require 'beautiful'
 local gears = require 'gears'
 local naughty = require 'naughty'
 local widgets = require 'ui.widgets'
-local bling = require 'modules.bling'
+local bling = require 'libs.bling'
 
 local playerctl = bling.signal.playerctl.lib()
 playerctl:connect_signal('metadata', function (_, title, artist, art)

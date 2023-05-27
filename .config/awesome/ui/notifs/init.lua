@@ -2,7 +2,7 @@ local beautiful = require 'beautiful'
 local gears = require 'gears'
 local naughty = require 'naughty'
 local settings = require 'conf.settings'
-local sfx = require 'conf.sfx'
+local sfx = require 'modules.sfx'
 
 naughty.config.spacing = beautiful.notification_spacing
 naughty.config.padding = beautiful.notification_padding

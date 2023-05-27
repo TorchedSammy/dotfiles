@@ -2,7 +2,7 @@ local awful = require 'awful'
 local beautiful = require 'beautiful'
 local xresources = require 'beautiful.xresources'
 local gears = require 'gears'
-local rubato = require 'modules.rubato'
+local rubato = require 'libs.rubato'
 local wibox = require 'wibox'
 local helpers = require 'helpers'
 

@@ -4,7 +4,7 @@ local gears = require 'gears'
 local beautiful = require 'beautiful'
 local xresources = require 'beautiful.xresources'
 local dpi = xresources.apply_dpi
-local vol = require 'conf.vol'
+local sfx = require 'modules.sfx'
 local helpers = require 'helpers'
 local naughty = require 'naughty'
 
@@ -217,15 +217,15 @@ function update_volume_bar(volume, mute)
 end
 
 widgets.volume_bar:buttons(gears.table.join(
-    awful.button({ }, 4, vol.up),
-    awful.button({ }, 5, vol.down),
-    awful.button({ }, 1, function() vol.mute() vol.get_volume_state(update_volume_bar) end),
+    awful.button({ }, 4, sfx.volumeUp),
+    awful.button({ }, 5, sfx.volumeDown),
+    awful.button({ }, 1, function() sfx.muteVolume() sfx.get_volume_state(update_volume_bar) end),
     awful.button({ }, 3, function() awful.spawn 'pavucontrol' end)))
 
 awesome.connect_signal("evil::volume", update_volume_bar)
 
 -- Init widget state
-vol.get_volume_state(update_volume_bar)
+sfx.get_volume_state(update_volume_bar)
 
 -- Music widget thatll say whats currently playing
 widgets.music_icon = wibox.widget {
@@ -268,44 +268,48 @@ widgets.macos_date = wibox.widget.textclock()
 widgets.macos_date.format = '%a %b %d'
 
 -- Systray
-local systray_margin = (beautiful.wibar_height - beautiful.systray_icon_size) / 2
-widgets.raw_systray = wibox.widget.systray()
-widgets.raw_systray:set_base_size(beautiful.systray_icon_size)
+function widgets.systray(opts)
+	local systray_margin = (beautiful.wibar_height - beautiful.systray_icon_size) / 2
+	widgets.raw_systray = wibox.widget.systray()
+	widgets.raw_systray:set_base_size(beautiful.systray_icon_size)
 
-local systrayPopup = wibox.widget {
-	{
-		widgets.raw_systray,
-		top = systray_margin,
-		bottom = systray_margin,
-		widget = wibox.container.margin	
-	},
-	widget = wibox.container.background,
-	shape = helpers.rrect(6)
-}
+	local systrayPopup = wibox.widget {
+		{
+			widgets.raw_systray,
+			top = systray_margin,
+			bottom = systray_margin,
+			widget = wibox.container.margin	
+		},
+		widget = wibox.container.background,
+		shape = helpers.rrect(6)
+	}
 
-widgets.systray = widgets.icon 'systray'
+	local popup = awful.popup {
+		widget = systrayPopup,
+		shape = helpers.rrect(6),
+		ontop = true,
+		visible = false,
+		hide_on_right_click = true,
+		placement = function(w)
+			awful.placement.bottom_right(w, {
+				margins = {
+					bottom = beautiful.dpi(beautiful.wibar_height) + beautiful.useless_gap, right = beautiful.dpi(32)
+				},
+				parent = awful.screen.focused()
+			})
+		end
+	}
+	helpers.hideOnClick(popup)
 
-local popup = awful.popup {
-	widget = systrayPopup,
-	shape = helpers.rrect(6),
-	ontop = true,
-	visible = false,
-	hide_on_right_click = true,
-	placement = function(w)
-		awful.placement.bottom_right(w, {
-			margins = {
-				bottom = beautiful.dpi(beautiful.wibar_height) + beautiful.useless_gap, right = beautiful.dpi(32)
-			},
-			parent = awful.screen.focused()
-		})
-	end
-}
-helpers.hideOnClick(popup)
-widgets.systray.buttons = {
-	awful.button({}, 1, function()
-		popup.visible = not popup.visible
-	end)
-}
+	return widgets.button('systray', {
+		bg = opts.bg,
+		onClick = function()
+			if awesome.systray() ~= 0 then
+				popup.visible = not popup.visible
+			end
+		end
+	})
+end
 
 local layoutbox = awful.widget.layoutbox(s)
 layoutbox:buttons(gears.table.join(
@@ -335,14 +339,68 @@ widgets.volslider = wibox.widget {
 	forced_width = 100,
 }
 
-vol.get_volume_state(function(volume)
+sfx.get_volume_state(function(volume)
 	widgets.volslider.value = volume
 end)
 
 widgets.volslider:connect_signal('property::value', function()
-	vol.set(widgets.volslider.value)
+	sfx.setVolume(widgets.volslider.value)
 end)
 
+function widgets.switch(opts)
+	local size = {
+		w = beautiful.dpi(52),
+		h = beautiful.dpi(20),
+	}
+
+	local progress = wibox.widget {
+		widget = wibox.widget.progressbar,
+		background_color = beautiful.bg_normal,
+		color = opts.color,
+		shape = gears.shape.rounded_bar,
+		bar_shape = gears.shape.rounded_bar,
+		forced_height = size.h,
+		forced_width = size.w,
+		max_value = 100
+	}
+
+	local slider = wibox.widget {
+		widget = wibox.widget.slider,
+		forced_width = size.w,
+		forced_height = size.h,
+		bar_color = '#00000000',
+		--handle_width = progress.forced_height,
+		handle_color = beautiful.fg_normal,
+		handle_border_color = beautiful.bg_normal,
+		handle_border_width = 1,
+		handle_shape = gears.shape.circle,
+		maximum = 100
+	}
+
+	local cover = wibox.widget {
+		widget = wibox.container.background,
+		bg = '#ffae23',
+		forced_width = size.w,
+		forced_height = size.h,
+	}
+
+	local switch = wibox.widget {
+		layout = wibox.layout.stack,
+		progress,
+		slider,
+		cover
+	}
+	switch.buttons = {
+		awful.button({}, 1, function()
+			progress.value = 100
+			slider.value = 100
+		end)
+	}
+
+	helpers.hoverCursor(switch)
+
+	return switch
+end
 
 return widgets
 

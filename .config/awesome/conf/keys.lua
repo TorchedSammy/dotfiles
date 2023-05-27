@@ -3,7 +3,7 @@ local beautiful = require 'beautiful'
 local gears = require 'gears'
 local naughty = require 'naughty'
 local hotkeys_popup = require 'awful.hotkeys_popup'
-local switcher = require 'modules.awesome-switcher'
+local switcher = require 'libs.awesome-switcher'
 local widgets = require 'ui.widgets'
 local helpers = require 'helpers'
 
@@ -97,14 +97,6 @@ awful.key({modkey}, 'd',
 		}
 	end, {
 		description = 'Update awesome config from dotfiles folder',
-		group = 'awesome'
-	}
-),
-awful.key({ modkey }, 'z',
-	function()
-		widgets.systray.visible = not widgets.systray.visible
-	end, {
-		description = 'Toggle systray visibility',
 		group = 'awesome'
 	}
 ),
