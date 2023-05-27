@@ -5,6 +5,7 @@ local View = require 'core.view'
 local DocView = require 'core.docview'
 local StatusView = require 'core.statusview'
 local TreeView = require 'plugins.treeview'
+local EmptyView = require 'core.emptyview'
 getmetatable(_G).__index = function(t, k) return rawget(t, k) end
 
 local oldPackagePath = package.path
@@ -103,6 +104,12 @@ style.scrollbar2 = style.color11
 local oldDrawBackground = View.draw_background
 function TreeView:draw_background()
 	oldDrawBackground(self, {common.color(bg)})
+end
+function EmptyView:draw_background()
+	oldDrawBackground(self, style.background2)
+end
+function StatusView:draw_background()
+	oldDrawBackground(self, style.color13)
 end
 
 style.minimap_background = {common.color(bg)}
