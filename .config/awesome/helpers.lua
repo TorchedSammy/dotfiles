@@ -47,14 +47,22 @@ function helpers.hoverCursor(w, cursorType)
   local oldCursor = 'left_ptr'
   local wbx
 
-  w:connect_signal('mouse::enter', function()
+  local enterCb = function()
     wbx = mouse.current_wibox
     if wbx then wbx.cursor = cursorType end
+  end
+  local leaveCb = function()
+    if wbx then wbx.cursor = oldCursor end
+  end
+
+  w:connect_signal('hover::disconnect', function()
+    w:disconnect_signal('mouse::enter', enterCb)
+    w:disconnect_signal('mouse::leave', leaveCb)
+    leaveCb()
   end)
 
-  w:connect_signal('mouse::leave', function()
-    if wbx then wbx.cursor = oldCursor end
-  end)
+  w:connect_signal('mouse::enter', enterCb)
+  w:connect_signal('mouse::leave', leaveCb)
 end
 
 local function clamp(component)
@@ -81,24 +89,34 @@ end
 
 function helpers.displayClickable(w, opts)
   opts = type(opts) == 'table' and opts or {}
+  opts.color = opts.bg or opts.color
   opts.shiftFactor = opts.shiftFactor or -15
   if settings.theme:match '-dark$' then opts.shiftFactor = opts.shiftFactor * -1 end
 
   local bgWid = w:get_children_by_id 'bg'[1]
-  helpers.hoverCursor(w, opts.cursorType)
 
-  w:connect_signal('mouse::enter', function()
-    if bgWid then
+  function ecb()
+   if bgWid then
       bgWid.bg = opts.hoverColor and opts.hoverColor or helpers.shiftColor(opts.color or w.bg, opts.shiftFactor)
     end
-  end)
+  end
 
-  w:connect_signal('mouse::leave', function()
+  function lcb()
     if bgWid then
       bgWid.bg = opts.color or w.bg
     end
+  end
+
+  w:connect_signal('dc::disconnect', function()
+    w:disconnect_signal('mouse::enter', ecb)
+    w:disconnect_signal('mouse::leave', lcb)
+    lcb()
   end)
 
+  w:connect_signal('mouse::enter', ecb)
+  w:connect_signal('mouse::leave', lcb)
+
+  helpers.hoverCursor(w, opts.cursorType)
   return w
 end
 
