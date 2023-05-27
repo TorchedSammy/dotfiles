@@ -4,85 +4,133 @@ local base = require 'ui.components.syntax.base'
 local dpi = beautiful.dpi
 local gears = require 'gears'
 local helpers = require 'helpers'
-local lgi = require 'lgi'
-local NM = lgi.NM
-local GLib = lgi.GLib
-local rubato = require 'modules.rubato'
+local rubato = require 'libs.rubato'
 local settings = require 'conf.settings'
 local wibox = require 'wibox'
 local w = require 'ui.widgets'
-
-local nmc = NM.Client.new()
-local wifiDevice = nmc:get_device_by_iface 'wlo1'
+local wifi = require 'modules.wifi'
+local inputbox = require 'ui.widgets.inputbox'
 
 local M = {
-	enabled = nmc:wireless_get_enabled(),
-	list = wibox.layout.fixed.vertical()
+	title = 'Wi-fi',
 }
-M.list:add(w.icon('wifi-ap-locked', {size = beautiful.dpi(28)}))
 
 -- @return boolean state of the setting (on or off)
 function M.toggle()
-	local conn = wifiDevice.active_connection
-	M.enabled = not nmc:wireless_get_enabled()
-	if conn then
-		wifiDevice:disconnect_async(nil)
-	end
-	nmc:dbus_set_property(NM.DBUS_PATH, NM.DBUS_INTERFACE, 'WirelessEnabled', GLib.Variant('b', M.enabled), -1, nil, nil)
-
-	return M.enabled
+	return wifi.toggle()
 end
 
-function isEmpty(t)
-	if t == nil then return true end
-	local next = next
-	if next(t) then return false else return true end
+function M.enabled()
+	return wifi.enabled
 end
 
-function flagsToSecurity(flags, wpa, rsn)
-	local str = ''
-	if flags['PRIVACY'] and isEmpty(wpa) and isEmpty(rsn) then
-		str = str .. ' WEP'
-	end
-	if not isEmpty(wpa) then
-		str = str .. ' WPA1'
-	end
-	if not isEmpty(rsn) then
-		str = str .. ' WPA2'
-	end
-	if wpa['KEY_MGMT_802_1X'] or rsn['KEY_MGMT_802_1X'] then
-		str = str .. ' 802.1X'
-	end
-	return (str:gsub('^%s', ''))
-end
+local function createAPWidget(ap)
+	local secure = wifi.getAPSecurity(ap) ~= ''
+	local ssid = wifi.getSSID(ap)
+	local connected = wifi.isActiveAP(ap)
 
-function M.addAP(ap, layout)
-	local ssid = ap:get_ssid()
-	local secure = flagsToSecurity(ap:get_flags(), ap:get_wpa_flags(), ap:get_rsn_flags()) ~= ''
-	require 'naughty'.notify {
-		title = 'Access Point Added',
-		text = NM.utils_ssid_to_utf8(ssid:get_data())
+	local password = inputbox {
+		password_mode = true,
+		mouse_focus = true,
+		fg = beautiful.accent,
+		text_hint = 'Enter password...',
+		font = beautiful.font:gsub('%d+$', '10')
+	}
+	helpers.hoverCursor(password.widget, 'xterm')
+
+	local connectBtn = w.button('wifi', {text = 'Connect', bg = beautiful.accent, shiftFactor = 25})
+	connectBtn.buttons = {
+		awful.button({}, 1, function()
+			wifi.connect(ap, password:get_text())
+		end)
 	}
 
-	local apWidget = wibox.widget {
-		layout = wibox.layout.fixed.horziontal,
-		w.icon(secure and 'wifi-ap-locked' or 'wifi-ap', {size = beautiful.dpi(28)}),
+	local spacing = beautiful.dpi(6)
+	local bgcolor = beautiful.bg_sec
+	local wid = wibox.widget {
+		widget = wibox.container.background,
+		shape = helpers.rrect(base.radius),
+		bg = bgcolor,
+		id = 'bg',
 		{
-			widget = wibox.widget.textbox,
-			markup = helpers.colorize_text(NM.utils_ssid_to_utf8(ssid:get_data()), beautiful.fg_normal)
+			widget = wibox.container.margin,
+			margins = beautiful.dpi(6),
+			{			
+				layout = wibox.layout.fixed.vertical,
+				{
+					layout = wibox.layout.fixed.horizontal,
+					spacing = spacing,
+					w.icon(secure and 'wifi-ap-locked' or 'wifi-ap', {size = beautiful.dpi(32)}),
+					{
+						widget = wibox.widget.textbox,
+						markup = helpers.colorize_text(ssid, beautiful.fg_normal),
+						font = beautiful.font:gsub('%d+$', '16')
+					}
+				},
+				{
+					layout = wibox.layout.grid,
+					id = 'wifi-control',
+					spacing = spacing,
+					visible = false,
+					secure and {
+						layout = wibox.layout.align.horizontal,
+						{
+							widget = wibox.widget.textbox,
+							markup = helpers.colorize_text('Password', beautiful.fg_normal),
+							font = beautiful.font:gsub('%d+$', '14')
+						},
+						{
+							widget = wibox.container.margin,
+							left = spacing,
+							{
+								widget = wibox.container.background,
+								bg = helpers.shiftColor(bgcolor, 6),
+								shape = helpers.rrect(base.radius),
+								{
+									widget = wibox.container.margin,
+									margins = beautiful.dpi(2),
+									password.widget
+								}
+							}
+						}
+					} or nil,
+					{
+						layout = wibox.layout.align.horizontal,
+						{	
+							layout = wibox.layout.fixed.horizontal,
+							spacing = spacing,
+							w.switch {color = beautiful.accent},
+							{
+								widget = wibox.widget.textbox,
+								markup = helpers.colorize_text('Auto connect', beautiful.fg_normal),
+								font = beautiful.font:gsub('%d+$', '14')
+							},
+						},
+						{
+							widget = wibox.container.place,
+						},
+						connectBtn
+					}
+				}
+			}
 		}
 	}
-	layout:add(apWidget)
+	helpers.displayClickable(wid, {color = bgcolor})
+	wid.buttons = {
+		awful.button({}, 1, function()
+			password:unfocus()
+			wid:get_children_by_id 'wifi-control'[1].visible = true
+			wid:emit_signal 'hover::disconnect'
+			wid:emit_signal 'dc::disconnect'
+		end)
+	}
+
+	return wid
 end
 
 function M.update(layout)
-	wifiDevice:request_scan_async(nil, function(client, result, data)
-		for _, ap in ipairs(wifiDevice:get_access_points()) do
-			local ssid = ap:get_ssid()
-			print(device, ap)
-
-			M.addAP(ap, layout)
-		end
+	wifi.getAPs(function(ap)
+		layout:add(createAPWidget(ap))
 	end)
 end
 

@@ -1,22 +1,21 @@
 local awful = require 'awful'
 local base = require 'ui.components.syntax.base'
 local beautiful = require 'beautiful'
-local bling = require 'modules.bling'
+local bling = require 'libs.bling'
 local dpi = beautiful.dpi
 local gears = require 'gears'
 local helpers = require 'helpers'
-local vol = require 'conf.vol'
 local wibox = require 'wibox'
 local w = require 'ui.widgets'
 local naughty = require 'naughty'
 local menugen = require 'menubar.menu_gen'
-local rubato = require 'modules.rubato'
+local rubato = require 'libs.rubato'
 local settings = require 'conf.settings'
 
 local bgcolor = beautiful.bg_sec
 local playerctl = bling.signal.playerctl.lib()
 local function button(color_focus, icon, size, shape)
-	return w.button(icon, {bgcolor = bgcolor, shape = shape, size = size})
+	return w.button(icon, {bg = bgcolor, shape = shape, size = size})
 end
 
 local widgets = {}
@@ -258,105 +257,6 @@ do
 			awful.placement.under_mouse(musicDisplay)
 		end
 		musicDisplay.visible = not musicDisplay.visible -- invert
-	end
-end
-
-do
-	local volSliderBack = wibox.widget {
-		widget = wibox.widget.progressbar,
-		border_color = beautiful.fg_sec,
-		border_width = 1,
-		forced_height = 18,
-		paddings = 4,
-		background_color = beautiful.bg_normal,
-		max_value = 100,
-		shape = base.shape,
-		bar_shape = base.shape
-	}
-
-	local slider = wibox.widget {
-		widget = wibox.widget.slider,
-		forced_height = volSliderBack.forced_height,
-		bar_color = '#00000000',
-	}
-
-	local function setupSlider()
-		volSliderBack.color = string.format('linear:0,0:%s,0:0,%s:%s,%s', math.floor(slider.value), base.gradientColors[1], math.floor(slider.value), base.gradientColors[2])
-		volSliderBack.value = slider.value
-	end
-
-	vol.get_volume_state(function(volume)
-		slider.value = volume
-		setupSlider()
-	end)
-
-	slider:connect_signal('property::value', function()
-		vol.set(slider.value)
-		setupSlider()
-	end)
-
-	widgets.volslider = wibox.widget {
-		layout = wibox.layout.stack,
-		volSliderBack,
-		{
-			layout = wibox.container.place,
-			halign = 'center',
-			valign = 'center',
-			{
-				widget = wibox.container.margin,
-				top = 2, bottom = 2, left = 2, right = 2,
-				slider
-			}
-		}
-	}
-end
-
-do
-	local control = wibox {
-		width = dpi(480),
-		height = dpi(180),
-		bg = '#00000000',
-		shape = gears.shape.rectangle,
-		ontop = true,
-		visible = false
-	}
-
-	local realWidget = wibox.widget {
-		layout = wibox.layout.fixed.horizontal,
-		{
-			shape = function(crr, w, h) return gears.shape.partially_rounded_rect(crr, w, h, false, false, false, true, base.rad) end,
-			bg = beautiful.bg_normal,
-			widget = wibox.container.background,
-			forced_width = control.width - (base.width * 2),
-			forced_height = control.height,
-			{
-				widget = wibox.container.margin,
-				top = 20, left = 20, right = 20, bottom = 20,
-				{
-					layout = wibox.layout.fixed.vertical,
-					spacing = 18,
-					widgets.volslider
-				}
-			}
-		},
-		base.sideDecor {
-			h = 180,
-			position = 'right'
-		},
-	}
-
-	control:setup {
-		layout = wibox.container.place,
-		realWidget
-	}
-
-	widgets.controlCenter = {}
-	function widgets.controlCenter.toggle()
-		if not control.visible then
-			awful.placement.top_right(control, { margins = { top = dpi(beautiful.topbar_height) + beautiful.useless_gap * 2, right = dpi(12) }, parent = s })
-		end
-
-		control.visible = not control.visible
 	end
 end
 
@@ -635,7 +535,7 @@ do
 					widgets.startMenu.toggle()
 				end)
 			}
-			helpers.displayClickable(wid, {color = bgcolor})
+			helpers.displayClickable(wid, {bg = bgcolor})
 			appList:add(wid)
 		end
 	end)
