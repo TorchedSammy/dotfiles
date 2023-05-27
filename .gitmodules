@@ -16,3 +16,12 @@
 [submodule ".config/awesome/modules/rubato"]
 	path = .config/awesome/modules/rubato
 	url = https://github.com/andOrlando/rubato
+[submodule ".config/awesome/libs/awesome-switcher"]
+	path = .config/awesome/libs/awesome-switcher
+	url = https://github.com/troglobit/awesome-switcher
+[submodule ".config/awesome/libs/rubato"]
+	path = .config/awesome/libs/rubato
+	url = https://github.com/andOrlando/rubato
+[submodule ".config/awesome/libs/bling"]
+	path = .config/awesome/libs/bling
+	url = https://github.com/Nooo37/bling/
