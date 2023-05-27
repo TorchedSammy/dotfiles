@@ -56,14 +56,32 @@ function widgets.icon(name, opts)
 					* {
 						fill: %s;
 					}
-				]], beautiful.fg_normal),
+				]], opts.color or beautiful.fg_normal),
 				id = 'icon'
 			}
 		}
 	}
 	if opts.bgcolor then helpers.displayClickable(ico, {color = opts.bgcolor}) end
 
-	return ico
+	return setmetatable({}, {
+			__index = function(_, k)
+				return ico[k]
+			end,
+			__newindex = function(_, k, v)
+				if k == 'icon' then
+					ico:get_children_by_id'icon'[1].image = gears.color.recolor_image(beautiful.config_path .. '/images/icons/' .. v .. '.svg', beautiful.fg_normal)
+					ico:emit_signal 'widget::redraw_needed'
+				elseif k == 'color' then
+					ico:get_children_by_id'icon'[1].stylesheet = string.format([[
+						* {
+							fill: %s;
+						}
+					]], v)
+					ico:emit_signal 'widget::redraw_needed'
+				end
+				ico[k] = v
+			end
+		})
 end
 
 function widgets.button(icon, opts)
@@ -74,30 +92,48 @@ function widgets.button(icon, opts)
 		id = 'bg',
 		widget = wibox.container.background,
 		color = opts.bgcolor,
-		shape = opts.shape or gears.shape.circle,
+		shape = opts.shape or (opts.text and helpers.rrect(6) or gears.shape.circle),
 		{
 			widget = wibox.container.margin,
 			margins = beautiful.dpi(2),
 			{
 				layout = wibox.container.place,
+				valign = 'center',
+				--halign = 'center',
+				--align = 'center',
 				{
-					widget = wibox.container.constraint,
-					width = opts.size and opts.size + 2 or beautiful.dpi(18),
+					layout = wibox.layout.fixed.horizontal,
+					spacing = beautiful.dpi(4),
 					{
-						widget = wibox.widget.imagebox,
-						image = beautiful.config_path .. '/images/icons/' .. icon .. '.svg',
-						stylesheet = string.format([[
-							* {
-								fill: %s;
-							}
-						]], beautiful.fg_normal),
-						id = 'icon'
+						widget = wibox.container.constraint,
+						width = opts.size and opts.size + 2 or beautiful.dpi(18),
+						{
+							widget = wibox.widget.imagebox,
+							image = beautiful.config_path .. '/images/icons/' .. icon .. '.svg',
+							stylesheet = string.format([[
+								* {
+									fill: %s;
+								}
+							]], opts.color or beautiful.fg_normal),
+							id = 'icon'
+						},
+					},
+					{
+						widget = wibox.widget.textbox,
+						markup = helpers.colorize_text(opts.text or '', opts.color or beautiful.fg_normal),
+						font = beautiful.font:gsub('%d+$', opts.fontSize or 14)
 					}
 				}
 			}
 		}
 	}
-	helpers.displayClickable(ico, {color = opts.bgcolor})
+	helpers.displayClickable(ico, opts)
+
+	ico.buttons = {
+		awful.button({}, 1, function()
+			opts.onClick()
+		end),
+	}
 
 	local function setupIcon()
 		--ico:get_children_by_id'icon'[1].image = gears.color.recolor_image(ico:get_children_by_id'icon'[1].image, focused and beautiful.fg_normal .. 55 or beautiful.fg_normal)
