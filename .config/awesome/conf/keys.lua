@@ -6,6 +6,7 @@ local hotkeys_popup = require 'awful.hotkeys_popup'
 local switcher = require 'libs.awesome-switcher'
 local widgets = require 'ui.widgets'
 local helpers = require 'helpers'
+local sfx = require 'modules.sfx'
 
 -- {{{ Key bindings
 globalkeys = gears.table.join(
@@ -36,6 +37,18 @@ awful.key({modkey}, 'F3', function()
 	awful.spawn.easy_async('light -A 10', function() end)
 end, {
 	description = 'Increase brightness',
+	group = 'screen'
+}),
+awful.key({modkey}, 'F7', function()
+	sfx.volumeDown()
+end, {
+	description = 'Decrease volume',
+	group = 'screen'
+}),
+awful.key({modkey}, 'F8', function()
+	sfx.volumeUp()
+end, {
+	description = 'Increase volume',
 	group = 'screen'
 }),
 
