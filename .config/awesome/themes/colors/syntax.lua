@@ -10,14 +10,14 @@ colors.xcolor3  = '#e3974f'
 colors.xcolor4  = '#4fa0e3'
 colors.xcolor5  = '#884fe3'
 colors.xcolor6  = '#4fe3cf'
-colors.xcolor7  = '#403e3e'
-colors.xcolor8  = '#d6d6d6'
-colors.xcolor9  = '#cccccc'
-colors.xcolor10 = '#b8b8b8'
-colors.xcolor11 = '#a6a6a6'
-colors.xcolor12 = '#949494'
-colors.xcolor13 = '#e0e0e0'
-colors.xcolor14 = '#615e5e'
-colors.xcolor15 = '#ebebeb'
+colors.xcolor7  = '#e9ecf0'
+colors.xcolor8  = '#f2f2f2'
+colors.xcolor9  = '#e6e6e6'
+colors.xcolor10 = '#d1d1d1'
+colors.xcolor11 = '#b5b5b5'
+colors.xcolor12 = '#9c9c9c'
+colors.xcolor13 = '#f5f2f2'
+colors.xcolor14 = '#8c8ca1' -- FIX
+colors.xcolor15 = '#1d1d21' -- FIX
 
 return colors
