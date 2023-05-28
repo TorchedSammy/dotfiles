@@ -10,6 +10,7 @@
 - [ ] Volume Slider
 
 ## Misc
+- [ ] Stop using menugen for start menu
 - [ ] Lock screen
 - [ ] Focus mode (in syntax action center)
 	- [ ] Filter notifications based on
