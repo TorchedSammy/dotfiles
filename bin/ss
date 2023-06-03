@@ -2,7 +2,15 @@
 -- ss: minimal screenshot script for sharex hosts
 -- check ssf for more details
 
-local errcode = hilbish.run 'maim -u -o -s /tmp/screenshot.png'
+local errcode
+if args[1] == 'window' then
+	errcode = hilbish.run 'maim -i $(xdotool getactivewindow) /tmp/screenshot.png'
+elseif args[1] == 'screen' then
+	errcode = hilbish.run 'maim -u -o /tmp/screenshot.png'
+else
+	errcode = hilbish.run 'maim -u -o -s /tmp/screenshot.png'
+end
+
 if errcode == 1 then
 	os.exit(1)
 end
