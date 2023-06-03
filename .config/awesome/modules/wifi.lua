@@ -14,7 +14,7 @@ local w = require 'ui.widgets'
 local naughty = require 'naughty'
 
 local nmc = NM.Client.new()
-local wifiDevice = nmc:get_device_by_iface 'wlo1'
+local wifiDevice = nmc:get_device_by_iface 'wlp2s0'
 
 local M = {
 	enabled = nmc:wireless_get_enabled() and wifiDevice ~= nil,
