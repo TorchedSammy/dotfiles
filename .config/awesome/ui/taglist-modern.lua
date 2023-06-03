@@ -59,18 +59,18 @@ local function setup(s)
 				shape = gears.shape.rounded_bar,
 			},
 			widget = wibox.container.place,
-			-- Add support for hover colors and an index label
 			create_callback = function(self, t, _, _)
+				local w = self:get_children_by_id 'tag'[1]
 				self.animator = rubato.timed {
 					intro = 0.02,
 					duration = 0.25,
 					override_dt = false,
 					subscribed = function(width)
-						self:get_children_by_id 'tag'[1].forced_width = width
+						w.forced_width = width
 					end
 				}
+
 				function self.update()
-					local w = self:get_children_by_id 'tag'[1]
 					local i = t.index
 
 					local clients = t:clients()

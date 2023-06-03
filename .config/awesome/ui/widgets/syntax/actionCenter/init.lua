@@ -8,6 +8,7 @@ local rubato = require 'libs.rubato'
 local settings = require 'conf.settings'
 local wibox = require 'wibox'
 local w = require 'ui.widgets'
+local sfx = require 'modules.sfx'
 
 local bgcolor = beautiful.bg_sec
 local btnSize = beautiful.dpi(32)
@@ -92,9 +93,9 @@ local function createToggle(type)
 			local controlOn = control.toggle()
 			setToggleBackground(controlOn)
 			if controlOn then
-				icon.icon = 'wifi'
+				icon.icon = type
 			else
-				icon.icon = 'wifi-off'
+				icon.icon = type .. '-off'
 			end
 		end),
 	}
@@ -107,6 +108,100 @@ local function createToggle(type)
 	}
 
 	toggleLayout:add(wid)
+end
+
+function slider(opts, onChange)
+	opts = opts or {}
+
+	local progressShape = gears.shape.rounded_bar
+	local progress = wibox.widget {
+		widget = wibox.widget.progressbar,
+		shape = progressShape,
+		bar_shape = progressShape,
+		background_color = beautiful.xcolor9,
+		max_value = opts.max or 100,
+		id = 'progress'
+	}
+
+	local function setupProgressColor(pos, length)
+		local posFraction = (pos / length)
+		local progressLength = opts.width
+		local progressCur = posFraction * progressLength
+		progress.color = string.format('linear:0,0:%s,0:0,%s:%s,%s', math.floor(beautiful.dpi(progressCur)), base.gradientColors[1], math.floor(beautiful.dpi(progressLength)), base.gradientColors[2])
+		progress.value = pos
+	end
+
+	local progressAnimator = rubato.timed {
+		duration = 0.2,
+		rate = 60,
+		subscribed = function(pos)
+			setupProgressColor(pos, progress.max_value)
+		end,
+		pos = 0,
+		easing = rubato.quadratic
+	}
+
+	local slider = wibox.widget {
+		widget = wibox.widget.slider,
+		forced_height = progress.forced_height,
+		bar_color = '#00000000',
+		id = 'slider'
+	}
+	slider:connect_signal('property::value', function()
+		progressAnimator.target = slider.value
+		opts.onChange(slider.value)
+	end)
+
+	return wibox.widget {
+		widget = wibox.container.constraint,
+		height = beautiful.dpi(5),
+		{
+			layout = wibox.layout.stack,
+			progress,
+			slider
+		}
+	}, slider, progress
+end
+
+local sliderControllers = {
+	volume = {
+		set = sfx.setVolume,
+		get = sfx.get_volume_state
+	},
+	brightness = {
+		set = function() end,
+		get = function() end
+	}
+}
+
+function createSlider(name)
+	local sl, slider, progress = slider {width = 460 - 24, onChange = sliderControllers[name].set}
+	sliderControllers[name].get(function(v)
+		slider.value = v
+	end)
+
+	awesome.connect_signal('syntax::' .. name, function(vol)
+		slider.value = vol
+	end)
+
+	local wid = wibox.widget {
+		layout = wibox.layout.fixed.horizontal,
+		spacing = beautiful.dpi(6),
+
+		w.icon(name),
+		sl
+	}
+
+	return setmetatable({}, {
+		__index = function(_, k)
+			return wid[k]
+		end,
+		__newindex = function(_, k, v)
+			if k == 'value' then
+				slider.value = v
+			end
+		end
+	})
 end
 
 do
@@ -152,8 +247,10 @@ do
 									layout = wibox.layout.grid,
 									spacing = dpi(36),
 									forced_num_cols = 3,
-									id = 'toggles'
-								}
+									id = 'toggles',
+								},
+								createSlider 'volume',
+								createSlider 'brightness'
 							}
 						}
 					},
@@ -214,7 +311,13 @@ do
 	controlLayout:set_step(1)
 	createToggle 'wifi'
 	createToggle 'bluetooth'
-	createToggle 'wifi'
+	createToggle 'coffee'
+	createToggle 'coffee'
+	createToggle 'coffee'
+	createToggle 'coffee'
+	createToggle 'coffee'
+	createToggle 'coffee'
+	createToggle 'coffee'
 
 	actionCenter:setup {
 		layout = wibox.layout.stack,

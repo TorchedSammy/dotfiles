@@ -11,6 +11,7 @@ local naughty = require 'naughty'
 local menugen = require 'menubar.menu_gen'
 local rubato = require 'libs.rubato'
 local settings = require 'conf.settings'
+local sfx = require 'modules.sfx'
 
 local bgcolor = beautiful.bg_sec
 local playerctl = bling.signal.playerctl.lib()
@@ -225,7 +226,7 @@ do
 			bg = bgcolor
 		},
 		{
-			shape = function(crr, w, h) return gears.shape.partially_rounded_rect(crr, w, h, false, true, false, false, base.rad) end,
+			shape = function(crr, w, h) return gears.shape.partially_rounded_rect(crr, w, h, false, true, true, false, base.radius) end,
 			bg = bgcolor,
 			widget = wibox.container.background,
 			forced_width = musicDisplay.width - (base.width * 2),
@@ -238,7 +239,7 @@ do
 					spacing = 18,
 					{
 						widget = wibox.container.constraint,
-						width = 140,
+						width = beautiful.dpi(130),
 						albumArt
 					},
 					info
@@ -328,7 +329,7 @@ do
 		layout = wibox.layout.fixed.horizontal,
 		{
 			widget = wibox.container.background,
-			shape = function(crr, w, h) return gears.shape.partially_rounded_rect(crr, w, h, false, false, false, true, base.rad) end,
+			shape = function(crr, w, h) return gears.shape.partially_rounded_rect(crr, w, h, false, false, false, true, base.radius) end,
 			bg = bgcolor,
 			forced_width = powerMenu.width - dpi(base.width),
 			{
@@ -623,19 +624,21 @@ do
 		easing = rubato.quadratic
 	}
 
-	
-	awful.placement.bottom_left(startMenu, {
-		margins = {
-			left = beautiful.useless_gap * dpi(2),
-			bottom = settings.noAnimate and beautiful.wibar_height + beautiful.useless_gap * dpi(2) or -startMenu.height
-		},
-		parent = awful.screen.focused()
-	})
+	local function doPlacement()
+		awful.placement.bottom_left(startMenu, {
+			margins = {
+				left = beautiful.useless_gap * dpi(2),
+				bottom = settings.noAnimate and beautiful.wibar_height + beautiful.useless_gap * dpi(2) or -startMenu.height
+			},
+			parent = awful.screen.focused()
+		})
+	end
 	if not settings.noAnimate then startMenu.visible = true end
 
 	widgets.startMenu = {}
 	function widgets.startMenu.toggle()
 		appList.scroll_factor = 0
+		doPlacement()
 		if settings.noAnimate then
 			startMenu.visible = not startMenu.visible
 		else
@@ -648,6 +651,175 @@ do
 	end
 end
 
+function slider(opts, onChange)
+	opts = opts or {}
+
+	local progressShape = gears.shape.rounded_bar
+	local progress = wibox.widget {
+		widget = wibox.widget.progressbar,
+		shape = progressShape,
+		bar_shape = progressShape,
+		background_color = beautiful.xcolor9,
+		max_value = opts.max or 100,
+		id = 'progress'
+	}
+
+	local function setupProgressColor(pos, length)
+		local posFraction = (pos / length)
+		local progressLength = opts.width
+		local progressCur = posFraction * progressLength
+		progress.color = string.format('linear:0,0:%s,0:0,%s:%s,%s', math.floor(beautiful.dpi(progressCur)), base.gradientColors[1], math.floor(beautiful.dpi(progressLength)), base.gradientColors[2])
+		progress.value = pos
+	end
+
+	local progressAnimator = rubato.timed {
+		duration = 0.3,
+		rate = 60,
+		subscribed = function(pos)
+			setupProgressColor(pos, progress.max_value)
+		end,
+		pos = 0,
+		easing = rubato.quadratic
+	}
+
+	local slider = wibox.widget {
+		widget = wibox.widget.slider,
+		forced_height = progress.forced_height,
+		bar_color = '#00000000',
+		id = 'slider'
+	}
+	slider:connect_signal('property::value', function()
+		progressAnimator.target = slider.value
+		opts.onChange(slider.value)
+	end)
+
+	return wibox.widget {
+		widget = wibox.container.constraint,
+		height = beautiful.dpi(5),
+		{
+			layout = wibox.layout.stack,
+			progress,
+			slider
+		}
+	}, slider, progress
+end
+
+local sliderControllers = {
+	volume = {
+		set = sfx.setVolume,
+		get = sfx.get_volume_state
+	},
+	brightness = {
+		set = function() end,
+		get = function() end
+	}
+}
+
+function createSlider(name, opts)
+	local sl, slider, progress = slider {width = opts.width, onChange = sliderControllers[name].set}
+	sliderControllers[name].get(function(v)
+		slider.value = v
+	end)
+
+	local wid = wibox.widget {
+		widget = wibox.container.place,
+		valign = 'center',
+		{
+			layout = wibox.layout.fixed.horizontal,
+			spacing = beautiful.dpi(6),
+
+			w.icon(name, {size = beautiful.dpi(32)}),
+			{
+				layout = wibox.layout.fixed.vertical,
+				{
+					font = beautiful.font:gsub('%d+$', '20'),
+					widget = wibox.widget.textbox,
+					text = name:gsub('^%l', string.upper)
+				},
+				sl
+			}
+		}
+	}
+
+	return setmetatable({}, {
+		__index = function(_, k)
+			return wid[k]
+		end,
+		__newindex = function(_, k, v)
+			if k == 'value' then
+				slider.value = v
+			end
+		end
+	})
+end
+
+do
+	local volumeDisplay = wibox {
+		width = dpi(280),
+		height = dpi(75),
+		bg = '#00000000',
+		ontop = true,
+		visible = false
+	}
+	local sl = createSlider('volume', {width = volumeDisplay.width})
+
+	local volIcon = wibox.widget {
+		text = '',
+		font = 'Microns 80',
+		align = 'center',
+		widget = wibox.widget.textbox,
+	}
+
+	local volInfo = wibox.widget {
+		font = beautiful.font:gsub('%d+$', '24'),
+		widget = wibox.widget.textbox
+	}
+
+	local displayTimer = gears.timer {
+		timeout = 2,
+		single_shot = true,
+		callback = function()
+			volumeDisplay.visible = false
+		end
+	}
+
+	local margins = beautiful.dpi(10)
+	local realWidget = wibox.widget {
+		layout = wibox.layout.fixed.vertical,
+		base.sideDecor {
+			h = volumeDisplay.width,
+			bg = bgcolor,
+			position = 'top',
+			emptyLen = base.width / dpi(2)
+		},
+		{
+			shape = function(crr, w, h) return gears.shape.partially_rounded_rect(crr, w, h, false, false, true, false, base.radius) end,
+			bg = bgcolor,
+			widget = wibox.container.background,
+			{
+				widget = wibox.container.margin,
+				margins = margins,
+				sl
+			}
+		},
+	}
+
+	volumeDisplay:setup {
+		layout = wibox.container.place,
+		realWidget
+	}
+
+	awesome.connect_signal('syntax::volume', function(volume, mute)
+		if volumeDisplay.visible then
+			displayTimer:stop()
+		end
+		displayTimer:start()
+		sl.value = volume
+
+		awful.placement.bottom(volumeDisplay, { margins = { bottom = beautiful.dpi(200) }, parent = awful.screen.focused() })
+		volumeDisplay.visible = true
+	end)
+end
 widgets.actionCenter = require 'ui.widgets.syntax.actionCenter'
 
 return widgets
