@@ -42,7 +42,7 @@ config.plugins.miq.plugins = {
 
 	-- others
 	'anthonyaxenov/lite-xl-ignore-syntax',
-	'juliardi/lite-xl-treeview-menu-extender',
+	'juliardi/lite-xl-treeview-extender',
 	'liquidev/lintplus',
 }
 
