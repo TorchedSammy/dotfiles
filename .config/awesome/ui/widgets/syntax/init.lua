@@ -614,9 +614,8 @@ do
 
 	local scr = awful.screen.focused()
 	local animator = rubato.timed {
-		outro = 0.5,
-		duration = 0.7,
-		rate = 30,
+		duration = 0.2,
+		rate = 60,
 		subscribed = function(y)
 			startMenu.y = y
 		end,
