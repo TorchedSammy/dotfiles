@@ -17,11 +17,13 @@ local nmc = NM.Client.new()
 local wifiDevice = nmc:get_device_by_iface 'wlo1'
 
 local M = {
-	enabled = nmc:wireless_get_enabled(),
+	enabled = nmc:wireless_get_enabled() and wifiDevice ~= nil,
 }
 
 -- @return boolean state of the setting (on or off)
 function M.toggle()
+	if not wifiDevice then return false end
+
 	local conn = wifiDevice.active_connection
 	if conn then
 		wifiDevice:disconnect_async(nil)
@@ -121,9 +123,11 @@ function M.isActiveAP(ap)
 end
 
 do
-	local activeAP = wifiDevice:get_active_access_point()
-	if activeAP then
-		M.activeAPSSID = M.getSSID(activeAP)
+	if wifiDevice then
+		local activeAP = wifiDevice:get_active_access_point()
+		if activeAP then
+			M.activeAPSSID = M.getSSID(activeAP)
+		end
 	end
 end
 
