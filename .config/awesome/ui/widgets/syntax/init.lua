@@ -46,6 +46,7 @@ do
 		widget = wibox.widget.textbox
 	}
 
+	local position = 0
 	local musicDisplay = wibox {
 		width = dpi(480),
 		height = dpi(180),
@@ -56,27 +57,42 @@ do
 	}
 	helpers.hideOnClick(musicDisplay)
 
-	local progressShape = base.shape
+	local progressShape = gears.shape.rounded_bar
 	local progress = wibox.widget {
 		widget = wibox.widget.progressbar,
-		border_color = beautiful.fg_sec,
-		border_width = 1,
-		forced_height = 18,
-		paddings = 2,
-		background_color = bgcolor,
+		forced_height = beautiful.dpi(10),
 		shape = progressShape,
-		bar_shape = progressShape
+		bar_shape = progressShape,
+		background_color = beautiful.xcolor9,
 	}
+
+	function setupProgressColor(pos, length)
+		local posFraction = (pos / length)
+		local progressLength = 282
+		local progressCur = posFraction * progressLength
+		progress.color = string.format('linear:0,0:%s,0:0,%s:%s,%s', math.floor(beautiful.dpi(progressCur)), base.gradientColors[1], math.floor(beautiful.dpi(progressLength)), base.gradientColors[2])
+	end
+
+	local progressAnimator = rubato.timed {
+		duration = 0.2,
+		rate = 60,
+		subscribed = function(pos)
+			progress.value = pos
+			setupProgressColor(pos, progress.max_value)
+		end,
+		pos = 0,
+		easing = rubato.quadratic
+	}
+
 	local slider = wibox.widget {
 		widget = wibox.widget.slider,
 		forced_height = progress.forced_height,
 		bar_color = '#00000000'
 	}
 	slider:connect_signal('property::value', function()
-		progress.value = slider.value
+		progressAnimator.target = slider.value
 		playerctl:set_position(slider.value)
 	end)
-
 
 	local function scroll(widget)
 		return wibox.widget {
@@ -93,48 +109,59 @@ do
 	local wrappedMusicAlbum = scroll(musicAlbum)
 	local btnSize = beautiful.dpi(19)
 
-	local shuffle = button(beautiful.fg_normal, 'shuffle', btnSize)
+	local updateShuffle
 	local shuffleState
-	local function updateShuffle()
+	local shuffle = w.button('shuffle', {
+		bg = bgcolor,
+		size = btnSize,
+		onClick = function()
+			shuffleState = not shuffleState
+			playerctl:set_shuffle(shuffleState)
+			updateShuffle()
+		end
+	})
+
+	updateShuffle = function()
 		if shuffleState then
-			shuffle.color = beautiful.xcolor2
+			shuffle.color = beautiful.accent
 		else
 			shuffle.color = beautiful.fg_normal
 		end
 	end
-
-	shuffle:connect_signal('button::press', function()
-		shuffleState = not shuffleState
-		playerctl:set_shuffle(shuffleState)
-		updateShuffle()
-	end)
+	
 	playerctl:connect_signal('shuffle', function(_, shuff)
 		shuffleState = shuff
 		updateShuffle()
 	end)
 
-	local position = 0
-	local prev = button(beautiful.fg_normal, 'skip-previous', btnSize)
-	prev:connect_signal('button::press', function()
-		if position >= 5 then
-			playerctl:set_position(0)
-			position = 0
-			return
+	local prev = w.button('skip-previous', {
+		bg = bgcolor,
+		size = btnSize,
+		onClick = function()
+			if position >= 5 then
+				playerctl:set_position(0)
+				position = 0
+				progressAnimator.target = 0
+				return
+			end
+			playerctl:previous()
 		end
-		playerctl:previous()
-	end)
+	})
 
 	local playPauseIcons = {'play', 'pause'}
-	local playPause = button(beautiful.fg_normal, playPauseIcons[2], btnSize)
-	playPause:connect_signal('button::press', function()
-		playerctl:play_pause()
-	end)
+	local playPause = w.button(playPauseIcons[2], {
+		bg = bgcolor,
+		size = btnSize,
+		onClick = function() playerctl:play_pause() end
+	})
+	local next = w.button('skip-next', {
+		bg = bgcolor,
+		size = btnSize,
+		onClick = function() playerctl:next()
+	end})
 
-	local next = button(beautiful.fg_normal, 'skip-next', btnSize)
-	next:connect_signal('button::press', function()
-		playerctl:next()
-	end)
-
+	local lastArtist
+	local lastAlbum
 	playerctl:connect_signal('metadata', function (_, title, artist, art, album)
 		musicArtist:set_markup_silently(artist)
 		wrappedMusicArtist:emit_signal 'widget::redraw_needed'
@@ -142,17 +169,21 @@ do
 		musicTitle:set_markup_silently(title)
 		wrappedMusicTitle:emit_signal 'widget::redraw_needed'
 
-		musicAlbum:set_markup_silently(helpers.colorize_text(album, beautiful.fg_sec))
+		musicAlbum:set_markup_silently(helpers.colorize_text(album == '' and '~~~' or album, beautiful.fg_sec))
 		wrappedMusicAlbum:emit_signal 'widget::redraw_needed'
 
-		albumArt.image = gears.surface.load_uncached_silently(art, beautiful.config_path .. '/images/albumPlaceholder.png')
 		positionText:set_markup_silently(helpers.colorize_text('0:00', beautiful.fg_sec))
+
+		if artist == lastArtist and album == lastAlbum then return end
+		lastArtist = artist
+		lastAlbum = album
+		albumArt.image = gears.surface.load_uncached_silently(art, beautiful.config_path .. '/images/albumPlaceholder.png')
 	end)
+
 	playerctl:connect_signal('position', function (_, pos, length)
-		progress.color = string.format('linear:0,0:%s,0:0,%s:%s,%s', math.floor(length), base.gradientColors[1], math.floor(length), base.gradientColors[2])
 		progress.max_value = length
 		slider.maximum = length
-		progress.value = pos
+		progressAnimator.target = pos
 		position = pos
 
 		local mins = math.floor(pos / 60)
@@ -169,7 +200,7 @@ do
 	end)
 
 	local info = wibox.widget {
-		layout = wibox.layout.ratio.vertical,
+		layout = wibox.layout.align.vertical,
 		{
 			layout = wibox.layout.fixed.vertical,
 			spacing = 6,
@@ -204,20 +235,11 @@ do
 		{
 			layout = wibox.layout.stack,
 			progress,
-			{
-				layout = wibox.container.place,
-				halign = 'center',
-				valign = 'center',
-				{
-					widget = wibox.container.margin,
-					top = 2, bottom = 2, left = 2, right = 2,
-					slider
-				}
-			}
+			slider
 		}
 	}
-	info:ajust_ratio(2, 0.45, 0.15, 0.4)
-	info:ajust_ratio(3, 0.85, 0.15, 0)
+	--info:ajust_ratio(2, 0.45, 0.15, 0.4)
+	--info:ajust_ratio(3, 0.75, 0.25, 0)
 
 	local realWidget = wibox.widget {
 		layout = wibox.layout.fixed.horizontal,
@@ -239,7 +261,7 @@ do
 					spacing = 18,
 					{
 						widget = wibox.container.constraint,
-						width = beautiful.dpi(130),
+						width = 140,
 						albumArt
 					},
 					info
