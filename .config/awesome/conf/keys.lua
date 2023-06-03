@@ -27,25 +27,25 @@ awful.key({modkey}, 'Escape', awful.tag.history.restore, {
 	group = 'tag'
 }),
 
-awful.key({modkey}, 'F2', function()
+awful.key({}, 'XF86MonBrightnessDown', function()
 	awful.spawn.easy_async('light -U 10', function() end)
 end, {
 	description = 'Decrease brightness',
 	group = 'screen'
 }),
-awful.key({modkey}, 'F3', function()
+awful.key({}, 'XF86MonBrightnessUp', function()
 	awful.spawn.easy_async('light -A 10', function() end)
 end, {
 	description = 'Increase brightness',
 	group = 'screen'
 }),
-awful.key({modkey}, 'F7', function()
+awful.key({}, 'XF86AudioLowerVolume', function()
 	sfx.volumeDown()
 end, {
 	description = 'Decrease volume',
 	group = 'screen'
 }),
-awful.key({modkey}, 'F8', function()
+awful.key({}, 'XF86AudioRaiseVolume', function()
 	sfx.volumeUp()
 end, {
 	description = 'Increase volume',
