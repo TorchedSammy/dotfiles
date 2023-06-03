@@ -1,12 +1,21 @@
 [submodule ".config/awesome/wallpapers"]
 	path = .config/awesome/wallpapers
 	url = https://github.com/TorchedSammy/walls
+[submodule ".config/awesome/modules/bling"]
+	path = .config/awesome/modules/bling
+	url = https://github.com/Nooo37/bling/
+[submodule ".config/awesome/modules/awesome-switcher"]
+	path = .config/awesome/modules/awesome-switcher
+	url = https://github.com/troglobit/awesome-switcher
 [submodule ".config/awesome/freedesktop"]
 	path = .config/awesome/freedesktop
 	url = https://github.com/lcpz/awesome-freedesktop
 [submodule ".config/lite-xl/widget"]
 	path = .config/lite-xl/widget
 	url = https://github.com/jgmdev/lite-xl-widgets
+[submodule ".config/awesome/modules/rubato"]
+	path = .config/awesome/modules/rubato
+	url = https://github.com/andOrlando/rubato
 [submodule ".config/awesome/libs/awesome-switcher"]
 	path = .config/awesome/libs/awesome-switcher
 	url = https://github.com/troglobit/awesome-switcher
@@ -15,3 +24,4 @@
 	url = https://github.com/andOrlando/rubato
 [submodule ".config/awesome/libs/bling"]
 	path = .config/awesome/libs/bling
+	url = https://github.com/Nooo37/bling/
