@@ -11,7 +11,9 @@ local w = require 'ui.widgets'
 local sfx = require 'modules.sfx'
 
 local bgcolor = beautiful.bg_sec
-local btnSize = beautiful.dpi(32)
+local btnSize = dpi(32)
+local actionCenterMargin = dpi(12)
+local toggleSpacing = dpi(36)
 local widgets = {}
 local centers = {
 	wifi = require 'ui.widgets.syntax.actionCenter.wifi'
@@ -23,7 +25,7 @@ local contentLayout
 local contentLabelLayout
 
 local actionCenter = wibox {
-	height = dpi(580),
+	height = dpi(420),
 	width = dpi(460),
 	bg = '#00000000',
 	shape = gears.shape.rectangle,
@@ -57,7 +59,7 @@ local function createToggle(type)
 	local wid = wibox.widget {
 		widget = wibox.container.constraint,
 		height = dpi(50),
-		width = dpi(72 + (btnSize * beautiful.dpi(3))),
+		width = ((actionCenter.width - actionCenterMargin - (toggleSpacing * dpi(3))) / 3) + btnSize / 3,
 		strategy = 'exact',
 		{
 			widget = wibox.container.background,
@@ -213,13 +215,13 @@ do
 		end)
 	}
 
-	local actionCenterMargin = beautiful.dpi(12)
 	local realWidget = wibox.widget {
 		layout = wibox.layout.fixed.horizontal,
 		{
 			widget = wibox.container.background,
 			bg = bgcolor,
 			forced_width = actionCenter.width,
+			shape = function(crr, w, h) return gears.shape.partially_rounded_rect(crr, w, h, false, false, true, true, base.radius) end,
 			{
 				layout = wibox.layout.align.vertical,
 				{
@@ -235,7 +237,7 @@ do
 							margins = actionCenterMargin,
 							{
 								layout = wibox.layout.fixed.vertical,
-								spacing = beautiful.dpi(6),
+								spacing = actionCenterMargin,
 								{
 									widget = wibox.widget.textbox,
 									markup = helpers.colorize_text('Action Center', beautiful.fg_normal),
@@ -243,7 +245,7 @@ do
 								},
 								{
 									layout = wibox.layout.grid,
-									spacing = dpi(36),
+									spacing = toggleSpacing,
 									forced_num_cols = 3,
 									id = 'toggles',
 								},
@@ -320,7 +322,7 @@ do
 	actionCenter:setup {
 		layout = wibox.layout.stack,
 		base.sideDecor {
-			h = actionCenter.height,
+			h = actionCenter.width,
 			position = 'top',
 			bg = bgcolor,
 			emptyLen = base.width / dpi(2)
