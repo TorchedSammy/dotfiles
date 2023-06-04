@@ -34,14 +34,14 @@ local actionCenter = wibox {
 }
 
 local actionCenterAnimator = rubato.timed {
-	intro = 0.02,
 	duration = 0.04,
-	override_dt = true,
+	rate = 60,
 	subscribed = function(sf)
 		if controlLayout then
 			controlLayout:set_scroll_factor(sf)
 		end
-	end
+	end,
+	easing = rubato.linear
 }
 
 local function createToggle(type)
