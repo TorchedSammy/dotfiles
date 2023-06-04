@@ -120,27 +120,36 @@ function helpers.displayClickable(w, opts)
   return w
 end
 
-function helpers.hideOnClick(w, hider)
-    hider = hider or function(widget)
-      if widget == w then
-        return
-      end
-      w.visible = false
+local onClickHiders = {}
+local onClickID = 0
+awful.mouse.append_global_mousebinding(awful.button({}, 1, function()
+ for _, hider in ipairs(onClickHiders) do
+    hider.func()
+ end
+end))
+
+function helpers.hideOnClick(w, cb)
+  local hider = cb or function(widget)
+    if widget == w then
+      return
     end
+    w.visible = false
+  end
 
-    local btn = awful.button({ }, 1, hider)
+  table.insert(onClickHiders, {func = hider, widget = w})
+  client.connect_signal('button::press', hider)
 
-    w:connect_signal('property::visible', function(w)
-      if not w.visible then
-        --wibox.disconnect_signal('button::press', hider)
-        client.disconnect_signal('button::press', hider)
-        --awful.mouse.remove_global_mousebinding(btn)
-      else
-        awful.mouse.append_global_mousebinding(btn)
-        client.connect_signal('button::press', hider)
-        --wibox.connect_signal('button::press', hider)
-      end
-    end)
+  w:connect_signal('lol', function(w)
+    if not w.visible then
+      --wibox.disconnect_signal('button::press', hider)
+      client.disconnect_signal('button::press', hider)
+      --awful.mouse.remove_global_mousebinding(btn)
+    else
+      awful.mouse.append_global_mousebinding(btn)
+      client.connect_signal('button::press', hider)
+      --wibox.connect_signal('button::press', hider)
+    end
+  end)
 end
 
 return helpers

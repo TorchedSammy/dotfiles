@@ -457,7 +457,6 @@ do
 		ontop = true,
 		visible = false
 	}
-	helpers.hideOnClick(startMenu)
 
 	local result = {}
 	local allApps = {}
@@ -654,21 +653,34 @@ do
 			parent = awful.screen.focused()
 		})
 	end
+	doPlacement()
 	if not settings.noAnimate then startMenu.visible = true end
 
+	local startMenuOpen = false
 	widgets.startMenu = {}
 	function widgets.startMenu.toggle()
 		appList.scroll_factor = 0
-		doPlacement()
 		if settings.noAnimate then
+			doPlacement()
 			startMenu.visible = not startMenu.visible
 		else
-			if startMenu.y <= scr.geometry.height - startMenu.height then
+			if startMenuOpen then
 				animator.target = scr.geometry.height
 			else
 				animator.target = scr.geometry.height - (beautiful.wibar_height + beautiful.useless_gap * dpi(2)) - startMenu.height
 			end
+			startMenuOpen = not startMenuOpen
 		end
+	end
+
+	if settings.noAnimate then
+		helpers.hideOnClick(startMenu)
+	else
+		helpers.hideOnClick(startMenu, settings.noAnimate and nil or function()
+			if startMenuOpen then
+				widgets.startMenu.toggle()
+			end
+		end)
 	end
 end
 
@@ -784,18 +796,6 @@ do
 	}
 	local sl = createSlider('volume', {width = volumeDisplay.width})
 
-	local volIcon = wibox.widget {
-		text = '',
-		font = 'Microns 80',
-		align = 'center',
-		widget = wibox.widget.textbox,
-	}
-
-	local volInfo = wibox.widget {
-		font = beautiful.font:gsub('%d+$', '24'),
-		widget = wibox.widget.textbox
-	}
-
 	local displayTimer = gears.timer {
 		timeout = 2,
 		single_shot = true,
@@ -837,10 +837,80 @@ do
 		displayTimer:start()
 		sl.value = volume
 
-		awful.placement.bottom(volumeDisplay, { margins = { bottom = beautiful.dpi(200) }, parent = awful.screen.focused() })
+		awful.placement.bottom(volumeDisplay, { margins = { bottom = beautiful.wibar_height + (beautiful.useless_gap * dpi(2)) }, parent = awful.screen.focused() })
 		volumeDisplay.visible = true
 	end)
 end
+
+do
+	widgets.capsIndicator = {}
+	local capsIndicator = wibox {
+		width = dpi(280),
+		height = dpi(75),
+		bg = '#00000000',
+		ontop = true,
+		visible = false
+	}
+
+	local displayTimer = gears.timer {
+		timeout = 2,
+		single_shot = true,
+		callback = function()
+			capsIndicator.visible = false
+		end
+	}
+
+	function widgets.capsIndicator.display(capsStatus)
+		local margins = beautiful.dpi(10)
+		local realWidget = wibox.widget {
+			layout = wibox.layout.fixed.vertical,
+			base.sideDecor {
+				h = capsIndicator.width,
+				bg = bgcolor,
+				position = 'top',
+				emptyLen = base.width / dpi(2)
+			},
+			{
+				shape = function(crr, w, h) return gears.shape.partially_rounded_rect(crr, w, h, false, false, true, false, base.radius) end,
+				bg = bgcolor,
+				widget = wibox.container.background,
+				{
+					widget = wibox.container.margin,
+					margins = margins,
+					{
+						widget = wibox.container.place,
+						valign = 'center',
+						{
+							layout = wibox.layout.fixed.horizontal,
+							spacing = beautiful.dpi(6),
+
+							w.icon(capsStatus and 'caps-on' or 'caps-off', {size = beautiful.dpi(32)}),
+							{
+								font = beautiful.font:gsub('%d+$', '24'),
+								widget = wibox.widget.textbox,
+								text = capsStatus and 'Caps Lock On' or 'Caps Lock Off'
+							}
+						}
+					}
+				}
+			},
+		}
+
+		capsIndicator:setup {
+			layout = wibox.container.place,
+			realWidget
+		}
+
+		if capsIndicator.visible then
+			displayTimer:stop()
+		end
+		displayTimer:start()
+
+		awful.placement.bottom(capsIndicator, { margins = { bottom = beautiful.wibar_height + (beautiful.useless_gap * dpi(2)) }, parent = awful.screen.focused() })
+		capsIndicator.visible = true
+	end
+end
+
 widgets.actionCenter = require 'ui.widgets.syntax.actionCenter'
 
 return widgets

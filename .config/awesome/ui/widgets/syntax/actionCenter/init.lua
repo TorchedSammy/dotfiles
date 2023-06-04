@@ -205,8 +205,6 @@ function createSlider(name)
 end
 
 do
-	helpers.hideOnClick(actionCenter)
-
 	local contentBack = w.button('arrow-left', {bg = bgcolor, size = beautiful.dpi(32)})
 	contentBack.buttons = {
 		awful.button({}, 1, function()
@@ -336,36 +334,52 @@ do
 
 	local scr = awful.screen.focused()
 	local animator = rubato.timed {
-		outro = 0.5,
-		duration = 0.7,
-		rate = 30,
+		duration = 0.4,
+		rate = 60,
 		subscribed = function(y)
 			actionCenter.y = y
 		end,
-		pos = scr.geometry.height + actionCenter.height,
-		easing = rubato.quadratic
+		pos = scr.geometry.height,
+		easing = rubato.linear
 	}
-	
-	awful.placement.bottom_right(actionCenter, {
-		margins = {
-			right = beautiful.useless_gap * dpi(2),
-			bottom = settings.noAnimate and beautiful.wibar_height + beautiful.useless_gap * dpi(2) or -actionCenter.height
-		},
-		parent = awful.screen.focused()
-	})
+
+	function doPlacement()
+		awful.placement.bottom_right(actionCenter, {
+			margins = {
+				right = beautiful.useless_gap * dpi(2),
+				bottom = settings.noAnimate and beautiful.wibar_height + (beautiful.useless_gap * dpi(2)) or -actionCenter.height
+			},
+			parent = awful.screen.focused()
+		})
+	end
+	doPlacement()
 	if not settings.noAnimate then actionCenter.visible = true end
 
+	local actionCenterOpen
 	widgets.actionCenter = {}
 	function widgets.actionCenter.toggle()
 		if settings.noAnimate then
+			doPlacement()
 			actionCenter.visible = not actionCenter.visible
 		else
-			if actionCenter.y <= scr.geometry.height - actionCenter.height then
+			if actionCenterOpen then
 				animator.target = scr.geometry.height
 			else
-				animator.target = scr.geometry.height - (beautiful.wibar_height + beautiful.useless_gap * dpi(2)) - actionCenter.height
+				animator.target = scr.geometry.height - (beautiful.wibar_height + (beautiful.useless_gap * dpi(2))) - actionCenter.height
 			end
 		end
+
+		actionCenterOpen = not actionCenterOpen
+	end
+
+	if settings.noAnimate then
+		helpers.hideOnClick(actionCenter)
+	else
+		helpers.hideOnClick(actionCenter, settings.noAnimate and nil or function()
+			if actionCenterOpen then
+				widgets.actionCenter.toggle()
+			end
+		end)
 	end
 end
 
