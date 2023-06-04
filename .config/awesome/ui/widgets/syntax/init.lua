@@ -187,7 +187,7 @@ do
 		position = pos
 
 		local mins = math.floor(pos / 60)
-		local secs = pos % 60
+		local secs = math.floor(pos % 60)
 		local time = string.format('%01d:%02d', mins, secs)
 		positionText:set_markup_silently(helpers.colorize_text(time, beautiful.fg_sec))
 	end)
@@ -300,7 +300,7 @@ do
 	local powerText = wibox.widget {
 		widget = wibox.widget.textbox,
 		markup = helpers.colorize_text('Power Options Menu', beautiful.fg_sec),
-		font = 'SF Pro Display 16'
+		font = 'SF Pro Display 20'
 	}
 	local function setupDisplayers(set)
 		for i, widget in ipairs(set) do
@@ -573,6 +573,7 @@ do
 			widget = wibox.container.background,
 			bg = bgcolor,
 			forced_width = startMenu.width,
+			shape = function(crr, w, h) return gears.shape.partially_rounded_rect(crr, w, h, false, false, true, true, base.radius) end,
 			{
 				widget = wibox.container.margin,
 				margins = dpi(5),
@@ -635,13 +636,13 @@ do
 
 	local scr = awful.screen.focused()
 	local animator = rubato.timed {
-		duration = 0.2,
+		duration = 0.4,
 		rate = 60,
 		subscribed = function(y)
 			startMenu.y = y
 		end,
-		pos = scr.geometry.height + startMenu.height,
-		easing = rubato.quadratic
+		pos = scr.geometry.height,
+		easing = rubato.linear
 	}
 
 	local function doPlacement()
