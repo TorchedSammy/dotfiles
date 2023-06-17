@@ -14,7 +14,12 @@ local programs = {
 	-- 'xmodmap -e "pointer = 3 2 1"',
 	'udiskie --tray',
 	'gcdemu',
-	'pactl load-module module-role-ducking trigger_roles=phone,event'
+	'pactl load-module module-role-ducking trigger_roles=phone,event',
+	'pactl load-module module-bluetooth-discover',
+	'pactl load-module module-bluetooth-policy',
+	'pactl load-module module-switch-on-connect',
+	settings.picom and 'picom --experimental-backends -b' or true,
+	'libinput-gestures-setup start'
 }
 
 for _, p in ipairs(programs) do
@@ -25,3 +30,12 @@ for _, p in ipairs(programs) do
 	end)
 end
 
+awful.spawn.easy_async_with_shell('wmctrl -m | grep PID', function(out)
+	local pid = out:match '%d+'
+	awful.spawn.easy_async_with_shell(string.format('test -f /tmp/awesome-%s && printf "y"', pid), function(out2)
+		if not out2:match 'y' then
+			awful.spawn.easy_async(string.format('touch /tmp/awesome-%s', pid), function() end)
+			awful.spawn.easy_async('dex-autostart --environment Awesome --autostart', function() end)
+		end
+	end)
+end)
