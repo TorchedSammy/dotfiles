@@ -19,7 +19,8 @@ local programs = {
 	'pactl load-module module-bluetooth-policy',
 	'pactl load-module module-switch-on-connect',
 	settings.picom and 'picom --experimental-backends -b' or true,
-	'libinput-gestures-setup start'
+	'libinput-gestures-setup start',
+	'tym --daemon'
 }
 
 for _, p in ipairs(programs) do
