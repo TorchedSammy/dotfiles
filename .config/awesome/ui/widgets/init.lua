@@ -206,6 +206,7 @@ awful.widget.watch('cat /proc/meminfo', 5, function(widget, stdout)
   widgets.ram_percent:set_markup_silently(math.floor(usepercent) .. '%')
 end, widgets.ram_bar)
 
+--[[
 widgets.volume_bar = rounded_bar(beautiful.xcolor2)
 function update_volume_bar(volume, mute)
     widgets.volume_bar.value = volume
@@ -226,6 +227,7 @@ awesome.connect_signal("evil::volume", update_volume_bar)
 
 -- Init widget state
 sfx.get_volume_state(update_volume_bar)
+]]--
 
 -- Music widget thatll say whats currently playing
 widgets.music_icon = wibox.widget {
