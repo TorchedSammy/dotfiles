@@ -275,6 +275,23 @@ function widgets.systray(opts)
 	widgets.raw_systray = wibox.widget.systray()
 	widgets.raw_systray:set_base_size(beautiful.systray_icon_size)
 
+	local popup
+	local btn
+	btn = widgets.button('systray', {
+		bg = opts.bg,
+		onClick = function()
+			if awesome.systray() ~= 0 then
+				--popup:move_next_to(btn)
+				popup.visible = not popup.visible
+			end
+		end
+	})
+	--[[
+	local oldDraw = btn.draw
+	function btn:draw()
+	end
+	]]--
+
 	local systrayPopup = wibox.widget {
 		{
 			widgets.raw_systray,
@@ -286,12 +303,13 @@ function widgets.systray(opts)
 		shape = helpers.rrect(6)
 	}
 
-	local popup = awful.popup {
+	popup = awful.popup {
 		widget = systrayPopup,
 		shape = helpers.rrect(6),
 		ontop = true,
 		visible = false,
 		hide_on_right_click = true,
+		preferred_positions = 'top',
 		placement = function(w)
 			awful.placement.bottom_right(w, {
 				margins = {
@@ -301,16 +319,10 @@ function widgets.systray(opts)
 			})
 		end
 	}
+	--popup:move_next_to(btn)
 	helpers.hideOnClick(popup)
 
-	return widgets.button('systray', {
-		bg = opts.bg,
-		onClick = function()
-			if awesome.systray() ~= 0 then
-				popup.visible = not popup.visible
-			end
-		end
-	})
+	return btn
 end
 
 local layoutbox = awful.widget.layoutbox(s)
