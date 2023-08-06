@@ -28,28 +28,32 @@ awful.key({modkey}, 'Escape', awful.tag.history.restore, {
 }),
 
 awful.key({}, 'XF86MonBrightnessDown', function()
-	awful.spawn.easy_async('light -U 10', function() end)
+	awful.spawn.easy_async('light -U 5', function() end)
 end, {
 	description = 'Decrease brightness',
 	group = 'screen'
 }),
 awful.key({}, 'XF86MonBrightnessUp', function()
-	awful.spawn.easy_async('light -A 10', function() end)
+	awful.spawn.easy_async('light -A 5', function() end)
 end, {
 	description = 'Increase brightness',
 	group = 'screen'
+}),
+awful.key({}, 'XF86AudioMute', sfx.muteVolume, {
+	description = 'Mute volume',
+	group = 'audio'
 }),
 awful.key({}, 'XF86AudioLowerVolume', function()
 	sfx.volumeDown()
 end, {
 	description = 'Decrease volume',
-	group = 'screen'
+	group = 'audio'
 }),
 awful.key({}, 'XF86AudioRaiseVolume', function()
 	sfx.volumeUp()
 end, {
 	description = 'Increase volume',
-	group = 'screen'
+	group = 'audio'
 }),
 
 awful.key({modkey}, 'j',
@@ -78,23 +82,23 @@ awful.key({modkey}, 'w',
 ),
 awful.key({control}, 'Print',
 	function()
-		awful.spawn 'ss'
+		awful.spawn.with_shell '~/bin/ss'
 	end, {
 		description = 'Take a regional screenshot',
 		group = 'awesome'
 	}
 ),
-awful.key({control, shift}, 'Print',
+awful.key({control, altkey}, 'Print',
 	function()
-		awful.spawn 'ss window'
+		awful.spawn.with_shell '~/bin/ss window'
 	end, {
 		description = 'Take a window screenshot',
 		group = 'awesome'
 	}
 ),
-awful.key({control, shift}, 'Print',
+awful.key({}, 'Print',
 	function()
-		awful.spawn 'ss screen'
+		awful.spawn.with_shell '~/bin/ss screen'
 	end, {
 		description = 'Take a screenshot of the whole screen',
 		group = 'awesome'
@@ -180,7 +184,7 @@ awful.key({modkey}, 't',
 		group = 'launcher'
 	}
 ),
-awful.key({modkey, control}, 'r', awesome.restart, {
+awful.key({modkey, altkey}, 'r', awesome.restart, {
 	description = 'Restart/Reload awesome',
 	group = 'awesome'
 }),
