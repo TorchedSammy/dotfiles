@@ -16,6 +16,14 @@ local naughty = require 'naughty'
 local nmc = NM.Client.new()
 local wifiDevice = nmc:get_device_by_iface 'wlp2s0'
 
+function wifiDevice:on_access_point_added(ap)
+	awesome.emit_signal('wifi::ap-added', ap)
+end
+
+function wifiDevice:on_access_point_removed()
+	awesome.emit_signal('wifi::ap-removed')
+end
+
 local M = {
 	enabled = nmc:wireless_get_enabled() and wifiDevice ~= nil,
 }
@@ -77,6 +85,8 @@ end
 
 function M.getSSID(ap)
 	local ssid = ap:get_ssid()
+	if not ssid then return end
+
 	return NM.utils_ssid_to_utf8(ssid:get_data())
 end
 
@@ -122,12 +132,10 @@ function M.isActiveAP(ap)
 	return M.activeAPSSID == ssid
 end
 
-do
-	if wifiDevice then
-		local activeAP = wifiDevice:get_active_access_point()
-		if activeAP then
-			M.activeAPSSID = M.getSSID(activeAP)
-		end
+if wifiDevice then
+	local activeAP = wifiDevice:get_active_access_point()
+	if activeAP then
+		M.activeAPSSID = M.getSSID(activeAP)
 	end
 end
 

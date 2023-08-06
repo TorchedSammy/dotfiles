@@ -12,7 +12,7 @@ local function spawn(cmd)
 end
 
 function M.play(s)
-	awful.spawn.easy_async(string.format('pacat --property=media.role=event %s', beautiful.config_path .. 'sounds/' .. sounds[s]), function() end)
+	awful.spawn.easy_async(string.format('pacat --property=media.role=event %s', beautiful.config_path .. 'sounds/' .. (sounds[s] or s .. '.wav')), function() end)
 end
 
 function M.notify()
@@ -20,6 +20,7 @@ function M.notify()
 end
 
 function M.get_volume_state(cb)
+	--[[
 	awful.spawn.easy_async('pactl list sinks', function(stdout)
 		local mute = stdout:match('Mute:%s+(%a+)')
 		local volpercent = stdout:match('%s%sVolume:[%s%a-:%d/]+%s(%d+)%%')
@@ -34,6 +35,7 @@ function M.get_volume_state(cb)
 
 		cb(volpercent, mute)
 	end)
+	]]--
 end
 
 function M.volumeUp()
