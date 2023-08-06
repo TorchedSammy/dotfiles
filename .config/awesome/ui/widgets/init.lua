@@ -131,7 +131,7 @@ function widgets.button(icon, opts)
 
 	ico.buttons = {
 		awful.button({}, 1, function()
-			opts.onClick()
+			if opts.onClick then opts.onClick() end
 		end),
 	}
 
