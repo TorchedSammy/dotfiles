@@ -32,7 +32,7 @@ require 'conf.autostart'
 terminal = 'tym'
 terminalname = terminal:gsub('^%l', string.upper)
 
-editor = os.getenv 'EDITOR' or 'lite-xl'
+editor = 'lite-xl'
 editorname = 'Lite XL'
 editorcmd = editor
 
