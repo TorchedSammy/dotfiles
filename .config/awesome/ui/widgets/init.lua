@@ -335,12 +335,17 @@ layoutbox:buttons(gears.table.join(
 	end)
 ))
 
-widgets.layout = {
-	layoutbox,
-	top = 7, bottom = 7,
-	widget = wibox.container.margin
+widgets.layout = wibox.layout {
+	widget = wibox.container.constraint,
+	width = beautiful.dpi(18),
+	{
+		widget = wibox.container.place,
+		align = 'center',
+		layoutbox
+	}
 }
 
+--[[
 widgets.volslider = wibox.widget {
 	widget = wibox.widget.slider,
 	value = 100,
@@ -360,6 +365,7 @@ end)
 widgets.volslider:connect_signal('property::value', function()
 	sfx.setVolume(widgets.volslider.value)
 end)
+]]--
 
 function widgets.switch(opts)
 	local size = {
