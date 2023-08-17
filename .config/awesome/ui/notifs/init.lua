@@ -16,6 +16,7 @@ naughty.connect_signal('added', function(notif)
 	end
 end)
 require 'ui.notifs.playerctl'
+require 'ui.notifs.battery'
 
 if package.searchpath('ui.notifs.' .. settings.theme, package.path) then
 	require('ui.notifs.' .. settings.theme)
