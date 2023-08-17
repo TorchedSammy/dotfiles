@@ -16,4 +16,4 @@
 	- [ ] Filter notifications based on
 		- [ ] Title/Message
 		- [ ] Client it came from (class, instance, app title)
-
+- [ ] Fix volume state function
