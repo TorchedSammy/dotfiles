@@ -14,7 +14,10 @@ globalkeys = gears.table.join(globalkeys,
 		powerMenu.toggle()
 	end),
 	awful.key({}, 'Caps_Lock', function()
-		gears.timer.start_new(0.2, function() caps.state(widgets.capsIndicator.display) end)
+		gears.timer.start_new(0.4, function()
+			caps.state(widgets.capsIndicator.display)
+			caps.state(widgets.caps.display)
+		end)
 	end)
 )
 
