@@ -2,6 +2,7 @@ local beautiful = require 'beautiful'
 local cairo = require 'lgi'.cairo
 local gears = require 'gears'
 local wibox = require 'wibox'
+local helpers = require 'helpers'
 
 local base = {
 	width = 12,
@@ -11,7 +12,7 @@ local base = {
 		'#9cfa74'
 	},
 }
-base.shape = function(cr, w, h) return gears.shape.partially_rounded_rect(cr, w, h, false, true, false, true, base.radius) end
+base.shape = helpers.rrect(base.radius)
 base.widths = {
 	round = base.width + (base.width / 2),
 	empty = base.width / 2,
