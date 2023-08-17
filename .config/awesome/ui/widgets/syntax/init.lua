@@ -12,6 +12,7 @@ local menugen = require 'menubar.menu_gen'
 local rubato = require 'libs.rubato'
 local settings = require 'conf.settings'
 local sfx = require 'modules.sfx'
+local pctl = require 'modules.playerctl'
 
 local bgcolor = beautiful.bg_sec
 local playerctl = bling.signal.playerctl.lib()
@@ -157,12 +158,10 @@ do
 	local next = w.button('skip-next', {
 		bg = bgcolor,
 		size = btnSize,
-		onClick = function() playerctl:next()
-	end})
+		onClick = function() playerctl:next() end
+	})
 
-	local lastArtist
-	local lastAlbum
-	playerctl:connect_signal('metadata', function (_, title, artist, art, album)
+	pctl.listenMetadata(function (title, artist, art, album)
 		musicArtist:set_markup_silently(artist)
 		wrappedMusicArtist:emit_signal 'widget::redraw_needed'
 
@@ -174,10 +173,7 @@ do
 
 		positionText:set_markup_silently(helpers.colorize_text('0:00', beautiful.fg_sec))
 
-		if artist == lastArtist and album == lastAlbum then return end
-		lastArtist = artist
-		lastAlbum = album
-		albumArt.image = gears.surface.load_uncached_silently(art, beautiful.config_path .. '/images/albumPlaceholder.png')
+		albumArt.image = art
 	end)
 
 	playerctl:connect_signal('position', function (_, pos, length)
@@ -310,32 +306,43 @@ do
 		end
 	end
 
-	local function btn(bc, ic, icf)
-		return button(bc, ic, 58, helpers.rrect(base.radius))
-	end
-	local buttonColor = beautiful.fg_normal
-	local logout = btn(buttonColor, 'logout')
+	local logout = w.button('logout', {
+		bg = bgcolor,
+		size = beautiful.dpi(58),
+		shape = helpers.rrect(base.radius),
+		onClick = function()
+			awesome.quit()
+			hide()
+	  end
+	})
+	local shutdown = w.button('power2', {
+		bg = bgcolor,
+		size = beautiful.dpi(58),
+		shape = helpers.rrect(base.radius),
+		onClick = function()
+			awful.spawn 'poweroff'
+			hide()
+		end
+	})
+	local restart = w.button('restart', {
+		bg = bgcolor,
+		size = beautiful.dpi(58),
+		shape = helpers.rrect(base.radius),
+		onClick = function()
+			awful.spawn 'reboot'
+			hide()
+		end
+	})
+	local sleep = w.button('sleep', {
+		bg = bgcolor,
+		size = beautiful.dpi(58),
+		shape = helpers.rrect(base.radius),
+		onClick = function()
+			awful.spawn 'systemctl suspend'
+			hide()
+		end
+	})
 
-	logout:connect_signal('button::press', function()
-		awesome.quit()
-		hide()
-	end)
-
-	local shutdown = btn(buttonColor, 'power2')
-	shutdown:connect_signal('button::press', function()
-		awful.spawn 'poweroff'
-		hide()
-	end)
-	local restart = btn(buttonColor, 'restart')
-	restart:connect_signal('button::press', function()
-		awful.spawn 'reboot'
-		hide()
-	end)
-	local sleep = btn(buttonColor, 'sleep')
-	sleep:connect_signal('button::press', function()
-		awful.spawn 'systemctl suspend'
-		hide()
-	end)
 	setupDisplayers {
 		logout,
 		'Logout',
@@ -446,6 +453,8 @@ do
 
 		powerMenu.visible = not powerMenu.visible
 	end
+
+	helpers.hideOnClick(powerMenu)
 end
 
 do
@@ -462,7 +471,7 @@ do
 	local allApps = {}
 	local appList = wibox.layout.overflow.vertical()
 	appList.spacing = 1
-	appList.step = 25
+	appList.step = 65
 	appList.scrollbar_widget = {
 		{
 			widget = wibox.widget.separator,
@@ -474,13 +483,12 @@ do
 	}
 	appList.scrollbar_width = dpi(14)
 
+	--menugen.generate = function() end -- TODO: remove (stop using menugen)
 	menugen.generate(function(entries)
-		-- Add category icons
 		for k, v in pairs(menugen.all_categories) do
 			table.insert(result, { k, {}, v.icon })
 		end
 
-		-- Get items table
 		for k, v in pairs(entries) do
 			for _, cat in pairs(result) do
 				if cat[1] == v.category then
@@ -495,8 +503,8 @@ do
 			local a = {}
 			for n in pairs(t) do table.insert(a, n) end
 			table.sort(a, f)
-			local i = 0      -- iterator variable
-			local iter = function ()   -- iterator function
+			local i = 0
+			local iter = function ()
 				i = i + 1
 				if a[i] == nil then return nil
 				else return a[i], t[a[i]]
@@ -515,9 +523,6 @@ do
 --				v[1] = menugen.all_categories[v[1]].name
 --			end
 --		end
-
-		-- Sort categories alphabetically also
-		--table.sort(result, function(a, b) return string.byte(string.lower(a[1])) < string.byte(string.lower(b[1])) end)
 
 		for name, props in pairsByKeys(allApps, function(a, b) return string.lower(a) < string.lower(b) end) do
 			local wid = wibox.widget {
@@ -636,7 +641,7 @@ do
 
 	local scr = awful.screen.focused()
 	local animator = rubato.timed {
-		duration = 0.4,
+		duration = 0.3,
 		rate = 60,
 		subscribed = function(y)
 			startMenu.y = y
@@ -661,8 +666,11 @@ do
 	widgets.startMenu = {}
 	function widgets.startMenu.toggle()
 		appList.scroll_factor = 0
-		if settings.noAnimate then
+		if not startMenuOpen then
 			doPlacement()
+		end
+
+		if settings.noAnimate then
 			startMenu.visible = not startMenu.visible
 		else
 			if startMenuOpen then
@@ -670,8 +678,8 @@ do
 			else
 				animator.target = scr.geometry.height - (beautiful.wibar_height + beautiful.useless_gap * dpi(2)) - startMenu.height
 			end
-			startMenuOpen = not startMenuOpen
 		end
+		startMenuOpen = not startMenuOpen
 	end
 
 	if settings.noAnimate then
@@ -695,6 +703,7 @@ function slider(opts, onChange)
 		bar_shape = progressShape,
 		background_color = beautiful.xcolor9,
 		max_value = opts.max or 100,
+		forced_height = beautiful.dpi(5),
 		id = 'progress'
 	}
 
@@ -728,13 +737,9 @@ function slider(opts, onChange)
 	end)
 
 	return wibox.widget {
-		widget = wibox.container.constraint,
-		height = beautiful.dpi(5),
-		{
-			layout = wibox.layout.stack,
-			progress,
-			slider
-		}
+		layout = wibox.layout.stack,
+		progress,
+		slider
 	}, slider, progress
 end
 
@@ -760,17 +765,11 @@ function createSlider(name, opts)
 		valign = 'center',
 		{
 			layout = wibox.layout.fixed.horizontal,
-			spacing = beautiful.dpi(6),
-
+			spacing = beautiful.dpi(8),
 			w.icon(name, {size = beautiful.dpi(32)}),
 			{
-				layout = wibox.layout.fixed.vertical,
-				{
-					font = beautiful.font:gsub('%d+$', '20'),
-					widget = wibox.widget.textbox,
-					text = name:gsub('^%l', string.upper)
-				},
-				sl
+				layout = wibox.container.place,
+				sl,
 			}
 		}
 	}
@@ -912,6 +911,27 @@ do
 	end
 end
 
-widgets.actionCenter = require 'ui.widgets.syntax.actionCenter'
+do
+	widgets.caps = wibox.widget {
+		layout = wibox.layout.fixed.horizontal,
+		visible = true,
+		w.icon('caps-on', {
+			size = beautiful.dpi(24),
+			color = helpers.invertColor(beautiful.fg_normal)
+		}),
+		{
+			font = beautiful.font:gsub('%d+$', '12'),
+			widget = wibox.widget.textbox,
+			text = 'Caps Lock On',
+			valign = 'center'
+		}
+	}
+
+	function widgets.caps.display(capsStatus)
+		capsWidget.visible = capsStatus
+	end
+end
+
+widgets.quickSettings = require 'ui.widgets.syntax.quickSettings'
 
 return widgets

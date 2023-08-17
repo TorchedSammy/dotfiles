@@ -12,11 +12,13 @@ local sfx = require 'modules.sfx'
 
 local bgcolor = beautiful.bg_sec
 local btnSize = dpi(32)
-local actionCenterMargin = dpi(12)
+local quickSettingsMargin = dpi(12)
 local toggleSpacing = dpi(36)
 local widgets = {}
 local centers = {
-	wifi = require 'ui.widgets.syntax.actionCenter.wifi'
+	wifi = require 'ui.widgets.syntax.quickSettings.wifi',
+	battery = require 'ui.widgets.syntax.quickSettings.battery',
+	bluetooth = require 'ui.widgets.syntax.quickSettings.bluetooth',
 }
 
 local toggleLayout
@@ -24,7 +26,7 @@ local controlLayout
 local contentLayout
 local contentLabelLayout
 
-local actionCenter = wibox {
+local quickSettings = wibox {
 	height = dpi(420),
 	width = dpi(460),
 	bg = '#00000000',
@@ -33,8 +35,8 @@ local actionCenter = wibox {
 	visible = false
 }
 
-local actionCenterAnimator = rubato.timed {
-	duration = 0.04,
+local quickSettingsAnimator = rubato.timed {
+	duration = 0.2,
 	rate = 60,
 	subscribed = function(sf)
 		if controlLayout then
@@ -48,6 +50,7 @@ local function createToggle(type)
 	local control = centers[type] or {
 		enabled = function() return false end,
 		toggle = function() return false end,
+		status = function() return false, '' end,
 	}
 
 	local toggleFgColor = beautiful.fg_normal
@@ -56,27 +59,40 @@ local function createToggle(type)
 	local icon = w.icon(control.enabled() and type or type .. '-off', {size = btnSize, color = toggleFgColor})
 	local rightIcon = w.icon('arrow-right', {size = btnSize, color = toggleFgColor})
 
+	local _, textStatus = control.status()
 	local wid = wibox.widget {
-		widget = wibox.container.constraint,
-		height = dpi(50),
-		width = ((actionCenter.width - actionCenterMargin - (toggleSpacing * dpi(3))) / 3) + btnSize / 3,
-		strategy = 'exact',
-		{
-			widget = wibox.container.background,
-			shape = helpers.rrect(base.radius),
-			id = 'bg',
+		layout = wibox.layout.fixed.vertical,
+		spacing = beautiful.dpi(8),
+		{	
+			widget = wibox.container.constraint,
+			height = dpi(50),
+			width = ((quickSettings.width - quickSettingsMargin - (toggleSpacing * dpi(3))) / 3) + btnSize / 3,
+			strategy = 'exact',
 			{
-				widget = wibox.container.margin,
-				left = toggleMargin, right = toggleMargin,
+				widget = wibox.container.background,
+				shape = helpers.rrect(base.radius),
+				id = 'bg',
 				{
-					layout = wibox.layout.align.horizontal,
-					spacing = beautiful.dpi(24),
+					widget = wibox.container.margin,
+					left = toggleMargin, right = toggleMargin,
 					{
-						widget = wibox.container.place
-					},
-					icon,
-					rightIcon
+						layout = wibox.layout.align.horizontal,
+						spacing = beautiful.dpi(24),
+						{
+							widget = wibox.container.place
+						},
+						icon,
+						rightIcon
+					}
 				}
+			}
+		},
+		{
+			layout = wibox.container.place,
+			{
+				widget = wibox.widget.textbox,
+				text = textStatus,
+				font = beautiful.font:gsub('%d+$', '14')
 			}
 		}
 	}
@@ -89,23 +105,30 @@ local function createToggle(type)
 	end
 
 	setToggleBackground(control.enabled())
+	local function displayControls()
+		contentLabelLayout.markup = helpers.colorize_text(control.title, beautiful.fg_normal)
+		quickSettingsAnimator.target = 1
+		control.display(contentLayout)
+	end
 
 	icon.buttons = {
 		awful.button({}, 1, function()
-			local controlOn = control.toggle()
-			setToggleBackground(controlOn)
-			if controlOn then
-				icon.icon = type
+			if control.toggle then
+				local controlOn = control.toggle()
+				setToggleBackground(controlOn)
+				if controlOn then
+					icon.icon = type
+				else
+					icon.icon = type .. '-off'
+				end
 			else
-				icon.icon = type .. '-off'
+				displayControls()
 			end
 		end),
 	}
 	rightIcon.buttons = {
 		awful.button({}, 1, function()
-			contentLabelLayout.markup = helpers.colorize_text(control.title, beautiful.fg_normal)
-			actionCenterAnimator.target = 1
-			control.display(contentLayout)
+			displayControls()
 		end)
 	}
 
@@ -119,6 +142,7 @@ function slider(opts, onChange)
 	local progress = wibox.widget {
 		widget = wibox.widget.progressbar,
 		shape = progressShape,
+		forced_height = beautiful.dpi(5),
 		bar_shape = progressShape,
 		background_color = beautiful.xcolor9,
 		max_value = opts.max or 100,
@@ -145,7 +169,7 @@ function slider(opts, onChange)
 
 	local slider = wibox.widget {
 		widget = wibox.widget.slider,
-		forced_height = progress.forced_height,
+		forced_height = beautiful.dpi(5),
 		bar_color = '#00000000',
 		id = 'slider'
 	}
@@ -155,13 +179,9 @@ function slider(opts, onChange)
 	end)
 
 	return wibox.widget {
-		widget = wibox.container.constraint,
-		height = beautiful.dpi(5),
-		{
-			layout = wibox.layout.stack,
-			progress,
-			slider
-		}
+		layout = wibox.layout.stack,
+		progress,
+		slider
 	}, slider, progress
 end
 
@@ -188,117 +208,97 @@ function createSlider(name)
 
 	local wid = wibox.widget {
 		layout = wibox.layout.fixed.horizontal,
-		spacing = beautiful.dpi(6),
-
-		w.icon(name),
-		sl
+		spacing = beautiful.dpi(8),
+		w.icon(name, {size = beautiful.dpi(20)}),
+		{
+			layout = wibox.container.place,
+			sl,
+		}
 	}
 
-	return setmetatable({}, {
-		__index = function(_, k)
-			return wid[k]
-		end,
-		__newindex = function(_, k, v)
-			if k == 'value' then
-				slider.value = v
-			end
-		end
-	})
+	return wid
 end
 
 do
-	local contentBack = w.button('arrow-left', {bg = bgcolor, size = beautiful.dpi(32)})
-	contentBack.buttons = {
-		awful.button({}, 1, function()
-			actionCenterAnimator.target = 0
-			contentLayout:reset()
-		end)
-	}
+	local function contentBackCallback()
+		quickSettingsAnimator.target = 0
+		contentLayout:reset()
+	end
+	local contentBack = w.button('arrow-left', {bg = bgcolor, size = beautiful.dpi(32), onClick = contentBackCallback})
 
 	local realWidget = wibox.widget {
-		layout = wibox.layout.fixed.horizontal,
-		{
 			widget = wibox.container.background,
 			bg = bgcolor,
-			forced_width = actionCenter.width,
+			forced_width = quickSettings.width,
 			shape = function(crr, w, h) return gears.shape.partially_rounded_rect(crr, w, h, false, false, true, true, base.radius) end,
 			{
-				layout = wibox.layout.align.vertical,
-				{
 					layout = wibox.layout.overflow.horizontal,
 					scrollbar_enabled = false,
 					id = 'control',
 					{
 						widget = wibox.container.constraint,
 						strategy = 'exact',
-						width = actionCenter.width,
+						width = quickSettings.width,
 						{
 							widget = wibox.container.margin,
-							margins = actionCenterMargin,
+							margins = quickSettingsMargin,
 							{
-								layout = wibox.layout.fixed.vertical,
-								spacing = actionCenterMargin,
+								layout = wibox.layout.align.vertical,
 								{
-									widget = wibox.widget.textbox,
-									markup = helpers.colorize_text('Action Center', beautiful.fg_normal),
-									font = beautiful.font:gsub('%d+$', '24')
+									layout = wibox.layout.fixed.vertical,
+									spacing = quickSettingsMargin,
+									{
+										widget = wibox.widget.textbox,
+										markup = helpers.colorize_text('Quick Settings', beautiful.fg_normal),
+										font = beautiful.font:gsub('%d+$', '24'),
+										valign = 'bottom'
+									},
+									{
+										layout = wibox.layout.grid,
+										horizontal_spacing = toggleSpacing,
+										vertical_spacing = quickSettingsMargin,
+										forced_num_cols = 3,
+										id = 'toggles',
+									},
 								},
 								{
-									layout = wibox.layout.grid,
-									spacing = toggleSpacing,
-									forced_num_cols = 3,
-									id = 'toggles',
-								},
-								createSlider 'volume',
-								createSlider 'brightness'
+									layout = wibox.layout.fixed.vertical,
+									createSlider 'volume',
+									createSlider 'brightness',
+								}
 							}
 						}
 					},
 					{
 						widget = wibox.container.constraint,
 						strategy = 'exact',
-						width = actionCenter.width,
+						width = quickSettings.width,
 						{
 							widget = wibox.container.margin,
-							margins = actionCenterMargin,
+							margins = quickSettingsMargin,
 							{
 								layout = wibox.layout.fixed.vertical,
+								spacing = quickSettingsMargin,
 								{
-									layout = wibox.layout.align.horizontal,
+									layout = wibox.layout.fixed.horizontal,
+									spacing = beautiful.dpi(4),
+									contentBack,
 									{
-										layout = wibox.container.place,
-										valign = 'center',
-										{
-											layout = wibox.layout.fixed.horizontal,
-											spacing = beautiful.dpi(4),
-											contentBack,
-											{
-												widget = wibox.widget.textbox,
-												font = beautiful.font:gsub('%d+$', '24'),
-												id = 'contentLabel',
-												valign = 'center'
-											}
-										}
-									},
-									{
-										layout = wibox.container.place,
+										widget = wibox.widget.textbox,
+										font = beautiful.font:gsub('%d+$', '24'),
+										id = 'contentLabel',
+										valign = 'bottom'
 									}
 								},
 								{
 									layout = wibox.layout.overflow.vertical,
-									forced_width = actionCenter.width,
+									forced_width = quickSettings.width,
 									id = 'content'
 								}
 							}
 						}
 					}
-				},
-				{
-					layout = wibox.layout.align.horizontal,
-					expand = 'none',
-				}
 			}
-		},
 	}
 
 	-- for fancy scrolling between toggles and controls
@@ -312,17 +312,14 @@ do
 	createToggle 'wifi'
 	createToggle 'bluetooth'
 	createToggle 'coffee'
-	createToggle 'coffee'
-	createToggle 'coffee'
-	createToggle 'coffee'
-	createToggle 'coffee'
-	createToggle 'coffee'
+	createToggle 'battery'
+	createToggle 'focus'
 	createToggle 'coffee'
 
-	actionCenter:setup {
+	quickSettings:setup {
 		layout = wibox.layout.stack,
 		base.sideDecor {
-			h = actionCenter.width,
+			h = quickSettings.width,
 			position = 'top',
 			bg = bgcolor,
 			emptyLen = base.width / dpi(2)
@@ -339,50 +336,51 @@ do
 		duration = 0.4,
 		rate = 60,
 		subscribed = function(y)
-			actionCenter.y = y
+			quickSettings.y = y
 		end,
 		pos = scr.geometry.height,
 		easing = rubato.linear
 	}
 
 	function doPlacement()
-		awful.placement.bottom_right(actionCenter, {
+		awful.placement.bottom_right(quickSettings, {
 			margins = {
 				right = beautiful.useless_gap * dpi(2),
-				bottom = settings.noAnimate and beautiful.wibar_height + (beautiful.useless_gap * dpi(2)) or -actionCenter.height
+				bottom = settings.noAnimate and beautiful.wibar_height + (beautiful.useless_gap * dpi(2)) or -quickSettings.height
 			},
 			parent = awful.screen.focused()
 		})
 	end
 	doPlacement()
-	if not settings.noAnimate then actionCenter.visible = true end
+	if not settings.noAnimate then quickSettings.visible = true end
 
-	local actionCenterOpen
-	widgets.actionCenter = {}
-	function widgets.actionCenter.toggle()
+	local quickSettingsOpen
+	widgets.quickSettings = {}
+	function widgets.quickSettings.toggle()
+		doPlacement()
 		if settings.noAnimate then
-			doPlacement()
-			actionCenter.visible = not actionCenter.visible
+			quickSettings.visible = not quickSettings.visible
 		else
-			if actionCenterOpen then
+			if quickSettingsOpen then
 				animator.target = scr.geometry.height
 			else
-				animator.target = scr.geometry.height - (beautiful.wibar_height + (beautiful.useless_gap * dpi(2))) - actionCenter.height
+				animator.target = scr.geometry.height - (beautiful.wibar_height + (beautiful.useless_gap * dpi(2))) - quickSettings.height
 			end
 		end
 
-		actionCenterOpen = not actionCenterOpen
+		quickSettingsOpen = not quickSettingsOpen
 	end
 
 	if settings.noAnimate then
-		helpers.hideOnClick(actionCenter)
+		helpers.hideOnClick(quickSettings)
 	else
-		helpers.hideOnClick(actionCenter, settings.noAnimate and nil or function()
-			if actionCenterOpen then
-				widgets.actionCenter.toggle()
+		helpers.hideOnClick(quickSettings, settings.noAnimate and nil or function()
+			if quickSettingsOpen then
+				widgets.quickSettings.toggle()
+				contentBackCallback()
 			end
 		end)
 	end
 end
 
-return widgets.actionCenter
+return widgets.quickSettings
