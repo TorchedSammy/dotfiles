@@ -3,6 +3,7 @@
 	- [ ] Add actions
 	- [ ] Click on notification to focus?
 	- [ ] Close button
+	- [ ] Make music display use generic widgets
 - [ ] Stardew
 
 ## Action Center
@@ -17,3 +18,5 @@
 		- [ ] Title/Message
 		- [ ] Client it came from (class, instance, app title)
 - [ ] Fix volume state function
+- [ ] Display notification on headphone connect
+- [ ] Create widgets for every theme for interchangable use
