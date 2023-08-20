@@ -47,6 +47,7 @@ function helpers.hoverCursor(w, cursorType)
   local oldCursor = 'left_ptr'
   local wbx
 
+ w.hcDisabled = false
   local enterCb = function()
     wbx = mouse.current_wibox
     if wbx then wbx.cursor = cursorType end
@@ -60,6 +61,15 @@ function helpers.hoverCursor(w, cursorType)
     w:disconnect_signal('mouse::leave', leaveCb)
     leaveCb()
   end)
+
+  function w:toggleHoverCursor()
+   w.hcDisabled = not w.hcDisabled
+   if w.hcDisabled then
+    leaveCb()
+   else
+    enterCb()
+   end
+  end
 
   w:connect_signal('mouse::enter', enterCb)
   w:connect_signal('mouse::leave', leaveCb)
@@ -94,16 +104,17 @@ function helpers.displayClickable(w, opts)
   if settings.theme:match '-dark$' then opts.shiftFactor = opts.shiftFactor * -1 end
 
   local bgWid = w:get_children_by_id 'bg'[1]
+  w.dcDisabled = false
 
   function ecb()
-   if bgWid then
+   if bgWid and not w.dcDisabled then
       bgWid.bg = opts.hoverColor and opts.hoverColor or helpers.shiftColor(opts.color or w.bg, opts.shiftFactor)
     end
   end
 
   function lcb()
     if bgWid then
-      bgWid.bg = opts.color or w.bg
+      bgWid.bg = opts.color
     end
   end
 
@@ -112,6 +123,15 @@ function helpers.displayClickable(w, opts)
     w:disconnect_signal('mouse::leave', lcb)
     lcb()
   end)
+
+  function w:toggleClickableDisplay()
+   w.dcDisabled = not w.dcDisabled
+   if w.dcDisabled then
+    bgWid.bg = opts.color
+   else
+    bgWid.bg = opts.hoverColor and opts.hoverColor or helpers.shiftColor(opts.color or w.bg, opts.shiftFactor)
+   end
+  end
 
   w:connect_signal('mouse::enter', ecb)
   w:connect_signal('mouse::leave', lcb)
@@ -129,15 +149,17 @@ awful.mouse.append_global_mousebinding(awful.button({}, 1, function()
 end))
 
 function helpers.hideOnClick(w, cb)
-  local hider = cb or function(widget)
-    if widget == w then
-      return
-    end
-    w.visible = false
+ local hider = function(widget)
+  if widget == w then
+   return
   end
+
+  if cb then cb() else w.visible = false end
+ end
 
   table.insert(onClickHiders, {func = hider, widget = w})
   client.connect_signal('button::press', hider)
+  --wibox.connect_signal('button::press', hider)
 
   w:connect_signal('lol', function(w)
     if not w.visible then
@@ -147,7 +169,7 @@ function helpers.hideOnClick(w, cb)
     else
       awful.mouse.append_global_mousebinding(btn)
       client.connect_signal('button::press', hider)
-      --wibox.connect_signal('button::press', hider)
+      wibox.connect_signal('button::press', hider)
     end
   end)
 end

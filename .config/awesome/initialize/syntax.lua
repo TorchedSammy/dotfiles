@@ -2,7 +2,7 @@ local awful = require 'awful'
 local gears = require 'gears'
 local widgets = require 'ui.widgets.syntax'
 local caps = require 'modules.caps'
-require 'ui.components.syntax'
+require 'ui.extras.syntax'
 
 local music = widgets.musicDisplay
 local powerMenu = widgets.powerMenu
