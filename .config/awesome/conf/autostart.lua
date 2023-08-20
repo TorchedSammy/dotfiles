@@ -18,10 +18,12 @@ local programs = {
 	'pactl load-module module-bluetooth-discover',
 	'pactl load-module module-bluetooth-policy',
 	'pactl load-module module-switch-on-connect',
-	settings.picom and 'picom --experimental-backends -b' or true,
 	'libinput-gestures-setup start',
 	'tym --daemon'
 }
+if settings.picom then
+	-- table.insert(programs, 'picom --experimental-backends -b')
+end
 
 for _, p in ipairs(programs) do
 	awful.spawn.easy_async('pgrep ' .. p:match '^%w+', function(output)
