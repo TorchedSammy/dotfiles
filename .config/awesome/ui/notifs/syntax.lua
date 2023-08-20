@@ -1,5 +1,5 @@
 local beautiful = require 'beautiful'
-local base = require 'ui.components.syntax.base'
+local base = require 'ui.extras.syntax.base'
 local gears = require 'gears'
 local naughty = require 'naughty'
 local wibox = require 'wibox'

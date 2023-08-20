@@ -1,5 +1,5 @@
 local awful = require 'awful'
-local base = require 'ui.components.syntax.base'
+local base = require 'ui.extras.syntax.base'
 local beautiful = require 'beautiful'
 local gears = require 'gears'
 local helpers = require 'helpers'
@@ -90,16 +90,16 @@ local function setupUI(c)
 	local progressPaddings = 4
 	local progress = wibox.widget {
 		widget = wibox.widget.progressbar,
-		forced_height = 18,
+		forced_height = beautiful.dpi(18),
 		paddings = progressPaddings,
 		background_color = beautiful.bg_normal,
 		max_value = 100
 	}
-	local volumeBarWidth = 180
+	local volumeBarWidth = beautiful.dpi(150)
 	local volume = wibox.widget {
 		widget = wibox.widget.progressbar,
 		shape = gears.shape.rounded_bar,
-		forced_height = 8,
+		forced_height = beautiful.dpi(8),
 		background_color = '#00000000',
 		color = string.format('linear:0,0:%s,0:0,%s:%s,%s', volumeBarWidth, base.gradientColors[1], volumeBarWidth, base.gradientColors[2]),
 		max_value = 100
@@ -239,7 +239,7 @@ local function setupUI(c)
 			valign = 'center',
 			{
 				widget = wibox.container.margin,
-				top = 4, bottom = 4, left = 2, right = 2,
+				--top = 4, bottom = 4, left = 2, right = 2,
 				{
 					layout = wibox.layout.stack,
 					{
@@ -279,13 +279,13 @@ local function setupUI(c)
 				forced_height = uiHeight,
 				{
 					widget = wibox.container.margin,
-					top = 12, bottom = 12, right = base.widths.empty * 2,
+					top = 12, bottom = 12, --right = base.widths.empty * 2,
 					{
 						layout = wibox.layout.align.horizontal,
 						{
 							widget = wibox.container.background,
 							shape = base.shape,
-							forced_width = beautiful.dpi(140),
+							--forced_width = beautiful.dpi(140),
 							shape_border_width = 1,
 							shape_border_color = lightColor,
 							{
@@ -293,7 +293,7 @@ local function setupUI(c)
 								halign = 'center',
 								{
 									layout = wibox.layout.fixed.horizontal,
-									spacing = 16,
+									spacing = beautiful.dpi(16),
 									prev,
 									{
 										widget = wibox.widget.separator,
@@ -319,7 +319,7 @@ local function setupUI(c)
 						},
 						{
 							layout = wibox.layout.fixed.horizontal,
-							spacing = 8,
+							spacing = beautiful.dpi(8),
 							{
 								widget = wibox.container.constraint,
 								width = volumeBarWidth,

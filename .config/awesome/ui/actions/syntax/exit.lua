@@ -1,6 +1,6 @@
 local awful = require 'awful'
 local wibox = require 'wibox'
-local base = require 'ui.components.syntax.base'
+local base = require 'ui.extras.syntax.base'
 
 return function()
 	local yes = wibox.widget {

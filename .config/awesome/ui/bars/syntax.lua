@@ -1,5 +1,5 @@
 local awful = require 'awful'
-local base = require 'ui.components.syntax.base'
+local base = require 'ui.extras.syntax.base'
 local common = require 'awful.widget.common'
 local wibox = require 'wibox'
 local gears = require 'gears'
