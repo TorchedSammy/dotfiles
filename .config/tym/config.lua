@@ -13,6 +13,17 @@ tym.set_config {
 	shell = [[hilbish -ic "os.setenv('SHLVL', tostring(tonumber(os.getenv 'SHLVL') - 1))"]]
 }
 
+tym.set_hooks({
+  title = function(t)
+	if t:match 'cmus' then
+		tym.set_config {
+			padding_vertical = 0
+		}
+		return true -- this is needed to cancenl default title application
+	end
+  end,
+})
+
 tym.set_hook('selected', function ()
 	tym.copy_selection()
 end)
