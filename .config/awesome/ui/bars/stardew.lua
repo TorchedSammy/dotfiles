@@ -13,10 +13,12 @@ screen.connect_signal('property::geometry', helpers.set_wallpaper)
 awful.screen.connect_for_each_screen(function(s)
 	swidgets.stardew_time(s)
 
+--[[
 	local musicbuttons = {
 		widgets.imgwidget('icons/rightarrow.png'),
 		layout = wibox.layout.fixed.horizontal
 	}
+]]--
 
 	-- Create the wibox
 	s.bar = awful.wibar {
@@ -129,7 +131,7 @@ awful.screen.connect_for_each_screen(function(s)
 				spacing = beautiful.wibar_spacing,
 				{
 					{
-						widgets.volslider,
+						--widgets.volslider,
 						widget = wibox.container.margin,
 						left = dpi(8),
 						right = dpi(8)
@@ -140,7 +142,7 @@ awful.screen.connect_for_each_screen(function(s)
 					shape_border_width = 3,
 					bg = beautiful.bg_sec
 				},
-				--widgets.layout,
+				widgets.layout(s),
 				widgets.systray
 			},
 			left = beautiful.wibar_spacing,

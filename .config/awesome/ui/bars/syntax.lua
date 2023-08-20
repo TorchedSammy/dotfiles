@@ -297,7 +297,7 @@ awful.screen.connect_for_each_screen(function(s)
 						spacing = beautiful.wibar_spacing,
 						--w.caps,
 						widgets.systray {bg = beautiful.bg_normal_opposite},
-						widgets.layout,
+						widgets.layout(s),
 						actionBtn
 					}
 				},

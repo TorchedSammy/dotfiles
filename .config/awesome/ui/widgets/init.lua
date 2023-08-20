@@ -325,25 +325,27 @@ function widgets.systray(opts)
 	return btn
 end
 
-local layoutbox = awful.widget.layoutbox(s)
-layoutbox:buttons(gears.table.join(
-	awful.button({}, 1, function()
-		awful.layout.inc(1)
-	end),
-	awful.button({}, 3, function()
-		awful.layout.inc(-1)
-	end)
-))
+function widgets.layout(s)
+	local layoutbox = awful.widget.layoutbox(s)
+	layoutbox:buttons(gears.table.join(
+		awful.button({}, 1, function()
+			awful.layout.inc(1)
+		end),
+		awful.button({}, 3, function()
+			awful.layout.inc(-1)
+		end)
+	))
 
-widgets.layout = wibox.layout {
-	widget = wibox.container.constraint,
-	width = beautiful.dpi(18),
-	{
-		widget = wibox.container.place,
-		align = 'center',
-		layoutbox
+	return {
+		widget = wibox.container.constraint,
+		width = beautiful.dpi(18),
+		{
+			widget = wibox.container.place,
+			align = 'center',
+			layoutbox
+		}
 	}
-}
+end
 
 --[[
 widgets.volslider = wibox.widget {
