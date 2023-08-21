@@ -6,7 +6,7 @@ local rubato = require 'libs.rubato'
 local wibox = require 'wibox'
 local helpers = require 'helpers'
 
-local function setup(s)
+local function setup(s, vertical)
 	local tf, tu, to, te, cf, cu, co, ce;
 	-- Set fallback values if needed
 	if beautiful.taglist_text_focused then
@@ -120,12 +120,22 @@ local function setup(s)
 		))
 ]]--
 
-	return wibox.widget {
+	local t = wibox.widget {
 		widget = wibox.container.margin,
 		left = 5, right = 5,
 		bottom = 2, top = 2,
 		taglist
 	}
+
+	if vertical then
+		return wibox.widget {
+			widget = wibox.container.rotate,
+			direction = 'west',
+			t
+		}
+	else
+		return t
+	end
 end
 
 return setup

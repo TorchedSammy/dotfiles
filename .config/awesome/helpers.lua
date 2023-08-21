@@ -2,6 +2,7 @@ local awful = require 'awful'
 local beautiful = require 'beautiful'
 local gears = require 'gears'
 local settings = require 'conf.settings'
+local naughty = require 'naughty'
 local wibox = require 'wibox'
 
 local helpers = {}
@@ -172,6 +173,19 @@ function helpers.hideOnClick(w, cb)
       wibox.connect_signal('button::press', hider)
     end
   end)
+end
+
+function helpers.unimplemented(mod, func)
+	naughty.notify {
+		title = 'Missing Implementation',
+		text = string.format('%s: missing implementation of function %s', mod, func)
+	}
+end
+
+function helpers.implWrap(mod)
+ return function(func)
+  helpers.unimplemented(mod, func)
+ end
 end
 
 return helpers

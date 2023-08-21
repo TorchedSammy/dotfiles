@@ -1,5 +1,5 @@
 return {
-	theme = 'syntax-dark',
+	theme = 'dreams',
 	picom = true,
 	noAnimate = false
 }

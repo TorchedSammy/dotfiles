@@ -189,6 +189,7 @@ theme.layout_cornerne = layoutimg("cornernew.png")
 theme.layout_cornersw = layoutimg("cornersww.png")
 theme.layout_cornerse = layoutimg("cornersew.png")
 
+theme.os_icon = 'fedora'
 theme.awesome_icon = theme_assets.awesome_icon(
     theme.menu_height, theme.bg_focus, theme.fg_focus
 )
