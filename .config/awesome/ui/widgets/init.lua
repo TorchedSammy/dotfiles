@@ -229,21 +229,15 @@ awesome.connect_signal("evil::volume", update_volume_bar)
 sfx.get_volume_state(update_volume_bar)
 ]]--
 
--- Music widget thatll say whats currently playing
-widgets.music_icon = wibox.widget {
-	markup = '',
-	font = 'Font Awesome',
-	widget = wibox.widget.textbox
-}
 widgets.music_name = wibox.widget {
-		markup = 'Nothing Playing',
-		widget = wibox.widget.textbox,
+	markup = 'Nothing Playing',
+	widget = wibox.widget.textbox,
 }
 
 widgets.music = wibox.widget {
 	layout = wibox.layout.fixed.horizontal,
 	spacing = beautiful.dpi(4),
-	widgets.music_icon,
+	widgets.icon 'music',
 	widgets.music_name
 }
 
@@ -277,12 +271,13 @@ function widgets.systray(opts)
 
 	local popup
 	local btn
-	btn = widgets.button('systray', {
+	btn = widgets.button('expand-more', {
 		bg = opts.bg,
 		onClick = function()
 			if awesome.systray() ~= 0 then
 				--popup:move_next_to(btn)
 				popup.visible = not popup.visible
+				btn.icon = popup.visible and 'expand-less' or 'expand-more'
 			end
 		end
 	})
