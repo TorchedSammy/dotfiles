@@ -121,7 +121,8 @@ function widgets.button(icon, opts)
 					{
 						widget = wibox.widget.textbox,
 						markup = helpers.colorize_text(opts.text or '', opts.color or beautiful.fg_normal),
-						font = beautiful.font:gsub('%d+$', opts.fontSize or 14)
+						font = beautiful.font:gsub('%d+$', opts.fontSize or 14),
+						id = 'textbox'
 					}
 				}
 			}
@@ -165,6 +166,8 @@ function widgets.button(icon, opts)
 					}
 				]], v)
 				ico:emit_signal 'widget::redraw_needed'
+			elseif k == 'text' then
+				ico:get_children_by_id'textbox'[1].markup = helpers.colorize_text(v, opts.color or beautiful.fg_normal)
 			end
 			ico[k] = v
 		end
