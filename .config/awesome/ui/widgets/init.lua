@@ -91,7 +91,7 @@ function widgets.button(icon, opts)
 	local ico = wibox.widget {
 		id = 'bg',
 		widget = wibox.container.background,
-		color = opts.bgcolor,
+		color = opts.bgcolor or opts.bg,
 		shape = opts.shape or (opts.text and helpers.rrect(6) or gears.shape.circle),
 		{
 			widget = wibox.container.margin,
