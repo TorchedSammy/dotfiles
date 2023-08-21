@@ -23,248 +23,38 @@ end
 local widgets = {}
 
 do
-	local albumArt = wibox.widget {
-		widget = wibox.widget.imagebox,
-		resize = true
-	}
+	local music = require 'ui.widgets.musicDisplay'
 
-	local musicArtist = wibox.widget {
-		markup = '',
-		widget = wibox.widget.textbox
-	}
-
-	local musicTitle = wibox.widget {
-		markup = '',
-		widget = wibox.widget.textbox
-	}
-
-	local musicAlbum = wibox.widget {
-		markup = '',
-		widget = wibox.widget.textbox
-	}
-	local positionText = wibox.widget {
-		markup = '',
-		widget = wibox.widget.textbox
-	}
-
-	local position = 0
 	local musicDisplay = wibox {
-		width = dpi(480),
-		height = dpi(180),
+		width = beautiful.dpi(480),
+		height = beautiful.dpi(180),
 		bg = '#00000000',
 		shape = gears.shape.rectangle,
 		ontop = true,
 		visible = false
 	}
-	helpers.hideOnClick(musicDisplay)
 
-	local progressShape = gears.shape.rounded_bar
-	local progress = wibox.widget {
-		widget = wibox.widget.progressbar,
-		forced_height = beautiful.dpi(10),
-		shape = progressShape,
-		bar_shape = progressShape,
-		background_color = beautiful.xcolor9,
-	}
-
-	function setupProgressColor(pos, length)
-		local posFraction = (pos / length)
-		local progressLength = 282
-		local progressCur = posFraction * progressLength
-		progress.color = string.format('linear:0,0:%s,0:0,%s:%s,%s', math.floor(beautiful.dpi(progressCur)), base.gradientColors[1], math.floor(beautiful.dpi(progressLength)), base.gradientColors[2])
-	end
-
-	local progressAnimator = rubato.timed {
-		duration = 0.2,
-		rate = 60,
-		subscribed = function(pos)
-			progress.value = pos
-			setupProgressColor(pos, progress.max_value)
-		end,
-		pos = 0,
-		easing = rubato.quadratic
-	}
-
-	local slider = wibox.widget {
-		widget = wibox.widget.slider,
-		forced_height = progress.forced_height,
-		bar_color = '#00000000'
-	}
-	slider:connect_signal('property::value', function()
-		progressAnimator.target = slider.value
-		playerctl:set_position(slider.value)
-	end)
-
-	local function scroll(widget)
-		return wibox.widget {
-			layout = wibox.container.scroll.horizontal,
-			step_function = wibox.container.scroll.step_functions.nonlinear_back_and_forth,
-			max_size = 50,
-			speed = 80,
-			widget
-		}
-	end
-
-	local wrappedMusicArtist = scroll(musicArtist)
-	local wrappedMusicTitle = scroll(musicTitle)
-	local wrappedMusicAlbum = scroll(musicAlbum)
-	local btnSize = beautiful.dpi(19)
-
-	local updateShuffle
-	local shuffleState
-	local shuffle = w.button('shuffle', {
+	local musicWidget = music.new {
 		bg = bgcolor,
-		size = btnSize,
-		onClick = function()
-			shuffleState = not shuffleState
-			playerctl:set_shuffle(shuffleState)
-			updateShuffle()
+		shape = function(crr, w, h)
+			return gears.shape.partially_rounded_rect(crr, w, h, false, true, true, false, 6)
 		end
-	})
-
-	updateShuffle = function()
-		if shuffleState then
-			shuffle.color = beautiful.accent
-		else
-			shuffle.color = beautiful.fg_normal
-		end
-	end
-	
-	playerctl:connect_signal('shuffle', function(_, shuff)
-		shuffleState = shuff
-		updateShuffle()
-	end)
-
-	local prev = w.button('skip-previous', {
-		bg = bgcolor,
-		size = btnSize,
-		onClick = function()
-			if position >= 5 then
-				playerctl:set_position(0)
-				position = 0
-				progressAnimator.target = 0
-				return
-			end
-			playerctl:previous()
-		end
-	})
-
-	local playPauseIcons = {'play', 'pause'}
-	local playPause = w.button(playPauseIcons[2], {
-		bg = bgcolor,
-		size = btnSize,
-		onClick = function() playerctl:play_pause() end
-	})
-	local next = w.button('skip-next', {
-		bg = bgcolor,
-		size = btnSize,
-		onClick = function() playerctl:next() end
-	})
-
-	pctl.listenMetadata(function (title, artist, art, album)
-		musicArtist:set_markup_silently(artist)
-		wrappedMusicArtist:emit_signal 'widget::redraw_needed'
-
-		musicTitle:set_markup_silently(title)
-		wrappedMusicTitle:emit_signal 'widget::redraw_needed'
-
-		musicAlbum:set_markup_silently(helpers.colorize_text(album == '' and '~~~' or album, beautiful.fg_sec))
-		wrappedMusicAlbum:emit_signal 'widget::redraw_needed'
-
-		positionText:set_markup_silently(helpers.colorize_text('0:00', beautiful.fg_sec))
-
-		albumArt.image = art
-	end)
-
-	playerctl:connect_signal('position', function (_, pos, length)
-		progress.max_value = length
-		slider.maximum = length
-		progressAnimator.target = pos
-		position = pos
-
-		local mins = math.floor(pos / 60)
-		local secs = math.floor(pos % 60)
-		local time = string.format('%01d:%02d', mins, secs)
-		positionText:set_markup_silently(helpers.colorize_text(time, beautiful.fg_sec))
-	end)
-	playerctl:connect_signal('playback_status', function(_, playing)
-		if not playing then
-			playPause.icon = playPauseIcons[1]
-		else
-			playPause.icon = playPauseIcons[2]
-		end
-	end)
-
-	local info = wibox.widget {
-		layout = wibox.layout.align.vertical,
-		{
-			layout = wibox.layout.fixed.vertical,
-			spacing = 6,
-			wrappedMusicArtist,
-			wrappedMusicTitle,
-			wrappedMusicAlbum,
-		},
-		{
-			layout = wibox.layout.align.horizontal,
-			expand = 'none',
-			{
-				widget = wibox.container.margin,
-				left = -beautiful.dpi(6),
-				{
-					layout = wibox.layout.fixed.horizontal,
-					spacing = beautiful.wibar_spacing / beautiful.dpi(4),
-					prev,
-					playPause,
-					next
-				}
-			},
-			{
-				layout = wibox.container.place
-			},
-			{
-				layout = wibox.layout.fixed.horizontal,
-				spacing = beautiful.wibar_spacing,
-				shuffle,
-				positionText
-			}
-		},
-		{
-			layout = wibox.layout.stack,
-			progress,
-			slider
-		}
 	}
-	--info:ajust_ratio(2, 0.45, 0.15, 0.4)
-	--info:ajust_ratio(3, 0.75, 0.25, 0)
-
 	local realWidget = wibox.widget {
 		layout = wibox.layout.fixed.horizontal,
 		base.sideDecor {
-			h = 180,
+			h = music.height,
 			bg = bgcolor
 		},
 		{
-			shape = function(crr, w, h) return gears.shape.partially_rounded_rect(crr, w, h, false, true, true, false, base.radius) end,
-			bg = bgcolor,
-			widget = wibox.container.background,
-			forced_width = musicDisplay.width - (base.width * 2),
-			forced_height = musicDisplay.height,
-			{
-				widget = wibox.container.margin,
-				top = 20, left = 20 - (base.widths.empty + base.widths.round), right = 20, bottom = 20,
-				{
-					layout = wibox.layout.fixed.horizontal,
-					spacing = 18,
-					{
-						widget = wibox.container.constraint,
-						width = 140,
-						albumArt
-					},
-					info
-				}
-			}
+			widget = wibox.container.margin,
+			left = -(base.widths.round - (base.widths.empty / 2)),
+			musicWidget
 		}
 	}
+
+	helpers.hideOnClick(musicDisplay)
+
 	musicDisplay:setup {
 		layout = wibox.container.place,
 		realWidget
@@ -781,6 +571,9 @@ function createSlider(name, opts)
 		__newindex = function(_, k, v)
 			if k == 'value' then
 				slider.value = v
+			elseif k == 'max' then
+				progress.max = v
+				slider.maximum = v
 			end
 		end
 	})

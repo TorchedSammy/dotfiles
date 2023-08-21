@@ -101,7 +101,7 @@ function helpers.displayClickable(w, opts)
   opts = type(opts) == 'table' and opts or {}
   opts.color = opts.bg or opts.color
   opts.shiftFactor = opts.shiftFactor or -15
-  if settings.theme:match '-dark$' then opts.shiftFactor = opts.shiftFactor * -1 end
+  if settings.theme:match '-dark$' or beautiful.dark then opts.shiftFactor = opts.shiftFactor * -1 end
 
   local bgWid = w:get_children_by_id 'bg'[1]
   w.dcDisabled = false

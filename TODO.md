@@ -20,5 +20,5 @@
 - [x] Fix volume state function
 - [ ] Display notification on headphone connect
 - [ ] Create widgets for every theme for interchangable use
-	- [ ] Music
+	- [x] Music
 - [ ] Fix next music causing progress to jump to end then to beginning
