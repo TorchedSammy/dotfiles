@@ -5,9 +5,11 @@ local naughty = require 'naughty'
 
 -- Picom
 if settings.picom then
+	--[[
 	awful.spawn.with_shell('picom --config ~/.config/picom/' .. beautiful.picom_conf
 	.. '.conf ' .. (beautiful.exp_picom_bknd and '--experimental-backends ' or '')
 	.. '-b')
+	]]--
 end
 
 local programs = {
@@ -21,8 +23,9 @@ local programs = {
 	'libinput-gestures-setup start',
 	'tym --daemon'
 }
+
 if settings.picom then
-	-- table.insert(programs, 'picom --experimental-backends -b')
+	table.insert(programs, 'picom -b')
 end
 
 for _, p in ipairs(programs) do
