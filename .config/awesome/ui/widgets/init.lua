@@ -264,6 +264,21 @@ widgets.macos_date = wibox.widget.textclock()
 widgets.macos_date.format = '%a %b %d'
 
 -- Systray
+function find_widget_in_wibox(wb, widget)
+  local function find_widget_in_hierarchy(h, widget)
+    if h:get_widget() == widget then
+      return h
+    end
+    local result
+    for _, ch in ipairs(h:get_children()) do
+      result = result or find_widget_in_hierarchy(ch, widget)
+    end
+    return result
+  end
+  local h = wb._drawable._widget_hierarchy
+  return h and find_widget_in_hierarchy(h, widget)
+end
+
 function widgets.systray(opts)
 	local systray_margin = (beautiful.wibar_height - beautiful.systray_icon_size) / 2
 	widgets.raw_systray = wibox.widget.systray()
@@ -271,11 +286,15 @@ function widgets.systray(opts)
 
 	local popup
 	local btn
+	local wid
 	btn = widgets.button('expand-more', {
 		bg = opts.bg,
 		onClick = function()
 			if awesome.systray() ~= 0 then
-				--popup:move_next_to(btn)
+				local w = find_widget_in_wibox(opts.bar, wid)
+				local x, y, width, height = w:get_matrix_to_device():transform_rectangle(0, 0, w:get_size())
+				popup.x = x + width + beautiful.useless_gap
+				popup.y = y + height + beautiful.useless_gap
 				popup.visible = not popup.visible
 				btn.icon = popup.visible and 'expand-less' or 'expand-more'
 			end
@@ -299,12 +318,14 @@ function widgets.systray(opts)
 	}
 
 	popup = awful.popup {
+		parent = btn,
 		widget = systrayPopup,
 		shape = helpers.rrect(6),
 		ontop = true,
 		visible = false,
 		hide_on_right_click = true,
-		preferred_positions = 'top',
+		preferred_positions = 'right',
+		--[[
 		placement = function(w)
 			awful.placement.bottom_right(w, {
 				margins = {
@@ -313,11 +334,22 @@ function widgets.systray(opts)
 				parent = awful.screen.focused()
 			})
 		end
+		]]--
 	}
 	--popup:move_next_to(btn)
 	helpers.hideOnClick(popup)
 
-	return btn
+	if opts.vertical then
+		wid = wibox.widget {
+			widget = wibox.container.rotate,
+			direction = 'west',
+			btn
+		}
+	else
+		wid = btn
+	end
+
+	return wid, popup
 end
 
 function widgets.layout(s)
