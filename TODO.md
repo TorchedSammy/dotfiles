@@ -8,7 +8,7 @@
 
 ## Action Center
 - [ ] Caffeinate
-- [ ] Volume Slider
+- [x] Volume Slider
 
 ## Misc
 - [ ] Stop using menugen for start menu
@@ -17,6 +17,8 @@
 	- [ ] Filter notifications based on
 		- [ ] Title/Message
 		- [ ] Client it came from (class, instance, app title)
-- [ ] Fix volume state function
+- [x] Fix volume state function
 - [ ] Display notification on headphone connect
 - [ ] Create widgets for every theme for interchangable use
+	- [ ] Music
+- [ ] Fix next music causing progress to jump to end then to beginning
