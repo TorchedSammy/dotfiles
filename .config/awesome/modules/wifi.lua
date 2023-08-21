@@ -1,6 +1,5 @@
 local awful = require 'awful'
 local beautiful = require 'beautiful'
-local base = require 'ui.components.syntax.base'
 local dpi = beautiful.dpi
 local gears = require 'gears'
 local helpers = require 'helpers'
