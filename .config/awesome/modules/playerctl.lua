@@ -13,7 +13,7 @@ local M = {
 
 local playerctl = bling.signal.playerctl.lib {
 	priority = M.priority,
-	update_on_activity = false -- TEMPORARY: exit signal doesnt work
+--	update_on_activity = false -- TEMPORARY: exit signal doesnt work
 }
 
 local lastTitle
