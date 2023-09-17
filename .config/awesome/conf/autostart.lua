@@ -21,11 +21,14 @@ local programs = {
 	'pactl load-module module-bluetooth-policy',
 	'pactl load-module module-switch-on-connect',
 	'libinput-gestures-setup start',
-	'tym --daemon'
+	'tym --daemon',
+	string.format('gsettings set org.gnome.desktop.interface color-scheme prefer-%s', beautiful.dark and 'dark' or 'light')
 }
 
 if settings.picom then
 	table.insert(programs, 'picom -b')
+else
+	awful.spawn.easy_async('pkill picom', function() end)
 end
 
 for _, p in ipairs(programs) do
