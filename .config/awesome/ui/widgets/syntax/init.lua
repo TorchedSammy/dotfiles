@@ -582,12 +582,22 @@ end
 do
 	local volumeDisplay = wibox {
 		width = dpi(280),
-		height = dpi(75),
+		height = dpi(50),
 		bg = '#00000000',
 		ontop = true,
 		visible = false
 	}
-	local sl = createSlider('volume', {width = volumeDisplay.width})
+	local sl = syntax.slider {
+		width = volumeDisplay.width,
+		height = beautiful.dpi(6),
+		icon = 'volume',
+		iconSize = beautiful.dpi(28),
+		bg = beautiful.xcolor9,
+		onChange = function(val)
+			sfx.setVolume(val)
+		end
+	}
+	--local sl = createSlider('volume', {width = volumeDisplay.width})
 
 	local displayTimer = gears.timer {
 		timeout = 2,
@@ -598,7 +608,7 @@ do
 	}
 
 	local margins = beautiful.dpi(10)
-	local realWidget = wibox.widget {
+	volumeDisplay:setup {
 		layout = wibox.layout.fixed.vertical,
 		base.sideDecor {
 			h = volumeDisplay.width,
@@ -612,23 +622,20 @@ do
 			widget = wibox.container.background,
 			{
 				widget = wibox.container.margin,
-				margins = margins,
+				top = margins - (base.width / dpi(2)),
+				bottom = margins, left = margins, right = margins,
 				sl
 			}
 		},
 	}
 
-	volumeDisplay:setup {
-		layout = wibox.container.place,
-		realWidget
-	}
-
-	awesome.connect_signal('syntax::volume', function(volume, mute)
+	awesome.connect_signal('syntax::volume', function(volume, muted)
 		if volumeDisplay.visible then
 			displayTimer:stop()
 		end
 		displayTimer:start()
 		sl.value = volume
+		sl.icon = muted and 'volume-muted' or 'volume'
 
 		awful.placement.bottom(volumeDisplay, { margins = { bottom = beautiful.wibar_height + (beautiful.useless_gap * dpi(2)) }, parent = awful.screen.focused() })
 		volumeDisplay.visible = true

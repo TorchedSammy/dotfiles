@@ -1,7 +1,7 @@
 local awful = require 'awful'
 
 local volume_old = -1
-local muted_old = -1
+local muted_old = false
 local function emit_volume_info()
     -- Get volume info of the currently active sink
     -- The currently active sink has a star `*` in front of its index
@@ -12,8 +12,7 @@ local function emit_volume_info()
         'pacmd list-sinks | awk \'/\\* index: /{nr[NR+7];nr[NR+11]}; NR in nr\'',
         function(stdout)
             local volume = stdout:match('(%d+)%% /')
-            local muted = stdout:match('Muted:(%s+)[yes]')
-            local muted_int = muted and 1 or 0
+            local muted = stdout:match('muted:%s+(%w+)') == 'yes'
             local volume_int = tonumber(volume)
             -- Only send signal if there was a change
             -- We need this since we use `pactl subscribe` to detect
@@ -21,10 +20,10 @@ local function emit_volume_info()
             -- user adjusts the volume through a keybind, but also
             -- through `pavucontrol` or even without user intervention,
             -- when a media file starts playing.
-            if volume_int ~= volume_old or muted_int ~= muted_old then
+            if volume_int ~= volume_old or muted ~= muted_old then
                 awesome.emit_signal('syntax::volume', volume_int, muted)
                 volume_old = volume_int
-                muted_old = muted_int
+                muted_old = muted
             end
         end)
 end
