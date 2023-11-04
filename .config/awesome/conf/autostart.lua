@@ -41,9 +41,9 @@ end
 
 awful.spawn.easy_async_with_shell('wmctrl -m | grep PID', function(out)
 	local pid = out:match '%d+'
-	awful.spawn.easy_async_with_shell(string.format('test -f /tmp/awesome-%s && printf "y"', pid), function(out2)
+	awful.spawn.easy_async_with_shell(string.format('test -f /tmp/awesome && printf "y"', pid), function(out2)
 		if not out2:match 'y' then
-			awful.spawn.easy_async(string.format('touch /tmp/awesome-%s', pid), function() end)
+			awful.spawn.easy_async(string.format('touch /tmp/awesome', pid), function() end)
 			awful.spawn.easy_async('dex-autostart --environment Awesome --autostart', function() end)
 		end
 	end)
