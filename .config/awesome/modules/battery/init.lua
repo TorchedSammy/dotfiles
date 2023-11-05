@@ -74,7 +74,7 @@ function M.time()
 	end
 end
 
-local manager = require 'modules.battery.managers.powerprofilesdaemon'
+local manager = require 'modules.battery.managers.system76-power'
 function M.setProfile(profile)
 	manager[profile .. 'Profile']()
 end
