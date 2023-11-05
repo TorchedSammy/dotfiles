@@ -134,19 +134,37 @@ awful.screen.connect_for_each_screen(function(s)
 		},
 		{
 			widget = wibox.container.place,
-			halign = 'center',
 			valign = 'center',
 			{
-				layout = wibox.layout.fixed.horizontal,
+				layout = wibox.layout.fixed.vertical,
 				{
-					-- time
-					widget = wibox.widget.textclock,
-					format = helpers.colorize_text('%-I:%M ', beautiful.fg_normal_opposite),
+					widget = wibox.container.place,
+					halign = 'center',
+					valign = 'center',
+					{
+						layout = wibox.layout.fixed.horizontal,
+						{
+							-- time
+							widget = wibox.widget.textclock,
+							format = helpers.colorize_text('%-I:%M ', beautiful.fg_normal_opposite),
+						},
+						{
+							-- format in cyan
+							widget = wibox.widget.textclock,
+							format = helpers.colorize_text('%p', beautiful.xcolor6),
+						}
+					},
 				},
 				{
-					-- format in cyan
-					widget = wibox.widget.textclock,
-					format = helpers.colorize_text('%p', beautiful.xcolor6),
+					widget = wibox.container.place,
+					halign = 'center',
+					valign = 'center',
+					{
+						-- time
+						widget = wibox.widget.textclock,
+						format = helpers.colorize_text('%x', beautiful.xcolor14),
+						font = beautiful.font:gsub('%d+$', '9'),
+					}
 				}
 			}
 		}
@@ -255,8 +273,9 @@ awful.screen.connect_for_each_screen(function(s)
 		onClick = w.quickSettings.toggle
 	})
 
-	local realbar = wibox.widget {
-		layout = wibox.layout.ratio.horizontal,
+	local ratio = wibox.layout.ratio.horizontal()
+	s.bar:setup {
+		layout = ratio,
 		{
 			{
 				{
@@ -296,7 +315,7 @@ awful.screen.connect_for_each_screen(function(s)
 						layout = wibox.layout.fixed.horizontal,
 						spacing = beautiful.wibar_spacing,
 						--w.caps,
-						widgets.systray {bg = beautiful.bg_normal_opposite},
+						widgets.systray {bg = beautiful.bg_normal_opposite, bar = s.bar},
 						widgets.layout(s),
 						actionBtn
 					}
@@ -312,12 +331,9 @@ awful.screen.connect_for_each_screen(function(s)
 			forced_height = s.bar.height,
 		},
 	}
-	realbar:ajust_ratio(1, 0, 0.32, 0.68)
+	ratio:adjust_ratio(1, 0, 0.32, 0.68)
 
-	s.bar:setup {
-		layout = wibox.layout.align.horizontal,
-		realbar
-	}
+	--s.bar:setup(realbar)
 	s.topbar:setup {
 		layout = wibox.layout.stack,
 		{
