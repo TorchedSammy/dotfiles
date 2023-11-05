@@ -25,3 +25,6 @@
 [submodule ".config/awesome/libs/bling"]
 	path = .config/awesome/libs/bling
 	url = https://github.com/Nooo37/bling/
+[submodule ".config/awesome/modules/extrautils"]
+	path = .config/awesome/modules/extrautils
+	url = https://github.com/ReadyWidgets/awesome-extrautils

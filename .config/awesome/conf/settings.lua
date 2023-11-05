@@ -1,5 +1,5 @@
 return {
-	theme = 'dreams',
+	theme = 'harmony',
 	picom = true,
 	noAnimate = false
 }

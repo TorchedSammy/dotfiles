@@ -6,13 +6,15 @@ local bling = require 'libs.bling'
 
 local M = {
 	priority = {
+		'Feishin',
 		'cmus',
 		'%any'
 	}
 }
 
 local playerctl = bling.signal.playerctl.lib {
-	priority = M.priority,
+	player = M.priority,
+	ignore = 'firefox'
 --	update_on_activity = false -- TEMPORARY: exit signal doesnt work
 }
 
@@ -52,6 +54,7 @@ local function dispatchMetadata(player)
 end
 
 playerctl:connect_signal('metadata', function (_, title, artist, art, album, _new, player)
+
 	if title == lastTile and artist == lastArtist then return end
 	if not activePlayer then
 		activePlayer = player
@@ -63,7 +66,7 @@ playerctl:connect_signal('metadata', function (_, title, artist, art, album, _ne
 	local t = gears.string.xml_unescape(title)
 	local at = gears.string.xml_unescape(artist)
 	local abm = gears.string.xml_unescape(album)
-	local albumArt = gears.surface.load_uncached_silently(art, beautiful.config_path .. '/images/albumPlaceholder.png')
+	local albumArt = art or beautiful.config_path .. '/images/albumPlaceholder.png'
 
 	if not players[player] then
 		players[player] = true

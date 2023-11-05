@@ -55,12 +55,10 @@ awful.screen.connect_for_each_screen(function(s)
 		widget = wibox.widget.imagebox,
 		horizontal_fit_policy = "cover",
 		vertical_fit_policy = "cover",
-		valign = "center",
-		haling = "center"
+		valign = 'center',
+		halign = 'center',
 	}
-	pctl.listenMetadata(function (title, artist, art, album)
-		albumArt.image = art
-	end)
+	local albumColors = {}
 
 	local mw, width, height = music.new {
 		bg = '#00000000',
@@ -72,15 +70,12 @@ awful.screen.connect_for_each_screen(function(s)
 		width = beautiful.dpi(480),
 		height = beautiful.dpi(180),
 		bg = '#00000000',
-		shape = gears.shape.rectangle,
+		shape = helpers.rrect(6),
 		ontop = true,
 		visible = false
 	}
 
-	musicDisplay:setup {
-		layout = wibox.layout.stack,
-		albumArt,
-		{
+	local gradient = wibox.widget {
 			widget = wibox.container.background,
 			bg = {
 				type  = 'linear' ,
@@ -103,7 +98,86 @@ awful.screen.connect_for_each_screen(function(s)
 					}
 				}
 			}
-		},
+		}
+
+	pctl.listenMetadata(function (title, artist, art, album)
+		albumArt.image = gears.surface.load_uncached_silently(art)
+		albumColors = {}
+
+		awful.spawn.with_line_callback(string.format('magick %s -colors 5 -unique-colors txt:', art), {
+			stdout = function(out)
+				if albumColors[2] then
+					mw.setColors {
+						position = helpers.invertColor(albumColors[1], true),
+						album = helpers.invertColor(albumColors[1], true),
+						progress = {
+							albumColors[3],
+							albumColors[2],
+						},
+						shuffle = albumColors[3]
+					}
+				end
+				albumColors[tonumber(out:match '^%d') + 1] = out:match '#%x%x%x%x%x%x'
+				gradient.bg = {
+					type  = 'linear' ,
+					from  = {
+						0,
+						musicDisplay.height
+					},
+					to = {
+						musicDisplay.width,
+						musicDisplay.height
+					},
+					stops = {
+						{
+							0.2,
+							albumColors[1]
+						},
+						{
+							0.8,
+							beautiful.bg_sec .. '55'
+						},
+						{
+							1,
+							beautiful.bg_sec .. '00'
+						},
+					}
+				}
+			end,
+			exit = function(reason, code)
+				if reason == 'exit' and code == 0 then
+					--[[
+					gradient.bg = {
+					type  = 'linear' ,
+					from  = {
+						0,
+						musicDisplay.height
+					},
+					to = {
+						musicDisplay.width,
+						musicDisplay.height
+					},
+					stops = {
+						{
+							0.2,
+							albumColors[1]
+						},
+						{
+							1,
+							beautiful.bg_sec .. '55'
+						}
+					}
+				}
+					]]
+				end
+			end
+		})
+	end)
+
+	musicDisplay:setup {
+		layout = wibox.layout.stack,
+		albumArt,
+		gradient,
 		mw
 	}
 	helpers.slidePlacement(musicDisplay, {placement = 'bottom_right'})

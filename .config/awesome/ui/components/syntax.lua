@@ -3,6 +3,7 @@ local beautiful = require 'beautiful'
 local gears = require 'gears'
 local rubato = require 'libs.rubato'
 local wibox = require 'wibox'
+local widgets = require 'ui.widgets'
 local M = {}
 
 function M.slider(opts)
@@ -24,8 +25,17 @@ function M.slider(opts)
 		local posFraction = (pos / length)
 		local progressLength = opts.width
 		local progressCur = posFraction * progressLength
-		progress.color = string.format('linear:0,0:%s,0:0,%s:%s,%s', math.floor(beautiful.dpi(progressCur)), base.gradientColors[1], math.floor(beautiful.dpi(progressLength)), base.gradientColors[2])
-		progress.value = pos
+		if progress.muted then
+			progress.color = opts.mutedColor or beautiful.fg_tert
+		else
+			if opts.color and type(opts.color) == 'string' then
+				progress.color = opts.color
+				return
+			end
+
+			progress.color = string.format('linear:0,0:%s,0:0,%s:%s,%s', math.floor(beautiful.dpi(progressCur)), (opts.color or base.gradientColors)[1], math.floor(beautiful.dpi(progressLength)), (opts.color or base.gradientColors)[2])
+		end
+		progress._private.value = pos
 	end
 
 	local progressAnimator = rubato.timed {
@@ -50,14 +60,23 @@ function M.slider(opts)
 		if opts.onChange then opts.onChange(slider.value) end
 	end)
 
+	local icon = opts.icon and widgets.icon(opts.icon, {size = opts.iconSize --[[or beautiful.dpi(32)]]}) or nil
+
 	local wid = wibox.widget {
-		layout = wibox.layout.fixed.horizontal,
-		spacing = beautiful.dpi(8),
-		opts.icon and w.icon(opts.icon, {size = opts.iconSize --[[or beautiful.dpi(32)]]}) or nil,
+		widget = wibox.container.place,
+		valign = 'center',
 		{
-			layout = wibox.layout.stack,
-			progress,
-			slider
+			layout = wibox.layout.fixed.horizontal,
+			spacing = beautiful.dpi(8),
+			icon,
+			{
+				layout = wibox.container.place,
+				{
+					layout = wibox.layout.stack,
+					progress,
+					slider
+				}
+			}
 		}
 	}
 
@@ -75,12 +94,23 @@ function M.slider(opts)
 		end,
 		__newindex = function(_, k, v)
 			if k == 'value' then
-				progressAnimator.target = v
+				if v < 2 and progress.value < 5 then
+					progressAnimator.pos = 0
+					setupProgressColor(0, progress.max_value)
+				else
+					progressAnimator.target = v
+				end
 			elseif k == 'color' then
+				opts.color = v
 				progress.color = v
 			elseif k == 'max' then
 				progress.max_value = v
 				slider.maximum = v
+			elseif k == 'icon' then
+				icon.icon = v
+			elseif k == 'muted' then
+				progress.muted = v
+				setupProgressColor(progress.value, progress.max_value)
 			end
 		end
 	})

@@ -4,6 +4,7 @@ local gears = require 'gears'
 local settings = require 'conf.settings'
 local naughty = require 'naughty'
 local wibox = require 'wibox'
+local rubato = require 'libs.rubato'
 
 local helpers = {}
 
@@ -89,15 +90,30 @@ function helpers.shiftColor(color, percent)
   return string.format('%#x', clamp(r) * 0x10000 + clamp(g) * 0x100 + clamp(b)):gsub('0x', '#')
 end
 
-function helpers.invertColor(color)
+function helpers.invertColor(color, bw)
   local num = tonumber(color:sub(2), 16)
-  local r = 0xff - math.floor(num / 0x10000)
-  local g = 0xff - (math.floor(num / 0x100) % 0x100)
-  local b = 0xff - (num % 0x100)
+  local r = math.floor(num / 0x10000)
+  local g = (math.floor(num / 0x100) % 0x100)
+  local b = (num % 0x100)
+
+  if bw then
+    return (r * 0.299 + g * 0.587 + b * 0.114) > 186 and '#000000' or '#ffffff'
+  end
+
+  r = 0xff - math.floor(num / 0x10000)
+  g = 0xff - (math.floor(num / 0x100) % 0x100)
+  b = 0xff - (num % 0x100)
 
   return string.format('%#x', clamp(r) * 0x10000 + clamp(g) * 0x100 + clamp(b)):gsub('0x', '#')
 end
 
+function helpers.onLeftClick(w, cb)
+ 	w.buttons = {
+   awful.button({}, 1, function()
+    cb()
+   end),
+  }
+end
 function helpers.displayClickable(w, opts)
   opts = type(opts) == 'table' and opts or {}
   opts.color = opts.bg or opts.color
@@ -164,7 +180,7 @@ function helpers.hideOnClick(w, cb)
 
   w:connect_signal('lol', function(w)
     if not w.visible then
-      --wibox.disconnect_signal('button::press', hider)
+      wibox.disconnect_signal('button::press', hider)
       client.disconnect_signal('button::press', hider)
       --awful.mouse.remove_global_mousebinding(btn)
     else
@@ -188,4 +204,56 @@ function helpers.implWrap(mod)
  end
 end
 
+function helpers.slidePlacement(wbx, opts)
+ local wbxOpen = false
+ local animator = rubato.timed {
+		duration = 0.3,
+		rate = 60,
+		subscribed = function(y)
+			wbx.y = y
+		end,
+		pos = awful.screen.focused().geometry.height,
+		easing = rubato.linear
+	}
+	local placer = type(opts.placement) == 'string' and awful.placement[opts.placement] or opts.placement
+ local function doPlacement()
+		placer(wbx, {
+			margins = {
+				left = beautiful.useless_gap * beautiful.dpi(2),
+				right = beautiful.useless_gap * beautiful.dpi(2),
+				bottom = settings.noAnimate and beautiful.wibar_height + beautiful.useless_gap * beautiful.dpi(2) or -wbx.height
+			},
+			parent = awful.screen.focused()
+		})
+	end
+	doPlacement()
+	if not settings.noAnimate then wbx.visible = true end
+
+	if settings.noAnimate then
+		helpers.hideOnClick(wbx)
+	else
+		helpers.hideOnClick(wbx, settings.noAnimate and nil or function()
+			if wbxOpen then
+				wbx:toggle()
+			end
+		end)
+	end
+
+	function wbx:toggle()
+		if not wbxOpen then
+			doPlacement()
+		end
+
+		if settings.noAnimate then
+			wbx.visible = not wbx.visible
+		else
+			if wbxOpen then
+				animator.target = awful.screen.focused().geometry.height
+			else
+				animator.target = awful.screen.focused().geometry.height - (beautiful.wibar_height + beautiful.useless_gap * beautiful.dpi(2)) - wbx.height
+			end
+		end
+		wbxOpen = not wbxOpen
+	end
+end
 return helpers
