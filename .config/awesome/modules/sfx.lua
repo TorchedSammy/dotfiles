@@ -5,14 +5,16 @@ local sounds = {
 	notification = 'notify2.wav',
 }
 
-local M = {}
+local M = {
+	volume = 0.75
+}
 
 local function spawn(cmd)
 	awful.spawn.easy_async(cmd, function() end)
 end
 
 function M.play(s)
-	awful.spawn.easy_async(string.format('pacat --property=media.role=event %s', beautiful.config_path .. 'sounds/' .. (sounds[s] or s .. '.wav')), function() end)
+	awful.spawn.easy_async(string.format('pacat --volume %d --property=media.role=event %s', math.floor(65536 * M.volume), beautiful.config_path .. 'sounds/' .. (sounds[s] or s .. '.wav')), function() end)
 end
 
 function M.notify()
@@ -54,7 +56,7 @@ function M.setVolume(vol)
 end
 
 function M.muteVolume()
-	spawn('pactl set-sink-mute @DEFAULT_SINK@ toggle')
+	spawn('amixer set Master toggle')
 end
 
 return M
