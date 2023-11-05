@@ -176,6 +176,7 @@ function helpers.hideOnClick(w, cb)
 
   table.insert(onClickHiders, {func = hider, widget = w})
   client.connect_signal('button::press', hider)
+  client.connect_signal('manage', hider)
   --wibox.connect_signal('button::press', hider)
 
   w:connect_signal('lol', function(w)
