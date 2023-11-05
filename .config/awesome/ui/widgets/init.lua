@@ -290,14 +290,37 @@ function widgets.systray(opts)
 	local popup
 	local btn
 	local wid
+
+	local function adjustSystray()
+	local w = find_widget_in_wibox(opts.bar, wid)
+	if not w then return 0, 0 end
+	local bx, by, width, height = w:get_matrix_to_device():transform_rectangle(0, 0, w:get_size())
+
+	local x = opts.vertical
+		and bx + width + beautiful.useless_gap
+		or bx + (width / 2) - (((beautiful.systray_icon_size * awesome.systray()) + (beautiful.systray_icon_spacing * (awesome.systray() - 1))) / 2)
+	local y = opts.vertical
+		and by + height + beautiful.useless_gap
+		or screen.primary.geometry.height - height - beautiful.wibar_height - beautiful.useless_gap - (opts.margin and opts.margin or 0)
+
+	return x, y
+	end
+
+	local function setPopupPos(px, py)
+		popup.x = px
+		popup.y = py
+	end
+
+	widgets.raw_systray:connect_signal('widget::layout_changed', function()
+		setPopupPos(adjustSystray())
+	end)
+
 	btn = widgets.button('expand-more', {
 		bg = opts.bg,
 		onClick = function()
 			if awesome.systray() ~= 0 then
-				local w = find_widget_in_wibox(opts.bar, wid)
-				local x, y, width, height = w:get_matrix_to_device():transform_rectangle(0, 0, w:get_size())
-				popup.x = x + width + beautiful.useless_gap
-				popup.y = y + height + beautiful.useless_gap
+				setPopupPos(adjustSystray())
+				
 				popup.visible = not popup.visible
 				btn.icon = popup.visible and 'expand-less' or 'expand-more'
 			end
@@ -321,13 +344,11 @@ function widgets.systray(opts)
 	}
 
 	popup = awful.popup {
-		parent = btn,
 		widget = systrayPopup,
 		shape = helpers.rrect(6),
 		ontop = true,
 		visible = false,
 		hide_on_right_click = true,
-		preferred_positions = 'right',
 		--[[
 		placement = function(w)
 			awful.placement.bottom_right(w, {
@@ -355,7 +376,7 @@ function widgets.systray(opts)
 	return wid, popup
 end
 
-function widgets.layout(s)
+function widgets.layout(s, size)
 	local layoutbox = awful.widget.layoutbox(s)
 	layoutbox:buttons(gears.table.join(
 		awful.button({}, 1, function()
@@ -368,7 +389,7 @@ function widgets.layout(s)
 
 	return {
 		widget = wibox.container.constraint,
-		width = beautiful.dpi(18),
+		width = size or beautiful.dpi(18),
 		{
 			widget = wibox.container.place,
 			align = 'center',
