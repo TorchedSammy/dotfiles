@@ -10,10 +10,11 @@ local sfx = require 'modules.sfx'
 
 -- {{{ Key bindings
 globalkeys = gears.table.join(
-awful.key({modkey}, 's', hotkeys_popup.show_help, {
+awful.key({modkey, shift}, '/', hotkeys_popup.show_help, {
 	description = 'Show all hotkeys',
 	group = 'awesome'
 }),
+--[[
 awful.key({modkey}, 'Left', awful.tag.viewprev, {
 	description = 'Go to previous tag',
 	group = 'tag'
@@ -22,6 +23,7 @@ awful.key({modkey}, 'Right', awful.tag.viewnext, {
 	description = 'Go to next tag',
 	group = 'tag'
 }),
+]]--
 awful.key({modkey}, 'Escape', awful.tag.history.restore, {
 	description = 'Go to the last tag visited',
 	group = 'tag'
@@ -39,7 +41,9 @@ end, {
 	description = 'Increase brightness',
 	group = 'screen'
 }),
-awful.key({}, 'XF86AudioMute', sfx.muteVolume, {
+awful.key({}, 'XF86AudioMute', function()
+	sfx.muteVolume()
+end, {
 	description = 'Mute volume',
 	group = 'audio'
 }),
@@ -90,17 +94,17 @@ awful.key({control}, 'Print',
 ),
 awful.key({control, altkey}, 'Print',
 	function()
-		awful.spawn.with_shell '~/bin/ss window'
+		awful.spawn.with_shell '~/bin/ss screen'
 	end, {
-		description = 'Take a window screenshot',
+		description = 'Take a screenshot of all screens',
 		group = 'awesome'
 	}
 ),
 awful.key({}, 'Print',
 	function()
-		awful.spawn.with_shell '~/bin/ss screen'
+		awful.spawn.with_shell '~/bin/ss window'
 	end, {
-		description = 'Take a screenshot of the whole screen',
+		description = 'Take a screenshot of the current window',
 		group = 'awesome'
 	}
 ),
@@ -118,6 +122,48 @@ awful.key({modkey}, 'd',
 	}
 ),
 
+awful.key({modkey, shift}, 'Left', function()
+	--awful.client.swap.bydirection 'left'
+	awful.layout.set(awful.layout.suit.tile.right)
+end, {
+	description = 'Move master to the left',
+	group = 'client'
+}),
+awful.key({modkey, shift}, 'Right', function()
+	--awful.client.swap.bydirection 'right'
+	awful.layout.set(awful.layout.suit.tile.left)
+end, {
+	description = 'Move master to the right',
+	group = 'client'
+}),
+awful.key({modkey}, 'Left', function()
+	--awful.client.swap.bydirection 'left'
+	awful.client.swap.bydirection 'left'
+end, {
+	description = 'Move client to the left',
+	group = 'client'
+}),
+awful.key({modkey}, 'Right', function()
+	--awful.client.swap.bydirection 'right'
+	awful.client.swap.bydirection 'right'
+end, {
+	description = 'Move client to the right',
+	group = 'client'
+}),
+awful.key({modkey}, 'Up', function()
+	--awful.client.swap.bydirection 'left'
+	awful.client.swap.bydirection 'up'
+end, {
+	description = 'Move client up',
+	group = 'client'
+}),
+awful.key({modkey}, 'Down', function()
+	--awful.client.swap.bydirection 'right'
+	awful.client.swap.bydirection 'down'
+end, {
+	description = 'Move client down',
+	group = 'client'
+}),
 -- Layout manipulation
 awful.key({modkey, shift}, 'j',
 	function()
