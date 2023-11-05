@@ -12,7 +12,7 @@ awesome.connect_signal('battery::status', function(status, battery)
 	end
 end)
 
-awesome.connect_signal('battery::percentage', function(percent)
+local function checkPercent(percent)
 	if battery.status() ~= 'Charging' then
 		if percent > 20 and (not lowNotified or not criticalNotified) then
 			battery.setProfile 'powerSave'
@@ -21,16 +21,21 @@ awesome.connect_signal('battery::percentage', function(percent)
 		if percent < 20 and percent > 10 and not lowNotified then
 			naughty.notification {
 				title = 'Battery Low',
-				text = 'Battery\'s lower than 20%. You should consider charging.'
+				text = string.format('Battery\'s at %d%%. You should consider charging.', percent)
 			}
 			lowNotified = true
 		end
 		if percent < 10 and not criticalNotified then
 			naughty.notification {
 				title = 'Critical Battery Level',
-				text = 'You should charge now, battery is lower than 10%.'
+				text = string.format('You should charge now, battery is at %d%%.', percent)
 			}
 			criticalNotified = true
 		end
 	end
+end
+
+checkPercent(battery.percentage())
+awesome.connect_signal('battery::percentage', function(percent)
+	checkPercent(percent)
 end)
