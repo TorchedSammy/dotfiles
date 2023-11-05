@@ -3,12 +3,14 @@
 pcall(require, 'luarocks.loader')
 
 local awful = require 'awful'
-require 'awful.autofocus'
-require 'awful.hotkeys_popup.keys'
 local beautiful = require 'beautiful'
+local gears = require 'gears'
 local helpers = require 'helpers'
 local naughty = require 'naughty'
 local scheduler = require 'modules.scheduler'
+
+require 'awful.autofocus'
+require 'awful.hotkeys_popup.keys'
 
 -- Check if awesome encountered an error during startup and fell back to
 -- another config (This code will only ever execute for the fallback config)
@@ -39,6 +41,7 @@ end
 
 require 'conf'
 
+screen.connect_signal('property::geometry', helpers.set_wallpaper)
 awful.screen.connect_for_each_screen(function(s)
 	helpers.set_wallpaper(s)
 
@@ -75,6 +78,7 @@ awful.rules.rules = {
 			screen = awful.screen.preferred,
 		},
 		callback = function(c)
+			--[[
 			local g = c:geometry()
 			local sg = c.screen.geometry
 			if (g.width >= sg.width or g.height >= sg.height) then
@@ -84,9 +88,9 @@ awful.rules.rules = {
 				local pf = awful.placement.no_offscreen + awful.placement.centered
 				pf(c, {parent = awful.screen.preferred()})
 			end
+			]]--
 		end
 	},
-
 	{
 		rule_any = {
 			class = "zentity"
@@ -136,7 +140,7 @@ awful.rules.rules = {
 
 	{ rule_any = { class = {'Google-chrome'}, name = {'Discord'} },
 	   callback = function(c)
-		helpers.winmaxer(c)
+		-- helpers.winmaxer(c)
      end},
 }
 -- }}}
