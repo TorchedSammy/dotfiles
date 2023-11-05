@@ -231,7 +231,7 @@ awful.screen.connect_for_each_screen(function(s)
 		height = beautiful.dpi(3),
 		width = beautiful.dpi(3)
 	}
-	local clientIndicatorShift = beautiful.dpi(6)
+	local clientIndicatorShift = beautiful.dpi(10)
 
 	s.tasklist = awful.widget.tasklist {
 		screen = s,
@@ -273,7 +273,7 @@ awful.screen.connect_for_each_screen(function(s)
 				{
 					layout = wibox.container.constraint,
 					strategy = 'exact',
-					width = beautiful.dpi(25),
+					width = beautiful.dpi(26.5),
 					{
 						layout = wibox.container.place,
 						{
