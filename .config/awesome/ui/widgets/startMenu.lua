@@ -8,7 +8,7 @@ local settings = require 'conf.settings'
 local syntax = require 'ui.components.syntax'
 local w = require 'ui.widgets'
 local wibox = require 'wibox'
-local extrautils = require 'modules.extrautils'()
+local extrautils = require 'libs.extrautils'()
 
 local lgi = require 'lgi'
 local Gio = lgi.Gio
@@ -33,18 +33,22 @@ function M.new(opts)
 	local result = {}
 	local allApps = {}
 	local collision = {}
-	appList.spacing = 1
-	appList.step = 65
-	appList.scrollbar_widget = {
-		{
-			widget = wibox.widget.separator,
-			shape = gears.shape.rounded_bar,
-			color = beautiful.xcolor11
-		},
-		widget = wibox.container.margin,
-		left = beautiful.dpi(5),
-	}
-	appList.scrollbar_width = beautiful.dpi(14)
+	function setupAppList()
+		appList:reset()
+		appList.spacing = 1
+		appList.step = 65
+		appList.scrollbar_widget = {
+			{
+				widget = wibox.widget.separator,
+				shape = gears.shape.rounded_bar,
+				color = beautiful.xcolor11
+			},
+			widget = wibox.container.margin,
+			left = beautiful.dpi(5),
+		}
+		appList.scrollbar_width = beautiful.dpi(14)
+	end
+	setupAppList()
 
 	local power = button(buttonColor, 'power2', beautiful.dpi(18))
 	power:connect_signal('button::press', function()
@@ -99,6 +103,7 @@ function M.new(opts)
 	}
 
 	function w:fetchApps()
+		--rsetupAppList()
 		local allApps = extrautils.apps.get_all()
 		local function pairsByKeys (t, f)
 				local a = {}
@@ -166,13 +171,11 @@ function M.new(opts)
 		end
 	end
 
---[[
 	local monitor = Gio.AppInfoMonitor.get()
 
 	function monitor:on_changed(...)
 		w:fetchApps()
 	end
-]]--
 -- ^ doesnt actually work
 
 	w:fetchApps()
