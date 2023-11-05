@@ -13,6 +13,7 @@ local rubato = require 'libs.rubato'
 local settings = require 'conf.settings'
 local sfx = require 'modules.sfx'
 local pctl = require 'modules.playerctl'
+local syntax = require 'ui.components.syntax'
 
 local bgcolor = beautiful.bg_sec
 local playerctl = bling.signal.playerctl.lib()
@@ -248,238 +249,16 @@ do
 end
 
 do
-	local startMenu = wibox {
-		height = dpi(580),
-		width = dpi(460),
-		bg = '#00000000',
-		shape = gears.shape.rectangle,
-		ontop = true,
-		visible = false
+	local sm = require 'ui.widgets.startMenu'
+	local startMenu = sm.create {
+		bg = bgcolor,
+		shape = function(crr, w, h) return gears.shape.partially_rounded_rect(crr, w, h, false, false, true, true, base.radius) end
 	}
-
-	local result = {}
-	local allApps = {}
-	local appList = wibox.layout.overflow.vertical()
-	appList.spacing = 1
-	appList.step = 65
-	appList.scrollbar_widget = {
-		{
-			widget = wibox.widget.separator,
-			shape = gears.shape.rounded_bar,
-			color = beautiful.xcolor11
-		},
-		widget = wibox.container.margin,
-		left = dpi(5),
-	}
-	appList.scrollbar_width = dpi(14)
-
-	--menugen.generate = function() end -- TODO: remove (stop using menugen)
-	menugen.generate(function(entries)
-		for k, v in pairs(menugen.all_categories) do
-			table.insert(result, { k, {}, v.icon })
-		end
-
-		for k, v in pairs(entries) do
-			for _, cat in pairs(result) do
-				if cat[1] == v.category then
-					table.insert(cat[2], {v.name, v.cmdline, v.icon})
-					allApps[v.name] = {v.cmdline, v.icon}
-					break
-				end
-			end
-		end
-
-		local function pairsByKeys (t, f)
-			local a = {}
-			for n in pairs(t) do table.insert(a, n) end
-			table.sort(a, f)
-			local i = 0
-			local iter = function ()
-				i = i + 1
-				if a[i] == nil then return nil
-				else return a[i], t[a[i]]
-				end
-			end
-			return iter
-		end
-
---		for i = #result, 1, -1 do
---			local v = result[i]
---			if #v[2] == 0 then
---				-- Remove unused categories
---				table.remove(result, i)
---			else
---				table.sort(v[2], function(a, b) return string.lower(a[1]) < string.lower(b[1]) end)
---				v[1] = menugen.all_categories[v[1]].name
---			end
---		end
-
-		for name, props in pairsByKeys(allApps, function(a, b) return string.lower(a) < string.lower(b) end) do
-			local wid = wibox.widget {
-				widget = wibox.container.background,
-				shape = helpers.rrect(base.radius),
-				id = 'bg',
-				bg = bgcolor,
-				{
-					widget = wibox.container.margin,
-					margins = dpi(4),
-					{	
-						layout = wibox.layout.fixed.horizontal,
-						spacing = dpi(8),
-						{
-							{
-								widget = wibox.widget.imagebox,
-								image = props[2]
-							},
-							widget = wibox.container.constraint,
-							strategy = 'exact',
-							width = 32,
-							height = 32
-						},
-						{
-							widget = wibox.widget.textbox,
-							align = 'center',
-							halign = 'center',
-							valign = 'center',
-							markup = name
-						}
-					}
-				}
-			}
-			wid.buttons = {
-				awful.button({}, 1, function()
-					awful.spawn(props[1])
-					widgets.startMenu.toggle()
-				end)
-			}
-			helpers.displayClickable(wid, {bg = bgcolor})
-			appList:add(wid)
-		end
-	end)
-
-	local power = button(buttonColor, 'power2', beautiful.dpi(18))
-	power:connect_signal('button::press', function()
-		widgets.powerMenu.toggle()
-	end)
-
-	local realWidget = wibox.widget {
-		layout = wibox.layout.fixed.horizontal,
-		{
-			widget = wibox.container.background,
-			bg = bgcolor,
-			forced_width = startMenu.width,
-			shape = function(crr, w, h) return gears.shape.partially_rounded_rect(crr, w, h, false, false, true, true, base.radius) end,
-			{
-				widget = wibox.container.margin,
-				margins = dpi(5),
-				{
-					layout = wibox.layout.align.vertical,
-					{
-						widget = wibox.widget.textbox,
-						markup = helpers.colorize_text('Applications', beautiful.fg_normal),
-						font = beautiful.font:gsub('%d+$', '24')
-					},
-					{
-						widget = wibox.container.margin,
-						bottom = dpi(5),
-						appList
-					},
-					{
-						layout = wibox.layout.align.horizontal,
-						expand = 'none',
-						{
-							layout = wibox.layout.fixed.horizontal,
-							spacing = dpi(5),
-							{
-								w.imgwidget('avatar.jpg', {
-									clip_shape = gears.shape.circle
-								}),
-								widget = wibox.container.constraint,
-								strategy = 'exact',
-								width = 24,
-								height = 24
-							},
-							{
-								widget = wibox.widget.textbox,
-								text = os.getenv 'USER'
-							}
-						},
-						{
-							layout = wibox.layout.fixed.horizontal,
-						},
-						power
-					}
-				}
-			}
-		},
-	}
-
-	startMenu:setup {
-		layout = wibox.layout.stack,
-		base.sideDecor {
-			h = startMenu.height,
-			position = 'top',
-			bg = bgcolor,
-			emptyLen = base.width / dpi(2)
-		},
-		{
-			widget = wibox.container.margin,
-			top = base.width / dpi(2),
-			realWidget,
-		}
-	}
-
-	local scr = awful.screen.focused()
-	local animator = rubato.timed {
-		duration = 0.3,
-		rate = 60,
-		subscribed = function(y)
-			startMenu.y = y
-		end,
-		pos = scr.geometry.height,
-		easing = rubato.linear
-	}
-
-	local function doPlacement()
-		awful.placement.bottom_left(startMenu, {
-			margins = {
-				left = beautiful.useless_gap * dpi(2),
-				bottom = settings.noAnimate and beautiful.wibar_height + beautiful.useless_gap * dpi(2) or -startMenu.height
-			},
-			parent = awful.screen.focused()
-		})
-	end
-	doPlacement()
-	if not settings.noAnimate then startMenu.visible = true end
-
-	local startMenuOpen = false
+	sm.bindMethods(startMenu)
+	
 	widgets.startMenu = {}
 	function widgets.startMenu.toggle()
-		appList.scroll_factor = 0
-		if not startMenuOpen then
-			doPlacement()
-		end
-
-		if settings.noAnimate then
-			startMenu.visible = not startMenu.visible
-		else
-			if startMenuOpen then
-				animator.target = scr.geometry.height
-			else
-				animator.target = scr.geometry.height - (beautiful.wibar_height + beautiful.useless_gap * dpi(2)) - startMenu.height
-			end
-		end
-		startMenuOpen = not startMenuOpen
-	end
-
-	if settings.noAnimate then
-		helpers.hideOnClick(startMenu)
-	else
-		helpers.hideOnClick(startMenu, settings.noAnimate and nil or function()
-			if startMenuOpen then
-				widgets.startMenu.toggle()
-			end
-		end)
+		startMenu:toggle()
 	end
 end
 
@@ -636,6 +415,7 @@ do
 		displayTimer:start()
 		sl.value = volume
 		sl.icon = muted and 'volume-muted' or 'volume'
+		sl.muted = muted
 
 		awful.placement.bottom(volumeDisplay, { margins = { bottom = beautiful.wibar_height + (beautiful.useless_gap * dpi(2)) }, parent = awful.screen.focused() })
 		volumeDisplay.visible = true
@@ -728,7 +508,7 @@ do
 	}
 
 	function widgets.caps.display(capsStatus)
-		capsWidget.visible = capsStatus
+		widgets.caps.visible = capsStatus
 	end
 end
 
