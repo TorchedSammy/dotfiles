@@ -142,6 +142,15 @@ awful.rules.rules = {
 	   callback = function(c)
 		-- helpers.winmaxer(c)
      end},
+
+	{
+		rule = {
+			instance = 'emulationstation'
+		},
+		properties = {
+			screen = 'HDMI1'
+		}
+	}
 }
 -- }}}
 
@@ -157,21 +166,42 @@ client.connect_signal('manage', function(c)
 	end
 
 	if c.maximized then
-		helpers.winmaxer(c)
+		helpers.maximize(c)
 	end
 
+	if not c.fullscreen then
+		awful.placement.centered(c, {parent = c.transient_for or c.screen or awful.screen.focused()})
+	end
+
+	if c.sticky then
+		c.floating = true
+	end
+
+--[[
 	if c.floating then
 		if c.transient_for ~= nil then
 			awful.placement.centered(c, {parent = c.transient_for})
 		else
-			awful.placement.centered(c, {parent = s})
+			awful.placement.centered(c, {parent = awful.screen.focused()})
 		end
 	end
+]]--
+
+    local cairo = require("lgi").cairo
+    local default_icon = beautiful.config_path .. '/images/app-placeholder.png'
+    if c and c.valid and not c.icon then
+        local s = gears.surface(default_icon)
+        local img = cairo.ImageSurface.create(cairo.Format.ARGB32, s:get_width(), s:get_height())
+        local cr = cairo.Context(img)
+        cr:set_source_surface(s, 0, 0)
+        cr:paint()
+        c.icon = img._native
+    end
 end)
 
 require 'ui'
 
-if beautiful.double_borders then require 'ui.components.double-borders' end
+if beautiful.double_borders then require 'ui.extras.double-borders' end
 
 require 'initialize'
 
