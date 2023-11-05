@@ -6,7 +6,7 @@ local sounds = {
 }
 
 local M = {
-	volume = 0.75
+	volume = 0.60
 }
 
 local function spawn(cmd)
