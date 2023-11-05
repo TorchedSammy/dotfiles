@@ -36,7 +36,8 @@ local function setup(s, vertical)
 		ce = {fe, fe, fe, fe, fe, fe, fe, fe, fe, fe}
 	end
 
-	local baseSize = beautiful.dpi(13)
+	local baseSize = beautiful.taglist_size or beautiful.dpi(13)
+	local expandedSize = beautiful.taglist_expanded_size or beautiful.dpi(15)
 	local taglist = awful.widget.taglist {
 		screen = s,
 		filter = awful.widget.taglist.filter.all,
@@ -75,10 +76,10 @@ local function setup(s, vertical)
 
 					local clients = t:clients()
 					if t.selected then
-						self.animator.target = baseSize + 15
+						self.animator.target = baseSize + expandedSize
 						w.bg = cf[i]
 					elseif t.urgent then
-						self.animator.target = baseSize + 15
+						self.animator.target = baseSize + expandedSize
 						w.bg = cu[i]
 						w.markup = helpers.colorize_text(tu[i], cu[i])
 					elseif clients and #clients > 0 then
