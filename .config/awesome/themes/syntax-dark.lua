@@ -6,6 +6,7 @@ local helpers = require 'helpers'
 local dpi = xresources.apply_dpi
 
 local theme = require 'themes.syntax'
+theme.dark = true
 
 -- join theme and colors
 local gears = require 'gears'

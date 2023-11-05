@@ -14,6 +14,7 @@ theme = gears.table.join(theme, colors)
 theme.font          = 'SF Pro Text Medium 12'
 
 theme.dark = true
+theme.accent = theme.xcolor6
 theme.bg_normal = theme.xbackground
 theme.bg_popup = helpers.shiftColor(theme.bg_normal, 5)
 theme.bg_sec = helpers.shiftColor(theme.bg_normal, 13)
@@ -49,7 +50,7 @@ theme.notification_padding = theme.useless_gap * dpi(2)
 theme.notification_shape = helpers.rrect(2)
 
 theme.bar = 'dreams'
-theme.wibar_height = dpi(36)
+theme.wibar_height = dpi(42)
 
 theme.wibar_bg = theme.bg_normal
 theme.bg_systray = theme.wibar_bg
@@ -58,6 +59,8 @@ theme.taglist_text_font = 'SF Pro Text Medium 12'
 theme.taglist_text_focused = nil
 theme.taglist_text_color = theme.xforeground
 theme.taglist_text_color_focused = '#806e6a'
+
+theme.task_preview_widget_bg = theme.bg_popup
 
 theme.wallpaper = theme.config_path..'/wallpapers/meadows.jpg'
 theme.picom_conf = 'picom'
