@@ -256,4 +256,5 @@ function helpers.slidePlacement(wbx, opts)
 		wbxOpen = not wbxOpen
 	end
 end
+
 return helpers

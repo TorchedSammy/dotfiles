@@ -48,8 +48,8 @@ function M.new(opts)
 		resize = true
 	}
 
-	local musicArtist = coloredText('', opts.fg_sec or beautiful.fg_normal)
-	local musicTitle = coloredText('', opts.fg_sec or beautiful.fg_normal)
+	local musicArtist = coloredText('', opts.fg or beautiful.fg_normal)
+	local musicTitle = coloredText('', opts.fg or beautiful.fg_normal)
 	local musicAlbum = coloredText('', opts.fg_sec or beautiful.fg_sec)
 	local positionText = coloredText('', opts.fg_sec or beautiful.fg_sec)
 

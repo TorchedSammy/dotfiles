@@ -31,7 +31,7 @@ awful.screen.connect_for_each_screen(function(s)
 			id = 'bg',
 			{
 				widget = wibox.container.margin,
-				margins = beautiful.dpi(4),
+				margins = beautiful.dpi(6),
 				w
 			}
 		}
@@ -63,7 +63,7 @@ awful.screen.connect_for_each_screen(function(s)
 	local mw, width, height = music.new {
 		bg = '#00000000',
 		shape = helpers.rrect(16),
-		showAlbumArt = false
+		fg_sec = beautiful.fg_normal
 	}
 
 	local musicDisplay = wibox {
@@ -100,49 +100,77 @@ awful.screen.connect_for_each_screen(function(s)
 			}
 		}
 
+	local Color = require 'lua-color'
+	local oldMusicColors = {
+		gradient = Color(beautiful.bg_sec),
+		shuffle = Color(beautiful.accent)
+	}
+
 	pctl.listenMetadata(function (title, artist, art, album)
 		albumArt.image = gears.surface.load_uncached_silently(art)
 		albumColors = {}
 
 		awful.spawn.with_line_callback(string.format('magick %s -colors 5 -unique-colors txt:', art), {
 			stdout = function(out)
+				local idx = tonumber(out:match '^%d') + 1
+				albumColors[idx] = out:match '#%x%x%x%x%x%x'
+
+				if idx == 3 then
+					local gradientColor = Color(albumColors[1])
+					local shuffleColor = Color(albumColors[1])
+
+					local animator = rubato.timed {
+						duration = 2,
+						rate = 60,
+						override_dt = false,
+						subscribed = function(perc)
+							gradient.bg = {
+								type  = 'linear' ,
+								from  = {
+									0,
+									musicDisplay.height
+								},
+								to = {
+									musicDisplay.width,
+									musicDisplay.height
+								},
+								stops = {
+									{
+										0.2,
+										tostring(oldMusicColors.gradient:mix(gradientColor, perc / 100))
+									},
+									{
+										1,
+										beautiful.bg_sec .. '55'
+									}
+								}
+							}
+							mw.setColors {
+								--shuffle = tostring(oldMusicColors.shuffle:mix(shuffleColor, perc / 100))
+								--shuffle = helpers.invertColor(tostring(shuffleColor), true)
+							}
+
+							if perc == 100 then
+								oldMusicColors.gradient = Color(albumColors[1])
+								oldMusicColors.shuffle = Color(albumColors[3])
+							end
+						end,
+						pos = 0,
+						easing = rubato.quadratic
+					}
+					animator.target = 100
+				end
+
 				if albumColors[2] then
 					mw.setColors {
-						position = helpers.invertColor(albumColors[1], true),
-						album = helpers.invertColor(albumColors[1], true),
+						--position = helpers.invertColor(albumColors[1], true),
+						--album = helpers.invertColor(albumColors[1], true),
 						progress = {
 							albumColors[3],
 							albumColors[2],
-						},
-						shuffle = albumColors[3]
+						}
 					}
 				end
-				albumColors[tonumber(out:match '^%d') + 1] = out:match '#%x%x%x%x%x%x'
-				gradient.bg = {
-					type  = 'linear' ,
-					from  = {
-						0,
-						musicDisplay.height
-					},
-					to = {
-						musicDisplay.width,
-						musicDisplay.height
-					},
-					stops = {
-						{
-							0.2,
-							albumColors[1]
-						},
-						{
-							0.8,
-							beautiful.bg_sec .. '55'
-						},
-						{
-							1,
-							beautiful.bg_sec .. '00'
-						},
-					}
-				}
 			end,
 			exit = function(reason, code)
 				if reason == 'exit' and code == 0 then
@@ -245,7 +273,7 @@ awful.screen.connect_for_each_screen(function(s)
 				{
 					layout = wibox.container.constraint,
 					strategy = 'exact',
-					width = beautiful.dpi(22),
+					width = beautiful.dpi(25),
 					{
 						layout = wibox.container.place,
 						{
@@ -346,6 +374,7 @@ awful.screen.connect_for_each_screen(function(s)
 						widgets.systray {bg = beautiful.wibar_bg, bar = s.bar, margin = beautiful.dpi(8)},
 						musicBtn,
 						controls,
+						widgets.textclock,
 						widgets.layout(s, beautiful.dpi(15))
 					},
 					left = beautiful.wibar_spacing,
