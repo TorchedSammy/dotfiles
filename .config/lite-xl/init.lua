@@ -31,7 +31,10 @@ config.plugins.miq.plugins = {
 
 	{'TorchedSammy/Litepresence', run = 'go get && go build'},
 
-	{'TorchedSammy/Evergreen.lxl', run = 'luarocks install ltreesitter --local --dev'},
+	{
+		'~/Files/Projects/Evergreen.lxl',
+		--run = 'luarocks install ltreesitter --local --dev'
+	},
 
 	--{'TorchedSammy/lite-xl-gitdiff-highlight', name = 'gitdiff_highlight'},
 	'~/Files/Projects/lite-xl-scm',
@@ -42,7 +45,7 @@ config.plugins.miq.plugins = {
 
 	-- others
 	'anthonyaxenov/lite-xl-ignore-syntax',
-	'juliardi/lite-xl-treeview-extender',
+--	'juliardi/lite-xl-treeview-extender',
 	'liquidev/lintplus',
 }
 
@@ -62,21 +65,21 @@ fontconfig.use_blocking {
 	font = {
 		group = {
 			'SF Pro Display:style=Regular',
-			'VictorMono Nerd Font Mono:style=Medium',
+			'VictorMono Nerd Font:style=Medium',
 			'Segoe UI Emoji'
 		},
 		size = 12 * SCALE
 	},
 	code_font = {
 		group = {
-			'VictorMono Nerd Font Mono:style=Medium',
+			'VictorMono Nerd Font:style=Medium',
 			'Segoe UI Emoji'
 		},
 		size = 12 * SCALE
 	}
 }
 local italicFont = fontconfig.load_group_blocking({
-	'VictorMono Nerd Font Mono:style=Medium Italic',
+	'VictorMono Nerd Font:style=Medium Italic',
 	'Segoe UI Emoji'
 	},
 	12 * SCALE
@@ -94,7 +97,7 @@ for _, font in pairs(style.syntax_fonts) do
 end
 
 lspkind.setup {
-	fontName = 'VictorMono Nerd Font Mono:style=Medium'
+	fontName = 'VictorMono Nerd Font:style=Medium'
 }
 
 config.tab_type = 'hard'
@@ -104,10 +107,9 @@ config.plugins.toolbarview = false
 --config.plugins.trimwhitespace = true
 config.lint.lens_style = 'solid'
 config.plugins.lsp.stop_unneeded_servers = false
-config.plugins.plugin_manager.lpm_binary_path = HOME .. '/Downloads/lite-xl-plugin-manager/lpm'
 config.plugins.scale.mode = 'ui'
 
-local bigCodeFont = style.code_font:copy((16 * 1.6) * SCALE)
+local bigCodeFont = style.code_font:copy(16 * SCALE)
 if not core.status_view:get_item 'icon:heart' then
 	core.status_view:add_item {
 		name = 'icon:heart',
