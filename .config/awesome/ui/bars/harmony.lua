@@ -6,6 +6,10 @@ local taglist = require 'ui.taglist-modern'
 local widgets = require 'ui.widgets'
 local helpers = require 'helpers'
 local rubato = require 'libs.rubato'
+local filters = require 'surface_filters'
+
+local Color = require 'lua-color'
+
 screen.connect_signal('property::geometry', helpers.set_wallpaper)
 
 awful.screen.connect_for_each_screen(function(s)
@@ -58,7 +62,6 @@ awful.screen.connect_for_each_screen(function(s)
 		valign = 'center',
 		halign = 'center',
 	}
-	local albumColors = {}
 
 	local mw, width, height = music.new {
 		bg = '#00000000',
@@ -66,18 +69,37 @@ awful.screen.connect_for_each_screen(function(s)
 		fg_sec = beautiful.fg_normal
 	}
 
+	local titleHeight = beautiful.dpi(36)
 	local musicDisplay = wibox {
 		width = beautiful.dpi(480),
-		height = beautiful.dpi(180),
+		height = beautiful.dpi(180) + titleHeight,
 		bg = '#00000000',
 		shape = helpers.rrect(6),
 		ontop = true,
 		visible = false
 	}
 
-	local gradient = wibox.widget {
+	local titlebarColor = Color('#0f0f1f')
+	local _, titlebarColorSat, titlebarColorVal = titlebarColor:hsv()
+	local titlebar = wibox.widget {
+		widget = wibox.container.constraint,
+		strategy = 'exact',
+		height = titleHeight,
+		{
 			widget = wibox.container.background,
-			bg = {
+			bg = beautiful.bg_sec,
+			id = 'bg',
+			{
+				widget = wibox.container.margin,
+				top = beautiful.dpi(4), bottom = beautiful.dpi(4),
+				left = beautiful.dpi(8),
+				widgets.coloredText('Music', beautiful.fg_normal)
+			}
+		}
+	}
+
+	local function makeGradient(solid, transparent)
+		return {
 				type  = 'linear' ,
 				from  = {
 					0,
@@ -89,124 +111,179 @@ awful.screen.connect_for_each_screen(function(s)
 				},
 				stops = {
 					{
-						0.2,
-						beautiful.bg_sec
+						0,
+						solid
+					},
+					{
+						0.3,
+						 solid .. 'e6'
+					},
+					{
+						0.5,
+						solid .. '99'
+					},
+					{
+						0.7,
+						solid .. 'cc'
+					},
+					{
+						0.9,
+						 solid .. 'e6'
 					},
 					{
 						1,
-						beautiful.bg_sec .. '55'
+						solid
 					}
 				}
 			}
+	end
+	local gradient = wibox.widget {
+			widget = wibox.container.background,
+			bg = makeGradient(beautiful.bg_sec, beautiful.bg_sec)
 		}
 
-	local Color = require 'lua-color'
 	local oldMusicColors = {
 		gradient = Color(beautiful.bg_sec),
 		shuffle = Color(beautiful.accent)
 	}
 
+	local albumColors = {}
+	local oldMetadata = {}
+	local expectedColors = 0
 	pctl.listenMetadata(function (title, artist, art, album)
+		if oldMetadata.artist == artist and oldMetadata.album == album then return end
+
+		oldMetadata.artist = artist
+		oldMetadata.album = album
+
 		albumArt.image = gears.surface.load_uncached_silently(art)
 		albumColors = {}
 
 		awful.spawn.with_line_callback(string.format('magick %s -colors 5 -unique-colors txt:', art), {
 			stdout = function(out)
+				local enumAmount = out:match 'ImageMagick pixel enumeration: (%d),'
+				if enumAmount then expectedColors = tonumber(enumAmount) end
+
 				local idx = tonumber(out:match '^%d') + 1
-				albumColors[idx] = out:match '#%x%x%x%x%x%x'
+				albumColors[idx] = Color(out:match '#%x%x%x%x%x%x')
 
-				if idx == 3 then
-					local gradientColor = Color(albumColors[1])
-					local shuffleColor = Color(albumColors[1])
+				if idx == expectedColors then
+					local albumColorsValue = table.filter(albumColors, function(t)
+						-- only for the background gradient: attempt to avoid black/white if others are available
+						local _, s, v = t:hsv()
+						--[[
+						require 'naughty'.notify {
+							title = 'filter',
+							text = string.format('umm saturation is %s, value is %s and color is %s', tostring(s * 100), tostring(v * 100), t)
+						}
+						]]--
+						if (v * 100) < 15 or (s * 100) < 15 then
+							print(string.format('goodbye to the color that is %s', t))
+							return false
+						end
+						return true
+					end)
 
+					-- copy without reference to other table (to not mess up gradient)
+					local albumColorsLight = {}
+					--for k, v in pairs(albumColors) do albumColorsLight[k] = v end
+					if #albumColorsValue > 3 then
+						for k, v in pairs(albumColorsValue) do albumColorsLight[k] = v end
+					else
+						for k, v in pairs(albumColors) do albumColorsLight[k] = v end
+					end
+					table.sort(albumColorsLight, function(c1, c2)
+						local _, _, l1 = c1:hsla()
+						local _, _, l2 = c2:hsla()
+
+						return l1 > l2
+					end)
+
+					-- TODO: next sort by color value?
+
+					local gradientColor = albumColors[1]
+					local shuffleColor = albumColors[1]
+					if #albumColorsValue > 4 then
+						gradientColor = albumColorsValue[1]
+					end
+					--[[
+					require 'naughty'.notify {
+						title = 'hi!',
+						text = string.format('gradient color is %s, ones with value are %s', gradientColor, tostring(#albumColorsValue))
+					}
+					]]--
+
+					local titlebarBg = titlebar:get_children_by_id'bg'[1]
 					local animator = rubato.timed {
 						duration = 2,
 						rate = 60,
 						override_dt = false,
 						subscribed = function(perc)
-							gradient.bg = {
-								type  = 'linear' ,
-								from  = {
-									0,
-									musicDisplay.height
-								},
-								to = {
-									musicDisplay.width,
-									musicDisplay.height
-								},
-								stops = {
-									{
-										0.2,
-										tostring(oldMusicColors.gradient:mix(gradientColor, perc / 100))
-									},
-									{
-										1,
-										beautiful.bg_sec .. '55'
-									}
-								}
-							}
+							local mixedColor = oldMusicColors.gradient:mix(gradientColor, perc / 100)
+							local mixedColorHue = mixedColor:hsv()
+							titlebarBg.bg = tostring(Color {h = mixedColorHue, s = titlebarColorSat, v = titlebarColorVal})
+							gradient.bg = makeGradient(tostring(mixedColor), beautiful.bg_sec)
 							mw.setColors {
 								--shuffle = tostring(oldMusicColors.shuffle:mix(shuffleColor, perc / 100))
 								--shuffle = helpers.invertColor(tostring(shuffleColor), true)
+								shuffle = albumColorsLight[1]
 							}
 
 							if perc == 100 then
-								oldMusicColors.gradient = Color(albumColors[1])
-								oldMusicColors.shuffle = Color(albumColors[3])
+								oldMusicColors.gradient = gradientColor
+								oldMusicColors.shuffle = albumColors[3]
 							end
 						end,
 						pos = 0,
-						easing = rubato.quadratic
+						easing = {
+							F = 1/3, -- F(1) = 1/3
+							easing = function(t) return t*t end -- f(x) = x^2, I just use t for "time"
+						}
 					}
 					animator.target = 100
-				end
 
-				if albumColors[2] then
+					-- {{
+					-- for now, this part is a bit meh and actually causes
+					-- WORSE colors for the progress bar. funny huh, when the table is for
+					-- colors with better values.
+					local progressColors = {albumColors[3], albumColors[2]}
+					if #albumColorsValue > 3 then
+						progressColors = {albumColorsValue[3], albumColorsValue[2]}
+					end
+					-- }}
+
 					mw.setColors {
 						--position = helpers.invertColor(albumColors[1], true),
 						--album = helpers.invertColor(albumColors[1], true),
 						progress = {
-							albumColors[3],
-							albumColors[2],
+							tostring(albumColorsLight[1]),
+							tostring(albumColorsLight[2]),
 						}
 					}
 				end
 			end,
 			exit = function(reason, code)
 				if reason == 'exit' and code == 0 then
-					--[[
-					gradient.bg = {
-					type  = 'linear' ,
-					from  = {
-						0,
-						musicDisplay.height
-					},
-					to = {
-						musicDisplay.width,
-						musicDisplay.height
-					},
-					stops = {
-						{
-							0.2,
-							albumColors[1]
-						},
-						{
-							1,
-							beautiful.bg_sec .. '55'
-						}
-					}
-				}
-					]]
+					-- was doing the colors here but albumColors is length 0 for some reason (???)
 				end
 			end
 		})
 	end)
 
 	musicDisplay:setup {
-		layout = wibox.layout.stack,
-		albumArt,
-		gradient,
-		mw
+		layout = wibox.layout.fixed.vertical,
+		titlebar,
+		{
+			layout = wibox.layout.stack,
+			{
+				widget = filters.blur,
+				dual_pass = false,
+				radius = 5,
+				albumArt,
+			},
+			gradient,
+			mw
+		}
 	}
 	helpers.slidePlacement(musicDisplay, {placement = 'bottom_right'})
 

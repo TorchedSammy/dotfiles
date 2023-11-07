@@ -475,5 +475,21 @@ function widgets.switch(opts)
 	return switch
 end
 
+function widgets.coloredText(text, color)
+	local wid = wibox.widget {
+		widget = wibox.widget.textbox,
+		markup = helpers.colorize_text(text, color)
+	}
+	wid.color = color
+	wid.text = text
+
+	function wid.set(key, value)
+		wid[key] = value
+		wid:set_markup_silently(helpers.colorize_text(wid.text, wid.color))
+	end
+
+	return wid
+end
+
 return widgets
 

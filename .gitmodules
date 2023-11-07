@@ -31,3 +31,6 @@
 [submodule ".config/awesome/libs/succulent"]
 	path = .config/awesome/libs/succulent
 	url = https://github.com/Rosettea/Succulent
+[submodule ".config/awesome/surface_filters"]
+	path = .config/awesome/surface_filters
+	url = https://github.com/ReadyWidgets/surface_filters

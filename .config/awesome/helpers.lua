@@ -214,7 +214,10 @@ function helpers.slidePlacement(wbx, opts)
 			wbx.y = y
 		end,
 		pos = awful.screen.focused().geometry.height,
-		easing = rubato.quadratic
+		easing = {
+     F = 1/3,
+     easing = function(t) return t*t end
+  }
 	}
 	local placer = type(opts.placement) == 'string' and awful.placement[opts.placement] or opts.placement
  local function doPlacement()
