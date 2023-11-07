@@ -251,20 +251,7 @@ function M.create(opts)
 	opts.menu = startMenu
 	local w, width, height = M.new(opts)
 
-	startMenu:setup {
-		layout = wibox.layout.stack,
-		base.sideDecor {
-			h = startMenu.height,
-			position = 'top',
-			bg = bgcolor,
-			emptyLen = base.width / beautiful.dpi(2)
-		},
-		{
-			widget = wibox.container.margin,
-			top = base.width / beautiful.dpi(2),
-			w
-		}
-	}
+	startMenu:setup(w)
 
 	return startMenu
 end
