@@ -77,7 +77,31 @@ local function setup(s, vertical)
 					local clients = t:clients()
 					if t.selected then
 						self.animator.target = baseSize + expandedSize
-						w.bg = cf[i]
+						if beautiful.taglist_active_gradient then
+							w.bg = {
+								type  = 'linear' ,
+								from  = {
+									0,
+									0
+								},
+								to = {
+									baseSize + expandedSize,
+									baseSize
+								},
+								stops = {
+									{
+										0,
+										cf[i]
+									},
+									{
+										1,
+										helpers.shiftColor(cf[i], -50)
+									}
+								}
+							}
+						else
+							w.bg = cf[i]
+						end
 					elseif t.urgent then
 						self.animator.target = baseSize + expandedSize
 						w.bg = cu[i]

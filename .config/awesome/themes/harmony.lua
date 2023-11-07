@@ -14,7 +14,7 @@ theme = gears.table.join(theme, colors)
 theme.font          = 'SF Pro Text Medium 12'
 
 theme.dark = true
-theme.accent = theme.xcolor6
+theme.accent = '#8062ff'
 theme.bg_normal = theme.xbackground
 theme.bg_popup = helpers.shiftColor(theme.bg_normal, 5)
 theme.bg_sec = helpers.shiftColor(theme.bg_normal, 13)
@@ -65,9 +65,10 @@ end
 
 theme.taglist_size = dpi(12)
 theme.taglist_expanded_size = dpi(24)
+theme.taglist_active_gradient = true
 theme.taglist_text_color_empty    = rep(theme.xcolor14)
 theme.taglist_text_color_occupied  = rep(theme.xcolor7)
-theme.taglist_text_color_focused  = rep(theme.xcolor6)
+theme.taglist_text_color_focused  = rep(theme.accent)
 theme.taglist_text_color_urgent   = rep(theme.xcolor1)
 
 theme.task_preview_widget_bg = theme.bg_popup
