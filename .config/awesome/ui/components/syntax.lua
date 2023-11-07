@@ -14,11 +14,21 @@ function M.slider(opts)
 		widget = wibox.widget.progressbar,
 		shape = progressShape,
 		bar_shape = progressShape,
-		background_color = opts.bg or beautiful.bg_sec,
+		background_color = '#00000000',
 		max_value = opts.max or 100,
 		forced_height = opts.height or beautiful.dpi(10),
 		forced_width = opts.width or beautiful.dpi(10),
 		id = 'progress'
+	}
+
+	local slider = wibox.widget {
+		widget = wibox.widget.slider,
+		forced_height = progress.forced_height,
+		forced_width = progress.forced_width,
+		bar_color = opts.bg or beautiful.bg_sec,
+		bar_shape = progressShape,
+		handle_shape = progressShape,
+		id = 'slider'
 	}
 
 	local function setupProgressColor(pos, length)
@@ -48,13 +58,6 @@ function M.slider(opts)
 		easing = rubato.quadratic
 	}
 
-	local slider = wibox.widget {
-		widget = wibox.widget.slider,
-		forced_height = progress.forced_height,
-		bar_color = '#00000000',
-		id = 'slider'
-	}
-
 	slider:connect_signal('property::value', function()
 		progressAnimator.target = slider.value
 		if opts.onChange then opts.onChange(slider.value) end
@@ -73,12 +76,18 @@ function M.slider(opts)
 				layout = wibox.container.place,
 				{
 					layout = wibox.layout.stack,
+					{
+						widget = wibox.container.margin,
+						--left = 0.5, right = 0.5,
+						margins = 0.5,
+						slider,
+					},
 					progress,
-					slider
 				}
 			}
 		}
 	}
+	slider:emit_signal 'widget::redraw_needed'
 
 --[[
 	return wibox.widget{
@@ -94,12 +103,7 @@ function M.slider(opts)
 		end,
 		__newindex = function(_, k, v)
 			if k == 'value' then
-				if v < 2 and progress.value < 5 then
-					progressAnimator.pos = 0
-					setupProgressColor(0, progress.max_value)
-				else
-					progressAnimator.target = v
-				end
+				progressAnimator.target = v
 			elseif k == 'color' then
 				opts.color = v
 				progress.color = v
