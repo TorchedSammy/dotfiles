@@ -35,7 +35,7 @@ theme.border_normal  = theme.bg_sec
 theme.border_focus  = theme.accent
 theme.client_shape = helpers.rrect(12)
 
-theme.titlebars = false
+theme.titlebars = true
 theme.titlebar_type = 'simple'
 theme.titlebar_height = dpi(32)
 theme.titlebar_bg = theme.xcolor15
@@ -47,7 +47,7 @@ theme.notification_height = dpi(100)
 theme.notification_border_color = theme.xforeground
 theme.notification_border_width = dpi(3)
 theme.notification_padding = theme.useless_gap * dpi(2)
-theme.notification_shape = helpers.rrect(2)
+theme.notification_shape = helpers.rrect(12)
 
 theme.bar = 'harmony'
 theme.wibar_height = dpi(45)
@@ -74,7 +74,7 @@ theme.taglist_text_color_urgent   = rep(theme.xcolor1)
 theme.task_preview_widget_bg = theme.bg_popup
 
 theme.wallpaper = theme.config_path..'/wallpapers/purplesky.png'
-theme.picom_conf = 'picom'
+theme.picom_conf = 'picom-harmony'
 
 return theme
 

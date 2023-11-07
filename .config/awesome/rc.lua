@@ -7,8 +7,10 @@ local beautiful = require 'beautiful'
 local gears = require 'gears'
 local helpers = require 'helpers'
 local naughty = require 'naughty'
+local settings = require 'conf.settings'
 local scheduler = require 'modules.scheduler'
 
+require 'libs.succulent'
 require 'awful.autofocus'
 require 'awful.hotkeys_popup.keys'
 
@@ -161,7 +163,7 @@ client.connect_signal('manage', function(c)
 	and not c.size_hints.program_position then
 		awful.placement.no_offscreen(c)
 	end
-	if beautiful.client_shape then
+	if beautiful.client_shape and not settings.picom then
 		c.shape = beautiful.client_shape
 	end
 

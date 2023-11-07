@@ -26,7 +26,7 @@ local programs = {
 }
 
 if settings.picom then
-	table.insert(programs, 'picom -b')
+	table.insert(programs, string.format('picom -b --config /home/%s/.config/picom/%s.conf', os.getenv 'USER', beautiful.picom_conf))
 else
 	awful.spawn.easy_async('pkill picom', function() end)
 end
