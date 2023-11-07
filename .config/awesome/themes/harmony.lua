@@ -30,10 +30,10 @@ theme.fg_urgent = theme.fg_normal
 theme.fg_minimize = theme.fg_sec
 
 theme.useless_gap   = dpi(6)
-theme.border_width  = dpi(0)
-theme.border_normal  = theme.fg_normal
-theme.border_focus  = theme.fg_normal
-theme.client_shape = helpers.rrect(2)
+theme.border_width  = dpi(1)
+theme.border_normal  = theme.bg_sec
+theme.border_focus  = theme.accent
+theme.client_shape = helpers.rrect(12)
 
 theme.titlebars = false
 theme.titlebar_type = 'simple'
@@ -73,7 +73,7 @@ theme.taglist_text_color_urgent   = rep(theme.xcolor1)
 
 theme.task_preview_widget_bg = theme.bg_popup
 
-theme.wallpaper = theme.config_path..'/wallpapers/meadows.jpg'
+theme.wallpaper = theme.config_path..'/wallpapers/purplesky.png'
 theme.picom_conf = 'picom'
 
 return theme
