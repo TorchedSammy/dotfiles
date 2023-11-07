@@ -207,14 +207,14 @@ end
 
 function helpers.slidePlacement(wbx, opts)
  local wbxOpen = false
- local animator = rubato.timed {
+ local animator = (opts.animator and opts.animator(wbx)) or rubato.timed {
 		duration = 0.3,
 		rate = 60,
 		subscribed = function(y)
 			wbx.y = y
 		end,
 		pos = awful.screen.focused().geometry.height,
-		easing = rubato.linear
+		easing = rubato.quadratic
 	}
 	local placer = type(opts.placement) == 'string' and awful.placement[opts.placement] or opts.placement
  local function doPlacement()
