@@ -110,7 +110,7 @@ awful.key({}, 'Print',
 ),
 awful.key({modkey}, 'd',
 	function()
-		awful.spawn.with_shell 'rsync -ah --inplace --info=progress2 ~/Files/Dotfiles/.config/awesome/ ~/.config/awesome/'
+		awful.spawn.with_shell 'rsync -ah --inplace --delete --info=progress2 ~/Files/Dotfiles/.config/awesome/ ~/.config/awesome/'
 		naughty.notification {
 			title = 'System',
 			text = 'New configuration copied.',
