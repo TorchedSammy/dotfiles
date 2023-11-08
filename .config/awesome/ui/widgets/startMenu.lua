@@ -2,6 +2,7 @@ local awful = require 'awful'
 local base = require 'ui.extras.syntax.base'
 local beautiful = require 'beautiful'
 local gears = require 'gears'
+local harmony = require 'ui.components.harmony'
 local helpers = require 'helpers'
 local rubato = require 'libs.rubato'
 local settings = require 'conf.settings'
@@ -13,40 +14,37 @@ local extrautils = require 'libs.extrautils'()
 local lgi = require 'lgi'
 local Gio = lgi.Gio
 
-local bgcolor = beautiful.bg_sec
-local function button(color_focus, icon, size, shape)
-	return w.button(icon, {bg = bgcolor, shape = shape, size = size})
-end
-
 local M = {
 	height = beautiful.dpi(580),
 	width = beautiful.dpi(460)
 }
-local appList = wibox.layout.overflow.vertical()
+local appList = wibox.widget {
+	layout = wibox.layout.overflow.vertical()
+}
 
 function M.new(opts)
 	opts = opts or {}
 	opts.shape = opts.shape or helpers.rrect(6)
 
-	local bgcolor = opts.bg
+	local bgcolor = opts.bg or beautiful.bg_popup
+
+	local function button(color_focus, icon, size, shape)
+		return w.button(icon, {bg = bgcolor, shape = shape, size = size})
+	end
 
 	local result = {}
 	local allApps = {}
 	local collision = {}
 	function setupAppList()
 		appList:reset()
-		appList.spacing = 1
+		--appList.spacing = beautiful.dpi(2)
 		appList.step = 65
 		appList.scrollbar_widget = {
-			{
-				widget = wibox.widget.separator,
-				shape = gears.shape.rounded_bar,
-				color = beautiful.xcolor11
-			},
-			widget = wibox.container.margin,
-			left = beautiful.dpi(5),
+			widget = wibox.widget.separator,
+			shape = gears.shape.rounded_bar,
+			color = beautiful.accent
 		}
-		appList.scrollbar_width = beautiful.dpi(14)
+		appList.scrollbar_width = beautiful.dpi(10)
 	end
 	setupAppList()
 
@@ -55,7 +53,7 @@ function M.new(opts)
 		widgets.powerMenu.toggle()
 	end)
 
-	local w = {
+	local wid = {
 		widget = wibox.container.background,
 		bg = bgcolor,
 		forced_width = M.width,
@@ -64,45 +62,16 @@ function M.new(opts)
 			widget = wibox.container.margin,
 			--margins = beautiful.dpi(5),
 			layout = wibox.layout.align.vertical,
-			{
-				widget = wibox.widget.textbox,
-				markup = helpers.colorize_text('Applications', beautiful.fg_normal),
-				font = beautiful.font:gsub('%d+$', '24')
-			},
+			harmony.titlebar 'Apps',
 			{
 				widget = wibox.container.margin,
-				bottom = beautiful.dpi(5),
+				margins = beautiful.dpi(16),
 				appList
 			},
-			{
-				layout = wibox.layout.align.horizontal,
-				expand = 'none',
-				{
-					layout = wibox.layout.fixed.horizontal,
-					spacing = beautiful.dpi(5),
-					{
-						w.imgwidget('avatar.jpg', {
-							clip_shape = gears.shape.circle
-						}),
-						widget = wibox.container.constraint,
-						strategy = 'exact',
-						width = 24,
-						height = 24
-					},
-					{
-						widget = wibox.widget.textbox,
-						text = os.getenv 'USER'
-					}
-				},
-				{
-					layout = wibox.layout.fixed.horizontal,
-				},
-				power
-			}
 		}
 	}
 
-	function w:fetchApps()
+	function wid:fetchApps()
 		--rsetupAppList()
 		local allApps = extrautils.apps.get_all()
 		local function pairsByKeys (t, f)
@@ -127,45 +96,67 @@ function M.new(opts)
 			end
 			collision[name] = true
 
-			local wid = wibox.widget {
-				widget = wibox.container.background,
-				shape = helpers.rrect(base.radius),
-				id = 'bg',
-				bg = bgcolor,
+			local appWid = wibox.widget {
+				widget = wibox.container.margin,
+				right = beautiful.dpi(8),
 				{
-					widget = wibox.container.margin,
-					margins = beautiful.dpi(4),
-					{	
-						layout = wibox.layout.fixed.horizontal,
-						spacing = beautiful.dpi(8),
-						{
+					widget = wibox.container.background,
+					shape = helpers.rrect(beautiful.radius or base.radius),
+					id = 'bg',
+					bg = bgcolor,
+					{
+						widget = wibox.container.margin,
+						margins = beautiful.dpi(8),
+						{	
+							layout = wibox.layout.fixed.horizontal,
+							spacing = beautiful.dpi(8),
 							{
-								widget = wibox.widget.imagebox,
-								image = app.icon
+								widget = wibox.container.place,
+								{
+									{
+										widget = wibox.widget.imagebox,
+										image = app.icon,
+										clip_shape = helpers.rrect(2)
+									},
+									widget = wibox.container.constraint,
+									strategy = 'exact',
+									width = beautiful.dpi(32),
+									height = beautiful.dpi(32),
+								}
 							},
-							widget = wibox.container.constraint,
-							strategy = 'exact',
-							width = 32,
-							height = 32
-						},
-						{
-							widget = wibox.widget.textbox,
-							align = 'center',
-							halign = 'center',
-							valign = 'center',
-							markup = name
+							{
+								widget = wibox.container.place,
+								{
+									layout = wibox.layout.fixed.vertical,
+									{
+										widget = wibox.widget.textbox,
+										valign = 'center',
+										markup = helpers.colorize_text(name, beautiful.fg_normal)
+									},
+									app.description and {
+										layout = wibox.container.place,
+										halign = 'left',
+										forced_width = beautiful.dpi(360),
+										forced_height = beautiful.dpi(22),
+										{
+											widget = wibox.widget.textbox,
+											markup = helpers.colorize_text(app.description or '', beautiful.fg_sec)
+										}
+									} or nil
+								}
+							}
 						}
 					}
 				}
 			}
-			wid.buttons = {
+			appWid.buttons = {
 				awful.button({}, 1, function()
 					app.launch()
 					opts.menu:toggle()
 				end)
 			}
-			helpers.displayClickable(wid, {bg = bgcolor})
-			appList:add(wid)
+			helpers.displayClickable(appWid, {bg = bgcolor})
+			appList:add(appWid)
 
 			::continue::
 		end
@@ -174,67 +165,20 @@ function M.new(opts)
 	local monitor = Gio.AppInfoMonitor.get()
 
 	function monitor:on_changed(...)
-		w:fetchApps()
+		wid:fetchApps()
 	end
 -- ^ doesnt actually work
 
-	w:fetchApps()
+	wid:fetchApps()
 
-	return w, opts.width, opts.height
+	return wid, opts.width, opts.height
 end
 
 function M.bindMethods(startMenu)
-	local scr = awful.screen.focused()
-	local startMenuOpen = false
-	local animator = rubato.timed {
-		duration = 0.3,
-		rate = 60,
-		subscribed = function(y)
-			startMenu.y = y
-		end,
-		pos = scr.geometry.height,
-		easing = rubato.linear
-	}
-
-	local function doPlacement()
-		awful.placement.bottom_left(startMenu, {
-			margins = {
-				left = beautiful.useless_gap * beautiful.dpi(2),
-				bottom = settings.noAnimate and beautiful.wibar_height + beautiful.useless_gap * beautiful.dpi(2) or -startMenu.height
-			},
-			parent = awful.screen.focused()
-		})
-	end
-	doPlacement()
-	if not settings.noAnimate then startMenu.visible = true end
-
-	if settings.noAnimate then
-		helpers.hideOnClick(startMenu)
-	else
-		helpers.hideOnClick(startMenu, settings.noAnimate and nil or function()
-			if startMenuOpen then
-				startMenu:toggle()
-			end
-		end)
-	end
-
-	function startMenu:toggle()
-		appList.scroll_factor = 0
-		if not startMenuOpen then
-			doPlacement()
-		end
-
-		if settings.noAnimate then
-			startMenu.visible = not startMenu.visible
-		else
-			if startMenuOpen then
-				animator.target = scr.geometry.height
-			else
-				animator.target = scr.geometry.height - (beautiful.wibar_height + beautiful.useless_gap * beautiful.dpi(2)) - startMenu.height
-			end
-		end
-		startMenuOpen = not startMenuOpen
-	end
+	helpers.slidePlacement(startMenu, {
+		placement = 'bottom_left',
+		toggler = function() appList.scroll_factor = 0 end
+	})
 end
 
 function M.create(opts)

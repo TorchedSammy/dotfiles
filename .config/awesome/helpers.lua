@@ -250,6 +250,8 @@ function helpers.slidePlacement(wbx, opts)
 			doPlacement()
 		end
 
+		if opts.toggler then opts.toggler(wbxOpen) end
+
 		if settings.noAnimate then
 			wbx.visible = not wbx.visible
 		else
