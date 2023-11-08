@@ -17,26 +17,27 @@ theme.dark = true
 theme.accent = '#8062ff'
 theme.bg_normal = theme.xbackground
 theme.bg_popup = helpers.shiftColor(theme.bg_normal, 5)
-theme.bg_sec = helpers.shiftColor(theme.bg_normal, 13)
+theme.bg_sec = theme.xcolor8
 theme.bg_focus = theme.bg_normal
 theme.bg_urgent = theme.bg_normal
 theme.bg_minimize = theme.bg_normal
 
 theme.fg_normal = theme.xforeground
-theme.fg_sec = helpers.shiftColor(theme.xcolor12, 8)
-theme.fg_tert = theme.xcolor12
+theme.fg_sec = theme.xcolor12
+theme.fg_tert = theme.xcolor11
 theme.fg_focus = theme.fg_normal
 theme.fg_urgent = theme.fg_normal
 theme.fg_minimize = theme.fg_sec
 
+theme.radius = 12
 theme.useless_gap   = dpi(6)
 theme.border_width  = dpi(1)
 theme.border_normal  = theme.bg_sec
 theme.border_focus  = theme.accent
-theme.client_shape = helpers.rrect(12)
+theme.client_shape = helpers.rrect(theme.radius)
 
 theme.titlebars = true
-theme.titlebar_type = 'simple'
+theme.titlebar_type = 'harmony'
 theme.titlebar_height = dpi(32)
 theme.titlebar_bg = theme.xcolor15
 
@@ -47,7 +48,7 @@ theme.notification_height = dpi(100)
 theme.notification_border_color = theme.xforeground
 theme.notification_border_width = dpi(3)
 theme.notification_padding = theme.useless_gap * dpi(2)
-theme.notification_shape = helpers.rrect(12)
+theme.notification_shape = helpers.rrect(theme.radius)
 
 theme.bar = 'harmony'
 theme.wibar_height = dpi(45)
@@ -65,7 +66,7 @@ end
 
 theme.taglist_size = dpi(12)
 theme.taglist_expanded_size = dpi(24)
-theme.taglist_active_gradient = true
+theme.taglist_active_gradient = false
 theme.taglist_text_color_empty    = rep(theme.xcolor14)
 theme.taglist_text_color_occupied  = rep(theme.xcolor7)
 theme.taglist_text_color_focused  = rep(theme.accent)
