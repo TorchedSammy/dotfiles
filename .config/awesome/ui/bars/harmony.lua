@@ -4,8 +4,10 @@ local gears = require 'gears'
 local beautiful = require 'beautiful'
 local taglist = require 'ui.taglist-modern'
 local widgets = require 'ui.widgets'
+local harmony = require 'ui.components.harmony'
 local helpers = require 'helpers'
 local rubato = require 'libs.rubato'
+local quickSettings = require 'ui.widgets.quickSettings'
 --local filters = require 'surface_filters'
 
 local Color = require 'lua-color'
@@ -49,7 +51,7 @@ awful.screen.connect_for_each_screen(function(s)
 		widgets.icon('volume', {size = beautiful.dpi(15)}),
 	}
 	local controls = backgroundBar(controlsRaw)
-	--helpers.onLeftClick(controls, w.quickSettings.toggle)
+	helpers.onLeftClick(controls, quickSettings.toggle)
 	helpers.displayClickable(controls, {bg = beautiful.xcolor8, hoverColor = beautiful.xcolor9})
 
 	local music = require 'ui.widgets.musicDisplay'
@@ -69,7 +71,7 @@ awful.screen.connect_for_each_screen(function(s)
 		fg_sec = beautiful.fg_normal
 	}
 
-	local titleHeight = beautiful.dpi(36)
+	local titlebar, titleHeight = harmony.titlebar 'Music'
 	local musicDisplay = wibox {
 		width = beautiful.dpi(480),
 		height = beautiful.dpi(180) + titleHeight,
@@ -81,22 +83,6 @@ awful.screen.connect_for_each_screen(function(s)
 
 	local titlebarColor = Color('#0f0f1f')
 	local _, titlebarColorSat, titlebarColorVal = titlebarColor:hsv()
-	local titlebar = wibox.widget {
-		widget = wibox.container.constraint,
-		strategy = 'exact',
-		height = titleHeight,
-		{
-			widget = wibox.container.background,
-			bg = beautiful.bg_sec,
-			id = 'bg',
-			{
-				widget = wibox.container.margin,
-				top = beautiful.dpi(4), bottom = beautiful.dpi(4),
-				left = beautiful.dpi(8),
-				widgets.coloredText('Music', beautiful.fg_normal)
-			}
-		}
-	}
 
 	local function makeGradient(solid, transparent)
 		return {

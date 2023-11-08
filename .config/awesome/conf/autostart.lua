@@ -1,5 +1,6 @@
 local awful = require 'awful'
 local beautiful = require 'beautiful'
+local compositor = require 'modules.compositor'
 local settings = require 'conf.settings'
 local naughty = require 'naughty'
 
@@ -26,9 +27,10 @@ local programs = {
 }
 
 if settings.picom then
-	table.insert(programs, string.format('picom -b --config /home/%s/.config/picom/%s.conf', os.getenv 'USER', beautiful.picom_conf))
+	-- toggle
+	compositor.on()
 else
-	awful.spawn.easy_async('pkill picom', function() end)
+	compositor.off()
 end
 
 for _, p in ipairs(programs) do

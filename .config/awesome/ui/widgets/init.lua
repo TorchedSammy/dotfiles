@@ -478,7 +478,7 @@ end
 function widgets.coloredText(text, color)
 	local wid = wibox.widget {
 		widget = wibox.widget.textbox,
-		markup = helpers.colorize_text(text, color)
+		markup = helpers.colorize_text('<b>' .. text .. '</b>', color)
 	}
 	wid.color = color
 	wid.text = text

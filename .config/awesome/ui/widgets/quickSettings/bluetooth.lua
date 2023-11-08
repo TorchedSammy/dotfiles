@@ -129,7 +129,7 @@ function M.display(layout)
 end
 
 function M.status()
-	return bluetooth.enabled, ''
+	return bluetooth.enabled, 'Bluetooth'
 end
 
 return M

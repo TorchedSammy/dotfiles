@@ -207,7 +207,7 @@ function M.display(layout)
 end
 
 function M.status()
-	return true, ''
+	return true, 'Battery'
 end
 
 return M

@@ -79,7 +79,7 @@ function M.slider(opts)
 					{
 						widget = wibox.container.margin,
 						--left = 0.5, right = 0.5,
-						margins = 0.5,
+						--margins = 0.5,
 						slider,
 					},
 					progress,
