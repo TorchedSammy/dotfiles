@@ -6,6 +6,8 @@ local naughty = require 'naughty'
 local wibox = require 'wibox'
 local rubato = require 'libs.rubato'
 
+local Color = require 'lua-color'
+
 local helpers = {}
 
 function helpers.rrect(radius)
@@ -259,6 +261,22 @@ function helpers.slidePlacement(wbx, opts)
 		end
 		wbxOpen = not wbxOpen
 	end
+end
+
+function helpers.transitionColor(opts)
+ local old = Color(opts.old)
+ local new = Color(opts.new)
+ local animator = rubato.timed {
+  duration = opts.duration or 2,
+		rate = 60,
+		override_dt = false,
+		subscribed = function(perc)
+   opts.transformer(tostring(old:mix(new, perc / 100)))
+		end,
+		pos = 0,
+		easing = opts.easing or rubato.quadratic
+	}
+	animator.target = 100
 end
 
 return helpers

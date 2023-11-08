@@ -208,14 +208,34 @@ if beautiful.double_borders then require 'ui.extras.double-borders' end
 require 'initialize'
 
 client.connect_signal('focus', function(c)
-	c.border_color = beautiful.border_focus
+	helpers.transitionColor {
+		old = beautiful.border_normal,
+		new = beautiful.border_focus,
+		transformer = function(col)
+			local valid = pcall(function() return c.valid end) and c.valid
+			if not valid then return end
+
+			c.border_color = col
+		end,
+		duration = 0.2
+	}
 	if c.pid then
 		scheduler.setForeground(c.pid)
 	end
 end)
 
 client.connect_signal('unfocus', function(c)
-	c.border_color = beautiful.border_normal
+	helpers.transitionColor {
+		old = beautiful.border_focus,
+		new = beautiful.border_normal,
+		transformer = function(col)
+			local valid = pcall(function() return c.valid end) and c.valid
+			if not valid then return end
+
+			c.border_color = col
+		end,
+		duration = 0.4
+	}
 end)
 
 collectgarbage('setpause', 110)
