@@ -6,7 +6,7 @@ local taglist = require 'ui.taglist-modern'
 local widgets = require 'ui.widgets'
 local helpers = require 'helpers'
 local rubato = require 'libs.rubato'
-local filters = require 'surface_filters'
+--local filters = require 'surface_filters'
 
 local Color = require 'lua-color'
 
@@ -275,12 +275,15 @@ awful.screen.connect_for_each_screen(function(s)
 		titlebar,
 		{
 			layout = wibox.layout.stack,
+			--[[
 			{
 				widget = filters.blur,
 				dual_pass = false,
 				radius = 5,
 				albumArt,
 			},
+			]]--
+			albumArt,
 			gradient,
 			mw
 		}
@@ -294,7 +297,7 @@ awful.screen.connect_for_each_screen(function(s)
 
 	local sm = require 'ui.widgets.startMenu'
 	local startMenu = sm.create {
-		bg = beautiful.bg_sec,
+		bg = beautiful.bg_normal,
 	--	shape = function(crr, w, h) return gears.shape.partially_rounded_rect(crr, w, h, false, false, true, true, base.radius) end
 	}
 	sm.bindMethods(startMenu)
