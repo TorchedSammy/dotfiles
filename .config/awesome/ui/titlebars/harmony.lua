@@ -80,14 +80,10 @@ return function(c)
 	return {
 		layout = wibox.layout.align.horizontal,
 		{
-			{
-				layout = wibox.layout.fixed.horizontal,
-				spacing = beautiful.wibar_spacing
-			},
-			left = beautiful.wibar_spacing,
-			right = beautiful.wibar_spacing,
-			widget = wibox.container.margin,
+			awful.titlebar.widget.iconwidget(c),
+			awful.titlebar.widget.titlewidget(c),
 			buttons = buttons,
+			layout  = wibox.layout.fixed.horizontal
 		},
 		{
 			{
