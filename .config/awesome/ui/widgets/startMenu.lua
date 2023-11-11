@@ -38,7 +38,7 @@ function M.new(opts)
 	function setupAppList()
 		appList:reset()
 		--appList.spacing = beautiful.dpi(2)
-		appList.step = 65
+		appList.step = beautiful.dpi(100)
 		appList.scrollbar_widget = {
 			widget = wibox.widget.separator,
 			shape = gears.shape.rounded_bar,
@@ -115,7 +115,7 @@ function M.new(opts)
 								{
 									{
 										widget = wibox.widget.imagebox,
-										image = app.icon,
+										image = app.icon or beautiful.config_path .. '/images/app-placeholder.png',
 										clip_shape = helpers.rrect(2)
 									},
 									widget = wibox.container.constraint,
@@ -129,9 +129,9 @@ function M.new(opts)
 								{
 									layout = wibox.layout.fixed.vertical,
 									{
-										widget = wibox.widget.textbox,
-										valign = 'center',
-										markup = helpers.colorize_text(name, beautiful.fg_normal)
+										text = name,
+										font = beautiful.fontName .. ' Medium 12',
+										widget = wibox.widget.textbox
 									},
 									app.description and {
 										layout = wibox.container.place,
@@ -140,7 +140,8 @@ function M.new(opts)
 										forced_height = beautiful.dpi(22),
 										{
 											widget = wibox.widget.textbox,
-											markup = helpers.colorize_text(app.description or '', beautiful.fg_sec)
+											markup = helpers.colorize_text(app.description or '', beautiful.fg_sec),
+											--font = beautiful.fontName .. ' Medium 12',
 										}
 									} or nil
 								}

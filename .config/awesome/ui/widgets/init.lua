@@ -475,10 +475,11 @@ function widgets.switch(opts)
 	return switch
 end
 
-function widgets.coloredText(text, color)
+function widgets.coloredText(text, opts)
+	color = type(opts) == 'table' and opts.color or opts
 	local wid = wibox.widget {
 		widget = wibox.widget.textbox,
-		markup = helpers.colorize_text('<b>' .. text .. '</b>', color)
+		markup = helpers.colorize_text(text, color),
 	}
 	wid.color = color
 	wid.text = text
