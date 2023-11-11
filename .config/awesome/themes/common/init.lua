@@ -18,6 +18,18 @@ theme.config_path = config_path
 theme.themes_path = themes_path
 theme.master_width_factor = 0.6
 
+--[[
+theme.playerctl_player = {
+	'Feishin',
+	'cmus',
+	'%any'
+}
+]]--
+theme.playerctl_ignore = {
+	'chromium',
+	'Firefox'
+}
+
 theme.xbackground = "#110f1c"
 theme.xforeground = "#ebe1e7"
 theme.xcolor0     = "#110f1c"

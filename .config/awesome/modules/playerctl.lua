@@ -12,11 +12,7 @@ local M = {
 	}
 }
 
-local playerctl = bling.signal.playerctl.lib {
-	player = M.priority,
-	ignore = 'firefox'
---	update_on_activity = false -- TEMPORARY: exit signal doesnt work
-}
+local playerctl = bling.signal.playerctl.lib {}
 
 local lastTitle
 local lastArtist
@@ -54,7 +50,6 @@ local function dispatchMetadata(player)
 end
 
 playerctl:connect_signal('metadata', function (_, title, artist, art, album, _new, player)
-
 	if title == lastTile and artist == lastArtist then return end
 	if not activePlayer then
 		activePlayer = player
@@ -85,6 +80,23 @@ playerctl:connect_signal('metadata', function (_, title, artist, art, album, _ne
 		activePlayer = player
 	end
 	dispatchMetadata(player)
+end)
+
+--[[
+playerctl:connect_signal('position', function (_, pos, length, player)
+	if player ~= activePlayer then
+		dispatchMetadata(player)
+		activePlayer = player
+	end
+end)
+
+]]--
+playerctl:connect_signal('playback_status', function(_, playing, player)
+	if player ~= activePlayer then
+		dispatchMetadata(player)
+	end
+	activePlayer = nil
+	activePlayer = player
 end)
 
 playerctl:connect_signal('exit', function(_, player)
@@ -119,6 +131,10 @@ end)
 
 function M.listenMetadata(cb)
 	table.insert(metadataCallbacks, cb)
+end
+
+function M.hasPlayers()
+	return #players ~= 0
 end
 
 return M
