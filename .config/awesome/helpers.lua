@@ -122,7 +122,6 @@ function helpers.onLeftClick(w, cb)
 end
 function helpers.displayClickable(w, opts)
   opts = type(opts) == 'table' and opts or {}
-  opts.color = opts.bg or opts.color
   opts.shiftFactor = opts.shiftFactor or -15
   if settings.theme:match '-dark$' or beautiful.dark then opts.shiftFactor = opts.shiftFactor * -1 end
 
@@ -130,14 +129,14 @@ function helpers.displayClickable(w, opts)
   w.dcDisabled = false
 
   function ecb()
-   if bgWid and not w.dcDisabled then
-      bgWid.bg = opts.hoverColor and opts.hoverColor or helpers.shiftColor(opts.color or w.bg, opts.shiftFactor)
+   if bgWid and not w.dcDisabled and opts.bg then
+      bgWid.bg = opts.hoverColor and opts.hoverColor or helpers.shiftColor(opts.bg or w.bg, opts.shiftFactor)
     end
   end
 
   function lcb()
-    if bgWid then
-      bgWid.bg = opts.color
+    if bgWid and opts.bg then
+      bgWid.bg = opts.bg
     end
   end
 
@@ -150,9 +149,9 @@ function helpers.displayClickable(w, opts)
   function w:toggleClickableDisplay()
    w.dcDisabled = not w.dcDisabled
    if w.dcDisabled then
-    bgWid.bg = opts.color
+    bgWid.bg = opts.bg
    else
-    bgWid.bg = opts.hoverColor and opts.hoverColor or helpers.shiftColor(opts.color or w.bg, opts.shiftFactor)
+    bgWid.bg = opts.hoverColor and opts.hoverColor or helpers.shiftColor(opts.bg or w.bg, opts.shiftFactor)
    end
   end
 

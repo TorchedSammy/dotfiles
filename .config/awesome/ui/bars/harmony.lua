@@ -289,8 +289,10 @@ awful.screen.connect_for_each_screen(function(s)
 	sm.bindMethods(startMenu)
 	
 	local startMenu = widgets.button(beautiful.os_icon, {
-		bg = beautiful.wibar_bg,
-		onClick = function() startMenu:toggle() end
+		onClick = function() startMenu:toggle() end,
+		size = beautiful.dpi(25),
+		shape = gears.shape.rectangle,
+		color = beautiful.accent
 	})
 
 	local baseClientIndicator = {
@@ -409,7 +411,6 @@ awful.screen.connect_for_each_screen(function(s)
 			margins = beautiful.dpi(8),
 			{	
 				layout = wibox.layout.align.horizontal,
-				expand = 'none',
 				{
 					
 					{ -- First bar
