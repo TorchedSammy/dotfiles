@@ -202,10 +202,15 @@ do
 										widget = wibox.container.place,
 										{
 											layout = wibox.layout.fixed.vertical,
-											w.coloredText(os.getenv 'USER', beautiful.fg_normal),
 											{
 												widget = wibox.widget.textbox,
-												markup = helpers.colorize_text('up 10 hours, 23 minutes', beautiful.fg_sec)
+												text = os.getenv 'USER',
+												font = beautiful.fontName .. ' Bold 12',
+											},
+											{
+												widget = wibox.widget.textbox,
+												markup = helpers.colorize_text('up 10 hours, 23 minutes', beautiful.fg_sec),
+												font = beautiful.fontName .. ' Bold 12',
 											}
 										}
 									},
