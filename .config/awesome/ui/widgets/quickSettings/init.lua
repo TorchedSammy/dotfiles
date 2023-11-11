@@ -114,11 +114,14 @@ local function createToggle(type)
 		}
 	}
 	local function setToggleBackground(toggledOn)
-		if toggledOn then
-			wid:get_children_by_id 'bg'[1].bg = beautiful.accent
-		else
-			wid:get_children_by_id 'bg'[1].bg = beautiful.xcolor9
-		end
+		helpers.transitionColor {
+			old = toggledOn and beautiful.xcolor9 or beautiful.accent,
+			new = not toggledOn and beautiful.xcolor9 or beautiful.accent,
+			transformer = function(col)
+				wid:get_children_by_id 'bg'[1].bg = col
+			end,
+			duration = 0.5
+		}
 	end
 
 	setToggleBackground(control.enabled())
