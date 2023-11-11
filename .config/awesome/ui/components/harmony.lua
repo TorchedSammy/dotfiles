@@ -8,7 +8,12 @@ function M.titlebar(title, opts)
 	opts = opts or {}
 	local titleHeight = beautiful.dpi(48)
 
-	local titleText = widgets.coloredText(title, beautiful.fg_normal)
+	local titleText = wibox.widget {
+		text = title,
+		font = beautiful.fontName .. ' Bold 12',
+		widget = wibox.widget.textbox
+	}
+
 	local w = wibox.widget {
 		widget = wibox.container.constraint,
 		strategy = 'exact',
