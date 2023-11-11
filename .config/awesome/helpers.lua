@@ -38,6 +38,10 @@ function helpers.maximize(c)
     c:raise()
 end
 
+function helpers.minimize(c)
+ gears.timer.delayed_call(function() c.minimized = true end)
+end
+
 function helpers.winmaxer(c)
   awful.placement.maximize(c, {
     honor_padding = true,
