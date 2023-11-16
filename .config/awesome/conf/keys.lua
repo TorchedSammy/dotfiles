@@ -235,8 +235,7 @@ awful.key({modkey, altkey}, 'r', awesome.restart, {
 	group = 'awesome'
 }),
 awful.key({ modkey, shift   }, 'q', function()
-	local exit = require 'ui.actions.syntax.exit'
-	exit()
+	awesome.quit()
 end, {
 	description = 'Exit awesome',
 	group = 'awesome'
