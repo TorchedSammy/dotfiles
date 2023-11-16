@@ -68,7 +68,7 @@ awful.screen.connect_for_each_screen(function(s)
 	local mw, width, height = music.new {
 		bg = '#00000000',
 		shape = helpers.rrect(16),
-		fg_sec = beautiful.fg_normal
+		fg_sec = beautiful.fg_normal,
 	}
 
 	local titlebar, titleHeight = harmony.titlebar 'Music'
@@ -76,7 +76,6 @@ awful.screen.connect_for_each_screen(function(s)
 		width = beautiful.dpi(480),
 		height = beautiful.dpi(180) + titleHeight,
 		bg = '#00000000',
-		shape = helpers.rrect(6),
 		ontop = true,
 		visible = false
 	}
@@ -257,21 +256,25 @@ awful.screen.connect_for_each_screen(function(s)
 	end)
 
 	musicDisplay:setup {
-		layout = wibox.layout.fixed.vertical,
-		titlebar,
+		widget = wibox.container.background,
+		shape = helpers.rrect(beautiful.radius),
 		{
-			layout = wibox.layout.stack,
-			--[[
+			layout = wibox.layout.fixed.vertical,
+			titlebar,
 			{
-				widget = filters.blur,
-				dual_pass = false,
-				radius = 5,
+				layout = wibox.layout.stack,
+				--[[
+				{
+					widget = filters.blur,
+					dual_pass = false,
+					radius = 5,
+					albumArt,
+				},
+				]]--
 				albumArt,
-			},
-			]]--
-			albumArt,
-			gradient,
-			mw
+				gradient,
+				mw
+			}
 		}
 	}
 	helpers.slidePlacement(musicDisplay, {placement = 'bottom_right'})
