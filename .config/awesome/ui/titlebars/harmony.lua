@@ -56,21 +56,21 @@ return function(c)
 		{
 			layout = wibox.layout.align.horizontal,
 			{
-				layout = wibox.layout.fixed.horizontal,
-				spacing = spacing,
-				buttons = buttons,
+				widget = wibox.container.place,
 				{
-					widget = wibox.container.constraint,
-					strategy = 'exact',
-					width = beautiful.dpi(25),
+					layout = wibox.layout.fixed.horizontal,
+					spacing = spacing,
+					buttons = buttons,
 					{
-						widget = wibox.container.place,
+						widget = wibox.container.constraint,
+						strategy = 'exact',
+						width = beautiful.dpi(25),
 						awful.titlebar.widget.iconwidget(c),
+					},
+					{
+						widget = awful.titlebar.widget.titlewidget(c),
+						font = beautiful.fontName .. ' Medium 12',
 					}
-				},
-				{
-					widget = awful.titlebar.widget.titlewidget(c),
-					font = beautiful.fontName .. ' Medium 12',
 				}
 			},
 			{
