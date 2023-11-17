@@ -15,7 +15,7 @@ theme.fontName = 'IBM Plex Sans'
 theme.font          = theme.fontName .. ' Regular 12'
 
 theme.dark = true
-theme.accent = '#8062ff'
+theme.accent = theme.xcolor6 --'#8062ff'
 theme.bg_normal = theme.xbackground
 theme.bg_popup = helpers.shiftColor(theme.bg_normal, 5)
 theme.bg_sec = theme.xcolor8
