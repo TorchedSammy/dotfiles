@@ -2,7 +2,7 @@ local awful = require 'awful'
 
 local volume_old = -1
 local muted_old = false
-local function emit_volume_info()
+local function emit_volume_info(init)
     -- Get volume info of the currently active sink
     -- The currently active sink has a star `*` in front of its index
     -- In the output of `pacmd list-sinks`, lines +7 and +11 after '* index:'
@@ -21,7 +21,7 @@ local function emit_volume_info()
             -- through `pavucontrol` or even without user intervention,
             -- when a media file starts playing.
             if volume_int ~= volume_old or muted ~= muted_old then
-                awesome.emit_signal('syntax::volume', volume_int, muted)
+                awesome.emit_signal('syntax::volume', volume_int, muted, init)
                 volume_old = volume_int
                 muted_old = muted
             end
@@ -45,3 +45,4 @@ awful.spawn.easy_async({
         stdout = function(line) emit_volume_info() end
     })
 end)
+emit_volume_info(true)
