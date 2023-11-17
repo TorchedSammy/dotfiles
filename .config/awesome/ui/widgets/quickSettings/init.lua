@@ -9,7 +9,7 @@ local rubato = require 'libs.rubato'
 local settings = require 'conf.settings'
 local wibox = require 'wibox'
 local w = require 'ui.widgets'
-local sfx = require 'modules.sfx'
+local util = require 'ui.widgets.quickSettings.util'
 
 local bgcolor = beautiful.bg_popup
 local btnSize = dpi(32)
@@ -38,9 +38,18 @@ local quickSettingsAnimator = rubato.timed {
 	easing = rubato.quadratic
 }
 
+local function setupContentLayout()
+	contentLayout:reset()
+	contentLayout.scrollbar_widget = wibox.widget {
+		widget = wibox.widget.separator,
+		shape = gears.shape.rounded_bar,
+		color = beautiful.accent
+	}
+end
+
 local function contentBackCallback()
 	quickSettingsAnimator.target = 0
-	contentLayout:reset()
+	setupContentLayout()
 end
 
 local contentLabel = harmony.titlebar('Content', {
@@ -69,25 +78,35 @@ local function createToggle(type)
 		status = function() return false, '' end,
 	}
 
-	local toggleFgColor = beautiful.fg_normal
+	local toggleBg = beautiful.accent
+	local toggleBgOff = helpers.shiftColor(beautiful.xcolor9, 3)
+
+	local toggleFgColor = beautiful.bg_popup
+	local toggleFgColorOff = beautiful.fg_normal
 	local toggleMargin = beautiful.dpi(10)
 
-	local icon = w.icon(control.enabled() and type or type .. '-off', {size = btnSize, color = toggleFgColor})
-	local rightIcon = w.icon('arrow-right', {size = btnSize, color = toggleFgColor})
+	local on, textStatus = control.status()
+	local icon = w.icon(control.enabled() and type or type .. '-off', {size = btnSize, color = on and toggleFgColor or toggleFgColorOff})
+	local rightIcon = w.icon('arrow-right', {size = btnSize, color = on and toggleFgColor or toggleFgColorOff})
 
-	local _, textStatus = control.status()
+	local status = wibox.widget {
+		widget = wibox.widget.textbox,
+		text = textStatus,
+		font = beautiful.font:gsub('%d+$', '14')
+	}
+
 	local wid = wibox.widget {
 		layout = wibox.layout.fixed.vertical,
 		spacing = beautiful.dpi(8),
 		{	
 			widget = wibox.container.constraint,
-			height = dpi(55),
-			width = dpi(110),
+			height = dpi(58),
+			--width = dpi(90),
 			--width = ((quickSettings.width - quickSettingsMargin - (toggleSpacing * dpi(3))) / 3) + btnSize / 3,
 			strategy = 'exact',
 			{
 				widget = wibox.container.background,
-				shape = helpers.rrect(beautiful.radius),
+				shape = helpers.rrect(15),
 				id = 'bg',
 				{
 					widget = wibox.container.margin,
@@ -106,19 +125,24 @@ local function createToggle(type)
 		},
 		{
 			layout = wibox.container.place,
-			{
-				widget = wibox.widget.textbox,
-				text = textStatus,
-				font = beautiful.font:gsub('%d+$', '14')
-			}
+			status
 		}
 	}
 	local function setToggleBackground(toggledOn)
 		helpers.transitionColor {
-			old = toggledOn and beautiful.xcolor9 or beautiful.accent,
-			new = not toggledOn and beautiful.xcolor9 or beautiful.accent,
+			old = toggledOn and toggleBgOff or toggleBg,
+			new = not toggledOn and toggleBgOff or toggleBg,
 			transformer = function(col)
 				wid:get_children_by_id 'bg'[1].bg = col
+			end,
+			duration = 0.5
+		}
+
+		helpers.transitionColor {
+			old = toggledOn and toggleFgColorOff or toggleFgColor,
+			new = not toggledOn and toggleFgColorOff or toggleFgColor,
+			transformer = function(col)
+				icon.color = col
 			end,
 			duration = 0.5
 		}
@@ -131,26 +155,43 @@ local function createToggle(type)
 		control.display(contentLayout)
 	end
 
+	local function setupButtonState(on)
+		setToggleBackground(on)
+		if on then
+			--icon.icon = type
+		else
+			--icon.icon = type .. '-off'
+		end
+	end
+
+	local function toggle()
+		if control.toggle then
+			local controlOn = control.toggle()
+			if controlOn == nil then return end
+
+			setupButtonState(controlOn)
+		else
+			displayControls()
+		end
+	end
+
+	util.connectSignal(type, 'toggle', setupButtonState)
+	util.connectSignal(type, 'status', function(statText)
+		status.text = statText
+	end)
+
 	icon.buttons = {
-		awful.button({}, 1, function()
-			if control.toggle then
-				local controlOn = control.toggle()
-				setToggleBackground(controlOn)
-				if controlOn then
-					icon.icon = type
-				else
-					icon.icon = type .. '-off'
-				end
-			else
-				displayControls()
-			end
-		end),
+		awful.button({}, 1, toggle),
 	}
 	rightIcon.buttons = {
 		awful.button({}, 1, function()
 			displayControls()
 		end)
 	}
+
+	if control.fetch then
+		control.fetch()
+	end
 
 	toggleLayout:add(wid)
 end

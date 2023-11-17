@@ -1,141 +1,136 @@
-local awful = require 'awful'
-local beautiful = require 'beautiful'
-local dpi = beautiful.dpi
-local gears = require 'gears'
-local helpers = require 'helpers'
 local lgi = require 'lgi'
-local NM = lgi.NM
-local GLib = lgi.GLib
-local rubato = require 'libs.rubato'
-local settings = require 'conf.settings'
-local wibox = require 'wibox'
-local w = require 'ui.widgets'
-local naughty = require 'naughty'
+local p = require 'dbus_proxy'
+local nm = p.Proxy:new {
+	bus = p.Bus.SYSTEM,
+	name = 'org.freedesktop.NetworkManager',
+	interface = 'org.freedesktop.NetworkManager',
+	path = '/org/freedesktop/NetworkManager'
+}
 
-local nmc = NM.Client.new()
-local wifiDevice = nmc:get_device_by_iface 'wlp2s0'
+local devPath = nm:GetDeviceByIpIface 'wlp2s0'
+local dev = p.Proxy:new {
+	bus = p.Bus.SYSTEM,
+	name = 'org.freedesktop.NetworkManager',
+	interface = 'org.freedesktop.NetworkManager.Device.Wireless',
+	path = devPath
+}
 
-function wifiDevice:on_access_point_added(ap)
-	awesome.emit_signal('wifi::ap-added', ap)
-end
+local function apPathToProxy(path)
+	local ap = p.Proxy:new {
+		bus = p.Bus.SYSTEM,
+		name = 'org.freedesktop.NetworkManager',
+		interface = 'org.freedesktop.NetworkManager.AccessPoint',
+		path = path
+	}
 
-function wifiDevice:on_access_point_removed()
-	awesome.emit_signal('wifi::ap-removed')
+	return ap
 end
 
 local M = {
-	enabled = nmc:wireless_get_enabled() and wifiDevice ~= nil,
+	enabled = nm.WirelessEnabled,
+	activeSSID = nil,
+	connectingSSID = nil,
+	connectivity = 0,
+	state = 0,
+
+	-- "enums"
+	CONNECTIVITY_UNKNOWN = 0,
+	CONNECTIVITY_NONE = 1,
+	CONNECTIVITY_PORTAL = 2,
+	CONNECTIVITY_LIMITED = 3,
+	CONNECTIVITY_FULL = 4,
 }
 
--- @return boolean state of the setting (on or off)
+local function bytesToString(b)
+	if not b then return end
+
+	return tostring(lgi.GLib.Bytes(b):get_data())
+end
+
+local function emitActiveAP()
+	if M.connectivity < M.CONNECTIVITY_NONE then
+	end
+
+	awesome.emit_signal('wifi::activeAP', M.activeSSID, M.activeAP)
+end
+
+function setConnectingSSID()
+	local ap = apPathToProxy(dev.ActiveAccessPoint)
+	M.connectingSSID = bytesToString(ap.Ssid)
+end
+
+function setActiveSSID()
+	local ap = apPathToProxy(dev.ActiveAccessPoint)
+	M.activeSSID = bytesToString(ap.Ssid)
+	M.activeAP = ap
+
+	if M.connectivity > M.CONNECTIVITY_NONE then
+		emitActiveAP()
+	end
+end
+setActiveSSID()
+
+nm:on_properties_changed(function(p, changed)
+	if changed.WirelessEnabled ~= nil and changed.WirelessEnabled ~= M.enabled then
+		M.enabled = changed.WirelessEnabled
+		awesome.emit_signal('wifi::toggle', M.enabled)
+	end
+
+	if changed.State ~= nil then
+		M.state = math.floor(changed.State)
+		if M.state >= 40 then
+			setActiveSSID()
+			M.connectingSSID = nil
+		else
+			M.activeSSID = nil
+			awesome.emit_signal('wifi::disconnected')
+		end
+	end
+
+	for k, v in pairs(changed) do
+		require'naughty'.notify {
+			title = 'NMCli Property changed: ' .. tostring(k),
+			text = tostring(v)
+		}
+	end
+end)
+
+dev:on_properties_changed(function(p, changed)
+	if changed.ActiveAccessPoint ~= nil then
+		setConnectingSSID()
+	end
+end)
+
 function M.toggle()
-	if not wifiDevice then return false end
-
-	local conn = wifiDevice.active_connection
-	if conn then
-		wifiDevice:disconnect_async(nil)
-	end
-
-	M.enabled = not nmc:wireless_get_enabled()
-	nmc:dbus_set_property(NM.DBUS_PATH, NM.DBUS_INTERFACE, 'WirelessEnabled', GLib.Variant('b', M.enabled), -1, nil, nil)
-
-	if M.enabled then
-		wifiDevice:request_scan_async(nil)
-	end
-
-	return M.enabled
+	nm:Set('org.freedesktop.NetworkManager', 'WirelessEnabled', lgi.GLib.Variant('b', not M.enabled))
+	nm.WirelessEnabled = {
+		signature = 'b',
+		value = not M.enabled,
+	}
+	M.activeSSID = nil
 end
 
-function isEmpty(t)
-	if t == nil then return true end
-	local next = next
-	if next(t) then return false else return true end
-end
+-- return: table of type AccessPoint
+-- AccessPoint has the folling properties:
+-- ssid: name
+-- security: a string or table possibly idk ill decide
+function M.getAccessPoints()
+	local apPaths = dev:GetAllAccessPoints()
+	local aps = {}
 
-function M.getAPSecurity(ap)
-	local flags = ap:get_flags()
-	local wpa = ap:get_wpa_flags()
-	local rsn = ap:get_rsn_flags()
-
-	local str = ''
-	if flags['PRIVACY'] and isEmpty(wpa) and isEmpty(rsn) then
-		str = str .. ' WEP'
-	end
-	if not isEmpty(wpa) then
-		str = str .. ' WPA1'
-	end
-	if not isEmpty(rsn) then
-		str = str .. ' WPA2'
-	end
-	if wpa['KEY_MGMT_802_1X'] or rsn['KEY_MGMT_802_1X'] then
-		str = str .. ' 802.1X'
+	for k, v in pairs(apPaths) do
+		local ap = apPathToProxy(v)
+		aps[bytesToString(ap.Ssid) or 'Unknown'] = ap
 	end
 
-	return (str:gsub('^%s', ''))
-end
-
-function M.getAPs(callback)
-	wifiDevice:request_scan_async(nil, function(client, result, data)
-		for _, ap in ipairs(wifiDevice:get_access_points()) do
-			callback(ap)
-		end
-	end)
-end
-
-function M.getSSID(ap)
-	local ssid = ap:get_ssid()
-	if not ssid then return end
-
-	return NM.utils_ssid_to_utf8(ssid:get_data())
-end
-
-function M.connect(ap, pass)
-	local ssid = M.getSSID(ap)
-	local profile = NM.SimpleConnection.new()
-
-	local conn = NM.SettingConnection.new()
-	local swlan = NM.SettingWireless.new()
-	profile:add_setting(swlan)
-	profile:add_setting(conn)
-
-	conn['id'] = ssid
-	conn['type'] = '802-11-wireless'
-	swlan['ssid'] = GLib.Bytes(ssid)
-
-	if M.getAPSecurity(ap) ~= '' then
-		local swsec = NM.SettingWirelessSecurity.new()
-		profile:add_setting(swsec)
-
-		-- TODO: wep and open wifi
-		swsec['key-mgmt'] = 'wpa-psk'
-		swsec['auth-alg'] = 'open'
-		swsec['psk'] = pass
+	for k, v in pairs(aps) do
+		require'naughty'.notify {
+			title = tostring(k),
+			text = tostring(v)
+		}
 	end
 
-	nmc:add_and_activate_connection_async(profile, nmc:get_device_by_iface 'wifi', profile:get_path(), nil, function(client, result, data)
-		local con, err, code = nmc:add_and_activate_connection_finish(result)
-		if not con then
-			naughty.notify {
-				title = 'Error while attempting to add connection...',
-				text = tostring(err)
-			}
-			print(code)
-			print(err)
-		end
-	end, nil)
-end
-
-function M.isActiveAP(ap)
-	local ssid = M.getSSID(ap)
-
-	return M.activeAPSSID == ssid
-end
-
-if wifiDevice then
-	local activeAP = wifiDevice:get_active_access_point()
-	if activeAP then
-		M.activeAPSSID = M.getSSID(activeAP)
-	end
+	return aps
 end
 
 return M
