@@ -14,7 +14,7 @@ end)
 
 local function checkPercent(percent)
 	if battery.status() ~= 'Charging' then
-		if percent > 20 and (not lowNotified or not criticalNotified) then
+		if percent < 20 and (not lowNotified or not criticalNotified) then
 			battery.setProfile 'powerSave'
 		end
 
