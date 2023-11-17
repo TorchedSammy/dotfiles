@@ -9,10 +9,12 @@ local helpers = require 'helpers'
 local naughty = require 'naughty'
 local settings = require 'conf.settings'
 local scheduler = require 'modules.scheduler'
+local extrautils = require 'libs.extrautils'()
 
 require 'libs.succulent'
 require 'awful.autofocus'
 require 'awful.hotkeys_popup.keys'
+require 'signals'
 
 -- Check if awesome encountered an error during startup and fell back to
 -- another config (This code will only ever execute for the fallback config)
@@ -190,7 +192,7 @@ client.connect_signal('manage', function(c)
 ]]--
 
     local cairo = require("lgi").cairo
-    local default_icon = beautiful.config_path .. '/images/app-placeholder.png'
+    local default_icon = extrautils.apps.lookup_icon('application-x-executable')
     if c and c.valid and not c.icon then
         local s = gears.surface(default_icon)
         local img = cairo.ImageSurface.create(cairo.Format.ARGB32, s:get_width(), s:get_height())

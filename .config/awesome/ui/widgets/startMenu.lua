@@ -115,7 +115,7 @@ function M.new(opts)
 								{
 									{
 										widget = wibox.widget.imagebox,
-										image = app.icon or beautiful.config_path .. '/images/app-placeholder.png',
+										image = app.icon or extrautils.apps.lookup_icon('application-x-executable'),
 										clip_shape = helpers.rrect(2)
 									},
 									widget = wibox.container.constraint,
