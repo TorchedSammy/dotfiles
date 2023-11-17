@@ -5,11 +5,21 @@ local gears = require 'gears'
 local w = require 'ui.widgets'
 local helpers = require 'helpers'
 local battery = require 'modules.battery'
+local syntax = require 'ui.components.syntax'
 local M = {
 	title = 'Battery',
 }
 
-local bgcolor = beautiful.bg_sec
+local bgcolor = beautiful.bg_popup
+local percentageBar = wibox.widget {
+	widget = wibox.widget.progressbar,
+	forced_height = beautiful.dpi(16),
+	forced_width = beautiful.dpi(420),
+	color = beautiful.accent,
+	background_color = beautiful.xcolor10,
+	shape = gears.shape.rounded_bar,
+	max_value = 100
+}
 
 local function dropDown(default, items)
 	-- items table format:
@@ -35,7 +45,7 @@ local function dropDown(default, items)
 					spacing = beautiful.dpi(12),
 					{
 						widget = wibox.widget.textbox,
-						font = beautiful.font:gsub('%d+$', '14'),
+						font = beautiful.fontName .. ' Medium 14',
 						text = default,
 						valign = 'bottom',
 						id = 'selection'
@@ -110,21 +120,24 @@ local wid = wibox.widget {
 	spacing = beautiful.dpi(6),
 	{
 		layout = wibox.layout.fixed.horizontal,
-		w.icon('battery', {size = beautiful.dpi(128)}),
+		--w.icon('battery', {size = beautiful.dpi(128)}),
 		{
 			layout = wibox.layout.fixed.vertical,
+			spacing = beautiful.dpi(14),
 			{
 				widget = wibox.widget.textbox,
-				font = beautiful.font:gsub('%d+$', '24'),
+				font = beautiful.fontName .. ' Bold 32',
+				id = 'percentage',
+				text = '',
+				valign = 'center'
+			},
+			{
+				widget = wibox.widget.textbox,
+				font = beautiful.fontName .. ' Medium 16',
 				id = 'status',
 				text = ''
 			},
-			{
-				widget = wibox.widget.textbox,
-				font = beautiful.font:gsub('%d+$', '22'),
-				id = 'percentage',
-				text = ''
-			},
+			percentageBar,
 			{
 				widget = wibox.widget.textbox,
 				font = beautiful.font:gsub('%d+$', '18'),
@@ -134,40 +147,53 @@ local wid = wibox.widget {
 		}
 	},
 	{
-		layout = wibox.layout.align.horizontal,
+		layout = wibox.layout.fixed.vertical,
 		{
-			widget = wibox.container.place,
-			valign = 'top',
+			layout = wibox.layout.align.horizontal,
 			{
-				widget = wibox.widget.textbox,
-				font = beautiful.font:gsub('%d+$', '18'),
-				text = 'Power Profile'
-			}
-		},	
-		{
-			widget = wibox.container.place,
-			halign = 'right',
-			dropDown (prettyPowerName[battery.profile()], {
+				widget = wibox.container.place,
+				valign = 'top',
 				{
-					name = 'Power Saving',
-					callback = function()
-						battery.setProfile 'powerSave'
-					end
-				},
-				{
-					name = 'Balanced',
-					callback = function()
-						battery.setProfile 'balanced'
-					end
-				},
-				{
-					name = 'Performance',
-					callback = function()
-						battery.setProfile 'performance'
-					end
+					widget = wibox.widget.textbox,
+					font = beautiful.fontName .. ' Bold 16',
+					text = 'Power Profile'
 				}
-			})
-		}
+			},	
+			{
+				widget = wibox.container.place,
+				halign = 'right',
+				dropDown (prettyPowerName[battery.profile()], {
+					{
+						name = 'Power Saving',
+						callback = function()
+							battery.setProfile 'powerSave'
+						end
+					},
+					{
+						name = 'Balanced',
+						callback = function()
+							battery.setProfile 'balanced'
+						end
+					},
+					{
+						name = 'Performance',
+						callback = function()
+							battery.setProfile 'performance'
+						end
+					}
+				}),
+			},
+		},
+		{
+			widget = wibox.widget.textbox,
+			font = beautiful.fontName .. ' Bold 16',
+			text = 'Battery Graph',
+		},
+		{
+			widget = wibox.widget.textbox,
+			font = beautiful.fontName .. ' Medium 14',
+			text = 'Usage since last full charge',
+		},
 	}
 }
 
@@ -175,20 +201,59 @@ local percentage = wid:get_children_by_id 'percentage'[1]
 local status = wid:get_children_by_id 'status'[1]
 local time = wid:get_children_by_id 'time'[1]
 
+function setStatus(s)
+	if s == 'Discharging' then
+		status.text = 'Not Charging'
+	else
+		status.text = s
+	end
+
+	if s == 'Charging' then
+		helpers.transitionColor {
+			old = percentageBar.color,
+			new = beautiful.xcolor2,
+			transformer = function(col)
+				percentageBar.color = col
+			end,
+			duration = 0.5
+		}
+	elseif s == 'Full' or s == 'Discharging' then
+		helpers.transitionColor {
+			old = percentageBar.color,
+			new = beautiful.accent,
+			transformer = function(col)
+				percentageBar.color = col
+			end,
+			duration = 0.5
+		}
+	end
+end
+
 percentage.text = string.format('%d%%', math.floor(battery.percentage()))
-status.text = battery.status()
+percentageBar.value = math.floor(battery.percentage())
+setStatus(battery.status())
 if battery.status() == 'Full' then
 	time.text = ''
 else
 	time.text = battery.time()
 end
 
-awesome.connect_signal('battery::status', function(s)
-	status.text = s
-end)
+awesome.connect_signal('battery::status', setStatus)
 awesome.connect_signal('battery::percentage', function(percent)
 	percentage.text = string.format('%d%%', math.floor(percent))
+	percentageBar.value = math.floor(battery.percentage())
+	if percent < 20 then
+		helpers.transitionColor {
+			old = percentageBar.color,
+			new = beautiful.xcolor1,
+			transformer = function(col)
+				percentageBar.color = col
+			end,
+			duration = 0.5
+		}
+	end
 end)
+
 awesome.connect_signal('battery::time', function(t)
 	if battery.status() == 'Full' then
 		time.text = ''
