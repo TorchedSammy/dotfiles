@@ -34,17 +34,25 @@ function M.slider(opts)
 	local function setupProgressColor(pos, length)
 		local posFraction = (pos / length)
 		local progressLength = opts.width
-		local progressCur = posFraction * progressLength
 		if progress.muted then
 			progress.color = opts.mutedColor or beautiful.fg_tert
 		else
 			if opts.color and type(opts.color) == 'string' then
 				progress.color = opts.color
-				return
+				goto cont
 			end
 
-			progress.color = string.format('linear:0,0:%s,0:0,%s:%s,%s', math.floor(beautiful.dpi(progressCur)), (opts.color or base.gradientColors)[1], math.floor(beautiful.dpi(progressLength)), (opts.color or base.gradientColors)[2])
+			progress.color = {
+				type  = "linear",
+				from  = {0, 0},
+				to = {100, 0},
+				stops = {
+					{0, (opts.color or base.gradientColors)[1]},
+					{1, (opts.color or base.gradientColors)[2]},
+				}
+			}
 		end
+		::cont::
 		progress._private.value = pos
 	end
 
