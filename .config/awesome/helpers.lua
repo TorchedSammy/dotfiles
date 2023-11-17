@@ -248,23 +248,37 @@ function helpers.slidePlacement(wbx, opts)
 		end)
 	end
 
+ function wbx:on()
+  animator.target = awful.screen.focused().geometry.height - (beautiful.wibar_height + beautiful.useless_gap * beautiful.dpi(2)) - wbx.height
+  wbxOpen = true
+ end
+
+ function wbx:off()
+		animator.target = awful.screen.focused().geometry.height
+		wbxOpen = false
+ end
+
 	function wbx:toggle()
 		if not wbxOpen then
 			doPlacement()
 		end
 
-		if opts.toggler then opts.toggler(wbxOpen) end
+		if opts.toggler then
+   local continue = opts.toggler(wbxOpen)
+   if continue == false then
+     return
+   end
+  end
 
 		if settings.noAnimate then
 			wbx.visible = not wbx.visible
 		else
 			if wbxOpen then
-				animator.target = awful.screen.focused().geometry.height
+				wbx:off()
 			else
-				animator.target = awful.screen.focused().geometry.height - (beautiful.wibar_height + beautiful.useless_gap * beautiful.dpi(2)) - wbx.height
+    wbx:on()
 			end
 		end
-		wbxOpen = not wbxOpen
 	end
 end
 
