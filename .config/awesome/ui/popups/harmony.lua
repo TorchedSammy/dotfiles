@@ -6,6 +6,7 @@ local wibox = require 'wibox'
 local w = require 'ui.widgets'
 local syntax = require 'ui.components.syntax'
 local sfx = require 'modules.sfx'
+local caps = require 'modules.caps'
 
 local volumeDisplay = wibox {
 	width = beautiful.dpi(420),
@@ -16,7 +17,7 @@ local volumeDisplay = wibox {
 }
 
 local displayTimer = gears.timer {
-	timeout = 1.5,
+	timeout = 1,
 	single_shot = true,
 	callback = function()
 		volumeDisplay:off()
@@ -38,47 +39,64 @@ local volPercent = wibox.widget {
 	font = beautiful.fontName .. ' Bold 16'
 }
 
-local popupWidget = wibox.widget {
-	widget = wibox.container.constraint,
-	strategy = 'exact',
-	width = volumeDisplay.width,
-	height = volumeDisplay.height,
-	{	
-		widget = wibox.container.background,
-		bg = beautiful.bg_sec,
-		shape = helpers.rrect(beautiful.radius),
+local capsLabel = wibox.widget {
+	widget = wibox.widget.textbox,
+	text = 'Caps Lock is Off',
+	font = beautiful.fontName .. ' Bold 16'
+}
+
+local function createPopup(icon, layout)
+	local icoWidget = w.icon(icon, {
+		size = beautiful.dpi(32),
+		color = beautiful.xcolor14
+	})
+
+	local popup = wibox.widget {
+		widget = wibox.container.constraint,
+		strategy = 'exact',
+		width = volumeDisplay.width,
+		height = volumeDisplay.height,
 		{
-			layout = wibox.layout.fixed.horizontal,
+			widget = wibox.container.background,
+			bg = beautiful.bg_sec,
+			shape = helpers.rrect(beautiful.radius),
 			{
-				widget = wibox.container.constraint,
-				strategy = 'exact',
-				width = volumeDisplay.height,
-				height = volumeDisplay.height,
+				layout = wibox.layout.fixed.horizontal,
 				{
-					widget = wibox.container.background,
-					bg = beautiful.xcolor9,
-					w.icon('volume', {
-						size = beautiful.dpi(32)
-					})
-				}
-			},
-			{
-				widget = wibox.container.margin,
-				margins = spacing,
+					widget = wibox.container.constraint,
+					strategy = 'exact',
+					width = volumeDisplay.height,
+					height = volumeDisplay.height,
+					{
+						widget = wibox.container.background,
+						bg = beautiful.xcolor9,
+						icoWidget
+					}
+				},
 				{
-					layout = wibox.layout.fixed.horizontal,
-					spacing = spacing,
-					volSlider,
-					volPercent
+					widget = wibox.container.margin,
+					margins = spacing,
+					layout
 				}
 			}
 		}
 	}
-}
+
+	return popup, icoWidget
+end
+
+local volumePopupWid = createPopup('volume', wibox.widget {
+	layout = wibox.layout.fixed.horizontal,
+	spacing = spacing,
+	volSlider,
+	volPercent
+})
+
+local capsPopupWid, capsIcon = createPopup('caps-on', capsLabel)
 
 volumeDisplay:setup {
 	layout = wibox.container.place,
-	popupWidget
+	volumePopupWid
 }
 
 helpers.slidePlacement(volumeDisplay, {
@@ -91,13 +109,34 @@ awesome.connect_signal('syntax::volume', function(volume, muted, init)
 		volPercent.text = string.format('%s%%', volume)
 		return
 	end
+	volumeDisplay:setup {
+		layout = wibox.container.place,
+		volumePopupWid
+	}
 
 	if volumeDisplay.visible then
 		displayTimer:stop()
 	end
-
 	volumeDisplay:on()
+
 	volSlider.value = volume
 	volPercent.text = string.format('%s%%', volume)
+	displayTimer:start()
+end)
+
+awesome.connect_signal('caps::state', function(state)
+	volumeDisplay:setup {
+		layout = wibox.container.place,
+		capsPopupWid
+	}
+
+	if volumeDisplay.visible then
+		displayTimer:stop()
+	end
+	volumeDisplay:on()
+
+	capsIcon.icon = state and 'caps-on' or 'caps-off'
+	capsLabel.text = state and 'Caps Lock is On' or 'Caps Lock is Off'
+
 	displayTimer:start()
 end)
