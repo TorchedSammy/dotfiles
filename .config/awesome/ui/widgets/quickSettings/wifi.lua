@@ -4,6 +4,7 @@ local base = require 'ui.extras.syntax.base'
 local dpi = beautiful.dpi
 local gears = require 'gears'
 local helpers = require 'helpers'
+local lgi = require 'lgi'
 local rubato = require 'libs.rubato'
 local settings = require 'conf.settings'
 local wibox = require 'wibox'
@@ -15,7 +16,20 @@ local util = require 'ui.widgets.quickSettings.util'
 local M = {
 	title = 'Wi-fi',
 	list = wibox.layout.fixed.vertical(),
-	active = nil
+	active = nil,
+	apWidgets = {},
+	lastConnectedSSID = nil
+}
+
+M.layout = wibox.widget {
+	layout = wibox.layout.fixed.vertical,
+	spacing = beautiful.dpi(20) * 2,
+	spacing_widget = {
+		widget = wibox.widget.separator,
+		thickness = beautiful.dpi(4),
+		color = beautiful.bg_sec
+	},
+	M.list
 }
 
 -- @return boolean state of the setting (on or off)
@@ -27,7 +41,27 @@ function M.enabled()
 	return wifi.enabled
 end
 
+local function apStrengthToTier(ap)
+	local strength = ap.Strength
+	if not strength then return 4 end
+
+	local tier = math.floor(strength / 25)
+
+	return tier
+end
+
+local function apStrengthToNumIcon(ap, locked)
+	local tier = apStrengthToTier(ap)
+
+	return locked and 'wifi-ap-locked-' .. tier or 'wifi-ap-' .. tier
+end
+
 local function createAPWidget(ssid, ap)
+	local existingAPWidget = M.apWidgets[ssid]
+	if existingAPWidget and M.lastConnectedSSID ~= ssid then
+		return existingAPWidget
+	end
+
 	local secure = true --wifi.getAPSecurity(ap) ~= ''
 	local connected = wifi.activeSSID == ssid
 	local passwordVisible = false
@@ -164,33 +198,43 @@ local function createAPWidget(ssid, ap)
 		}
 	}
 
+	local apIcon = w.icon(apStrengthToNumIcon(ap, secure), {
+		size = beautiful.dpi(32),
+		--color = beautiful.xcolor14
+	})
+
+	helpers.changedDBusProperty(ap, 'Strength', function(strength)
+		apIcon.icon = apStrengthToNumIcon(ap, secure)
+	end)
+
 	local wid = wibox.widget {
-		layout = wibox.layout.fixed.vertical,
+		widget = wibox.container.constraint,
+		strategy = 'max',
 		{
-			layout = wibox.layout.fixed.horizontal,
-			spacing = spacing,
-			w.icon(secure and 'wifi-ap-locked' or 'wifi-ap', {
-				size = beautiful.dpi(32),
-				--color = beautiful.xcolor14
-			}),
+			layout = wibox.layout.fixed.vertical,
 			{
-				widget = wibox.container.place,
-				valign = 'center',
+				layout = wibox.layout.fixed.horizontal,
+				spacing = spacing,
+				apIcon,
 				{
-					layout = wibox.layout.fixed.vertical,
+					widget = wibox.container.place,
+					valign = 'center',
 					{
-						widget = wibox.widget.textbox,
-						markup = helpers.colorize_text(ssid, connected and beautiful.accent or beautiful.fg_normal),
-						font = string.format('%s %s 12', beautiful.fontName, connected and 'Bold' or 'Medium'),
-					},
-					connected and {
-						widget = wibox.widget.textbox,
-						text = 'Connected',
-					} or nil,
+						layout = wibox.layout.fixed.vertical,
+						{
+							widget = wibox.widget.textbox,
+							markup = helpers.colorize_text(ssid, connected and beautiful.accent or beautiful.fg_normal),
+							font = string.format('%s %s 12', beautiful.fontName, connected and 'Bold' or 'Medium'),
+						},
+						connected and {
+							widget = wibox.widget.textbox,
+							text = 'Connected',
+						} or nil,
+					}
 				}
-			}
-		},
-		not connected and passwordEntry or nil
+			},
+			not connected and passwordEntry or nil
+		}
 	}
 
 	helpers.displayClickable(wid, {color = connected and beautiful.accent or bgcolor})
@@ -228,43 +272,70 @@ function addAP(ap)
 	M.ssidOccurrences[ssid] = M.ssidOccurrences[ssid] + 1
 end
 
-awesome.connect_signal('wifi::ap-added', addAP)
-awesome.connect_signal('wifi::ap-removed', function()
-	M.ssidOccurrences = {}
-	M.ssidList = {}
-	M.list:reset()
-	wifi.getAPs(addAP)
-end)
-
-wifi.getAPs(addAP)
-
 ]]--
-function M.fetch(layout)
-	M.list:reset()
 
+local function revealActiveAP(apWidget)
+	if M.active then return end
+
+	M.active = apWidget
+	M.active.height = 0
+	M.layout:insert(1, M.active)
+
+	local apConnectedRevealer = rubato.timed {
+		duration = 1.5,
+		rate = 60,
+		subscribed = function(h)
+			M.active.height = h
+		end,
+		easing = rubato.quadratic
+	}
+
+	apConnectedRevealer.target = beautiful.dpi(100)
+end
+
+local function removeAP(ap)
+	local ssidRaw = helpers.glibByteToVal(ap.Ssid)
+	local ssid = ssidRaw and tostring(ssidRaw) or 'Unknown'
+
+	M.list:remove_widgets(M.apWidgets[ssid])
+	if not idx then return end
+
+	-- +1 to account for active ssid
+	M.list:remove(idx)
+	M.apWidgets[ssid] = nil
+end
+
+local function addAP(ap)
+	if not ap then ap = wifi.activeAP end
+
+	local ssidRaw = helpers.glibByteToVal(ap.Ssid)
+	local ssid = ssidRaw and tostring(ssidRaw) or 'Unknown'
+	local idx = M.list:index(M.apWidgets[ssid])
+
+	if idx and wifi.activeSSID ~= ssid then return end
+
+	local apWidget = createAPWidget(ssid, ap)
+	if wifi.activeSSID == ssid then
+		removeAP(ap)
+		revealActiveAP(apWidget)
+	else
+		M.list:add(apWidget)
+	end
+	M.apWidgets[ssid] = apWidget
+end
+
+awesome.connect_signal('wifi::ap-added', addAP)
+awesome.connect_signal('wifi::ap-removed', removeAP)
+
+function M.fetch(layout)
 	local aps = wifi.getAccessPoints()
 	for ssid, ap in pairs(aps) do
-		local apWidget = createAPWidget(ssid, ap)
-		if wifi.activeSSID == ssid then
-			M.active = apWidget
-		else
-			M.list:add(apWidget)
-		end
+		addAP(ap)
 	end
 end
 
 function M.display(layout)
-	layout:add(wibox.widget {
-		layout = wibox.layout.fixed.vertical,
-		spacing = beautiful.dpi(20) * 2,
-		spacing_widget = {
-			widget = wibox.widget.separator,
-			thickness = beautiful.dpi(4),
-			color = beautiful.bg_sec
-		},
-		M.active,
-		M.list
-	})
+	layout:add(M.layout)
 end
 
 function M.status()
@@ -281,14 +352,17 @@ end)
 awesome.connect_signal('wifi::disconnected', function()
 	local enabled, textStatus = M.status()
 	util.emitSignal('wifi', 'status', textStatus)
-	M.active.visible = false
-	M.fetch()
+	M.layout:remove(1)
+	M.active = nil
+	addAP()
 end)
 
-awesome.connect_signal('wifi::activeAP', function()
+awesome.connect_signal('wifi::activeAP', function(ssid, ap)
+	M.lastConnectedSSID = ssid
+
 	local enabled, textStatus = M.status()
 	util.emitSignal('wifi', 'status', textStatus)
-	M.fetch()
+	addAP()
 end)
 
 return M
