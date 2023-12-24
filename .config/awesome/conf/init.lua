@@ -49,4 +49,4 @@ shift = 'Shift'
 control = 'Control'
 
 require 'conf.keys'
-
+require 'conf.focus'
