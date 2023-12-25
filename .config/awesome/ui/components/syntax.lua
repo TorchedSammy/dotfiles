@@ -27,7 +27,7 @@ function M.slider(opts)
 		forced_width = progress.forced_width,
 		bar_color = opts.bg or beautiful.bg_sec,
 		bar_shape = progressShape,
-		handle_shape = progressShape,
+		handle_color = '#00000000',
 		id = 'slider'
 	}
 
