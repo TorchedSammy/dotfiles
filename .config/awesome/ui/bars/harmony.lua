@@ -46,9 +46,9 @@ awful.screen.connect_for_each_screen(function(s)
 	local controlsRaw = wibox.widget {
 		layout = wibox.layout.fixed.horizontal,
 		spacing = 5,
-		widgets.icon('battery', {size = beautiful.dpi(15)}),
+		widgets.battery {size = beautiful.dpi(15)},
 		widgets.icon('wifi', {size = beautiful.dpi(15)}),
-		widgets.icon('volume', {size = beautiful.dpi(15)}),
+		widgets.volume {size = beautiful.dpi(15)},
 	}
 	local controls = backgroundBar(controlsRaw)
 	helpers.onLeftClick(controls, quickSettings.toggle)
