@@ -81,7 +81,7 @@ function M.new(opts)
 					widget = wibox.container.margin,
 					right = beautiful.dpi(18),
 					{
-						widget = wibox.widget.background,
+						widget = wibox.container.background,
 						bg = {
 							type  = "linear",
 							from  = {M.width, 0},
@@ -126,7 +126,10 @@ function M.new(opts)
 			end
 
 
-		for app in pairsByKeys(allApps, function(a, b) print(a, b); return string.lower(a.name) < string.lower(b.name) end) do
+		for app in pairsByKeys(allApps, function(a, b)
+			--print(a, b);
+			return string.lower(a.name) < string.lower(b.name)
+		end) do
 			local name = app.name
 			if collision[name] or not app.show then
 				goto continue
@@ -152,7 +155,7 @@ function M.new(opts)
 								{
 									{
 										widget = wibox.widget.imagebox,
-										image = app.icon or extrautils.apps.lookup_icon('application-x-executable'),
+										image = gears.surface.load_uncached_silently(app.icon, extrautils.apps.lookup_icon('application-x-executable')),
 										clip_shape = helpers.rrect(2)
 									},
 									widget = wibox.container.constraint,

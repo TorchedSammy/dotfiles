@@ -92,7 +92,7 @@ end)
 
 ]]--
 playerctl:connect_signal('playback_status', function(_, playing, player)
-	if player ~= activePlayer then
+	if activePlayer and player ~= activePlayer then
 		dispatchMetadata(player)
 	end
 	activePlayer = nil
@@ -122,10 +122,11 @@ playerctl:connect_signal('exit', function(_, player)
 end)
 
 playerctl:connect_signal('no_players', function()
-	naughty.notify {
+	--[[naughty.notify {
 		title = 'Party\'s Over!',
 		text = 'No more music playing.'
 	}
+	]]--
 	widgets.music_name:set_markup_silently 'Nothing Playing'
 end)
 

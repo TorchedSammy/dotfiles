@@ -225,7 +225,7 @@ local function createAPWidget(ssid, ap)
 	}
 
 	local connectWidget = wibox.widget {
-		widget = wibox.widget.background,
+		widget = wibox.container.background,
 		bg = beautiful.xcolor9,
 		shape = helpers.rrect(beautiful.radius),
 		{
