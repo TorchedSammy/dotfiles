@@ -76,14 +76,27 @@ local function createAPWidget(ssid, ap)
 	}
 	helpers.hoverCursor(password.widget, 'xterm')
 
-	local connectBtn = w.button('wifi', {
+	local connectBtn = w.button('', {
 		text = 'Connect',
-		bg = beautiful.xcolor14,
-		shiftFactor = 25,
+		bg = beautiful.xcolor11,
+		font = beautiful.fontName .. ' Medium 14',
+		shiftFactor = -25,
 		onClick = function()
 			wifi.connect(ap, password:get_text())
 		end,
 		margin = beautiful.dpi(4),
+		height = beautiful.dpi(32)
+	})
+	local connectCancelBtn = w.button('', {
+		text = 'Cancel',
+		bg = beautiful.xcolor11,
+		font = beautiful.fontName .. ' Medium 14',
+		shiftFactor = -25,
+		onClick = function()
+			wifi.connect(ap, password:get_text())
+		end,
+		margin = beautiful.dpi(4),
+		height = beautiful.dpi(32)
 	})
 
 	local spacing = beautiful.dpi(10)
@@ -217,7 +230,7 @@ local function createAPWidget(ssid, ap)
 		{
 			widget = wibox.widget.textbox,
 			markup = 'Auto Connect',
-			valign = 'top',
+			valign = 'center',
 			font = beautiful.fontName .. ' Medium 14',
 		},
 		nil,
@@ -225,6 +238,8 @@ local function createAPWidget(ssid, ap)
 	}
 
 	local connectWidget = wibox.widget {
+		id = 'wifi-control',
+		visible = false,
 		widget = wibox.container.background,
 		bg = beautiful.xcolor9,
 		shape = helpers.rrect(beautiful.radius),
@@ -240,7 +255,7 @@ local function createAPWidget(ssid, ap)
 					layout = wibox.layout.flex.horizontal,
 					spacing = beautiful.dpi(16),
 					connectBtn,
-					connectBtn,
+					connectCancelBtn,
 				}
 			}
 		}
@@ -255,46 +270,47 @@ local function createAPWidget(ssid, ap)
 		apIcon.icon = apStrengthToNumIcon(ap, secure)
 	end)
 
+	local apTitle = wibox.widget {
+		layout = wibox.layout.fixed.horizontal,
+		spacing = spacing,
+		apIcon,
+		{
+			widget = wibox.container.place,
+			valign = 'center',
+			{
+				layout = wibox.layout.fixed.vertical,
+				{
+					widget = wibox.widget.textbox,
+					markup = helpers.colorize_text(ssid, connected and beautiful.accent or beautiful.fg_normal),
+					font = string.format('%s %s 12', beautiful.fontName, connected and 'Bold' or 'Medium'),
+				},
+				connected and {
+					widget = wibox.widget.textbox,
+					text = 'Connected',
+				} or nil,
+			}
+		}
+	}
+	apTitle.buttons = {
+		awful.button({}, 1, function()
+			password:unfocus()
+			connectWidget.visible = not connectWidget.visible
+			--wid:emit_signal 'hover::disconnect'
+			--wid:emit_signal 'dc::disconnect'
+		end)
+	}
+
 	local wid = wibox.widget {
 		widget = wibox.container.constraint,
 		strategy = 'max',
 		{
 			layout = wibox.layout.fixed.vertical,
 			spacing = beautiful.dpi(8),
-			{
-				layout = wibox.layout.fixed.horizontal,
-				spacing = spacing,
-				apIcon,
-				{
-					widget = wibox.container.place,
-					valign = 'center',
-					{
-						layout = wibox.layout.fixed.vertical,
-						{
-							widget = wibox.widget.textbox,
-							markup = helpers.colorize_text(ssid, connected and beautiful.accent or beautiful.fg_normal),
-							font = string.format('%s %s 12', beautiful.fontName, connected and 'Bold' or 'Medium'),
-						},
-						connected and {
-							widget = wibox.widget.textbox,
-							text = 'Connected',
-						} or nil,
-					}
-				}
-			},
+			apTitle,
 			not connected and connectWidget or nil,
 		}
 	}
-
 	helpers.displayClickable(wid, {color = connected and beautiful.accent or bgcolor})
-	--[[wid.buttons = {
-		awful.button({}, 1, function()
-			password:unfocus()
-			wid:get_children_by_id 'wifi-control'[1].visible = true
-			wid:emit_signal 'hover::disconnect'
-			wid:emit_signal 'dc::disconnect'
-		end)
-	}]]--
 
 	return wid
 end
