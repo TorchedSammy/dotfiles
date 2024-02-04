@@ -201,7 +201,20 @@ local percentage = wid:get_children_by_id 'percentage'[1]
 local status = wid:get_children_by_id 'status'[1]
 local time = wid:get_children_by_id 'time'[1]
 
-function setStatus(s)
+local function checkLowColor()
+	if battery.percentage() < 20 and battery.status() ~= 'Charging' then
+		helpers.transitionColor {
+			old = percentageBar.color,
+			new = beautiful.xcolor1,
+			transformer = function(col)
+				percentageBar.color = col
+			end,
+			duration = 0.5
+		}
+	end
+end
+
+local function setStatus(s)
 	if s == 'Discharging' then
 		status.text = 'Not Charging'
 	else
@@ -217,7 +230,16 @@ function setStatus(s)
 			end,
 			duration = 0.5
 		}
-	elseif s == 'Full' or s == 'Discharging' then
+	elseif s == 'Full' then
+		helpers.transitionColor {
+			old = percentageBar.color,
+			new = beautiful.xcolor4,
+			transformer = function(col)
+				percentageBar.color = col
+			end,
+			duration = 0.5
+		}
+	elseif battery.percentage() > 20 then
 		helpers.transitionColor {
 			old = percentageBar.color,
 			new = beautiful.accent,
@@ -226,6 +248,8 @@ function setStatus(s)
 			end,
 			duration = 0.5
 		}
+	else
+		checkLowColor()
 	end
 end
 
@@ -242,20 +266,11 @@ awesome.connect_signal('battery::status', setStatus)
 awesome.connect_signal('battery::percentage', function(percent)
 	percentage.text = string.format('%d%%', math.floor(percent))
 	percentageBar.value = math.floor(battery.percentage())
-	if percent < 20 then
-		helpers.transitionColor {
-			old = percentageBar.color,
-			new = beautiful.xcolor1,
-			transformer = function(col)
-				percentageBar.color = col
-			end,
-			duration = 0.5
-		}
-	end
+	checkLowColor()
 end)
 
-awesome.connect_signal('battery::time', function(t)
-	if battery.status() == 'Full' then
+awesome.connect_signal('battery::time', function(t, timeNum)
+	if timeNum == 0 or battery.status() == 'Full' then
 		time.text = ''
 		return
 	end

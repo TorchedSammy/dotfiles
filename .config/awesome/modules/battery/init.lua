@@ -19,8 +19,8 @@ local function formatTime(t)
 	local secs =  math.floor(t - hours*3600 - mins *60)
 
 	local entries = {}
-	if hours > 0 then table.insert(entries, string.format('%d hours', hours)) end
-	if mins > 0 then table.insert(entries, string.format('%d minutes', mins)) end
+	if hours > 0 then table.insert(entries, string.format('%d hour%s', hours, hours > 2 and 's' or '')) end
+	if mins > 0 then table.insert(entries, string.format('%d minute%s', mins, mins > 2 and 's' or '')) end
 	--if secs > 0 then table.insert(entries, string.format('%d seconds', secs)) end
 
 	return table.concat(entries, ', ')
@@ -36,6 +36,9 @@ local function updateStats()
 	else
 		time = formatTime(battery.time_to_empty) .. ' until empty'
 	end
+	if percentage == 100 then
+		state = 'Full'
+	end
 
 	if state ~= oldStates.status then
 		awesome.emit_signal('battery::status', state)
@@ -46,7 +49,7 @@ local function updateStats()
 		awesome.emit_signal('battery::percentage', percentage)
 	end
 	if time ~= oldStates.time then
-		awesome.emit_signal('battery::time', time)
+		awesome.emit_signal('battery::time', time, state == 'Charging' and battery.time_to_full or battery.time_to_empty)
 	end
 
 	oldStates.percentage = percentage
@@ -57,6 +60,8 @@ updateStats()
 battery.on_notify = updateStats
 
 function M.status()
+	if M.percentage() == 100 then return 'Full' end
+
 	return statusNames[battery.state]
 end
 
