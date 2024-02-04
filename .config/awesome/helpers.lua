@@ -293,9 +293,60 @@ function helpers.transitionColor(opts)
    opts.transformer(tostring(old:mix(new, perc / 100)))
 		end,
 		pos = 0,
-		easing = opts.easing or rubato.quadratic
+		easing = opts.easing or rubato.quadratic,
+		clamp_position = true
 	}
 	animator.target = 100
 end
 
+function helpers.changedDBusProperty(proxy, property, callback)
+ proxy:on_properties_changed(function(_, changed)
+  if changed[property] ~= nil then
+   callback(changed[property])
+  end
+ end)
+end
+
+function helpers.glibByteToVal(b)
+ if not b then return end
+
+	return lgi.GLib.Bytes(b):get_data()
+end
+
+function helpers.aaWibox(opts)
+ local bg = opts.bg
+
+ opts.bg = '#00000000'
+ if opts.rrectRadius then
+  opts.bg = bg
+  opts.shape = helpers.rrect(opts.rrectRadius / 1.5)
+ end
+
+ local wbx = wibox(opts)
+
+ local oldSetup = wbx.setup
+ function wbx:setup(wid)
+  local setupWidget = wibox.widget {
+   widget = wibox.container.background,
+   bg = bg,
+   shape = helpers.rrect(opts.rrectRadius),
+   forced_height = wbx.height,
+   forced_width = wbx.width,
+   wid
+  }
+  oldSetup(wbx, {
+   layout = wibox.container.place,
+   setupWidget
+  })
+
+--[[
+  local function redraw()
+   setupWidget:emit_signal 'widget::redraw_needed'
+  end
+  awesome.connect_signal('compositor::off', redraw)
+  awesome.connect_signal('compositor::on', redraw)
+ ]]--
+ end
+ return wbx
+end
 return helpers
