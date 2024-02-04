@@ -54,7 +54,7 @@ awful.screen.connect_for_each_screen(function(s)
 
 	local margin = beautiful.useless_gap
 
-	local mul = 1-- beautiful.dpi(2)
+	local mul = beautiful.dpi(1)
 	s.padding = {
 		top = margin * mul,
 		left = margin * mul, right = margin * mul,
@@ -69,70 +69,73 @@ awful.screen.connect_for_each_screen(function(s)
 	awful.tag(taglist, s, layouts)
 end)
 
+local placer = awful.placement.no_overlap+awful.placement.no_offscreen
+
 ruled.client.connect_signal("request::rules", function()
-    -- @DOC_GLOBAL_RULE@
-    -- All clients will match this rule.
-    ruled.client.append_rule {
-        id         = "global",
-        rule       = { },
-        properties = {
-            focus     = awful.client.focus.filter,
-            raise     = true,
-            screen    = awful.screen.preferred,
-            placement = awful.placement.no_overlap+awful.placement.no_offscreen,
+	-- @DOC_GLOBAL_RULE@
+	-- All clients will match this rule.
+	ruled.client.append_rule {
+		id         = "global",
+		rule       = { },
+		properties = {
+			focus     = awful.client.focus.filter,
+			raise     = true,
+			screen    = awful.screen.preferred,
+			placement = function(c) placer(c, {honor_workarea = true, honor_padding = true}) end,
+			--placement = awful.placement.no_overlap+awful.placement.no_offscreen,
 			keys = clientkeys,
 			buttons = clientbuttons,
-        }
-    }
+		}
+	}
 
-    -- @DOC_FLOATING_RULE@
-    -- Floating clients.
-    ruled.client.append_rule {
-        id       = "floating",
-        rule_any = {
-            instance = { "copyq", "pinentry" },
-            class    = {
-                "Arandr", "Blueman-manager", "Gpick", "Kruler", "Sxiv",
-                "Tor Browser", "Wpa_gui", "veromix", "xtightvncviewer"
-            },
-            -- Note that the name property shown in xprop might be set slightly after creation of the client
-            -- and the name shown there might not match defined rules here.
-            name    = {
-                "Event Tester",  -- xev.
-            },
-            role    = {
-                "AlarmWindow",    -- Thunderbird's calendar.
-                "ConfigManager",  -- Thunderbird's about:config.
-                "pop-up",         -- e.g. Google Chrome's (detached) Developer Tools.
-            }
-        },
-        properties = { floating = true }
-    }
+	-- @DOC_FLOATING_RULE@
+	-- Floating clients.
+	ruled.client.append_rule {
+		id       = "floating",
+		rule_any = {
+			instance = { "copyq", "pinentry" },
+			class    = {
+				"Arandr", "Blueman-manager", "Gpick", "Kruler", "Sxiv",
+				"Tor Browser", "Wpa_gui", "veromix", "xtightvncviewer"
+			},
+			-- Note that the name property shown in xprop might be set slightly after creation of the client
+			-- and the name shown there might not match defined rules here.
+			name    = {
+				"Event Tester",  -- xev.
+			},
+			role    = {
+				"AlarmWindow",    -- Thunderbird's calendar.
+				"ConfigManager",  -- Thunderbird's about:config.
+				"pop-up",         -- e.g. Google Chrome's (detached) Developer Tools.
+			}
+		},
+		properties = { floating = true }
+	}
 
-    -- @DOC_DIALOG_RULE@
-    -- Add titlebars to normal clients and dialogs
-    ruled.client.append_rule {
-        -- @DOC_CSD_TITLEBARS@
-        id         = "titlebars",
-        rule_any   = { type = { "normal", "dialog" } },
-        properties = { titlebars_enabled = true      }
-    }
+	-- @DOC_DIALOG_RULE@
+	-- Add titlebars to normal clients and dialogs
+	ruled.client.append_rule {
+		-- @DOC_CSD_TITLEBARS@
+		id         = "titlebars",
+		rule_any   = { type = { "normal", "dialog" } },
+		properties = { titlebars_enabled = true      }
+	}
 
 	ruled.client.append_rule {
-        id       = "notitlebar",
-        rule_any = {
-            class    = {
-               "osu!.exe"
-            },
-        },
-        properties = { titlebars_enabled = false }
-    }
+		id       = "notitlebar",
+		rule_any = {
+			class    = {
+			   "osu!.exe"
+			},
+		},
+		properties = { titlebars_enabled = false }
+	}
 
-    -- Set Firefox to always map on the tag named "2" on screen 1.
-    -- ruled.client.append_rule {
-    --     rule       = { class = "Firefox"     },
-    --     properties = { screen = 1, tag = "2" }
-    -- }
+	-- Set Firefox to always map on the tag named "2" on screen 1.
+	-- ruled.client.append_rule {
+	--     rule       = { class = "Firefox"     },
+	--     properties = { screen = 1, tag = "2" }
+	-- }
 end)
 
 
@@ -146,7 +149,9 @@ client.connect_signal('manage', function(c)
 		helpers.winmaxer(c)
 	end
 
-	awful.placement.centered(c, {parent = c.transient_for or c.screen or awful.screen.focused()})
+	if not c.maximized and not c.fullscreen then
+		awful.placement.centered(c, {parent = c.transient_for or c.screen or awful.screen.focused()})
+	end
 
 	if c.sticky then
 		c.floating = true
@@ -162,16 +167,16 @@ client.connect_signal('manage', function(c)
 	end
 ]]--
 
-    local cairo = require("lgi").cairo
-    local default_icon = extrautils.apps.lookup_icon('application-x-executable')
-    if c and c.valid and not c.icon then
-        local s = gears.surface(default_icon)
-        local img = cairo.ImageSurface.create(cairo.Format.ARGB32, s:get_width(), s:get_height())
-        local cr = cairo.Context(img)
-        cr:set_source_surface(s, 0, 0)
-        cr:paint()
-        c.icon = img._native
-    end
+	local cairo = require("lgi").cairo
+	local default_icon = extrautils.apps.lookup_icon('application-x-executable')
+	if c and c.valid and not c.icon then
+		local s = gears.surface(default_icon)
+		local img = cairo.ImageSurface.create(cairo.Format.ARGB32, s:get_width(), s:get_height())
+		local cr = cairo.Context(img)
+		cr:set_source_surface(s, 0, 0)
+		cr:paint()
+		c.icon = img._native
+	end
 end)
 
 if beautiful.double_borders then require 'ui.extras.double-borders' end
