@@ -66,7 +66,7 @@ local contentLabel = harmony.titlebar('Content', {
 
 local quickSettingsTitle, qstHeight = harmony.titlebar 'Quick Settings'
 local quickSettings = helpers.aaWibox {
-	height = dpi(518) + qstHeight,
+	height = dpi(500) + qstHeight,
 	width = dpi(460),
 	bg = bgcolor,
 	rrectRadius = beautiful.radius,
@@ -92,7 +92,7 @@ local function createToggle(type)
 
 	local on, textStatus = control.status()
 	local icon = w.icon(control.enabled() and type or type .. '-off', {size = btnSize, color = on and toggleFgColor or toggleFgColorOff})
-	local rightIcon = w.icon('arrow-right', {size = btnSize, color = on and toggleFgColor or toggleFgColorOff})
+	local rightIcon = w.icon('arrow-right', {size = btnSize / 1.5, color = on and toggleFgColor or toggleFgColorOff})
 
 	local status = wibox.widget {
 		widget = wibox.widget.textbox,
@@ -117,13 +117,17 @@ local function createToggle(type)
 					widget = wibox.container.margin,
 					left = toggleMargin, right = toggleMargin,
 					{
-						layout = wibox.layout.align.horizontal,
-						spacing = beautiful.dpi(24),
-						{
-							widget = wibox.container.place
-						},
-						icon,
-						control.display and rightIcon or nil
+							layout = wibox.layout.stack,
+							--spacing = beautiful.dpi(24),
+							{
+								widget = wibox.container.place,
+								icon,
+							},
+							{
+								widget = wibox.container.place,
+								halign = 'right',
+								control.display and rightIcon or nil
+							},
 					}
 				}
 			}
