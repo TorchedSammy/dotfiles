@@ -89,40 +89,50 @@ function widgets.button(icon, opts)
 
 	local focused = false
 	local ico = wibox.widget {
-		id = 'bg',
-		widget = wibox.container.background,
-		color = opts.bgcolor or opts.bg,
-		shape = opts.shape or (opts.text and helpers.rrect(6) or gears.shape.circle),
+		layout = wibox.container.constraint,
+		height = opts.height,
+		strategy = 'exact',
 		{
-			widget = wibox.container.margin,
-			margins = beautiful.dpi(2),
+			id = 'bg',
+			widget = wibox.container.background,
+			bg = opts.bgcolor or opts.bg,
+			shape = opts.shape or (opts.text and helpers.rrect(6) or gears.shape.circle),
 			{
-				layout = wibox.container.place,
-				valign = 'center',
-				--halign = 'center',
-				--align = 'center',
+				widget = wibox.container.margin,
+				margins = opts.margin or beautiful.dpi(2),
 				{
-					layout = wibox.layout.fixed.horizontal,
-					spacing = beautiful.dpi(4),
+					layout = wibox.container.place,
+					halign = 'center',
 					{
-						widget = wibox.container.constraint,
-						width = opts.size and opts.size + 2 or beautiful.dpi(18),
+						layout = wibox.layout.fixed.horizontal,
+						spacing = beautiful.dpi(4),
+						(icon ~= '' and icon ~= nil) and {
+							layout = wibox.container.place,
+							valign = 'center',
+							halign = 'center',
+							align = 'center',
+							{
+								widget = wibox.container.constraint,
+								width = opts.size and opts.size + 2 or beautiful.dpi(18),
+								{
+									widget = wibox.widget.imagebox,
+									image = beautiful.config_path .. '/images/icons/' .. icon.. '.svg',
+									stylesheet = string.format([[
+										* {
+											fill: %s;
+										}
+									]], opts.color or beautiful.fg_normal),
+									id = 'icon'
+								},
+							},
+						} or nil,
 						{
-							widget = wibox.widget.imagebox,
-							image = beautiful.config_path .. '/images/icons/' .. icon .. '.svg',
-							stylesheet = string.format([[
-								* {
-									fill: %s;
-								}
-							]], opts.color or beautiful.fg_normal),
-							id = 'icon'
-						},
-					},
-					{
-						widget = wibox.widget.textbox,
-						markup = helpers.colorize_text(opts.text or '', opts.color or beautiful.fg_normal),
-						font = beautiful.font:gsub('%d+$', opts.fontSize or 14),
-						id = 'textbox'
+							widget = wibox.widget.textbox,
+							markup = helpers.colorize_text(opts.text or '', opts.color or beautiful.fg_normal),
+							font = opts.font or beautiful.font:gsub('%d+$', opts.fontSize or 14),
+							id = 'textbox',
+							valign = 'center'
+						}
 					}
 				}
 			}
