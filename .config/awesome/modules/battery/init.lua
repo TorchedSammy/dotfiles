@@ -1,4 +1,5 @@
 local upower = require 'lgi'.UPowerGlib
+local settings = require 'conf.settings'
 
 local M = {}
 
