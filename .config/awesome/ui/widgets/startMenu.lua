@@ -10,6 +10,7 @@ local syntax = require 'ui.components.syntax'
 local w = require 'ui.widgets'
 local wibox = require 'wibox'
 local extrautils = require 'libs.extrautils'()
+local inputbox = require 'ui.widgets.inputbox'
 
 local lgi = require 'lgi'
 local Gio = lgi.Gio
@@ -20,6 +21,14 @@ local M = {
 }
 local appList = wibox.widget {
 	layout = wibox.layout.overflow.vertical()
+}
+
+local searchInput = inputbox {
+	password_mode = false,
+	mouse_focus = true,
+	fg = beautiful.xcolor14,
+	text_hint = 'Search...',
+	font = beautiful.fontName .. ' Bold 12'
 }
 
 function M.new(opts)
@@ -37,7 +46,7 @@ function M.new(opts)
 	local collision = {}
 	function setupAppList()
 		appList:reset()
-		--appList.spacing = beautiful.dpi(2)
+		appList.spacing = beautiful.dpi(1)
 		appList.step = beautiful.dpi(100)
 		appList.scrollbar_widget = {
 			widget = wibox.widget.separator,
@@ -54,21 +63,49 @@ function M.new(opts)
 	end)
 
 	local wid = {
-		widget = wibox.container.background,
-		bg = bgcolor,
-		forced_width = M.width,
-		shape = opts.shape,
+		widget = wibox.container.margin,
+		--margins = beautiful.dpi(5),
+		layout = wibox.layout.align.vertical,
+		harmony.titlebar 'Apps',
 		{
 			widget = wibox.container.margin,
-			--margins = beautiful.dpi(5),
-			layout = wibox.layout.align.vertical,
-			harmony.titlebar 'Apps',
+			margins = beautiful.dpi(16),
 			{
-				widget = wibox.container.margin,
-				margins = beautiful.dpi(16),
-				appList
+				layout = wibox.layout.stack,
+				{
+					widget = wibox.container.margin,
+					bottom = beautiful.dpi(32),
+					appList,
+				},--
+				{
+					widget = wibox.container.margin,
+					right = beautiful.dpi(18),
+					{
+						widget = wibox.widget.background,
+						bg = {
+							type  = "linear",
+							from  = {M.width, 0},
+							to = {M.width, M.height - beautiful.dpi(16) - beautiful.titlebar_height},
+							stops = {
+								{0, beautiful.bg_popup .. '00'},
+								{0.8, beautiful.bg_popup .. '00'},
+								{0.88, beautiful.bg_popup .. 'cc'},
+								{0.9, beautiful.bg_popup},
+							}
+						},
+					},
+				},
+				{
+					widget = wibox.container.margin,
+					bottom = beautiful.dpi(8),
+					{
+						layout = wibox.container.place,
+						valign = 'bottom',
+						searchInput.widget,
+					}
+				}
 			},
-		}
+		},
 	}
 
 	function wid:fetchApps()
@@ -152,8 +189,8 @@ function M.new(opts)
 			}
 			appWid.buttons = {
 				awful.button({}, 1, function()
+					opts.menu:off()
 					app.launch()
-					opts.menu:toggle()
 				end)
 			}
 			helpers.displayClickable(appWid, {bg = bgcolor})
@@ -178,18 +215,22 @@ end
 function M.bindMethods(startMenu)
 	helpers.slidePlacement(startMenu, {
 		placement = 'bottom_left',
-		toggler = function() appList.scroll_factor = 0 end
+		toggler = function()
+			appList.scroll_factor = 0
+			searchInput:unfocus()
+		end
 	})
 end
 
 function M.create(opts)
 	opts = opts or {}
+	local bgcolor = opts.bg or beautiful.bg_popup
 
-	local startMenu = wibox {
+	local startMenu = helpers.aaWibox {
 		height = beautiful.dpi(580),
 		width = beautiful.dpi(460),
-		bg = '#00000000',
-		shape = gears.shape.rectangle,
+		bg = bgcolor,
+		rrectRadius = beautiful.radius,
 		ontop = true,
 		visible = false
 	}
