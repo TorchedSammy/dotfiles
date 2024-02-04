@@ -22,6 +22,10 @@ local centers = {
 	bluetooth = require 'ui.widgets.quickSettings.bluetooth',
 }
 
+-- stop quick settings from scrolling
+local overflow = wibox.layout.overflow.horizontal()
+function overflow:scroll() end
+
 local toggleLayout
 local controlLayout
 local contentLayout
