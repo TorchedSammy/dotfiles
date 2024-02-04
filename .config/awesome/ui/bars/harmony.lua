@@ -184,16 +184,16 @@ awful.screen.connect_for_each_screen(function(s)
 					-- TODO: next sort by color value?
 
 					local gradientColor = albumColors[1]
-					local shuffleColor = albumColors[1]
 					if #albumColorsValue > 4 then
 						gradientColor = albumColorsValue[1]
 					end
-					--[[
-					require 'naughty'.notify {
-						title = 'hi!',
-						text = string.format('gradient color is %s, ones with value are %s', gradientColor, tostring(#albumColorsValue))
-					}
-					]]--
+					local shuffleColor
+					if #albumColorsValue > 2 then
+						local albmClrValHue, albmClrSat, albmClrLum = albumColorsLight[1]:hsla()
+						shuffleColor = Color {h = albmClrValHue, s = albmClrSat, v = (albmClrLum - 1) * -1}
+					else
+						shuffleColor = beautiful.accent
+					end
 
 					local titlebarBg = titlebar:get_children_by_id'bg'[1]
 					local animator = rubato.timed {
@@ -208,7 +208,7 @@ awful.screen.connect_for_each_screen(function(s)
 							mw.setColors {
 								--shuffle = tostring(oldMusicColors.shuffle:mix(shuffleColor, perc / 100))
 								--shuffle = helpers.invertColor(tostring(shuffleColor), true)
-								shuffle = albumColorsLight[1]
+								shuffle = shuffleColor
 							}
 
 							if perc == 100 then
@@ -297,7 +297,6 @@ awful.screen.connect_for_each_screen(function(s)
 
 	local sm = require 'ui.widgets.startMenu'
 	local startMenu = sm.create {
-		bg = beautiful.bg_normal,
 	--	shape = function(crr, w, h) return gears.shape.partially_rounded_rect(crr, w, h, false, false, true, true, base.radius) end
 	}
 	sm.bindMethods(startMenu)
