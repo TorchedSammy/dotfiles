@@ -70,7 +70,7 @@ function inputbox.draw_text(self)
     cr:rectangle(
       cursor.x / Pango.SCALE,
       cursor.y / Pango.SCALE,
-      2,
+      1,
       cursor.height / Pango.SCALE)
     cr:fill()
   end
@@ -86,7 +86,7 @@ function inputbox:start_keygrabber()
     mask_event_callback = false,
     start_callback = function(_, mod, key)
       self._private.cursor_timer = gtimer {
-        timeout = 1,
+        timeout = self.cursor_blink_time,
         autostart = true,
         callback = function()
           self._private.show_cursor = not self._private.show_cursor
@@ -98,11 +98,18 @@ function inputbox:start_keygrabber()
     stop_callback = function(_, mod, key)
       self._private.cursor_timer:stop()
       self._private.show_cursor = false
-      self._private.cursor_timer = nil
+      --self._private.cursor_timer = nil
       self:draw_text()
       self:emit_signal('inputbox::stop', mod, key)
     end,
     keybindings = {
+      akey { -- Delete highlight or left to cursor
+        modifiers = {},
+        key = 'Escape',
+        on_press = function()
+          self:unfocus()
+        end,
+      },
       akey { -- Delete highlight or left to cursor
         modifiers = {},
         key = 'BackSpace',
@@ -283,8 +290,8 @@ function inputbox:start_keygrabber()
       },
     },
     keypressed_callback = function(_, mod, key)
+      self._private.show_cursor = self._private.cursor_timer.started
       self._private.cursor_timer:stop()
-      self._private.show_cursor = true
       local text = self:get_text()
       local cursor_pos = self:get_cursor_index()
       if (mod[1] == 'Mod2' or '') and (key:wlen() == 1) and (not (mod[1] == 'Control')) then
@@ -499,6 +506,7 @@ function inputbox.new(args)
   ret._private.layout:set_font_description(Pango.FontDescription.from_string(args.font or 'JetBrainsMono Nerd Font 16'))
 
   ret.password_mode = args.password_mode or false
+  ret.cursor_blink_time = args.cursor_blink_time or 0.5
   ret.password_char = args.password_char or '*' --'•'
   ret._private.text_hint = args.text_hint or ''
   ret._private.cursor_pos = {
@@ -519,6 +527,7 @@ function inputbox.new(args)
   if args.mouse_focus then
     ret.widget:connect_signal('button::press', function(_, x, y, button)
       if button == 1 then
+        ret._private.show_cursor = true
         ret:set_cursor_pos_from_mouse(x, y)
         ret:start_mousegrabber(x, y)
         ret:start_keygrabber()
