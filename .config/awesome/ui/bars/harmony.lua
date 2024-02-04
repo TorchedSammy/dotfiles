@@ -123,9 +123,9 @@ awful.screen.connect_for_each_screen(function(s)
 			}
 	end
 	local gradient = wibox.widget {
-			widget = wibox.container.background,
-			bg = makeGradient(beautiful.bg_sec, beautiful.bg_sec)
-		}
+		widget = wibox.container.background,
+		bg = makeGradient(beautiful.bg_sec, beautiful.bg_sec)
+	}
 
 	local oldMusicColors = {
 		gradient = Color(beautiful.bg_sec),
@@ -149,19 +149,16 @@ awful.screen.connect_for_each_screen(function(s)
 				local enumAmount = out:match 'ImageMagick pixel enumeration: (%d),'
 				if enumAmount then expectedColors = tonumber(enumAmount) end
 
-				local idx = tonumber(out:match '^%d') + 1
+				local idx = tonumber(out:match '^%d')
+				if not idx then return end
+				idx = idx + 1
+
 				albumColors[idx] = Color(out:match '#%x%x%x%x%x%x')
 
 				if idx == expectedColors then
 					local albumColorsValue = table.filter(albumColors, function(t)
 						-- only for the background gradient: attempt to avoid black/white if others are available
 						local _, s, v = t:hsv()
-						--[[
-						require 'naughty'.notify {
-							title = 'filter',
-							text = string.format('umm saturation is %s, value is %s and color is %s', tostring(s * 100), tostring(v * 100), t)
-						}
-						]]--
 						if (v * 100) < 15 or (s * 100) < 15 then
 							print(string.format('goodbye to the color that is %s', t))
 							return false
@@ -200,7 +197,7 @@ awful.screen.connect_for_each_screen(function(s)
 
 					local titlebarBg = titlebar:get_children_by_id'bg'[1]
 					local animator = rubato.timed {
-						duration = 2,
+						duration = 3,
 						rate = 60,
 						override_dt = false,
 						subscribed = function(perc)
@@ -225,7 +222,21 @@ awful.screen.connect_for_each_screen(function(s)
 							easing = function(t) return t*t end -- f(x) = x^2, I just use t for "time"
 						}
 					}
-					animator.target = 100
+					if musicDisplay.displayed then
+						animator.target = 100
+					else
+						local gradientColorHue = gradientColor:hsv()
+						titlebarBg.bg = tostring(Color {h = gradientColorHue, s = titlebarColorSat, v = titlebarColorVal})
+						gradient.bg = makeGradient(tostring(gradientColor), beautiful.bg_sec)
+						mw.setColors {
+							--shuffle = tostring(oldMusicColors.shuffle:mix(shuffleColor, perc / 100))
+							--shuffle = helpers.invertColor(tostring(shuffleColor), true)
+							shuffle = shuffleColor
+						}
+
+						oldMusicColors.gradient = gradientColor
+						oldMusicColors.shuffle = albumColors[3]
+					end
 
 					-- {{
 					-- for now, this part is a bit meh and actually causes
