@@ -20,6 +20,7 @@ local M = {
 	apWidgets = {},
 	lastConnectedSSID = nil
 }
+M.list.spacing = beautiful.dpi(16)
 
 M.layout = wibox.widget {
 	layout = wibox.layout.fixed.vertical,
@@ -58,30 +59,31 @@ end
 
 local function createAPWidget(ssid, ap)
 	local existingAPWidget = M.apWidgets[ssid]
-	if existingAPWidget and M.lastConnectedSSID ~= ssid then
+	local connected = wifi.activeSSID == ssid
+	if existingAPWidget and not connected then
 		return existingAPWidget
 	end
 
 	local secure = true --wifi.getAPSecurity(ap) ~= ''
-	local connected = wifi.activeSSID == ssid
 	local passwordVisible = false
 
 	local password = inputbox {
 		password_mode = true,
 		mouse_focus = true,
-		fg = beautiful.accent,
-		text_hint = 'Enter password...',
-		font = beautiful.font:gsub('%d+$', '10')
+		fg = beautiful.xcolor14,
+		text_hint = 'Enter Password...',
+		font = beautiful.fontName .. ' Medium 14',
 	}
 	helpers.hoverCursor(password.widget, 'xterm')
 
 	local connectBtn = w.button('wifi', {
 		text = 'Connect',
-		bg = bgcolor, --beautiful.accent,
+		bg = beautiful.xcolor14,
 		shiftFactor = 25,
 		onClick = function()
 			wifi.connect(ap, password:get_text())
-		end
+		end,
+		margin = beautiful.dpi(4),
 	})
 
 	local spacing = beautiful.dpi(10)
@@ -174,27 +176,73 @@ local function createAPWidget(ssid, ap)
 	]]--
 
 	local passwordEntry = wibox.widget {
+		widget = wibox.container.background,
+		bg = beautiful.xcolor10,
+		shape = helpers.rrect(6),
+		{
+			widget = wibox.container.margin,
+			margins = beautiful.dpi(8),
+			{
+				layout = wibox.layout.align.horizontal,
+				{
+					widget = wibox.container.constraint,
+					strategy = 'max',
+					width = beautiful.dpi(420 - (20 * 2)),
+					password.widget,
+				},
+				{
+					widget = wibox.container.place,
+					halign = 'right',
+					w.button('visibility-off', {
+						bg = beautiful.xcolor10,
+						color = beautiful.xcolor14,
+						size = beautiful.dpi(22),
+						onClick = function(self)
+							if passwordVisible then
+								self.icon = 'visibility-off'
+							else
+								self.icon = 'visibility'
+							end
+							passwordVisible = not passwordVisible
+						end
+					})
+				}
+			}
+		}
+	}
+
+	local autoConnect = wibox.widget {
 		layout = wibox.layout.align.horizontal,
+		expand = 'none',
 		{
-			widget = wibox.container.constraint,
-			strategy = 'max',
-			width = beautiful.dpi(420 - (20 * 2)),
-			password.widget,
+			widget = wibox.widget.textbox,
+			markup = 'Auto Connect',
+			valign = 'top',
+			font = beautiful.fontName .. ' Medium 14',
 		},
+		nil,
+		w.switch {color = beautiful.accent}
+	}
+
+	local connectWidget = wibox.widget {
+		widget = wibox.widget.background,
+		bg = beautiful.xcolor9,
+		shape = helpers.rrect(beautiful.radius),
 		{
-			widget = wibox.container.place,
-			halign = 'right',
-			w.button('visibility-off', {
-				bg = bgcolor,
-				onClick = function(self)
-					if passwordVisible then
-						self.icon = 'visibility-off'
-					else
-						self.icon = 'visibility'
-					end
-					passwordVisible = not passwordVisible
-				end
-			})
+			widget = wibox.container.margin,
+			margins = beautiful.dpi(16),
+			{
+				layout = wibox.layout.fixed.vertical,
+				spacing = beautiful.dpi(8),
+				passwordEntry,
+				autoConnect,
+				{
+					layout = wibox.layout.flex.horizontal,
+					spacing = beautiful.dpi(16),
+					connectBtn,
+					connectBtn,
+				}
+			}
 		}
 	}
 
@@ -212,6 +260,7 @@ local function createAPWidget(ssid, ap)
 		strategy = 'max',
 		{
 			layout = wibox.layout.fixed.vertical,
+			spacing = beautiful.dpi(8),
 			{
 				layout = wibox.layout.fixed.horizontal,
 				spacing = spacing,
@@ -233,7 +282,7 @@ local function createAPWidget(ssid, ap)
 					}
 				}
 			},
-			not connected and passwordEntry or nil
+			not connected and connectWidget or nil,
 		}
 	}
 
@@ -307,6 +356,7 @@ end
 
 local function addAP(ap)
 	if not ap then ap = wifi.activeAP end
+	if not ap then return end
 
 	local ssidRaw = helpers.glibByteToVal(ap.Ssid)
 	local ssid = ssidRaw and tostring(ssidRaw) or 'Unknown'
@@ -344,6 +394,10 @@ end
 
 awesome.connect_signal('wifi::toggle', function(state)
 	util.emitSignal('wifi', 'toggle', state)
+	if state == false then
+		M.layout:reset()
+		M.active = nil
+	end
 
 	local enabled, textStatus = M.status()
 	util.emitSignal('wifi', 'status', textStatus)
@@ -358,8 +412,6 @@ awesome.connect_signal('wifi::disconnected', function()
 end)
 
 awesome.connect_signal('wifi::activeAP', function(ssid, ap)
-	M.lastConnectedSSID = ssid
-
 	local enabled, textStatus = M.status()
 	util.emitSignal('wifi', 'status', textStatus)
 	addAP()
