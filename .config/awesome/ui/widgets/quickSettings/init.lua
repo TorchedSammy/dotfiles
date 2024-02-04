@@ -65,10 +65,11 @@ local contentLabel = harmony.titlebar('Content', {
 })
 
 local quickSettingsTitle, qstHeight = harmony.titlebar 'Quick Settings'
-local quickSettings = wibox {
-	height = dpi(420) + qstHeight,
+local quickSettings = helpers.aaWibox {
+	height = dpi(518) + qstHeight,
 	width = dpi(460),
-	bg = '#00000000',
+	bg = bgcolor,
+	rrectRadius = beautiful.radius,
 	shape = gears.shape.rectangle,
 	ontop = true,
 	visible = false
