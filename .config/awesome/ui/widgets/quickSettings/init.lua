@@ -148,6 +148,7 @@ local function createToggle(type)
 			new = not toggledOn and toggleFgColorOff or toggleFgColor,
 			transformer = function(col)
 				icon.color = col
+				rightIcon.color = col
 			end,
 			duration = 0.5
 		}
