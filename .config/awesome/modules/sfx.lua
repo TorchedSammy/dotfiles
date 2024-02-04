@@ -9,8 +9,8 @@ local M = {
 	volume = 0.60
 }
 
-local function spawn(cmd)
-	awful.spawn.easy_async(cmd, function() end)
+local function spawn(cmd, cb)
+	awful.spawn.easy_async(cmd, cb or function() end)
 end
 
 function M.play(s)
@@ -21,7 +21,12 @@ function M.notify()
 	M.play 'notification'
 end
 
-function M.get_volume_state(cb)
+function M.state(cb)
+	spawn('pamixer --get-mute && pamixer --get-volume', function(stdout)
+		local mute = stdout:match '([truefalse]+)' == 'true'
+
+		cb(volume, mute)
+	end)
 	--[[
 	awful.spawn.easy_async('pactl list sinks', function(stdout)
 		local mute = stdout:match('Mute:%s+(%a+)')
@@ -56,7 +61,7 @@ function M.setVolume(vol)
 end
 
 function M.muteVolume()
-	spawn('amixer set Master toggle')
+	spawn('pamixer --toggle-mute')
 end
 
 return M
