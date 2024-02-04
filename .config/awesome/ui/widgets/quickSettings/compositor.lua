@@ -1,4 +1,6 @@
 local compositor = require 'modules.compositor'
+local util = require 'ui.widgets.quickSettings.util'
+
 local M = {
 	toggle = true
 }
@@ -15,5 +17,13 @@ end
 function M.status()
 	return compositor.running, 'Compositor'
 end
+
+awesome.connect_signal('compositor::off', function()
+	util.emitSignal('compositor', 'toggle', false)
+end)
+
+awesome.connect_signal('compositor::on', function()
+	util.emitSignal('compositor', 'toggle', true)
+end)
 
 return M

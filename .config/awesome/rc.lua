@@ -4,9 +4,12 @@ pcall(require, 'luarocks.loader')
 
 local awful = require 'awful'
 local beautiful = require 'beautiful'
+local compositor = require 'modules.compositor'
 local gears = require 'gears'
 local helpers = require 'helpers'
+local ruled = require 'ruled'
 local naughty = require 'naughty'
+local wibox = require 'wibox'
 local settings = require 'conf.settings'
 local scheduler = require 'modules.scheduler'
 local extrautils = require 'libs.extrautils'()
@@ -66,116 +69,84 @@ awful.screen.connect_for_each_screen(function(s)
 	awful.tag(taglist, s, layouts)
 end)
 
--- {{{ Rules
--- Rules to apply to new clients (through the 'manage' signal).
-awful.rules.rules = {
-	-- All clients will match this rule.
-	{
-		rule = { },
-		properties = {
-			border_width = beautiful.border_width,
-			border_color = beautiful.border_normal,
-			focus = awful.client.focus.filter,
-			raise = true,
+ruled.client.connect_signal("request::rules", function()
+    -- @DOC_GLOBAL_RULE@
+    -- All clients will match this rule.
+    ruled.client.append_rule {
+        id         = "global",
+        rule       = { },
+        properties = {
+            focus     = awful.client.focus.filter,
+            raise     = true,
+            screen    = awful.screen.preferred,
+            placement = awful.placement.no_overlap+awful.placement.no_offscreen,
 			keys = clientkeys,
 			buttons = clientbuttons,
-			screen = awful.screen.preferred,
-		},
-		callback = function(c)
-			--[[
-			local g = c:geometry()
-			local sg = c.screen.geometry
-			if (g.width >= sg.width or g.height >= sg.height) then
-				if not c.fullscreen then
-					c.fullscreen = true
-				end
-				local pf = awful.placement.no_offscreen + awful.placement.centered
-				pf(c, {parent = awful.screen.preferred()})
-			end
-			]]--
-		end
-	},
-	{
-		rule_any = {
-			class = "zentity"
-		},
-		properties = {
-			placement = awful.placement.centered
-		}
-	},
+        }
+    }
 
-	-- Floating clients.
-	{ rule_any = {
-		instance = {
-		  'DTA',  -- Firefox addon DownThemAll.
-		  'copyq',  -- Includes session name in class.
-		  'pinentry',
-		},
-		class = {
-		  'Arandr',
-		  'Blueman-manager',
-		  'Gpick',
-		  'Kruler',
-		  'MessageWin',  -- kalarm.
-		  'Sxiv',
-		  'Tor Browser', -- Needs a fixed window size to avoid fingerprinting by screen size.
-		  'Wpa_gui',
-		  'veromix',
-		  'xtightvncviewer'},
+    -- @DOC_FLOATING_RULE@
+    -- Floating clients.
+    ruled.client.append_rule {
+        id       = "floating",
+        rule_any = {
+            instance = { "copyq", "pinentry" },
+            class    = {
+                "Arandr", "Blueman-manager", "Gpick", "Kruler", "Sxiv",
+                "Tor Browser", "Wpa_gui", "veromix", "xtightvncviewer"
+            },
+            -- Note that the name property shown in xprop might be set slightly after creation of the client
+            -- and the name shown there might not match defined rules here.
+            name    = {
+                "Event Tester",  -- xev.
+            },
+            role    = {
+                "AlarmWindow",    -- Thunderbird's calendar.
+                "ConfigManager",  -- Thunderbird's about:config.
+                "pop-up",         -- e.g. Google Chrome's (detached) Developer Tools.
+            }
+        },
+        properties = { floating = true }
+    }
 
-		-- Note that the name property shown in xprop might be set slightly after creation of the client
-		-- and the name shown there might not match defined rules here.
-		name = {
-		  'Event Tester',  -- xev.
-		},
-		role = {
-		  'AlarmWindow',  -- Thunderbird's calendar.
-		  'ConfigManager',  -- Thunderbird's about:config.
-		  'pop-up',       -- e.g. Google Chrome's (detached) Developer Tools.
-		}
-	  }, properties = { floating = true }},
+    -- @DOC_DIALOG_RULE@
+    -- Add titlebars to normal clients and dialogs
+    ruled.client.append_rule {
+        -- @DOC_CSD_TITLEBARS@
+        id         = "titlebars",
+        rule_any   = { type = { "normal", "dialog" } },
+        properties = { titlebars_enabled = true      }
+    }
 
-	{ rule_any = {type = { 'normal', 'dialog' }
-	  }, properties = { titlebars_enabled = beautiful.titlebars }
-	},
-	{ rule_any = {class = { 'osu!.exe' }
-	  }, properties = { titlebars_enabled = false }
-	},
+	ruled.client.append_rule {
+        id       = "notitlebar",
+        rule_any = {
+            class    = {
+               "osu!.exe"
+            },
+        },
+        properties = { titlebars_enabled = false }
+    }
 
-	{ rule_any = { class = {'Google-chrome'}, name = {'Discord'} },
-	   callback = function(c)
-		-- helpers.winmaxer(c)
-     end},
+    -- Set Firefox to always map on the tag named "2" on screen 1.
+    -- ruled.client.append_rule {
+    --     rule       = { class = "Firefox"     },
+    --     properties = { screen = 1, tag = "2" }
+    -- }
+end)
 
-	{
-		rule = {
-			instance = 'emulationstation'
-		},
-		properties = {
-			screen = 'HDMI1'
-		}
-	}
-}
--- }}}
+
+require 'ui'
 
 -- Signal function to execute when a new client appears.
 client.connect_signal('manage', function(c)
 	if not awesome.startup then awful.client.setslave(c) end
-	if awesome.startup and not c.size_hints.user_position
-	and not c.size_hints.program_position then
-		awful.placement.no_offscreen(c)
-	end
-	if beautiful.client_shape and not settings.picom then
-		c.shape = beautiful.client_shape
-	end
 
 	if c.maximized then
-		helpers.maximize(c)
+		helpers.winmaxer(c)
 	end
 
-	if not c.fullscreen then
-		awful.placement.centered(c, {parent = c.transient_for or c.screen or awful.screen.focused()})
-	end
+	awful.placement.centered(c, {parent = c.transient_for or c.screen or awful.screen.focused()})
 
 	if c.sticky then
 		c.floating = true
@@ -202,8 +173,6 @@ client.connect_signal('manage', function(c)
         c.icon = img._native
     end
 end)
-
-require 'ui'
 
 if beautiful.double_borders then require 'ui.extras.double-borders' end
 
@@ -244,3 +213,5 @@ collectgarbage('setpause', 110)
 collectgarbage('setstepmul', 1000)
 
 --require 'ui.setup'.start()
+require 'ui.extras.compositor'
+
