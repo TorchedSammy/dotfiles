@@ -1,5 +1,5 @@
-local awful = require 'awful'
 local wibox = require 'wibox'
+local awful = require 'awful'
 local gears = require 'gears'
 local beautiful = require 'beautiful'
 local xresources = require 'beautiful.xresources'
@@ -7,6 +7,8 @@ local dpi = xresources.apply_dpi
 local sfx = require 'modules.sfx'
 local helpers = require 'helpers'
 local naughty = require 'naughty'
+local cairo = require 'lgi'.cairo
+local battery = require 'modules.battery'
 
 local function rounded_bar(color)
 	return wibox.widget {
@@ -57,6 +59,8 @@ function widgets.icon(name, opts)
 						fill: %s;
 					}
 				]], opts.color or beautiful.fg_normal),
+				vertical_fit_policy = opts.vertical_fit_policy,
+				horizontal_fit_policy = opts.horizontal_fit_policy,
 				id = 'icon'
 			}
 		}
@@ -69,7 +73,7 @@ function widgets.icon(name, opts)
 			end,
 			__newindex = function(_, k, v)
 				if k == 'icon' then
-					ico:get_children_by_id'icon'[1].image = gears.color.recolor_image(beautiful.config_path .. '/images/icons/' .. v .. '.svg', beautiful.fg_normal)
+					ico:get_children_by_id'icon'[1].image = gears.color.recolor_image(beautiful.config_path .. '/images/icons/' .. v .. '.svg', opts.color or beautiful.fg_normal)
 					ico:emit_signal 'widget::redraw_needed'
 				elseif k == 'color' then
 					ico:get_children_by_id'icon'[1].stylesheet = string.format([[
@@ -140,12 +144,6 @@ function widgets.button(icon, opts)
 	}
 	helpers.displayClickable(ico, opts)
 
-	ico.buttons = {
-		awful.button({}, 1, function()
-			if opts.onClick then opts.onClick() end
-		end),
-	}
-
 	local function setupIcon()
 		--ico:get_children_by_id'icon'[1].image = gears.color.recolor_image(ico:get_children_by_id'icon'[1].image, focused and beautiful.fg_normal .. 55 or beautiful.fg_normal)
 		ico:emit_signal 'widget::redraw_needed'
@@ -161,7 +159,7 @@ function widgets.button(icon, opts)
 	end)
 
 	ico.visible = true
-	return setmetatable({}, {
+	local realWid =  setmetatable({}, {
 		__index = function(_, k)
 			return ico[k]
 		end,
@@ -182,6 +180,13 @@ function widgets.button(icon, opts)
 			ico[k] = v
 		end
 	})
+	realWid.buttons = {
+		awful.button({}, 1, function()
+			if opts.onClick then opts.onClick(realWid) end
+		end),
+	}
+
+	return realWid
 end
 
 widgets.ram_bar = rounded_bar(beautiful.ram_bar_color)
@@ -222,19 +227,19 @@ end, widgets.ram_bar)
 --[[
 widgets.volume_bar = rounded_bar(beautiful.xcolor2)
 function update_volume_bar(volume, mute)
-    widgets.volume_bar.value = volume
-    if mute then
-        widgets.volume_bar.color = beautiful.xforeground
-    else
-        widgets.volume_bar.color = beautiful.xcolor2
-    end
+	widgets.volume_bar.value = volume
+	if mute then
+		widgets.volume_bar.color = beautiful.xforeground
+	else
+		widgets.volume_bar.color = beautiful.xcolor2
+	end
 end
 
 widgets.volume_bar:buttons(gears.table.join(
-    awful.button({ }, 4, sfx.volumeUp),
-    awful.button({ }, 5, sfx.volumeDown),
-    awful.button({ }, 1, function() sfx.muteVolume() sfx.get_volume_state(update_volume_bar) end),
-    awful.button({ }, 3, function() awful.spawn 'pavucontrol' end)))
+	awful.button({ }, 4, sfx.volumeUp),
+	awful.button({ }, 5, sfx.volumeDown),
+	awful.button({ }, 1, function() sfx.muteVolume() sfx.get_volume_state(update_volume_bar) end),
+	awful.button({ }, 3, function() awful.spawn 'pavucontrol' end)))
 
 awesome.connect_signal("evil::volume", update_volume_bar)
 
@@ -279,14 +284,14 @@ widgets.macos_date.format = '%a %b %d'
 -- Systray
 function find_widget_in_wibox(wb, widget)
   local function find_widget_in_hierarchy(h, widget)
-    if h:get_widget() == widget then
-      return h
-    end
-    local result
-    for _, ch in ipairs(h:get_children()) do
-      result = result or find_widget_in_hierarchy(ch, widget)
-    end
-    return result
+	if h:get_widget() == widget then
+	  return h
+	end
+	local result
+	for _, ch in ipairs(h:get_children()) do
+	  result = result or find_widget_in_hierarchy(ch, widget)
+	end
+	return result
   end
   local h = wb._drawable._widget_hierarchy
   return h and find_widget_in_hierarchy(h, widget)
@@ -502,5 +507,81 @@ function widgets.coloredText(text, opts)
 	return wid
 end
 
-return widgets
+function widgets.battery(opts)
+	local background = widgets.icon('battery', {size = opts.size, color = beautiful.xcolor12})
+	local indicator = wibox.widget {
+		widget = wibox.widget.imagebox,
+	}
 
+	local wid = wibox.widget {
+		layout = wibox.container.constraint,
+		strategy = 'exact',
+		width = opts.size,
+		{
+			layout = wibox.container.place,
+			{
+				layout = wibox.layout.stack,
+				background,
+				indicator
+			}
+		}
+	}
+
+	local tt = awful.tooltip {
+		objects = {wid},
+		preferred_alignments = {'middle'},
+		mode = 'outside',
+	}
+
+	local function handleBattery()
+		local state = battery.status()
+		local batIcon = 'battery'
+		local color = beautiful.fg_normal
+
+		local time = battery.time()
+		if time ~= '' then time = '\n' .. time end
+		local text = string.format('%d%% on battery%s', battery.percentage(), time)
+
+		if state == 'Charging' then
+			--batIcon = 'battery-charging'
+			color = beautiful.xcolor2
+		end
+
+		if state == 'Full' then
+			text = 'Full'
+		end
+
+		tt.text = text
+		local batteryImg = gears.color.recolor_image(string.format('%s/images/icons/%s.svg', beautiful.config_path, batIcon), color)
+		local img = cairo.ImageSurface.create(cairo.Format.ARGB32, batteryImg:get_width(), batteryImg:get_height())
+		local cr = cairo.Context(img)
+		cr:set_source_surface(batteryImg, 0, batteryImg:get_height() - (batteryImg:get_height() * (battery.percentage() / 100)))
+		cr:paint()
+
+		indicator.image = img
+	end
+	handleBattery()
+	awesome.connect_signal('battery::percentage', handleBattery)
+
+	return wid
+end
+
+function widgets.volume(opts)
+	local icon = widgets.icon('volume', {size = opts.size})
+	local tt = awful.tooltip {
+		objects = {icon},
+		preferred_alignments = {'middle'},
+		mode = 'outside',
+	}
+
+	local function setState(volume, muted, init)
+		tt.text = string.format('%d%% volume%s', volume, muted and ' (muted)' or '')
+		icon.icon = muted and 'volume-muted' or 'volume'
+	end
+
+
+	awesome.connect_signal('syntax::volume', setState)
+
+	return icon
+end
+return widgets
