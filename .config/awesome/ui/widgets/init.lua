@@ -9,6 +9,7 @@ local helpers = require 'helpers'
 local naughty = require 'naughty'
 local cairo = require 'lgi'.cairo
 local battery = require 'modules.battery'
+local rubato = require 'libs.rubato'
 
 local function rounded_bar(color)
 	return wibox.widget {
@@ -437,55 +438,70 @@ end)
 
 function widgets.switch(opts)
 	local size = {
-		w = beautiful.dpi(52),
-		h = beautiful.dpi(20),
+		w = beautiful.dpi(36),
+		h = beautiful.dpi(36),
 	}
 
-	local progress = wibox.widget {
-		widget = wibox.widget.progressbar,
-		background_color = beautiful.bg_normal,
-		color = opts.color,
-		shape = gears.shape.rounded_bar,
-		bar_shape = gears.shape.rounded_bar,
-		forced_height = size.h,
-		forced_width = size.w,
-		max_value = 100
-	}
+	-- ### Remove mouse interaction from slider
+	local oldSliderMt = wibox.widget.slider.mt
+	local base = require 'wibox.widget.base'
+	local gtable = require 'gears.table'
+	function wibox.widget.slider.mt:__call(...)
+		local ret = base.make_widget(nil, nil, {
+			enable_properties = true,
+		})
 
-	local slider = wibox.widget {
-		widget = wibox.widget.slider,
-		forced_width = size.w,
-		forced_height = size.h,
-		bar_color = '#00000000',
-		--handle_width = progress.forced_height,
-		handle_color = beautiful.fg_normal,
-		handle_border_color = beautiful.bg_normal,
-		handle_border_width = 1,
-		handle_shape = gears.shape.circle,
-		maximum = 100
-	}
+		gtable.crush(ret._private, args or {})
 
-	local cover = wibox.widget {
-		widget = wibox.container.background,
-		bg = '#ffae23',
-		forced_width = size.w,
-		forced_height = size.h,
-	}
+		gtable.crush(ret, wibox.widget.slider, true)
+
+		--ret:connect_signal("button::press", mouse_press)
+
+		return ret
+	end
+	setmetatable(wibox.widget.slider, wibox.widget.slider.mt)
+	-- ###
 
 	local switch = wibox.widget {
-		layout = wibox.layout.stack,
-		progress,
-		slider,
-		cover
+		widget = wibox.widget.slider,
+		forced_height = size.h,
+		forced_width = size.w,
+		bar_margins = {
+			top = size.h / 3,
+			bottom = size.h / 3,
+		},
+		bar_color = beautiful.xcolor12,
+		bar_active_color = beautiful.accent,
+		bar_shape = gears.shape.rounded_bar,
+		handle_color = beautiful.xcolor7,
+		handle_shape = gears.shape.circle,
+		handle_border_color = beautiful.accent,
+		handle_border_width = 0,
+		value = opts.on and 100 or 0
 	}
+	setmetatable(wibox.widget.slider, oldSliderMt)
+
+	local animator = rubato.timed {
+		duration = 0.2,
+		rate = 60,
+		override_dt = true,
+		clamp_position = true,
+		easing = rubato.quadratic,
+		subscribed = function(p)
+			switch.value = p
+		end,
+		pos = switch.value,
+	}
+	helpers.hoverCursor(switch)
 	switch.buttons = {
 		awful.button({}, 1, function()
-			progress.value = 100
-			slider.value = 100
+			if switch.value == 100 then
+				animator.target = 0
+			else
+				animator.target = 100
+			end
 		end)
 	}
-
-	helpers.hoverCursor(switch)
 
 	return switch
 end
