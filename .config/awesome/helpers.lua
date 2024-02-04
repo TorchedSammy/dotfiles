@@ -5,6 +5,8 @@ local settings = require 'conf.settings'
 local naughty = require 'naughty'
 local wibox = require 'wibox'
 local rubato = require 'libs.rubato'
+local lgi = require 'lgi'
+local focus = require 'conf.focus'
 
 local Color = require 'lua-color'
 
@@ -46,7 +48,7 @@ function helpers.winmaxer(c)
   awful.placement.maximize(c, {
     honor_padding = true,
     honor_workarea = true,
-    margins = beautiful.useless_gap * beautiful.dpi(2)
+    --margins = beautiful.useless_gap * beautiful.dpi(2)
   })
 end
 
@@ -181,7 +183,9 @@ function helpers.hideOnClick(w, cb)
 
   table.insert(onClickHiders, {func = hider, widget = w})
   client.connect_signal('button::press', hider)
-  client.connect_signal('manage', hider)
+  client.connect_signal('request::activate', function()
+   if focus.shouldUnfocus() then hider() end
+  end)
   --wibox.connect_signal('button::press', hider)
 
   w:connect_signal('lol', function(w)
@@ -212,17 +216,22 @@ end
 
 function helpers.slidePlacement(wbx, opts)
  local wbxOpen = false
+ local hideHeight = awful.screen.focused().geometry.height
  local animator = (opts.animator and opts.animator(wbx)) or rubato.timed {
 		duration = 0.3,
 		rate = 60,
 		subscribed = function(y)
 			wbx.y = y
+			if y == hideHeight then
+    wbx.visible = false
+			end
 		end,
-		pos = awful.screen.focused().geometry.height,
+		pos = hideHeight,
 		easing = {
      F = 1/3,
      easing = function(t) return t*t end
-  }
+  },
+  clamp_position = true
 	}
 	local placer = type(opts.placement) == 'string' and awful.placement[opts.placement] or opts.placement
  local function doPlacement()
@@ -236,26 +245,43 @@ function helpers.slidePlacement(wbx, opts)
 		})
 	end
 	doPlacement()
-	if not settings.noAnimate then wbx.visible = true end
+	wbx.visible = false
 
 	if settings.noAnimate then
 		helpers.hideOnClick(wbx)
 	else
-		helpers.hideOnClick(wbx, settings.noAnimate and nil or function()
-			if wbxOpen then
-				wbx:toggle()
+		helpers.hideOnClick(wbx, function()
+			if wbxOpen and not settings.noAnimate then
+				wbx:off()
 			end
 		end)
 	end
 
  function wbx:on()
   animator.target = awful.screen.focused().geometry.height - (beautiful.wibar_height + beautiful.useless_gap * beautiful.dpi(2)) - wbx.height
+  wbx.visible = true
   wbxOpen = true
+  wbx.displayed = true
+
+  if opts.toggler then
+    local continue = opts.toggler(wbxOpen)
+    if continue == false then
+      return
+    end
+  end
  end
 
  function wbx:off()
-		animator.target = awful.screen.focused().geometry.height
 		wbxOpen = false
+		animator.target = awful.screen.focused().geometry.height
+    wbx.displayed = false
+
+    if opts.toggler then
+      local continue = opts.toggler(wbxOpen)
+      if continue == false then
+        return
+      end
+    end
  end
 
 	function wbx:toggle()
@@ -263,20 +289,13 @@ function helpers.slidePlacement(wbx, opts)
 			doPlacement()
 		end
 
-		if opts.toggler then
-   local continue = opts.toggler(wbxOpen)
-   if continue == false then
-     return
-   end
-  end
-
 		if settings.noAnimate then
 			wbx.visible = not wbx.visible
 		else
 			if wbxOpen then
 				wbx:off()
 			else
-    wbx:on()
+        wbx:on()
 			end
 		end
 	end
