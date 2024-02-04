@@ -203,6 +203,13 @@ local function createToggle(type)
 end
 
 do
+	local volSlider = harmony.slider {
+		icon = 'volume2'
+	}
+	local brightSlider = harmony.slider {
+		icon = 'brightness'
+	}
+
 	local realWidget = wibox.widget {
 			layout = overflow,
 			scrollbar_enabled = false,
@@ -307,6 +314,12 @@ do
 					}
 				}
 	}
+
+	awesome.connect_signal('syntax::volume', function(volume, muted, init)
+		volSlider.icon = muted and 'volume-muted' or 'volume2'
+		volSlider.value = volume
+		volSlider.color = muted and beautiful.xcolor12 or beautiful.accent
+	end)
 
 
 	-- for fancy scrolling between toggles and controls
