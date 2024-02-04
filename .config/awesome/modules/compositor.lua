@@ -2,7 +2,8 @@ local awful = require 'awful'
 local beautiful = require 'beautiful'
 
 local M = {
-	running = false
+	running = false,
+	awesomeKill = false
 }
 
 awful.spawn.easy_async('pgrep picom', function(output)
@@ -16,22 +17,37 @@ function M.state()
 end
 
 function M.on()
-	awful.spawn.easy_async(string.format('picom -b --config /home/%s/.config/picom/%s.conf', os.getenv 'USER', beautiful.picom_conf), function() end)
+	awesome.emit_signal('compositor::on')
+	M.pid = awful.spawn.easy_async(string.format('picom --config /home/%s/.config/picom/%s.conf', os.getenv 'USER', beautiful.picom_conf), function()
+		awesome.emit_signal('compositor::off')
+		if M.awesomeKill then
+			return
+		end
+		--M.on()
+	end)
 	M.running = true
+
+	return true
 end
 
 function M.off()
-	awful.spawn.easy_async('pkill picom', function() end)
+	M.awesomeKill = true
+	awful.spawn.easy_async(string.format('kill %d', M.pid), function()
+		M.awesomeKill = false
+	end)
 	M.running = false
+
+	return false
 end
 
 function M.toggle(on)
 	if not M.running or on then
-		M.on()
+		return M.on()
 	else
-		M.off()
+		return M.off()
 	end
-	return M.running
 end
+
+awesome.connect_signal('exit', M.off)
 
 return M
