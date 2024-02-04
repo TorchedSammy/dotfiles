@@ -204,14 +204,10 @@ end
 
 do
 	local realWidget = wibox.widget {
-		widget = wibox.container.background,
-		bg = bgcolor,
-		forced_width = quickSettings.width,
-		forced_height = quickSettings.height,
-		shape = helpers.rrect(beautiful.radius or base.radius),
-		{
-			layout = wibox.layout.overflow.horizontal,
+			layout = overflow,
 			scrollbar_enabled = false,
+			forced_width = quickSettings.width,
+			forced_height = quickSettings.height,
 			id = 'control',
 			{
 				widget = wibox.container.constraint,
@@ -225,10 +221,10 @@ do
 						margins = quickSettingsMargin,
 						{
 							layout = wibox.layout.fixed.vertical,
-							spacing = quickSettingsMargin * 2,
+							spacing = quickSettingsMargin * beautiful.dpi(2),
 							spacing_widget = {
 								widget = wibox.widget.separator,
-								thickness = beautiful.dpi(4),
+								thickness = beautiful.dpi(3),
 								color = beautiful.bg_sec
 							},
 							{
@@ -281,6 +277,12 @@ do
 								homogeneous = true,
 								expand = true,
 								id = 'toggles'
+							},
+							{
+								layout = wibox.layout.fixed.vertical,
+								spacing = quickSettingsMargin,
+								brightSlider,
+								volSlider
 							}
 						}
 					}
@@ -304,7 +306,6 @@ do
 						}
 					}
 				}
-		}
 	}
 
 
@@ -322,6 +323,8 @@ do
 	createToggle 'coffee'
 	createToggle 'focus'
 	createToggle 'compositor'
+
+	setupContentLayout()
 
 	quickSettings:setup{
 		layout = wibox.container.place,
