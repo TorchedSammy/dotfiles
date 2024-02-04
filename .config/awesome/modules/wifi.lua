@@ -31,7 +31,7 @@ local M = {
 	activeSSID = nil,
 	connectingSSID = nil,
 	connectivity = 0,
-	state = 0,
+	state = nm.State,
 
 	-- "enums"
 	CONNECTIVITY_UNKNOWN = 0,
@@ -60,13 +60,15 @@ function setConnectingSSID()
 end
 
 function setActiveSSID()
-	local ap = apPathToProxy(dev.ActiveAccessPoint)
-	M.activeSSID = bytesToString(ap.Ssid)
-	M.activeAP = ap
+	if M.state >= 40 then
+		local ap = apPathToProxy(dev.ActiveAccessPoint)
+		M.activeSSID = bytesToString(ap.Ssid)
+		M.activeAP = ap
 
-	if M.connectivity > M.CONNECTIVITY_NONE then
 		emitActiveAP()
 	end
+	--if M.connectivity > M.CONNECTIVITY_NONE then
+	--end
 end
 setActiveSSID()
 
@@ -81,18 +83,25 @@ nm:on_properties_changed(function(p, changed)
 		if M.state >= 40 then
 			setActiveSSID()
 			M.connectingSSID = nil
+			M.disconnectEmitted = false
 		else
+			M.inactiveSSID = M.activeSSID
 			M.activeSSID = nil
-			awesome.emit_signal('wifi::disconnected')
+			if not M.disconnectEmitted then
+				awesome.emit_signal('wifi::disconnected')
+				M.disconnectEmitted = true
+			end
 		end
 	end
 
+--[[
 	for k, v in pairs(changed) do
 		require'naughty'.notify {
 			title = 'NMCli Property changed: ' .. tostring(k),
 			text = tostring(v)
 		}
 	end
+]]--
 end)
 
 dev:on_properties_changed(function(p, changed)
@@ -100,6 +109,14 @@ dev:on_properties_changed(function(p, changed)
 		setConnectingSSID()
 	end
 end)
+
+dev:connect_signal(function(_, apPath)
+	awesome.emit_signal('wifi::ap-added', apPathToProxy(apPath))
+end, 'AccessPointAdded')
+
+dev:connect_signal(function(_, apPath)
+	awesome.emit_signal('wifi::ap-removed', apPathToProxy(apPath))
+end, 'AccessPointRemoved')
 
 function M.toggle()
 	nm:Set('org.freedesktop.NetworkManager', 'WirelessEnabled', lgi.GLib.Variant('b', not M.enabled))
@@ -123,12 +140,14 @@ function M.getAccessPoints()
 		aps[bytesToString(ap.Ssid) or 'Unknown'] = ap
 	end
 
+--[[
 	for k, v in pairs(aps) do
 		require'naughty'.notify {
 			title = tostring(k),
 			text = tostring(v)
 		}
 	end
+]]--
 
 	return aps
 end
