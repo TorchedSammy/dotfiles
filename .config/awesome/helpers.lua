@@ -338,7 +338,7 @@ function helpers.aaWibox(opts)
  opts.bg = '#00000000'
  if opts.rrectRadius then
   opts.bg = bg
-  opts.shape = helpers.rrect(opts.rrectRadius / 1.5)
+  opts.shape = helpers.rrect(opts.rrectRadius / 1.3)
  end
 
  local wbx = wibox(opts)
