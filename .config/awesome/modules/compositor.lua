@@ -23,7 +23,7 @@ function M.on()
 		if M.awesomeKill then
 			return
 		end
-		--M.on()
+		M.on()
 	end)
 	M.running = true
 
@@ -32,9 +32,13 @@ end
 
 function M.off()
 	M.awesomeKill = true
-	awful.spawn.easy_async(string.format('kill %d', M.pid), function()
-		M.awesomeKill = false
-	end)
+	if not M.pid then
+		awful.spawn.easy_async('pkill picom', function() end)
+	else
+		awful.spawn.easy_async(string.format('kill %d', M.pid), function()
+			M.awesomeKill = false
+		end)
+	end
 	M.running = false
 
 	return false
