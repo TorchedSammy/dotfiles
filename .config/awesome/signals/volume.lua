@@ -9,10 +9,10 @@ local function emit_volume_info(init)
     -- contain the volume level and muted state respectively
     -- This is why we are using `awk` to print them.
     awful.spawn.easy_async_with_shell(
-        'pacmd list-sinks | awk \'/\\* index: /{nr[NR+7];nr[NR+11]}; NR in nr\'',
+        'pamixer --get-volume && printf \'muted: \' && pamixer --get-mute',
         function(stdout)
-            local volume = stdout:match('(%d+)%% /')
-            local muted = stdout:match('muted:%s+(%w+)') == 'yes'
+            local volume = stdout:match('%d+')
+            local muted = stdout:match('muted:%s+(%w+)') == 'true'
             local volume_int = tonumber(volume)
             -- Only send signal if there was a change
             -- We need this since we use `pactl subscribe` to detect
