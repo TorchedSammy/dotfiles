@@ -111,10 +111,10 @@ awful.key({}, 'Print',
 awful.key({modkey}, 'd',
 	function()
 		awful.spawn.with_shell 'rsync -ah --inplace --delete --info=progress2 ~/Files/Dotfiles/.config/awesome/ ~/.config/awesome/'
-		naughty.notification {
+		naughty.notify {
 			title = 'System',
 			text = 'New configuration copied.',
-			icon = beautiful.config_path .. '/images/albumPlaceholder.png'
+			category = 'settings'
 		}
 	end, {
 		description = 'Update awesome config from dotfiles folder',
