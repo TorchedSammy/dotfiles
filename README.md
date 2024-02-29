@@ -1,6 +1,7 @@
 ##
 
 <div align='center'>
+	<!--
 	<img src="https://safe.kashima.moe/hv3tc2e2j7lx.svg" width=200><br>
 	<a href="#details">
 		<img alt="Setup" src="https://img.shields.io/badge/-Details-%23c3fa74?style=for-the-badge">
@@ -8,9 +9,11 @@
 	<a href="https://github.com/TorchedSammy/dotfiles/wiki/Gallery">
 		<img alt="Gallery" src="https://img.shields.io/badge/-Gallery-%23c3fa74?style=for-the-badge">
 	</a><br><br>
-	<h2>Syntax</h2>
-	<p>An elegant, gradient-full setup.</p><br>
-	<img src="https://safe.kashima.moe/ynn7zbxb3q2e.png">
+	-->
+	<h2>Harmony.</h2>
+	<!--<p>An elegant, gradient-full setup.</p><br>-->
+	<img src="https://safe.saya.moe/EUrYqhOGizEz.png">
+	<img src="https://safe.saya.moe/gHBcbQqXhmCn.png">
 </div>
 
 ## Welcome!
@@ -21,7 +24,7 @@ so this is a very Lua-riffic setup.
 > **Warning**
 > This code is public for **reference use** only. I do not mind people
 taking snippets (like a helper function) but publishing modifications of
-this is not allowed.
+major parts of this repository is not allowed. If unsure, **ASK**.
 
 ## Details
 - **Distro:** Fedora
@@ -30,7 +33,7 @@ this is not allowed.
 - **Terminal:** [Tym](https://github.com/endaaman/tym)
 - **Compositor:** picom
 - **Music Player:** cmus
-- **Text Editor:** [Lite XL](https://lite-xl.com/)included
+- **Text Editor:** [Lite XL](https://lite-xl.com/)
 - **Wallpapers:** https://github.com/TorchedSammy/walls
 
 ## Fonts
