@@ -46,7 +46,7 @@ local function apStrengthToTier(ap)
 	local strength = ap.Strength
 	if not strength then return 4 end
 
-	local tier = math.floor(strength / 25)
+	local tier = math.floor((strength / 24) + 0.5) + 1
 
 	return tier
 end
