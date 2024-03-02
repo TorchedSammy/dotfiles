@@ -15,7 +15,7 @@ end
 
 local programs = {
 	-- 'xmodmap -e "pointer = 3 2 1"',
-	'udiskie --tray',
+	'udiskie',
 	'gcdemu',
 	'pactl load-module module-role-ducking trigger_roles=phone,event',
 	'pactl load-module module-bluetooth-discover',
@@ -23,6 +23,8 @@ local programs = {
 	'pactl load-module module-switch-on-connect',
 	'libinput-gestures-setup start',
 	'tym --daemon',
+	'xplugd',
+	--'/usr/libexec/polkit-gnome-authentication-agent-1',
 	string.format('gsettings set org.gnome.desktop.interface color-scheme prefer-%s', beautiful.dark and 'dark' or 'light')
 }
 
