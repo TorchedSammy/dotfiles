@@ -11,6 +11,7 @@ local w = require 'ui.widgets'
 local wibox = require 'wibox'
 local extrautils = require 'libs.extrautils'()
 local inputbox = require 'ui.widgets.inputbox'
+local fzy = require 'fzy'
 
 local lgi = require 'lgi'
 local Gio = lgi.Gio
@@ -23,6 +24,8 @@ local appList = wibox.widget {
 	layout = wibox.layout.overflow.vertical()
 }
 
+local appWidgets = {}
+
 local searchInput = inputbox {
 	password_mode = false,
 	mouse_focus = true,
@@ -30,6 +33,42 @@ local searchInput = inputbox {
 	text_hint = 'Search...',
 	font = beautiful.fontName .. ' Bold 12'
 }
+
+function setupAppList()
+	appList:reset()
+	appList.spacing = beautiful.dpi(1)
+	appList.step = beautiful.dpi(100)
+	appList.scrollbar_widget = {
+		widget = wibox.widget.separator,
+		shape = gears.shape.rounded_bar,
+		color = beautiful.accent
+	}
+	appList.scrollbar_width = beautiful.dpi(10)
+end
+
+searchInput:connect_signal('inputbox::keypressed', function()
+	local text = searchInput:get_text()
+	setupAppList()
+
+	local matchIdx = 1
+	for idx, app in ipairs(appWidgets) do
+		if text ~= '' then
+			local match = fzy.has_match(searchInput:get_text(), app.name)
+			--print(app.name, match)
+			if match then
+				appList:insert(matchIdx, app.widget)
+				matchIdx = matchIdx + 1
+			else
+	--			appList:remove(idx)
+				appList:emit_signal 'widget::redraw_needed'
+				app.widget:emit_signal 'widget::redraw_needed'
+			end
+		else
+			print('adding backc all apps')
+			appList:insert(idx, app.widget)
+		end
+	end
+end)
 
 function M.new(opts)
 	opts = opts or {}
@@ -44,17 +83,6 @@ function M.new(opts)
 	local result = {}
 	local allApps = {}
 	local collision = {}
-	function setupAppList()
-		appList:reset()
-		appList.spacing = beautiful.dpi(1)
-		appList.step = beautiful.dpi(100)
-		appList.scrollbar_widget = {
-			widget = wibox.widget.separator,
-			shape = gears.shape.rounded_bar,
-			color = beautiful.accent
-		}
-		appList.scrollbar_width = beautiful.dpi(10)
-	end
 	setupAppList()
 
 	local power = button(buttonColor, 'power2', beautiful.dpi(18))
@@ -190,12 +218,19 @@ function M.new(opts)
 					}
 				}
 			}
+
+			table.insert(appWidgets, {
+				widget = appWid,
+				name = name
+			})
+
 			appWid.buttons = {
 				awful.button({}, 1, function()
 					opts.menu:off()
 					app.launch()
 				end)
 			}
+
 			helpers.displayClickable(appWid, {bg = bgcolor})
 			appList:add(appWid)
 
@@ -216,7 +251,7 @@ function M.new(opts)
 end
 
 function M.bindMethods(startMenu)
-	helpers.slidePlacement(startMenu, {
+		helpers.slidePlacement(startMenu, {
 		placement = 'bottom_left',
 		toggler = function()
 			appList.scroll_factor = 0
