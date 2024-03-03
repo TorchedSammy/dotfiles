@@ -19,16 +19,20 @@ local function checkPercent(percent)
 		end
 
 		if percent < 20 and percent > 10 and not lowNotified then
+			awesome.emit_signal('battery::low', percent)
 			naughty.notification {
 				title = 'Battery Low',
-				text = string.format('Battery\'s at %d%%. You should consider charging.', percent)
+				text = string.format('Battery\'s at %d%%. You should consider charging.', percent),
+				category = 'battery-low'
 			}
 			lowNotified = true
 		end
 		if percent < 10 and not criticalNotified then
+			awesome.emit_signal('battery::critical', percent)
 			naughty.notification {
 				title = 'Critical Battery Level',
-				text = string.format('You should charge now, battery is at %d%%.', percent)
+				text = string.format('You should charge now, battery is at %d%%.', percent),
+				category = 'battery-critical'
 			}
 			criticalNotified = true
 		end
