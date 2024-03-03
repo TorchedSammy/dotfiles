@@ -116,7 +116,9 @@ awesome.connect_signal('syntax::volume', function(volume, muted, init)
 	end
 	volumeDisplay:on()
 
+	volumeIcon.icon = muted and 'volume-muted' or 'volume'
 	volSlider.value = volume
+	volSlider.color = muted and beautiful.xcolor12 or beautiful.accent
 	volPercent.text = string.format('%s%%', volume)
 	displayTimer:start()
 end)
