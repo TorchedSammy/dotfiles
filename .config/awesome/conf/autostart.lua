@@ -32,7 +32,7 @@ if settings.picom then
 	-- toggle
 	compositor.on()
 else
-	compositor.off()
+	--compositor.off()
 end
 
 for _, p in ipairs(programs) do
