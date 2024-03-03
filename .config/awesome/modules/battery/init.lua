@@ -1,5 +1,6 @@
 local upower = require 'lgi'.UPowerGlib
 local settings = require 'conf.settings'
+local p = require 'dbus_proxy'
 
 local M = {}
 
@@ -105,5 +106,29 @@ function M.profile()
 end
 
 if M.profile() == 'powerSave' then settings.noAnimate = true end
+
+function M.history(updater)
+	local sparkline = p.Proxy:new {
+		bus = p.Bus.SESSION,
+		name = 'party.sammyette.Sparkline',
+		interface = 'party.sammyette.Sparkline',
+		path = '/party/sammyette/Sparkline'
+	}
+
+	local historyRaw = sparkline:Collect(battery:get_object_path())
+	local history = {}
+
+	for k, hist in pairs(historyRaw) do
+		table.insert(history, hist[1])
+		table.sort(history, function(a, b) return a > b end)
+	end
+
+	sparkline:connect_signal(function(_, data)
+		local percent = data[1]
+		updater(percent)
+	end, 'Update')
+
+	return history
+end
 
 return M

@@ -6,6 +6,7 @@ local w = require 'ui.widgets'
 local helpers = require 'helpers'
 local battery = require 'modules.battery'
 local syntax = require 'ui.components.syntax'
+local linegraph = require 'ui.widgets.linegraph'
 local M = {
 	title = 'Battery',
 }
@@ -16,10 +17,21 @@ local percentageBar = wibox.widget {
 	forced_height = beautiful.dpi(16),
 	forced_width = beautiful.dpi(420),
 	color = beautiful.accent,
-	background_color = beautiful.xcolor10,
+	background_color = beautiful.xcolor9,
 	shape = gears.shape.rounded_bar,
 	max_value = 100
 }
+
+local batteryGraph = linegraph {
+	color = beautiful.bg_popup,
+	fill_color = beautiful.xcolor4 .. 80,
+	max = 100,
+	min = 0,
+	fill = true
+}
+batteryGraph:set_values(battery.history(function(p)
+	batteryGraph:add_value(p)
+end))
 
 local function dropDown(default, items)
 	-- items table format:
@@ -42,15 +54,15 @@ local function dropDown(default, items)
 				{
 					layout = wibox.layout.fixed.horizontal,
 					id = 'base',
-					spacing = beautiful.dpi(12),
+					--spacing = beautiful.dpi(12),
 					{
 						widget = wibox.widget.textbox,
 						font = beautiful.fontName .. ' Medium 14',
-						text = default,
+						markup = helpers.colorize_text(default, beautiful.xcolor14),
 						valign = 'bottom',
-						id = 'selection'
+						id = 'selection',
 					},
-					w.icon('expand-more', {size = beautiful.dpi(24)})
+					w.icon('expand-more', {size = beautiful.dpi(24), color = beautiful.xcolor14})
 				},
 				{
 					layout = wibox.layout.overflow.vertical,
@@ -91,7 +103,7 @@ local function dropDown(default, items)
 			awful.button({}, 1, function()
 				item.callback()
 				toggleDropDown(false)
-				selection.text = item.name
+				selection.markup = helpers.colorize_text(item.name, beautiful.xcolor14)
 			end)
 		}
 
@@ -117,30 +129,39 @@ local prettyPowerName = {
 
 local wid = wibox.widget {
 	layout = wibox.layout.fixed.vertical,
-	spacing = beautiful.dpi(6),
+	spacing = beautiful.dpi(40),
+	spacing_widget = {
+		widget = wibox.widget.separator,
+		thickness = beautiful.dpi(3),
+		color = beautiful.bg_sec
+	},
 	{
 		layout = wibox.layout.fixed.horizontal,
-		--w.icon('battery', {size = beautiful.dpi(128)}),
+		--w.battery {size = beautiful.dpi(128)},
 		{
 			layout = wibox.layout.fixed.vertical,
-			spacing = beautiful.dpi(14),
+			spacing = beautiful.dpi(18),
 			{
-				widget = wibox.widget.textbox,
-				font = beautiful.fontName .. ' Bold 32',
-				id = 'percentage',
-				text = '',
-				valign = 'center'
-			},
-			{
-				widget = wibox.widget.textbox,
-				font = beautiful.fontName .. ' Medium 16',
-				id = 'status',
-				text = ''
+				layout = wibox.layout.fixed.vertical,
+				spacing = beautiful.dpi(-8),
+				{
+					widget = wibox.widget.textbox,
+					font = beautiful.fontName .. ' Bold 32',
+					id = 'percentage',
+					text = '',
+					valign = 'bottom'
+				},
+				{
+					widget = wibox.widget.textbox,
+					font = beautiful.fontName .. ' Medium 14',
+					id = 'status',
+					text = ''
+				},
 			},
 			percentageBar,
 			{
 				widget = wibox.widget.textbox,
-				font = beautiful.font:gsub('%d+$', '18'),
+				font = beautiful.fontName .. ' Medium 14',
 				id = 'time',
 				text = ''
 			},
@@ -191,8 +212,36 @@ local wid = wibox.widget {
 		},
 		{
 			widget = wibox.widget.textbox,
-			font = beautiful.fontName .. ' Medium 14',
-			text = 'Usage since last full charge',
+			font = beautiful.fontName .. ' Semibold 12',
+			markup = helpers.colorize_text('Usage since last full charge', beautiful.fg_sec),
+		},
+		{
+			layout = wibox.layout.fixed.horizontal,
+			{
+				widget = wibox.widget.separator,
+				thickness = beautiful.dpi(3),
+				color = beautiful.bg_sec,
+				orientation = 'vertical',
+				forced_width = beautiful.dpi(3)
+			},
+			{
+				layout = wibox.layout.stack,
+				{
+					layout = wibox.container.margin,
+					bottom = beautiful.dpi(3),
+					batteryGraph,
+				},
+				{
+					layout = wibox.container.place,
+					valign = 'bottom',
+					{
+						widget = wibox.widget.separator,
+						thickness = beautiful.dpi(3),
+						color = beautiful.bg_sec,
+						forced_height = beautiful.dpi(3)
+					},
+				}
+			}
 		},
 	}
 }
