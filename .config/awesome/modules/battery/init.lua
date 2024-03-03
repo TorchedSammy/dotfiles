@@ -3,7 +3,15 @@ local settings = require 'conf.settings'
 
 local M = {}
 
-local battery = upower.Client():get_display_device()
+--local battery = upower.Client():get_display_device()
+local battery
+local devices = upower.Client():get_devices()
+for _, dev in ipairs(devices) do
+	if dev.is_present and dev.power_supply then
+		battery = dev
+	end
+end
+
 local statusNames = {
 	[upower.DeviceState.PENDING_DISCHARGE] = "Discharging",
 	[upower.DeviceState.PENDING_CHARGE]    = "Charging",
@@ -35,7 +43,7 @@ local function updateStats()
 	if state == 'Charging' then
 		time = formatTime(battery.time_to_full) .. ' until full'
 	else
-		time = formatTime(battery.time_to_empty) .. ' until empty'
+		time = formatTime(battery.time_to_empty) .. ' left'
 	end
 	if percentage == 100 then
 		state = 'Full'
@@ -74,11 +82,11 @@ function M.time()
 	local state = M.status()
 
 	if state == 'Charging' then
-		if battery.time_to_full == 0 then return '' end
+		if battery.time_to_full == 0 then return 'Calculating time...' end
 		return formatTime(battery.time_to_full) .. ' until full'
 	else
-		if battery.time_to_empty == 0 then return '' end
-		return formatTime(battery.time_to_empty) .. ' until empty'
+		if battery.time_to_empty == 0 then return 'Calculating time...' end
+		return formatTime(battery.time_to_empty) .. ' left'
 	end
 end
 
