@@ -49,6 +49,7 @@ awful.spawn.easy_async_with_shell('wmctrl -m | grep PID', function(out)
 		if not out2:match 'y' then
 			awful.spawn.easy_async(string.format('touch /tmp/awesome', pid), function() end)
 			awful.spawn.easy_async('dex-autostart --environment Awesome --autostart', function() end)
+			awful.spawn.easy_async('pw-play .config/awesome/sounds/startup2.wav', function() end)
 		end
 	end)
 end)
