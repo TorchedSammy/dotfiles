@@ -56,12 +56,20 @@ local function contentBackCallback()
 	setupContentLayout()
 end
 
+local contentSwitch = w.switch {color = beautiful.accent}
+local contentBackButton = w.button('arrow-left', {
+	bg = beautiful.bg_sec,
+	size = beautiful.dpi(20),
+})
+
 local contentLabel = harmony.titlebar('Content', {
-	before = w.button('arrow-left', {
-		bg = beautiful.bg_sec,
-		size = beautiful.dpi(20),
-		onClick = contentBackCallback
-	})
+	before = contentBackButton,
+	after = wibox.widget {
+		layout = wibox.container.place,
+		halign = 'right',
+		content_fill_horizontal = false,
+		contentSwitch
+	}
 })
 
 local quickSettingsTitle, qstHeight = harmony.titlebar 'Quick Settings'
@@ -162,6 +170,20 @@ local function createToggle(type)
 	local function displayControls()
 		contentLabel:text(control.title)
 		quickSettingsAnimator.target = 1
+
+		contentSwitch.visible = control.toggle
+		contentSwitch:setState(on, true)
+		--[[function contentSwitch:handler()
+			local controlOn = control.toggle()
+			if controlOn == nil then return end
+
+			setupButtonState(controlOn)
+		end]]--
+
+		contentBackButton.onClick = function()
+			contentBackCallback()
+			if control.undisplay then control.undisplay() end
+		end
 		control.display(contentLayout)
 	end
 
