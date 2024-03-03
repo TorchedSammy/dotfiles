@@ -7,6 +7,7 @@ local wibox = require 'wibox'
 local rubato = require 'libs.rubato'
 local lgi = require 'lgi'
 local focus = require 'conf.focus'
+local easing = require 'modules.easing'
 
 local Color = require 'lua-color'
 
@@ -218,8 +219,9 @@ function helpers.slidePlacement(wbx, opts)
  local wbxOpen = false
  local hideHeight = awful.screen.focused().geometry.height
  local animator = (opts.animator and opts.animator(wbx)) or rubato.timed {
-		duration = 0.3,
-		rate = 60,
+		duration = 0.25,
+		rate = 120,
+		override_dt = true,
 		subscribed = function(y)
 			wbx.y = y
 			if y == hideHeight then
@@ -227,10 +229,7 @@ function helpers.slidePlacement(wbx, opts)
 			end
 		end,
 		pos = hideHeight,
-		easing = {
-     F = 1/3,
-     easing = function(t) return t*t end
-  },
+  easing = rubato.quadratic,
   clamp_position = true
 	}
 	local placer = type(opts.placement) == 'string' and awful.placement[opts.placement] or opts.placement
@@ -312,7 +311,7 @@ function helpers.transitionColor(opts)
    opts.transformer(tostring(old:mix(new, perc / 100)))
 		end,
 		pos = 0,
-		easing = opts.easing or rubato.quadratic,
+		easing = easing.easeInOutQuart,
 		clamp_position = true
 	}
 	animator.target = 100
