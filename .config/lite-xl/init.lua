@@ -1,3 +1,5 @@
+require 'miq'
+
 local core = require 'core'
 local config = require 'core.config'
 local command = require 'core.command'
@@ -6,49 +8,6 @@ local style = require 'core.style'
 local StatusView = require 'core.statusview'
 local DocView = require 'core.docview'
 local CommandView = require 'core.commandview'
-
-local ok = pcall(require, 'plugins.miq')
-if not ok then
-	core.log 'Installing Miq...'
-	local proc = process.start {'git', 'clone', 'https://github.com/TorchedSammy/Miq', USERDIR .. '/plugins/miq'}
-	if proc then
-		proc:wait(process.WAIT_INFINITE)
-		if proc:returncode() == 0 then
-			command.perform 'core:restart'
-		else
-			print(proc:read_stdout() or proc:read_stderr())
-			core.error 'Could not install Miq.'
-		end
-	end
-end
-
-config.plugins.miq.debug = true
-config.plugins.miq.plugins = {
-	-- miq can manage itself
-	'~/Files/Projects/Miq',
-
-	'TorchedSammy/Feathertime',
-
-	{'TorchedSammy/Litepresence', run = 'go get && go build'},
-
-	{
-		'~/Files/Projects/Evergreen.lxl',
-		--run = 'luarocks install ltreesitter --local --dev'
-	},
-
-	--{'TorchedSammy/lite-xl-gitdiff-highlight', name = 'gitdiff_highlight'},
-	'~/Files/Projects/lite-xl-scm',
-
-	'lite-xl/lite-xl-lsp',
-	'TorchedSammy/lite-xl-lspkind',
-	'~/Files/Projects/lspinstall.lxl',
-
-	-- others
-	'anthonyaxenov/lite-xl-ignore-syntax',
---	'juliardi/lite-xl-treeview-extender',
-	'liquidev/lintplus',
-}
-
 local fontconfig = require 'plugins.fontconfig'
 local lspconfig = require 'plugins.lsp.config'
 local lspkind = require 'plugins.lspkind'
@@ -61,28 +20,47 @@ local function ignoreExt(...)
 	end
 end
 ignoreExt('png')
+
+local codefont = 'Monaspace Neon'
+local codefontStyle = 'Regular'
+local italicCodeFont = 'Monaspace Radon'
+local codefontStyleItalic = 'Medium'
+local fontSize = 14
+local ligs = {
+	ss01 = false,
+--	ss03 = true,
+--	ss05 = true,
+--	ss06 = true,
+	ss07 = true,
+	ss08 = true,
+	calt = true,
+	dlig = true
+}
+
 fontconfig.use_blocking {
 	font = {
 		group = {
 			'SF Pro Display:style=Regular',
-			'VictorMono Nerd Font:style=Medium',
+			codefont .. ':style=' .. codefontStyle,
 			'Segoe UI Emoji'
 		},
-		size = 12 * SCALE
+		size = 16 * SCALE,
+		ligatures = ligs
 	},
 	code_font = {
 		group = {
-			'VictorMono Nerd Font:style=Medium',
+			codefont .. ':style=' .. codefontStyle,
 			'Segoe UI Emoji'
 		},
-		size = 12 * SCALE
-	}
+		size = fontSize * SCALE,
+		ligatures = ligs
+	},
 }
 local italicFont = fontconfig.load_group_blocking({
-	'VictorMono Nerd Font:style=Medium Italic',
+	italicCodeFont .. ':style=' ..  codefontStyleItalic,
 	'Segoe UI Emoji'
 	},
-	12 * SCALE
+	fontSize * SCALE
 )
 
 style.syntax_fonts = {
@@ -97,7 +75,7 @@ for _, font in pairs(style.syntax_fonts) do
 end
 
 lspkind.setup {
-	fontName = 'VictorMono Nerd Font:style=Medium'
+	fontName = codefont .. ':style=' .. codefontStyle
 }
 
 config.tab_type = 'hard'
@@ -116,7 +94,7 @@ if not core.status_view:get_item 'icon:heart' then
 		alignment = StatusView.Item.RIGHT,
 		get_item = function()
 			return {
-				style.color1, bigCodeFont, ''
+				style.color1, bigCodeFont, '♥'
 			}
 		end,
 		tooltip = '<3',
