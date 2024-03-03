@@ -271,7 +271,12 @@ end)
 
 awesome.connect_signal('battery::time', function(t, timeNum)
 	if timeNum == 0 or battery.status() == 'Full' then
-		time.text = ''
+		if battery.status() == 'Full' then
+			time.text = ''
+		else
+			time.text = 'Calculating time...'
+		end
+
 		return
 	end
 
