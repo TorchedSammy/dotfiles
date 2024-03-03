@@ -62,7 +62,7 @@ end, {
 
 awful.key({modkey}, 'j',
 	function()
-		awful.client.focus.byidx(1)
+		awful.client.focus.byidx(-1)
 	end, {
 		description = 'Focus next client by index',
 		group = 'client'
@@ -70,7 +70,7 @@ awful.key({modkey}, 'j',
 ),
 awful.key({modkey}, 'k',
 	function()
-		awful.client.focus.byidx(-1)
+		awful.client.focus.byidx(1)
 	end, {
 		description = 'Focus previous client by index',
 		group = 'client'
