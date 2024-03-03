@@ -160,7 +160,8 @@ function widgets.button(icon, opts)
 	end)
 
 	ico.visible = true
-	local realWid =  setmetatable({}, {
+	local realWid
+	realWid = setmetatable({}, {
 		__index = function(_, k)
 			return ico[k]
 		end,
@@ -177,6 +178,12 @@ function widgets.button(icon, opts)
 				ico:emit_signal 'widget::redraw_needed'
 			elseif k == 'text' then
 				ico:get_children_by_id'textbox'[1].markup = helpers.colorize_text(v, opts.color or beautiful.fg_normal)
+			elseif k == 'onClick' and type(v) == 'function' then
+				realWid.buttons = {
+					awful.button({}, 1, function()
+						v(realWid)
+					end),
+				}
 			end
 			ico[k] = v
 		end
@@ -443,23 +450,23 @@ function widgets.switch(opts)
 	}
 
 	-- ### Remove mouse interaction from slider
-	local oldSliderMt = wibox.widget.slider.mt
 	local base = require 'wibox.widget.base'
 	local gtable = require 'gears.table'
-	function wibox.widget.slider.mt:__call(...)
-		local ret = base.make_widget(nil, nil, {
-			enable_properties = true,
-		})
+	setmetatable(wibox.widget.slider, {
+		__call = function()
+			local ret = base.make_widget(nil, nil, {
+				enable_properties = true,
+			})
 
-		gtable.crush(ret._private, args or {})
+			gtable.crush(ret._private, args or {})
 
-		gtable.crush(ret, wibox.widget.slider, true)
+			gtable.crush(ret, wibox.widget.slider, true)
 
-		--ret:connect_signal("button::press", mouse_press)
+			--ret:connect_signal("button::press", mouse_press)
 
-		return ret
-	end
-	setmetatable(wibox.widget.slider, wibox.widget.slider.mt)
+			return ret
+		end
+	})
 	-- ###
 
 	local switch = wibox.widget {
@@ -469,6 +476,8 @@ function widgets.switch(opts)
 		bar_margins = {
 			top = size.h / 3,
 			bottom = size.h / 3,
+			left = beautiful.dpi(4),
+			right = beautiful.dpi(4),
 		},
 		bar_color = beautiful.xcolor12,
 		bar_active_color = beautiful.accent,
@@ -477,29 +486,50 @@ function widgets.switch(opts)
 		handle_shape = gears.shape.circle,
 		handle_border_color = beautiful.accent,
 		handle_border_width = 0,
-		value = opts.on and 100 or 0
+		value = opts.on and 100 or 0,
+		on = opts.on
 	}
-	setmetatable(wibox.widget.slider, oldSliderMt)
+	setmetatable(wibox.widget.slider, wibox.widget.slider.mt)
 
 	local animator = rubato.timed {
-		duration = 0.2,
+		duration = 1,
 		rate = 60,
-		override_dt = true,
-		clamp_position = true,
-		easing = rubato.quadratic,
+		outro = 0.7,
+		easing = {
+			F = (20*math.sqrt(3)*math.pi-30*math.log(2)-6147) /
+				(10*(2*math.sqrt(3)*math.pi-6147*math.log(2))),
+			easing = function(t) return
+		(4096*math.pi*(2^(10*t-10))*math.cos(20/3*math.pi*t-43/6*math.pi)
+		+6144*(2^(10*t-10))*math.log(2)*math.sin(20/3*math.pi*t-43/6*math.pi)
+		+2*math.sqrt(3)*math.pi-3*math.log(2)) /
+		(2*math.pi*math.sqrt(3)-6147*math.log(2))
+			end
+		},
 		subscribed = function(p)
 			switch.value = p
 		end,
 		pos = switch.value,
 	}
+	function switch:setState(on, instant)
+		if instant then
+			switch.value = on and 100 or 0
+			animator.target = on and 100 or 0
+		else
+			animator.target = on and 100 or 0
+		end
+
+		switch.on = on
+	end
+
 	helpers.hoverCursor(switch)
 	switch.buttons = {
 		awful.button({}, 1, function()
-			if switch.value == 100 then
-				animator.target = 0
+			if switch.value > 50 then
+				switch:setState(false)
 			else
-				animator.target = 100
+				switch:setState(true)
 			end
+			if switch.handler then switch:handler(switch.on) end
 		end)
 	}
 
