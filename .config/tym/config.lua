@@ -3,7 +3,7 @@ local thm = dofile(tym.get_theme_path())
 
 -- todo: watch config file and autoreload
 
-tym.set('font', 'Victor Mono Nerd Font Medium 12')
+tym.set('font', 'Monaspace Neon Medium 12')
 tym.set_config {
 	title = 'Tym',
 	padding_horizontal = 20,
