@@ -8,12 +8,14 @@ local syntax = require 'ui.components.syntax'
 local sfx = require 'modules.sfx'
 local caps = require 'modules.caps'
 
-local volumeDisplay = wibox {
+local volumeDisplay = helpers.aaWibox {
 	width = beautiful.dpi(420),
 	height = beautiful.dpi(88),
 	bg = '#00000000',
 	ontop = true,
 	visible = false,
+	rrectRadius = beautiful.radius,
+	bg = beautiful.bg_sec,
 }
 
 local displayTimer = gears.timer {
@@ -57,10 +59,6 @@ local function createPopup(icon, layout)
 		width = volumeDisplay.width,
 		height = volumeDisplay.height,
 		{
-			widget = wibox.container.background,
-			bg = beautiful.bg_sec,
-			shape = helpers.rrect(beautiful.radius),
-			{
 				layout = wibox.layout.fixed.horizontal,
 				{
 					widget = wibox.container.constraint,
@@ -78,14 +76,13 @@ local function createPopup(icon, layout)
 					margins = spacing,
 					layout
 				}
-			}
 		}
 	}
 
 	return popup, icoWidget
 end
 
-local volumePopupWid = createPopup('volume', wibox.widget {
+local volumePopupWid, volumeIcon = createPopup('volume', wibox.widget {
 	layout = wibox.layout.fixed.horizontal,
 	spacing = spacing,
 	volSlider,
