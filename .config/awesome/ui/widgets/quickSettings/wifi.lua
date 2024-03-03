@@ -33,6 +33,13 @@ M.layout = wibox.widget {
 	M.list
 }
 
+local scanTimer = gears.timer {
+	timeout = 10,
+	callback = function()
+		wifi.scan()
+		M.fetch()
+	end
+}
 -- @return boolean state of the setting (on or off)
 function M.toggle()
 	wifi.toggle()
@@ -402,6 +409,11 @@ end
 
 function M.display(layout)
 	layout:add(M.layout)
+	scanTimer:start()
+end
+
+function M.undisplay()
+	scanTimer:stop()
 end
 
 function M.status()
@@ -412,6 +424,7 @@ awesome.connect_signal('wifi::toggle', function(state)
 	util.emitSignal('wifi', 'toggle', state)
 	if state == false then
 		M.layout:reset()
+		M.list:reset()
 		M.active = nil
 	end
 

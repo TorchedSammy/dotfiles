@@ -332,7 +332,7 @@ do
 							widget = wibox.container.margin,
 							margins = quickSettingsMargin,
 							{
-								layout = wibox.layout.overflow.vertical,
+								layout = wibox.layout.fixed.vertical,
 								forced_width = quickSettings.width,
 								id = 'content'
 							}
