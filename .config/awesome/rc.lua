@@ -13,6 +13,7 @@ local wibox = require 'wibox'
 local settings = require 'conf.settings'
 local scheduler = require 'modules.scheduler'
 local extrautils = require 'libs.extrautils'()
+local sfx = require 'modules.sfx'
 
 require 'libs.succulent'
 require 'awful.autofocus'
@@ -214,6 +215,12 @@ client.connect_signal('unfocus', function(c)
 		end,
 		duration = 0.4
 	}
+end)
+
+client.connect_signal('property::urgent', function(c)
+    if c.urgent then
+        sfx.play 'foreground'
+    end
 end)
 
 collectgarbage('setpause', 110)
