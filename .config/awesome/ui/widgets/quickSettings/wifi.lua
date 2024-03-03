@@ -18,6 +18,7 @@ local M = {
 	list = wibox.layout.fixed.vertical(),
 	active = nil,
 	apWidgets = {},
+	aps = {},
 	lastConnectedSSID = nil
 }
 M.list.spacing = beautiful.dpi(16)
@@ -353,8 +354,8 @@ local function revealActiveAP(apWidget)
 	M.layout:insert(1, M.active)
 
 	local apConnectedRevealer = rubato.timed {
-		duration = 1.5,
-		rate = 60,
+		duration = 1,
+		rate = 120,
 		subscribed = function(h)
 			M.active.height = h
 		end,
