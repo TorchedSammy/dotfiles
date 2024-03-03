@@ -25,6 +25,7 @@ local appList = wibox.widget {
 }
 
 local appWidgets = {}
+local apps = {}
 
 local searchInput = inputbox {
 	password_mode = false,
@@ -36,7 +37,9 @@ local searchInput = inputbox {
 
 function setupAppList()
 	appList:reset()
-	appList.spacing = beautiful.dpi(1)
+	-- setting spacing makes it have a wack amount of space
+	-- because awesome handles not visible widgets in a layout in a dumb way
+	--appList.spacing = beautiful.dpi(1)
 	appList.step = beautiful.dpi(100)
 	appList.scrollbar_widget = {
 		widget = wibox.widget.separator,
@@ -46,29 +49,37 @@ function setupAppList()
 	appList.scrollbar_width = beautiful.dpi(10)
 end
 
-searchInput:connect_signal('inputbox::keypressed', function()
+local function handleSearch()
 	local text = searchInput:get_text()
-	setupAppList()
 
 	local matchIdx = 1
-	for idx, app in ipairs(appWidgets) do
+	for idx, appName in ipairs(apps) do
+		local wid = appList.children[idx]
+		if wid == nil then return end
+
 		if text ~= '' then
-			local match = fzy.has_match(searchInput:get_text(), app.name)
-			--print(app.name, match)
+			local match = fzy.has_match(searchInput:get_text(), appName)
 			if match then
-				appList:insert(matchIdx, app.widget)
+				wid.visible = true
 				matchIdx = matchIdx + 1
 			else
-	--			appList:remove(idx)
+				wid.visible = false
 				appList:emit_signal 'widget::redraw_needed'
-				app.widget:emit_signal 'widget::redraw_needed'
 			end
 		else
-			print('adding backc all apps')
-			appList:insert(idx, app.widget)
+			wid.visible = true
+			appList:emit_signal 'widget::redraw_needed'
 		end
 	end
-end)
+end
+
+local function resetSearch()
+	searchInput:unfocus()
+	searchInput:set_text('')
+	handleSearch()
+end
+
+searchInput:connect_signal('inputbox::keypressed', function() handleSearch() end)
 
 function M.new(opts)
 	opts = opts or {}
@@ -137,7 +148,7 @@ function M.new(opts)
 	}
 
 	function wid:fetchApps()
-		--rsetupAppList()
+		--setupAppList()
 		local allApps = extrautils.apps.get_all()
 		local function pairsByKeys (t, f)
 				local a = {}
@@ -163,10 +174,12 @@ function M.new(opts)
 				goto continue
 			end
 			collision[name] = true
+			table.insert(apps, app.name)
 
 			local appWid = wibox.widget {
 				widget = wibox.container.margin,
 				right = beautiful.dpi(8),
+				id = app.name,
 				{
 					widget = wibox.container.background,
 					shape = helpers.rrect(beautiful.radius or base.radius),
@@ -219,15 +232,17 @@ function M.new(opts)
 				}
 			}
 
+--[[
 			table.insert(appWidgets, {
 				widget = appWid,
 				name = name
 			})
-
+]]--
 			appWid.buttons = {
 				awful.button({}, 1, function()
 					opts.menu:off()
 					app.launch()
+					resetSearch()
 				end)
 			}
 
@@ -251,11 +266,13 @@ function M.new(opts)
 end
 
 function M.bindMethods(startMenu)
-		helpers.slidePlacement(startMenu, {
+	helpers.slidePlacement(startMenu, {
 		placement = 'bottom_left',
-		toggler = function()
+		toggler = function(open)
 			appList.scroll_factor = 0
-			searchInput:unfocus()
+			if not open then
+				resetSearch()
+			end
 		end
 	})
 end
