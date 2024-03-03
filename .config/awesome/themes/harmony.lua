@@ -17,7 +17,7 @@ theme.font          = theme.fontName .. ' Regular 12'
 theme.dark = true
 theme.accent = theme.xcolor6 --'#8062ff'
 theme.bg_normal = theme.xbackground
-theme.bg_popup = helpers.shiftColor(theme.bg_normal, 5)
+theme.bg_popup = helpers.shiftColor(theme.bg_normal, 2)
 theme.bg_sec = theme.xcolor8
 theme.bg_focus = theme.bg_normal
 theme.bg_urgent = theme.bg_normal
@@ -45,11 +45,11 @@ theme.titlebar_bg = theme.bg_sec
 theme.notification_bg = theme.xbackground
 theme.notification_position = 'bottom_right'
 theme.notification_width = dpi(340)
-theme.notification_height = dpi(100)
+theme.notification_height = dpi(120)
 theme.notification_border_color = theme.xforeground
-theme.notification_border_width = dpi(3)
+theme.notification_border_width = dpi(0)
 theme.notification_padding = theme.useless_gap * dpi(2)
-theme.notification_shape = helpers.rrect(theme.radius)
+--theme.notification_shape = helpers.rrect(theme.radius)
 
 theme.bar = 'harmony'
 theme.wibar_height = dpi(45)
@@ -75,7 +75,8 @@ theme.taglist_text_color_urgent   = rep(theme.xcolor1)
 
 theme.task_preview_widget_bg = theme.bg_popup
 
-theme.wallpaper = theme.config_path..'/wallpapers/purplesky.png'
+theme.wallpaper = theme.config_path..'/wallpapers/aster.png'
+--theme.wallpaper = theme.config_path..'/wallpapers/lvl374_free_v2_desktop.png'
 theme.picom_conf = 'picom-harmony'
 
 return theme
