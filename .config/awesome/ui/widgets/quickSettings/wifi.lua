@@ -67,13 +67,11 @@ end
 local function createAPWidget(ssid, ap)
 	local existingAPWidget = M.apWidgets[ssid]
 	local connected = wifi.activeSSID == ssid
-	if existingAPWidget and not connected then
+	if existingAPWidget and not connected and M.lastConnectedSSID == ssid then
 		return existingAPWidget
 	end
 
-	local secure = true --wifi.getAPSecurity(ap) ~= ''
-	local passwordVisible = false
-
+	local secure = true --wifi.getAPSecurity(ap) ~= ''\
 	local password = inputbox {
 		password_mode = true,
 		mouse_focus = true,
