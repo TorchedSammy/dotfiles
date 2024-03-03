@@ -47,7 +47,7 @@ awful.screen.connect_for_each_screen(function(s)
 		layout = wibox.layout.fixed.horizontal,
 		spacing = 5,
 		widgets.battery {size = beautiful.dpi(15)},
-		widgets.icon('wifi', {size = beautiful.dpi(15)}),
+		widgets.wifi {size = beautiful.dpi(15)},
 		widgets.volume {size = beautiful.dpi(15)},
 	}
 	local controls = backgroundBar(controlsRaw)

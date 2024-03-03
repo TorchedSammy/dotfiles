@@ -10,6 +10,7 @@ local naughty = require 'naughty'
 local cairo = require 'lgi'.cairo
 local battery = require 'modules.battery'
 local rubato = require 'libs.rubato'
+local wifi = require 'modules.wifi'
 
 local function rounded_bar(color)
 	return wibox.widget {
@@ -90,7 +91,7 @@ function widgets.icon(name, opts)
 end
 
 function widgets.button(icon, opts)
-	opts = opts or {}
+	opts = opts or (type(icon) == 'table' and icon or {})
 
 	local focused = false
 	local ico = wibox.widget {
@@ -630,4 +631,35 @@ function widgets.volume(opts)
 
 	return icon
 end
+
+function widgets.wifi(opts)
+	local stateIcon = wifi.enabled and (wifi.activeSSID and 'wifi' or 'wifi-noap') or 'wifi-off'
+	local icon = widgets.icon(stateIcon, {size = opts.size})
+	local tt = awful.tooltip {
+		objects = {icon},
+		preferred_alignments = {'middle'},
+		mode = 'outside',
+	}
+
+	local function setState(volume, muted, init)
+		tt.text = string.format('%d%% volume%s', volume, muted and ' (muted)' or '')
+		icon.icon = muted and 'volume-muted' or 'volume'
+	end
+
+
+	awesome.connect_signal('wifi::toggle', function(on)
+		icon.icon = on and 'wifi-noap' or 'wifi-off'
+	end)
+
+	awesome.connect_signal('wifi::disconnected', function()
+		if wifi.enabled then icon.icon = 'wifi-noap' end
+	end)
+
+	awesome.connect_signal('wifi::activeAP', function(ssid, ap)
+		icon.icon = 'wifi'
+	end)
+
+	return icon
+end
+
 return widgets
