@@ -2,7 +2,9 @@ local awful = require 'awful'
 local beautiful = require 'beautiful'
 local step = 5
 local sounds = {
-	notification = 'notify2.wav',
+	notification = 'notify6.wav',
+	deviceAdded = 'device-added2.wav',
+	deviceRemoved = 'device-removed2.wav',
 }
 
 local M = {
@@ -14,7 +16,8 @@ local function spawn(cmd, cb)
 end
 
 function M.play(s)
-	awful.spawn.easy_async(string.format('pacat --volume %d --property=media.role=event %s', math.floor(65536 * M.volume), beautiful.config_path .. 'sounds/' .. (sounds[s] or s .. '.wav')), function() end)
+	local cmd = string.format('pw-play --volume %f --properties=media.role=event %s', M.volume, beautiful.config_path .. 'sounds/' .. (sounds[s] or s .. '.wav'))
+	awful.spawn.easy_async(cmd, function() end)
 end
 
 function M.notify()
