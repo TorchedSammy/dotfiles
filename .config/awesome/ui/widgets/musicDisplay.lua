@@ -218,10 +218,11 @@ function M.new(opts)
 		forced_height = opts.height,
 		{
 			widget = wibox.container.margin,
-			top = 20,
-			left = 20,-- - (base.widths.empty + base.widths.round),
-			right = 20,
-			bottom = 20,
+			margins = beautiful.dpi(20),
+			--top = 20,
+			--left = 20,-- - (base.widths.empty + base.widths.round),
+			--right = 20,
+			--bottom = 20,
 			{
 				layout = wibox.layout.fixed.horizontal,
 				spacing = 20,
