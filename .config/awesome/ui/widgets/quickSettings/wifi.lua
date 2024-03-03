@@ -216,12 +216,13 @@ local function createAPWidget(ssid, ap)
 						color = beautiful.xcolor14,
 						size = beautiful.dpi(22),
 						onClick = function(self)
-							if passwordVisible then
+							if not password.password_mode then
 								self.icon = 'visibility-off'
 							else
 								self.icon = 'visibility'
 							end
-							passwordVisible = not passwordVisible
+							password.password_mode = not password.password_mode
+							password:set_text(password:get_text())
 						end
 					})
 				}
