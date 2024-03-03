@@ -358,13 +358,17 @@ function helpers.aaWibox(opts)
    setupWidget
   })
 
---[[
   local function redraw()
    setupWidget:emit_signal 'widget::redraw_needed'
   end
-  awesome.connect_signal('compositor::off', redraw)
-  awesome.connect_signal('compositor::on', redraw)
- ]]--
+  awesome.connect_signal('compositor::off', function()
+   wbx.bg = bg
+   redraw()
+  end)
+  awesome.connect_signal('compositor::on', function()
+   wbx.bg = '#00000000'
+   redraw()
+  end)
  end
  return wbx
 end
