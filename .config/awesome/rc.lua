@@ -25,7 +25,8 @@ if awesome.startup_errors then
 	naughty.notify {
 		preset = naughty.config.presets.critical,
 		title = 'Oops, there were errors during startup!',
-		text = awesome.startup_errors
+		text = awesome.startup_errors,
+		category = 'warning'
 	}
 end
 
@@ -40,7 +41,8 @@ do
 		naughty.notify {
 			preset = naughty.config.presets.critical,
 			title = 'Oops, an error happened!',
-			text = tostring(err)
+			text = tostring(err),
+			category = 'warning'
 		}
 		in_error = false
 	end)
