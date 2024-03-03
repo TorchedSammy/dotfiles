@@ -11,7 +11,16 @@ naughty.config.defaults.position = beautiful.notification_position
 naughty.config.defaults.border_width = beautiful.notification_border_width
 
 naughty.connect_signal('added', function(notif)
-	if notif.category ~= 'system.playerctl' then
+	if notif.category == 'system.playerctl' then return end
+
+	local categorySound = {
+		['device.added'] = 'deviceAdded',
+		['device.removed'] = 'deviceRemoved',
+	}
+
+	if notif.category and categorySound[notif.category] then
+		sfx.play(categorySound[notif.category])
+	else
 		sfx.notify()
 	end
 end)
