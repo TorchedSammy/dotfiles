@@ -14,6 +14,7 @@
 	<!--<p>An elegant, gradient-full setup.</p><br>-->
 	<img src="https://safe.saya.moe/EUrYqhOGizEz.png">
 	<img src="https://safe.saya.moe/gHBcbQqXhmCn.png">
+	<i>designed with assistance from @tsukki9696</i>
 </div>
 
 ## Welcome!
