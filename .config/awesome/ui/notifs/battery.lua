@@ -4,11 +4,17 @@ local battery = require 'modules.battery'
 local lowNotified = false
 local criticalNotified = false
 
-awesome.connect_signal('battery::status', function(status, battery)
+awesome.connect_signal('battery::status', function(status)
 	if status == 'Charging' then
 		lowNotified = false
 		criticalNotified = false
 		sfx.play 'charge'
+
+		naughty.notification {
+			title = 'Battery Charging',
+			text = string.format('Currently at %d%%.', battery.percentage()),
+			category = 'battery-charging-2'
+		}
 	end
 end)
 
