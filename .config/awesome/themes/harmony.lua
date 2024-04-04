@@ -15,7 +15,7 @@ theme.fontName = 'IBM Plex Sans'
 theme.font          = theme.fontName .. ' Regular 12'
 
 theme.dark = true
-theme.accent = theme.xcolor6 --'#8062ff'
+theme.accent = theme.xcolor4 --'#8062ff'
 theme.bg_normal = theme.xbackground
 theme.bg_popup = helpers.shiftColor(theme.bg_normal, 2)
 theme.bg_sec = theme.xcolor8
@@ -75,7 +75,7 @@ theme.taglist_text_color_urgent   = rep(theme.xcolor1)
 
 theme.task_preview_widget_bg = theme.bg_popup
 
-theme.wallpaper = theme.config_path..'/wallpapers/aster.png'
+theme.wallpaper = theme.config_path..'/wallpapers/mine.png'
 --theme.wallpaper = theme.config_path..'/wallpapers/lvl374_free_v2_desktop.png'
 theme.picom_conf = 'picom-harmony'
 
