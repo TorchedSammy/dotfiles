@@ -51,6 +51,7 @@ end
 
 local function handleSearch()
 	local text = searchInput:get_text()
+	appList:scroll(-9999)
 
 	local matchIdx = 1
 	for idx, appName in ipairs(apps) do
