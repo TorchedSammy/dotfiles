@@ -18,6 +18,10 @@ if not ok then
 end
 
 config.plugins.miq.debug = true
+config.plugins.miq.repos = {
+	'https://github.com/lite-xl/lite-xl-plugins.git:master',
+}
+
 config.plugins.miq.plugins = {
 	-- miq can manage itself
 	'~/Files/Projects/Miq',

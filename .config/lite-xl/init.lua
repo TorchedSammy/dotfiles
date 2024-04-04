@@ -9,6 +9,7 @@ local StatusView = require 'core.statusview'
 local DocView = require 'core.docview'
 local CommandView = require 'core.commandview'
 local fontconfig = require 'plugins.fontconfig'
+local lsp = require 'plugins.lsp'
 local lspconfig = require 'plugins.lsp.config'
 local lspkind = require 'plugins.lspkind'
 
@@ -131,6 +132,13 @@ lspconfig.sumneko_lua.setup {
 			}
 		}
 	}
+}
+
+lsp.add_server {
+	name = 'gleam',
+	language = 'gleam',
+	file_patterns = { '%.gleam' },
+	command = { 'gleam', 'lsp' }
 }
 
 core.reload_module 'colors.awesomewm'
