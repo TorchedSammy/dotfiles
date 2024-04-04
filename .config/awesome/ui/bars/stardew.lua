@@ -143,7 +143,7 @@ awful.screen.connect_for_each_screen(function(s)
 					bg = beautiful.bg_sec
 				},
 				widgets.layout(s),
-				widgets.systray
+				--widgets.systray {bg = beautiful.wibar_bg, bar = s.bar, margin = beautiful.dpi(8)}
 			},
 			left = beautiful.wibar_spacing,
 			right = beautiful.wibar_spacing,

@@ -84,7 +84,7 @@ local function taglist(s)
 		for i = 1, ntags do
 			tagbox[i].shape_border_width = 0
 			tagbox[i].bg = '#00000000'
-			tag_text[i].markup = helpers.colorize_text(te[i], beautiful.taglist_text_color)
+			--tag_text[i].markup = helpers.colorize_text(te[i], beautiful.taglist_text_color)
 			local tag_clients
 			if s.tags[i] then
 				tag_clients = s.tags[i]:clients()
