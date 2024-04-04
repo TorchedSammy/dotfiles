@@ -15,7 +15,6 @@ local M = {
 	height = beautiful.dpi(180)
 }
 
-
 local function coloredText(text, color)
 	local wid = wibox.widget {
 		widget = wibox.widget.textbox,
@@ -41,17 +40,17 @@ function M.new(opts)
 	opts.sliderBg = opts.sliderBg or beautiful.xcolor9
 
 	local bgcolor = opts.bg
+	local horizMargin = beautiful.dpi(10)
+	local vertMargin = beautiful.dpi(20)
 
-	local albumArt = wibox.widget {
-		widget = wibox.widget.imagebox,
-		clip_shape = helpers.rrect(6),
-		resize = true
-	}
+	local albumArt = w.imgwidget('albumPlaceholder.png', {
+		clip_shape = helpers.rrect(beautiful.radius / 2)
+	})
 
-	local musicArtist = coloredText('', opts.fg or beautiful.fg_normal)
-	local musicTitle = coloredText('', opts.fg or beautiful.fg_normal)
-	local musicAlbum = coloredText('', opts.fg_sec or beautiful.fg_sec)
-	local positionText = coloredText('', opts.fg_sec or beautiful.fg_sec)
+	local musicArtist = coloredText('Artist', opts.fg or beautiful.fg_normal)
+	local musicTitle = coloredText('Title', opts.fg or beautiful.fg_normal)
+	local musicAlbum = coloredText('Album', opts.fg_sec or beautiful.fg_sec)
+	local positionText = coloredText('0:00', opts.fg_sec or beautiful.fg_sec)
 
 	local position = 0
 	local musicDisplay = wibox {
@@ -218,14 +217,11 @@ function M.new(opts)
 		forced_height = opts.height,
 		{
 			widget = wibox.container.margin,
-			margins = beautiful.dpi(20),
-			--top = 20,
-			--left = 20,-- - (base.widths.empty + base.widths.round),
-			--right = 20,
-			--bottom = 20,
+			top = vertMargin, bottom = vertMargin,
+			left = horizMargin, right = horizMargin,
 			{
 				layout = wibox.layout.fixed.horizontal,
-				spacing = 20,
+				spacing = 5,
 				{
 					widget = wibox.container.constraint,
 					width = 140,

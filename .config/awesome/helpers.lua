@@ -263,8 +263,8 @@ function helpers.slidePlacement(wbx, opts)
   wbxOpen = true
   wbx.displayed = true
 
+  lock.passthrough(wbx)
   if opts.toggler then
-    lock.passthrough(wbx)
     local continue = opts.toggler(wbxOpen)
     if continue == false then
       return
