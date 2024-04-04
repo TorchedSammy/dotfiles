@@ -93,11 +93,13 @@ end
 
 local manager = require 'modules.battery.managers.system76-power'
 function M.setProfile(profile)
+	--[[
 	if profile == 'powerSave' then
 		settings.noAnimate = true
 	else
 		settings.noAnimate = false
 	end
+	]]--
 	manager[profile .. 'Profile']()
 end
 
@@ -105,9 +107,10 @@ function M.profile()
 	return manager.profile()
 end
 
-if M.profile() == 'powerSave' then settings.noAnimate = true end
+--if M.profile() == 'powerSave' then settings.noAnimate = true end
 
 function M.history(updater)
+	--[[
 	local sparkline = p.Proxy:new {
 		bus = p.Bus.SESSION,
 		name = 'party.sammyette.Sparkline',
@@ -129,6 +132,9 @@ function M.history(updater)
 	end, 'Update')
 
 	return history
+	]]--
+
+	return {}
 end
 
 return M
