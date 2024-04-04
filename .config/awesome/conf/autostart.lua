@@ -15,6 +15,7 @@ end
 
 local programs = {
 	-- 'xmodmap -e "pointer = 3 2 1"',
+	'gnome-keyring-daemon',
 	'udiskie',
 	'gcdemu',
 	'pactl load-module module-role-ducking trigger_roles=phone,event',
