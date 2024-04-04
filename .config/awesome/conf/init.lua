@@ -32,9 +32,9 @@ require 'conf.autostart'
 terminal = 'tym'
 terminalname = terminal:gsub('^%l', string.upper)
 
-editor = 'pragtical'
-editorname = 'Pragtical'
-editorcmd = 'hilbish -c ' .. editor
+editor = 'lite-xl'
+editorname = 'Lite XL'
+editorcmd = 'hilbish -ic "' .. editor .. ' && exit"'
 
 musicplayer = 'cmus'
 playername = musicplayer:gsub('^%l', string.upper)
