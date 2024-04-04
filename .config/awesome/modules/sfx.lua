@@ -8,7 +8,7 @@ local sounds = {
 }
 
 local M = {
-	volume = 0.60
+	volume = 0.9
 }
 
 local function spawn(cmd, cb)
@@ -16,7 +16,7 @@ local function spawn(cmd, cb)
 end
 
 function M.play(s)
-	local cmd = string.format('pw-play --volume %f --properties=media.role=event %s', M.volume, beautiful.config_path .. 'sounds/' .. (sounds[s] or s .. '.wav'))
+	local cmd = string.format('paplay --volume %f --property=media.role=event %s', M.volume * 65536, beautiful.config_path .. 'sounds/' .. (sounds[s] or s .. '.wav'))
 	awful.spawn.easy_async(cmd, function() end)
 end
 
