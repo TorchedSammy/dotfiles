@@ -646,13 +646,12 @@ function widgets.wifi(opts)
 		icon.icon = muted and 'volume-muted' or 'volume'
 	end
 
-
 	awesome.connect_signal('wifi::toggle', function(on)
 		icon.icon = on and 'wifi-noap' or 'wifi-off'
 	end)
 
 	awesome.connect_signal('wifi::disconnected', function()
-		if wifi.enabled then icon.icon = 'wifi-noap' end
+		if wifi.enabled then icon.icon = 'wifi-noap' else icon.icon = 'wifi-off' end
 	end)
 
 	awesome.connect_signal('wifi::activeAP', function(ssid, ap)
