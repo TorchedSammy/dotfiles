@@ -7,7 +7,7 @@ local widgets = require 'ui.widgets'
 local harmony = require 'ui.components.harmony'
 local helpers = require 'helpers'
 local rubato = require 'libs.rubato'
-local quickSettings = require 'ui.widgets.quickSettings'
+local quickSettings = require 'ui.panels.quickSettings'
 --local filters = require 'surface_filters'
 
 local Color = require 'lua-color'
@@ -54,7 +54,7 @@ awful.screen.connect_for_each_screen(function(s)
 	helpers.onLeftClick(controls, quickSettings.toggle)
 	helpers.displayClickable(controls, {bg = beautiful.xcolor8, hoverColor = beautiful.xcolor9})
 
-	local music = require 'ui.widgets.musicDisplay'
+	local music = require 'ui.panels.musicDisplay'
 	local pctl = require 'modules.playerctl'
 
 	local albumArt = wibox.widget {
@@ -295,7 +295,7 @@ awful.screen.connect_for_each_screen(function(s)
 		onClick = function() musicDisplay:toggle() end
 	})
 
-	local sm = require 'ui.widgets.startMenu'
+	local sm = require 'ui.panels.startMenu'
 	local startMenu = sm.create {
 	--	shape = function(crr, w, h) return gears.shape.partially_rounded_rect(crr, w, h, false, false, true, true, base.radius) end
 	}

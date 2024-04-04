@@ -9,7 +9,7 @@ local rubato = require 'libs.rubato'
 local settings = require 'conf.settings'
 local wibox = require 'wibox'
 local w = require 'ui.widgets'
-local util = require 'ui.widgets.quickSettings.util'
+local util = require 'ui.panels.quickSettings.util'
 
 local bgcolor = beautiful.bg_popup
 local btnSize = dpi(32)
@@ -17,9 +17,9 @@ local quickSettingsMargin = dpi(20)
 local toggleSpacing = dpi(16)
 local widgets = {}
 local centers = {
-	wifi = require 'ui.widgets.quickSettings.wifi',
-	battery = require 'ui.widgets.quickSettings.battery',
-	bluetooth = require 'ui.widgets.quickSettings.bluetooth',
+	wifi = require 'ui.panels.quickSettings.wifi',
+	battery = require 'ui.panels.quickSettings.battery',
+	bluetooth = require 'ui.panels.quickSettings.bluetooth',
 }
 
 -- stop quick settings from scrolling
@@ -84,7 +84,7 @@ local quickSettings = helpers.aaWibox {
 }
 
 local function createToggle(type)
-	local ok, controlModule = pcall(require, string.format('ui.widgets.quickSettings.%s', type))
+	local ok, controlModule = pcall(require, string.format('ui.panels.quickSettings.%s', type))
 	local control = ok and controlModule or {
 		enabled = function() return false end,
 		toggle = function() return false end,

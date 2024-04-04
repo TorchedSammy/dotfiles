@@ -8,6 +8,7 @@ local rubato = require 'libs.rubato'
 local lgi = require 'lgi'
 local focus = require 'conf.focus'
 local easing = require 'modules.easing'
+local lock = require 'ui.panels.lock'
 
 local Color = require 'lua-color'
 
@@ -263,6 +264,7 @@ function helpers.slidePlacement(wbx, opts)
   wbx.displayed = true
 
   if opts.toggler then
+    lock.passthrough(wbx)
     local continue = opts.toggler(wbxOpen)
     if continue == false then
       return

@@ -1,5 +1,5 @@
 local compositor = require 'modules.compositor'
-local util = require 'ui.widgets.quickSettings.util'
+local util = require 'ui.panels.quickSettings.util'
 
 local M = {
 	toggle = true

@@ -11,7 +11,7 @@ local wibox = require 'wibox'
 local w = require 'ui.widgets'
 local wifi = require 'modules.wifi'
 local inputbox = require 'ui.widgets.inputbox'
-local util = require 'ui.widgets.quickSettings.util'
+local util = require 'ui.panels.quickSettings.util'
 
 local M = {
 	title = 'Wi-fi',
