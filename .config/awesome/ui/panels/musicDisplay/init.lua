@@ -40,7 +40,7 @@ function M.new(opts)
 	opts.sliderBg = opts.sliderBg or beautiful.xcolor9
 
 	local bgcolor = opts.bg
-	local horizMargin = beautiful.dpi(10)
+	local horizMargin = beautiful.dpi(20)
 	local vertMargin = beautiful.dpi(20)
 
 	local albumArt = w.imgwidget('albumPlaceholder.png', {
@@ -150,6 +150,8 @@ function M.new(opts)
 
 		albumArt.image = gears.surface.load_uncached_silently(art)
 		playPause.icon = playPauseIcons[2]
+		progress.value = 0
+		position = 0
 	end)
 
 	playerctl:connect_signal('position', function (_, pos, length)
@@ -216,24 +218,27 @@ function M.new(opts)
 		forced_width = opts.width, -- - (base.width * 2),
 		forced_height = opts.height,
 		{
-			widget = wibox.container.margin,
-			top = vertMargin, bottom = vertMargin,
-			left = horizMargin, right = horizMargin,
+			widget = wibox.container.place,
 			{
-				layout = wibox.layout.fixed.horizontal,
-				spacing = 5,
+				widget = wibox.container.margin,
+				top = vertMargin, bottom = vertMargin,
+				left = horizMargin, right = horizMargin,
 				{
-					widget = wibox.container.constraint,
-					width = 140,
-					strategy = 'exact',
+					layout = wibox.layout.fixed.horizontal,
+					spacing = beautiful.dpi(20),
 					{
-						layout = wibox.container.place,
-						valign = 'center',
-						halign = 'center',
-						albumArt
-					}
-				},
-				info
+						widget = wibox.container.constraint,
+						--width = 140,
+						--strategy = 'exact',
+						{
+							layout = wibox.container.place,
+							valign = 'center',
+							halign = 'center',
+							albumArt
+						}
+					},
+					info
+				}
 			}
 		}
 	}
