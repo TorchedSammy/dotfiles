@@ -8,7 +8,7 @@ local music = require 'ui.panels.musicDisplay'
 local harmony = require 'ui.components.harmony'
 local gears = require 'gears'
 local Color = require 'lua-color'
-local widgets = require 'ui.widgets'
+local w = require 'ui.widgets'
 
 local albumArt = w.imgwidget('albumPlaceholder.png', {
     widget = wibox.widget.imagebox,
