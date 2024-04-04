@@ -21,6 +21,7 @@ function M.on()
 	M.pid = awful.spawn.easy_async(string.format('picom --config /home/%s/.config/picom/%s.conf', os.getenv 'USER', beautiful.picom_conf), function()
 		awesome.emit_signal('compositor::off')
 		if M.awesomeKill then
+			M.awesomeKill = false
 			return
 		end
 		M.on()
@@ -35,9 +36,7 @@ function M.off()
 	if not M.pid then
 		awful.spawn.easy_async('pkill picom', function() end)
 	else
-		awful.spawn.easy_async(string.format('kill %d', M.pid), function()
-			M.awesomeKill = false
-		end)
+		awful.spawn.easy_async(string.format('kill %d', M.pid), function() end)
 	end
 	M.running = false
 

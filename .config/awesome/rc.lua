@@ -81,6 +81,7 @@ ruled.client.connect_signal("request::rules", function()
 		id         = "global",
 		rule       = { },
 		properties = {
+			border_width = beautiful.border_width,
 			focus     = awful.client.focus.filter,
 			raise     = true,
 			screen    = awful.screen.preferred,
