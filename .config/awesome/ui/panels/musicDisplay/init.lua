@@ -96,16 +96,22 @@ function M.new(opts)
 		onClick = function()
 			shuffleState = not shuffleState
 			playerctl:set_shuffle(shuffleState)
-			updateShuffle()
+			updateShuffle(true)
 		end
 	})
+	if shuffleState then
+		shuffle.color = beautiful.fg_normal
+	else
+		shuffle.color = shuffleActive
+	end
 
-	updateShuffle = function()
-		if shuffleState then
-			shuffle.color = shuffleActive
-		else
-			shuffle.color = beautiful.fg_normal
-		end
+	updateShuffle = function(toggle)
+		helpers.transitionColor {
+			old = (toggle and shuffleState) and beautiful.fg_normal or shuffleActive,
+			new = not shuffleState and beautiful.fg_normal or shuffleActive,
+			transformer = function(col) shuffle.color = col end,
+			duration = 0.3
+		}
 	end
 		
 	playerctl:connect_signal('shuffle', function(_, shuff)

@@ -115,7 +115,7 @@ pctl.listenMetadata(function (title, artist, art, album)
                 titlebarBg.bg = tostring(Color {h = mixedColorHue, s = titlebarColorSat, v = titlebarColorVal})
                 gradient.bg = makeGradient(tostring(mixedColor), beautiful.bg_sec)
                 mw.setColors {
-                    shuffle = tostring(shuffleColor)
+                    shuffle = tostring(oldMusicColors.shuffle:mix(shuffleColor, perc / 100))
                 }
 
                 if perc == 100 then
