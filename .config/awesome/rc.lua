@@ -72,7 +72,7 @@ awful.screen.connect_for_each_screen(function(s)
 	awful.tag(taglist, s, layouts)
 end)
 
-local placer = awful.placement.no_overlap+awful.placement.no_offscreen
+local placer = awful.placement.no_overlap+awful.placement.no_offscreen+awful.placement.skip_fullscreen
 
 ruled.client.connect_signal("request::rules", function()
 	-- @DOC_GLOBAL_RULE@
