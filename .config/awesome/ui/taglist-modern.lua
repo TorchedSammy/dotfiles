@@ -8,33 +8,37 @@ local helpers = require 'helpers'
 
 local function setup(s, vertical)
 	local tf, tu, to, te, cf, cu, co, ce;
-	-- Set fallback values if needed
-	if beautiful.taglist_text_focused then
-		tf = beautiful.taglist_text_focused
-		tu = beautiful.taglist_text_urgent
-		to = beautiful.taglist_text_occupied
-		te = beautiful.taglist_text_empty
-		cf = beautiful.taglist_text_color_focused
-		cu = beautiful.taglist_text_color_urgent
-		co = beautiful.taglist_text_color_occupied
-		ce = beautiful.taglist_text_color_empty
-	else
-		-- Fallback values
-		tf = {'1', '2', '3', '4', '5', '6', '7', '8', '9'}
-		tu = tf
-		to = tf
-		te = tf
+	local function colors()
+		-- Set fallback values if needed
+		if beautiful.taglist_text_focused then
+			tf = beautiful.taglist_text_focused
+			tu = beautiful.taglist_text_urgent
+			to = beautiful.taglist_text_occupied
+			te = beautiful.taglist_text_empty
+			cf = beautiful.taglist_text_color_focused
+			cu = beautiful.taglist_text_color_urgent
+			co = beautiful.taglist_text_color_occupied
+			ce = beautiful.taglist_text_color_empty
+		else
+			-- Fallback values
+			tf = {'1', '2', '3', '4', '5', '6', '7', '8', '9'}
+			tu = tf
+			to = tf
+			te = tf
 
-		local ff = beautiful.fg_focus
-		local fu = beautiful.fg_urgent
-		local fo = beautiful.fg_normal
-		local fe = beautiful.fg_minimize
+			local ff = beautiful.fg_focus
+			local fu = beautiful.fg_urgent
+			local fo = beautiful.fg_normal
+			local fe = beautiful.fg_minimize
 
-		cf = {ff, ff, ff, ff, ff, ff, ff, ff, ff, ff}
-		cu = {fu, fu, fu, fu, fu, fu, fu, fu, fu, fu}
-		co = {fo, fo, fo, fo, fo, fo, fo, fo, fo, fo}
-		ce = {fe, fe, fe, fe, fe, fe, fe, fe, fe, fe}
+			cf = {ff, ff, ff, ff, ff, ff, ff, ff, ff, ff}
+			cu = {fu, fu, fu, fu, fu, fu, fu, fu, fu, fu}
+			co = {fo, fo, fo, fo, fo, fo, fo, fo, fo, fo}
+			ce = {fe, fe, fe, fe, fe, fe, fe, fe, fe, fe}
+		end
 	end
+
+	colors()
 
 	local baseSize = beautiful.taglist_size or beautiful.dpi(13)
 	local expandedSize = beautiful.taglist_expanded_size or beautiful.dpi(15)
@@ -123,6 +127,12 @@ local function setup(s, vertical)
 		},
 		--buttons = taglist_buttons
 	}
+
+	awesome.connect_signal('makeup::put_on', function()
+		colors()
+		taglist._do_taglist_update() -- private function! oops!
+	end)
+
 	--[[
 		tag_text[i]:buttons(gears.table.join(
 			-- Left click - Tag back and forth
@@ -164,4 +174,6 @@ local function setup(s, vertical)
 end
 
 return setup
+
+
 

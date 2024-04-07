@@ -1,6 +1,7 @@
 -- If LuaRocks is installed, make sure that packages installed through it are
 -- found (e.g. lgi). If LuaRocks is not installed, do nothing.
 pcall(require, 'luarocks.loader')
+package.cpath = package.cpath .. ';' .. os.getenv 'HOME' .. '/.config/awesome/?/?.so'
 
 local awful = require 'awful'
 local beautiful = require 'beautiful'
@@ -45,11 +46,18 @@ do
 			text = tostring(err),
 			category = 'warning'
 		}
+		print(err)
 		in_error = false
 	end)
 end
 
 require 'conf'
+
+awesome.connect_signal('makeup::put_on', function()
+	awful.screen.connect_for_each_screen(function(s)
+		helpers.set_wallpaper(s)
+	end)
+end)
 
 screen.connect_signal('property::geometry', helpers.set_wallpaper)
 awful.screen.connect_for_each_screen(function(s)
@@ -222,6 +230,28 @@ client.connect_signal('property::urgent', function(c)
     if c.urgent then
         sfx.play 'foreground'
     end
+end)
+
+client.connect_signal('request::geometry', function(c)
+	if not c.fullscreen then
+		--awful.placement.no_offscreen(c, {honor_workarea = true, margins = beautiful.useless_gap * beautiful.dpi(2)})
+	end
+end)
+
+awesome.connect_signal('makeup::put_on', function(old)
+	if client.focus then
+		helpers.transitionColor {
+			old = old.border_focus,
+			new = beautiful.border_focus,
+			transformer = function(col)
+				local valid = pcall(function() return client.focus.valid end) and client.focus.valid
+				if not valid then return end
+
+				client.focus.border_color = col
+			end,
+			duration = 4
+		}
+	end
 end)
 
 collectgarbage('setpause', 110)

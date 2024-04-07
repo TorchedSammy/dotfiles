@@ -11,8 +11,8 @@ local sfx = require 'modules.sfx'
 local wibox = require 'wibox'
 local w = require 'ui.widgets'
 local util = require 'ui.panels.quickSettings.util'
+local makeup = require 'ui.makeup'
 
-local bgcolor = beautiful.bg_popup
 local btnSize = dpi(32)
 local quickSettingsMargin = dpi(20)
 local toggleSpacing = dpi(16)
@@ -77,7 +77,7 @@ local quickSettingsTitle, qstHeight = harmony.titlebar 'Quick Settings'
 local quickSettings = helpers.aaWibox {
 	height = dpi(500) + qstHeight,
 	width = dpi(460),
-	bg = bgcolor,
+	bg = 'bg_popup',
 	rrectRadius = beautiful.radius,
 	shape = gears.shape.rectangle,
 	ontop = true,
@@ -92,16 +92,18 @@ local function createToggle(type)
 		status = function() return false, '' end,
 	}
 
-	local toggleBg = beautiful.accent
-	local toggleBgOff = helpers.shiftColor(beautiful.xcolor9, 3)
+	local function constructColors()
+		return 'accent', 'bg_tert'
+	end
+	local toggleBg, toggleBgOff = constructColors()
 
-	local toggleFgColor = beautiful.bg_popup
-	local toggleFgColorOff = beautiful.fg_normal
+	local toggleFgColor = 'bg_popup'
+	local toggleFgColorOff = 'fg_normal'
 	local toggleMargin = beautiful.dpi(10)
 
 	local on, textStatus = control.status()
-	local icon = w.icon(control.enabled() and type or type .. '-off', {size = btnSize, color = on and toggleFgColor or toggleFgColorOff})
-	local rightIcon = w.icon('arrow-right', {size = btnSize / 1.5, color = on and toggleFgColor or toggleFgColorOff})
+	local icon = w.icon(control.enabled() and type or type .. '-off', {size = btnSize, color = on and beautiful[toggleFgColor] or beautiful[toggleFgColorOff]})
+	local rightIcon = w.icon('arrow-right', {size = btnSize / 1.5, color = on and beautiful[toggleFgColor] or beautiful[toggleFgColorOff]})
 
 	local status = wibox.widget {
 		widget = wibox.widget.textbox,
@@ -112,14 +114,19 @@ local function createToggle(type)
 	local wid = wibox.widget {
 		layout = wibox.layout.fixed.vertical,
 		spacing = beautiful.dpi(8),
-		{	
+		{
 			widget = wibox.container.constraint,
 			height = dpi(58),
 			--width = dpi(90),
 			--width = ((quickSettings.width - quickSettingsMargin - (toggleSpacing * dpi(3))) / 3) + btnSize / 3,
 			strategy = 'exact',
 			{
-				widget = wibox.container.background,
+				widget = makeup.putOn(wibox.container.background, function(w)
+					toggleBg, toggleBgOff = constructColors()
+					return {
+						bg = control.enabled() and toggleBg or toggleBgOff
+					}
+				end, {wibox = quickSettings}),
 				shape = helpers.rrect(15),
 				id = 'bg',
 				{
@@ -148,8 +155,8 @@ local function createToggle(type)
 	}
 	local function setToggleBackground(toggledOn)
 		helpers.transitionColor {
-			old = toggledOn and toggleBgOff or toggleBg,
-			new = not toggledOn and toggleBgOff or toggleBg,
+			old = toggledOn and beautiful[toggleBgOff] or beautiful[toggleBg],
+			new = not toggledOn and beautiful[toggleBgOff] or beautiful[toggleBg],
 			transformer = function(col)
 				wid:get_children_by_id 'bg'[1].bg = col
 			end,
@@ -157,8 +164,8 @@ local function createToggle(type)
 		}
 
 		helpers.transitionColor {
-			old = toggledOn and toggleFgColorOff or toggleFgColor,
-			new = not toggledOn and toggleFgColorOff or toggleFgColor,
+			old = toggledOn and beautiful[toggleFgColorOff] or beautiful[toggleFgColor],
+			new = not toggledOn and beautiful[toggleFgColorOff] or beautiful[toggleFgColor],
 			transformer = function(col)
 				icon.color = col
 				rightIcon.color = col
@@ -167,7 +174,7 @@ local function createToggle(type)
 		}
 	end
 
-	setToggleBackground(control.enabled())
+	--setToggleBackground(control.enabled())
 	local function displayControls()
 		contentLabel:text(control.title)
 		quickSettingsAnimator.target = 1
@@ -232,6 +239,7 @@ end
 do
 	local volSlider = harmony.slider {
 		icon = 'volume2',
+		parentWibox = quickSettings,
 		onChange = sfx.setVolume
 	}
 
@@ -246,7 +254,8 @@ do
 	end)
 
 	local brightSlider = harmony.slider {
-		icon = 'brightness'
+		icon = 'brightness',
+		parentWibox = quickSettings
 	}
 
 	local realWidget = wibox.widget {
@@ -271,7 +280,7 @@ do
 							spacing_widget = {
 								widget = wibox.widget.separator,
 								thickness = beautiful.dpi(3),
-								color = beautiful.bg_sec
+								color = beautiful.separator
 							},
 							{
 								layout = wibox.layout.align.horizontal,

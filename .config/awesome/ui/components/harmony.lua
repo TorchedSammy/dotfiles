@@ -4,6 +4,7 @@ local wibox = require 'wibox'
 local gears = require 'gears'
 local rubato = require 'libs.rubato'
 local helpers = require 'helpers'
+local makeup = require 'ui.makeup'
 
 local M = {}
 
@@ -22,8 +23,7 @@ function M.titlebar(title, opts)
 		strategy = 'exact',
 		height = titleHeight,
 		{
-			widget = wibox.container.background,
-			bg = beautiful.bg_sec,
+			widget = makeup.putOn(wibox.container.background, {bg = 'bg_sec'}, {wibox = opts.parentWibox}),
 			id = 'bg',
 			{
 				widget = wibox.container.margin,
@@ -49,11 +49,11 @@ end
 
 function M.slider(opts)
 	opts = opts or {}
-	opts.color = opts.color or beautiful.accent
+	opts.color = opts.color or 'accent'
 
 	local progressShape = helpers.rrect(beautiful.radius)
 	local progress = wibox.widget {
-		widget = wibox.widget.progressbar,
+		widget = makeup.putOn(wibox.widget.progressbar, {color = opts.color}, {wibox = opts.parentWibox}),
 		shape = progressShape,
 		bar_shape = progressShape,
 		background_color = '#00000000',
@@ -64,10 +64,9 @@ function M.slider(opts)
 	}
 
 	local slider = wibox.widget {
-		widget = wibox.widget.slider,
+		widget = makeup.putOn(wibox.widget.slider, {bar_color = opts.bg or 'bg_tert'}, {wibox = opts.parentWibox}),
 		forced_height = progress.forced_height,
 		forced_width = progress.forced_width,
-		bar_color = opts.bg or beautiful.xcolor10,
 		bar_shape = progressShape,
 		handle_color = '#00000000',
 		id = 'slider'

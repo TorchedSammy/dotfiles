@@ -1,24 +1,34 @@
 local colors = require 'themes.colors.stardew-night'
 if not awesome then return colors end
 
+local settings = require 'conf.settings'
 local xresources = require 'beautiful.xresources'
 local helpers = require 'helpers'
 local dpi = xresources.apply_dpi
 
 local theme = require 'themes.common'
+theme.wallpaper = settings.wallpaper or theme.config_path..'/wallpapers/mine.png'
 
--- join theme and colors
 local gears = require 'gears'
 theme = gears.table.join(theme, colors)
+
+if settings.dynamicTheme then
+	local surfaces = require 'themes.colors.material-you'(theme.wallpaper)
+	theme = gears.table.join(theme, surfaces)
+end
 
 theme.fontName = 'IBM Plex Sans'
 theme.font          = theme.fontName .. ' Regular 12'
 
 theme.dark = true
-theme.accent = theme.xcolor4 --'#8062ff'
-theme.bg_normal = theme.xbackground
-theme.bg_popup = helpers.shiftColor(theme.bg_normal, 2)
-theme.bg_sec = theme.xcolor8
+theme.accent = settings.dynamicTheme and theme.accent or theme[settings.accent or 'accent'] --'#8062ff'
+
+theme.bg_normal = theme.background
+theme.bg_sec = theme.backgroundSecondary
+theme.bg_tert = theme.backgroundTertiary
+theme.bg_quad = theme.backgroundQuad
+
+theme.bg_popup = theme.bg_normal--helpers.shiftColor(theme.bg_normal, 2)
 theme.bg_focus = theme.bg_normal
 theme.bg_urgent = theme.bg_normal
 theme.bg_minimize = theme.bg_normal
@@ -75,7 +85,6 @@ theme.taglist_text_color_urgent   = rep(theme.xcolor1)
 
 theme.task_preview_widget_bg = theme.bg_popup
 
-theme.wallpaper = theme.config_path..'/wallpapers/mine.png'
 --theme.wallpaper = theme.config_path..'/wallpapers/lvl374_free_v2_desktop.png'
 theme.picom_conf = 'picom-harmony'
 

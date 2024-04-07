@@ -4,7 +4,7 @@ local dpi = xresources.apply_dpi
 
 local gfs = require("gears.filesystem")
 local themes_path = gfs.get_themes_dir()
-local config_path = gfs.get_configuration_dir()
+local config_path = os.getenv 'HOME' .. '/.config/awesome/'--gfs.get_configuration_dir()
 local helpers = require("helpers")
 
 function layoutimg(name)

@@ -8,6 +8,7 @@ local harmony = require 'ui.components.harmony'
 local helpers = require 'helpers'
 local rubato = require 'libs.rubato'
 local quickSettings = require 'ui.panels.quickSettings'
+local makeup = require 'ui.makeup'
 --local filters = require 'surface_filters'
 
 screen.connect_signal('property::geometry', helpers.set_wallpaper)
@@ -29,8 +30,7 @@ awful.screen.connect_for_each_screen(function(s)
 
 	local function backgroundBar(w)
 		return wibox.widget {
-			widget = wibox.container.background,
-			bg = beautiful.xcolor8,
+			widget = makeup.putOn(wibox.container.background, {bg = 'bg_sec'}),
 			shape = gears.shape.rounded_bar,
 			id = 'bg',
 			{
@@ -50,12 +50,16 @@ awful.screen.connect_for_each_screen(function(s)
 	}
 	local controls = backgroundBar(controlsRaw)
 	helpers.onLeftClick(controls, quickSettings.toggle)
-	helpers.displayClickable(controls, {bg = beautiful.xcolor8, hoverColor = beautiful.xcolor9})
+	helpers.displayClickable(controls, {bg = 'bg_sec', hoverColor = 'bg_tert'})
 
-	local musicDisplay = require 'ui.panels.musicDisplay.material'
+	--local musicDisplay = require 'ui.panels.musicDisplay.material'
+	local musicDisplay = require 'ui.panels.musicDisplay'.create {
+		bg = beautiful.bg_popup
+	}
+	helpers.slidePlacement(musicDisplay, {placement = 'bottom_right'})
 
 	local musicBtn = widgets.button('music', {
-		bg = beautiful.wibar_bg,
+		bg = 'wibar_bg',
 		onClick = function() musicDisplay:toggle() end
 	})
 
@@ -69,7 +73,7 @@ awful.screen.connect_for_each_screen(function(s)
 		onClick = function() startMenu:toggle() end,
 		size = beautiful.dpi(25),
 		shape = gears.shape.rectangle,
-		color = beautiful.accent
+		color = 'accent'
 	})
 
 	local baseClientIndicator = {
@@ -104,12 +108,18 @@ awful.screen.connect_for_each_screen(function(s)
 			spacing = beautiful.wibar_spacing,
 			layout  = wibox.layout.fixed.horizontal
 		},
-		style = {
-			bg_normal = beautiful.fg_tert,
-			bg_focus = beautiful.accent,
-			bg_minimize = beautiful.fg_tert,
-			shape = helpers.rrect(6)
-		},
+		style = setmetatable({}, {
+			__index = function(_, k)
+				local styles = {
+					bg_normal = beautiful.fg_tert,
+					bg_focus = beautiful.accent,
+					bg_minimize = beautiful.fg_tert,
+					shape = helpers.rrect(6)
+				}
+
+				return styles[k]
+			end
+		}),
 		widget_template = {
 			widget = wibox.container.place,
 			{
@@ -179,10 +189,12 @@ awful.screen.connect_for_each_screen(function(s)
 			end
 		},
 	}
+	awesome.connect_signal('makeup::put_on', function()
+		s.tasklist._do_tasklist_update()
+	end)
 
 	local realbar = {
-		widget = wibox.container.background,
-		bg = beautiful.bg_normal,
+		widget = makeup.putOn(wibox.container.background, {bg = 'wibar_bg'}),
 		{
 			widget = wibox.container.margin,
 			margins = beautiful.dpi(8),
@@ -215,7 +227,7 @@ awful.screen.connect_for_each_screen(function(s)
 					{ -- First bar
 						layout = wibox.layout.fixed.horizontal,
 						spacing = beautiful.wibar_spacing,
-						widgets.systray {bg = beautiful.wibar_bg, bar = s.bar, margin = beautiful.dpi(8)},
+						widgets.systray {bg = 'wibar_bg', bar = s.bar, margin = beautiful.dpi(8)},
 						musicBtn,
 						controls,
 						widgets.textclock,

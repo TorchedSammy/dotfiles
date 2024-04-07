@@ -3,6 +3,7 @@ local beautiful = require 'beautiful'
 local bling = require 'libs.bling'
 local gears = require 'gears'
 local helpers = require 'helpers'
+local makeup = require 'ui.makeup'
 local pctl = require 'modules.playerctl'
 local rubato = require 'libs.rubato'
 local syntax = require 'ui.components.syntax'
@@ -38,6 +39,7 @@ function M.new(opts)
 	opts.width = opts.width or M.width
 	opts.height = opts.height or M.height
 	opts.sliderBg = opts.sliderBg or beautiful.xcolor9
+	opts.sliderColor = opts.sliderColor or beautiful.accent
 
 	local bgcolor = opts.bg
 	local horizMargin = beautiful.dpi(20)
@@ -69,7 +71,8 @@ function M.new(opts)
 		color = opts.sliderColor,
 		onChange = function(val)
 			playerctl:set_position(val)
-		end
+		end,
+		parentWibox = opts.panel
 	}
 
 	local function scroll(widget)
@@ -89,7 +92,8 @@ function M.new(opts)
 
 	local updateShuffle
 	local shuffleState
-	local shuffleActive = beautiful.accent
+	local shuffleActive = 'accent'
+	local shuffleInactive = 'fg_normal'
 	local shuffle = w.button('shuffle', {
 		bg = bgcolor,
 		size = btnSize,
@@ -97,21 +101,24 @@ function M.new(opts)
 			shuffleState = not shuffleState
 			playerctl:set_shuffle(shuffleState)
 			updateShuffle(true)
-		end
+		end,
+		makeup = shuffleInactive
 	})
 	if shuffleState then
-		shuffle.color = beautiful.fg_normal
+		shuffle.color = shuffleInactive
 	else
 		shuffle.color = shuffleActive
 	end
 
 	updateShuffle = function(toggle)
+		local shuffleNewColor = not shuffleState and helpers.beautyVar(shuffleInactive) or helpers.beautyVar(shuffleActive)
 		helpers.transitionColor {
-			old = (toggle and shuffleState) and beautiful.fg_normal or shuffleActive,
-			new = not shuffleState and beautiful.fg_normal or shuffleActive,
+			old = (toggle and shuffleState) and helpers.beautyVar(shuffleInactive) or helpers.beautyVar(shuffleActive),
+			new = shuffleNewColor,
 			transformer = function(col) shuffle.color = col end,
 			duration = 0.3
 		}
+		shuffle.makeup = not shuffleState and shuffleInactive or shuffleActive
 	end
 		
 	playerctl:connect_signal('shuffle', function(_, shuff)
@@ -219,8 +226,7 @@ function M.new(opts)
 
 	local w = wibox.widget {
 		shape = opts.shape,
-		bg = opts.bg,
-		widget = wibox.container.background,
+		widget = makeup.putOn(wibox.container.background, {bg = opts.bg}),
 		forced_width = opts.width, -- - (base.width * 2),
 		forced_height = opts.height,
 		{
@@ -267,8 +273,6 @@ function M.new(opts)
 end
 
 function M.create(opts)
-	local w, width, height = M.new(opts)
-
 	local musicDisplay = wibox {
 		width = beautiful.dpi(480),
 		height = beautiful.dpi(180),
@@ -277,22 +281,24 @@ function M.create(opts)
 		ontop = true,
 		visible = false
 	}
+	opts.panel = musicDisplay
+	local w, width, height = M.new(opts)
 
 	musicDisplay:setup {
 		widget = wibox.container.place,
 		w
 	}
 
-	helpers.hideOnClick(musicDisplay)
-
-	return {
+	--[[return {
 		toggle = function()
 			if not musicDisplay.visible then
 				opts.placement(musicDisplay)
 			end
 			musicDisplay.visible = not musicDisplay.visible -- invert
 		end
-	}
+	}]]--
+
+	return musicDisplay
 end
 
 return M

@@ -133,13 +133,15 @@ function helpers.displayClickable(w, opts)
 
   function ecb()
    if bgWid and not w.dcDisabled and opts.bg then
-      bgWid.bg = opts.hoverColor and opts.hoverColor or helpers.shiftColor(opts.bg or w.bg, opts.shiftFactor)
+      bgWid.bg = opts.hoverColor and
+      (opts.hoverColor:match '^#' and opts.hoverColor or beautiful[opts.hoverColor])
+      or helpers.shiftColor((opts.bg or w.bg):match '^#' and (opts.bg or w.bg) or beautiful[opts.bg or w.bg], opts.shiftFactor)
     end
   end
 
   function lcb()
     if bgWid and opts.bg then
-      bgWid.bg = opts.bg
+      bgWid.bg = opts.bg:match '^#' and opts.bg or beautiful[opts.bg]
     end
   end
 
@@ -307,8 +309,21 @@ function helpers.slidePlacement(wbx, opts)
 end
 
 function helpers.transitionColor(opts)
- local old = Color(opts.old)
+  --local animate = animate == nil and settings.noAnimate or animate
+  if opts.animate ~= nil and opts.animate == false then
+    opts.transformer(opts.new)
+    return
+  end
+
+  local old = opts.old
+  if type(old) == 'userdata' and tostring(old):match 'cairo.SolidPattern' then
+    local _, r, g, b, a = old:get_rgba()
+    old = {r = r, g = g, b = b}
+  end
+
+ local old = Color(old)
  local new = Color(opts.new)
+  
  local animator = rubato.timed {
   duration = opts.duration or 2,
 		rate = 60,
@@ -338,6 +353,7 @@ function helpers.glibByteToVal(b)
 end
 
 function helpers.aaWibox(opts)
+  local makeup = require 'ui.makeup'
  local bg = opts.bg
 
  opts.bg = '#00000000'
@@ -347,12 +363,12 @@ function helpers.aaWibox(opts)
  end
 
  local wbx = wibox(opts)
+ wbx.popup = opts.popup
 
  local oldSetup = wbx.setup
  function wbx:setup(wid)
   local setupWidget = wibox.widget {
-   widget = wibox.container.background,
-   bg = bg,
+   widget = makeup.putOn(wibox.container.background, {bg = bg}, {wibox = wbx}),
    shape = helpers.rrect(opts.rrectRadius),
    forced_height = wbx.height,
    forced_width = wbx.width,
@@ -376,5 +392,13 @@ function helpers.aaWibox(opts)
   end)
  end
  return wbx
+end
+
+function helpers.beautyVar(var)
+  if type(var) == 'string' then
+    return var:match '^#' and var or beautiful[var]
+  end
+
+  return var
 end
 return helpers

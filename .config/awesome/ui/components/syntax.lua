@@ -66,8 +66,21 @@ function M.slider(opts)
 		easing = rubato.quadratic
 	}
 
+	local function setProgress(val)
+		local visible = true
+		if opts.parentWibox then
+			visible = opts.parentWibox.visible
+		end
+
+		if visible then
+			progressAnimator.target = val
+		else
+			setupProgressColor(val, progress.max_value)
+		end
+	end
+
 	slider:connect_signal('property::value', function()
-		progressAnimator.target = slider.value
+		setProgress(slider.value)
 		if opts.onChange then opts.onChange(slider.value) end
 	end)
 
@@ -111,7 +124,7 @@ function M.slider(opts)
 		end,
 		__newindex = function(_, k, v)
 			if k == 'value' then
-				progressAnimator.target = v
+				setProgress(v)
 			elseif k == 'color' then
 				opts.color = v
 				progress.color = v

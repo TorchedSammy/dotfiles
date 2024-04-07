@@ -4,6 +4,7 @@ local beautiful = require 'beautiful'
 local gears = require 'gears'
 local harmony = require 'ui.components.harmony'
 local helpers = require 'helpers'
+local makeup = require 'ui.makeup'
 local rubato = require 'libs.rubato'
 local settings = require 'conf.settings'
 local syntax = require 'ui.components.syntax'
@@ -36,7 +37,6 @@ local searchInput = inputbox {
 }
 
 function setupAppList()
-	appList:reset()
 	-- setting spacing makes it have a wack amount of space
 	-- because awesome handles not visible widgets in a layout in a dumb way
 	--appList.spacing = beautiful.dpi(1)
@@ -48,6 +48,10 @@ function setupAppList()
 	}
 	appList.scrollbar_width = beautiful.dpi(10)
 end
+
+awesome.connect_signal('makeup::put_on', function()
+	setupAppList()
+end)
 
 local function handleSearch()
 	local text = searchInput:get_text()
@@ -86,7 +90,7 @@ function M.new(opts)
 	opts = opts or {}
 	opts.shape = opts.shape or helpers.rrect(6)
 
-	local bgcolor = opts.bg or beautiful.bg_popup
+	local bgcolor = opts.bg or 'bg_popup'
 
 	local function button(color_focus, icon, size, shape)
 		return w.button(icon, {bg = bgcolor, shape = shape, size = size})
@@ -95,6 +99,7 @@ function M.new(opts)
 	local result = {}
 	local allApps = {}
 	local collision = {}
+	appList:reset()
 	setupAppList()
 
 	local power = button(buttonColor, 'power2', beautiful.dpi(18))
@@ -106,33 +111,53 @@ function M.new(opts)
 		widget = wibox.container.margin,
 		--margins = beautiful.dpi(5),
 		layout = wibox.layout.align.vertical,
-		harmony.titlebar 'Apps',
+		harmony.titlebar('Apps', {parentWibox = opts.menu}),
 		{
 			widget = wibox.container.margin,
 			margins = beautiful.dpi(16),
 			{
 				layout = wibox.layout.stack,
 				{
+					layout = wibox.container.place,
+					halign = 'right',
+					forced_width = beautiful.dpi(10),
+					{
+						widget = wibox.container.constraint,
+						width = beautiful.dpi(10),
+						{
+							widget = wibox.container.margin,
+							bottom = beautiful.dpi(32),
+							{
+								widget = makeup.putOn(wibox.widget.separator, {color = 'bg_sec'}, {wibox = opts.menu}),
+								shape = gears.shape.rounded_bar,
+							}
+						}
+					}
+				},
+				{
 					widget = wibox.container.margin,
 					bottom = beautiful.dpi(32),
 					appList,
-				},--
+				},
 				{
 					widget = wibox.container.margin,
 					right = beautiful.dpi(18),
 					{
-						widget = wibox.container.background,
-						bg = {
-							type  = "linear",
-							from  = {M.width, 0},
-							to = {M.width, M.height - beautiful.dpi(16) - beautiful.titlebar_height},
-							stops = {
-								{0, beautiful.bg_popup .. '00'},
-								{0.8, beautiful.bg_popup .. '00'},
-								{0.88, beautiful.bg_popup .. 'cc'},
-								{0.9, beautiful.bg_popup},
+						widget = makeup.putOn(wibox.container.background, function()
+							return {
+								bg = {
+									type  = "linear",
+									from  = {M.width, 0},
+									to = {M.width, M.height - beautiful.dpi(16) - beautiful.titlebar_height},
+									stops = {
+										{0, beautiful.bg_popup .. '00'},
+										{0.8, beautiful.bg_popup .. '00'},
+										{0.88, beautiful.bg_popup .. 'cc'},
+										{0.9, beautiful.bg_popup},
+									}
+								}
 							}
-						},
+						end, {wibox = opts.menu}),
 					},
 				},
 				{
@@ -167,7 +192,6 @@ function M.new(opts)
 
 
 		for app in pairsByKeys(allApps, function(a, b)
-			--print(a, b);
 			return string.lower(a.name) < string.lower(b.name)
 		end) do
 			local name = app.name
@@ -182,10 +206,9 @@ function M.new(opts)
 				right = beautiful.dpi(8),
 				id = app.name,
 				{
-					widget = wibox.container.background,
+					widget = makeup.putOn(wibox.container.background, {bg = bgcolor}, {wibox = opts.menu}),
 					shape = helpers.rrect(beautiful.radius or base.radius),
 					id = 'bg',
-					bg = bgcolor,
 					{
 						widget = wibox.container.margin,
 						margins = beautiful.dpi(8),
@@ -280,7 +303,7 @@ end
 
 function M.create(opts)
 	opts = opts or {}
-	local bgcolor = opts.bg or beautiful.bg_popup
+	local bgcolor = opts.bg or 'bg_popup'
 
 	local startMenu = helpers.aaWibox {
 		height = beautiful.dpi(580),

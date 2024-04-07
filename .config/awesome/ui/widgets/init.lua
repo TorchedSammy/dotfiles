@@ -11,6 +11,7 @@ local cairo = require 'lgi'.cairo
 local battery = require 'modules.battery'
 local rubato = require 'libs.rubato'
 local wifi = require 'modules.wifi'
+local makeup = require 'ui.makeup'
 
 local function rounded_bar(color)
 	return wibox.widget {
@@ -91,7 +92,15 @@ function widgets.icon(name, opts)
 end
 
 function widgets.button(icon, opts)
-	opts = opts or (type(icon) == 'table' and icon or {})
+	local opts = opts
+	if type(icon) == 'table' then
+		opts = icon
+	else
+		opts.icon = icon
+	end
+
+	local color = opts.color or 'fg_normal'
+	local function handleColor() return color:match '^#' and color or beautiful[color] end
 
 	local focused = false
 	local ico = wibox.widget {
@@ -100,19 +109,18 @@ function widgets.button(icon, opts)
 		strategy = 'exact',
 		{
 			id = 'bg',
-			widget = wibox.container.background,
-			bg = opts.bgcolor or opts.bg,
+			widget = makeup.putOn(wibox.container.background, {bg = opts.bgcolor or opts.bg}, {wibox = opts.parentWibox}),
 			shape = opts.shape or (opts.text and helpers.rrect(6) or gears.shape.circle),
 			{
 				widget = wibox.container.margin,
 				margins = opts.margin or beautiful.dpi(2),
 				{
 					layout = wibox.container.place,
-					halign = 'center',
+					halign = opts.align or 'center',
 					{
 						layout = wibox.layout.fixed.horizontal,
 						spacing = beautiful.dpi(4),
-						(icon ~= '' and icon ~= nil) and {
+						(opts.icon ~= '' and opts.icon ~= nil) and {
 							layout = wibox.container.place,
 							valign = 'center',
 							halign = 'center',
@@ -121,20 +129,28 @@ function widgets.button(icon, opts)
 								widget = wibox.container.constraint,
 								width = opts.size and opts.size + 2 or beautiful.dpi(18),
 								{
-									widget = wibox.widget.imagebox,
-									image = beautiful.config_path .. '/images/icons/' .. icon.. '.svg',
+									widget = makeup.putOn(wibox.widget.imagebox, function()
+										return {
+											stylesheet = string.format([[
+												* {
+													fill: %s;
+												}
+											]], helpers.beautyVar(opts.makeup or color))
+										}
+									end),
+									image = beautiful.config_path .. '/images/icons/' .. opts.icon .. '.svg',
 									stylesheet = string.format([[
 										* {
 											fill: %s;
 										}
-									]], opts.color or beautiful.fg_normal),
+									]], handleColor()),
 									id = 'icon'
 								},
 							},
 						} or nil,
 						{
 							widget = wibox.widget.textbox,
-							markup = helpers.colorize_text(opts.text or '', opts.color or beautiful.fg_normal),
+							markup = helpers.colorize_text(opts.text or '', handleColor()),
 							font = opts.font or beautiful.font:gsub('%d+$', opts.fontSize or 14),
 							id = 'textbox',
 							valign = 'center'
@@ -171,20 +187,27 @@ function widgets.button(icon, opts)
 				ico:get_children_by_id'icon'[1].image = gears.color.recolor_image(beautiful.config_path .. '/images/icons/' .. v .. '.svg', beautiful.fg_normal)
 				ico:emit_signal 'widget::redraw_needed'
 			elseif k == 'color' then
-				ico:get_children_by_id'icon'[1].stylesheet = string.format([[
-					* {
-						fill: %s;
-					}
-				]], v)
-				ico:emit_signal 'widget::redraw_needed'
+				local icon = ico:get_children_by_id'icon'[1]
+				color = v
+				if icon then
+					icon.stylesheet = string.format([[
+						* {
+							fill: %s;
+						}
+					]], handleColor())
+					ico:emit_signal 'widget::redraw_needed'
+				end
 			elseif k == 'text' then
-				ico:get_children_by_id'textbox'[1].markup = helpers.colorize_text(v, opts.color or beautiful.fg_normal)
+				ico:get_children_by_id'textbox'[1].markup = helpers.colorize_text(v, handleColor())
 			elseif k == 'onClick' and type(v) == 'function' then
 				realWid.buttons = {
 					awful.button({}, 1, function()
 						v(realWid)
 					end),
 				}
+			elseif k == 'makeup' then
+				opts.makeup = v
+				print(opts.makeup)
 			end
 			ico[k] = v
 		end
@@ -379,6 +402,9 @@ function widgets.systray(opts)
 		end
 		]]--
 	}
+	awesome.connect_signal('makeup::put_on', function()
+		popup.bg = beautiful.bg_popup
+	end)
 	--popup:move_next_to(btn)
 
 	if opts.vertical then
@@ -461,7 +487,7 @@ function widgets.switch(opts)
 	local base = require 'wibox.widget.base'
 	local gtable = require 'gears.table'
 	setmetatable(wibox.widget.slider, {
-		__call = function()
+		__call = function(args)
 			local ret = base.make_widget(nil, nil, {
 				enable_properties = true,
 			})
@@ -478,9 +504,7 @@ function widgets.switch(opts)
 	-- ###
 
 	local switch = wibox.widget {
-		widget = wibox.widget.slider,
-		forced_height = size.h,
-		forced_width = size.w,
+		widget = makeup.putOn(wibox.widget.slider, {bar_active_color = opts.color or 'accent'}),
 		bar_margins = {
 			top = size.h / 3,
 			bottom = size.h / 3,
@@ -488,7 +512,7 @@ function widgets.switch(opts)
 			right = beautiful.dpi(4),
 		},
 		bar_color = beautiful.xcolor12,
-		bar_active_color = beautiful.accent,
+		--bar_active_color = beautiful.accent,
 		bar_shape = gears.shape.rounded_bar,
 		handle_color = beautiful.xcolor7,
 		handle_shape = gears.shape.circle,

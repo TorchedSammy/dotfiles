@@ -20,4 +20,17 @@ colors.xcolor13 = '#212126'
 colors.xcolor14 = '#9595ab'
 colors.xcolor15 = '#18181c'
 
+colors.background = colors.xbackground
+colors.backgroundSecondary = colors.xcolor8
+colors.backgroundTertiary = colors.xcolor9
+colors.backgroundQuad = colors.xcolor10
+
+colors.foreground = colors.xforeground
+
+colors.accent = colors.xcolor6
+colors.accentforeground = colors.xcolor0
+colors.accentcontainer = colors.accent
+
+colors.separator = colors.backgroundTertiary
+
 return colors
