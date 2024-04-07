@@ -9,7 +9,6 @@ Gio.File.new_for_path(configDir):make_directory()
 
 local configPath = configDir .. 'config.json'
 local file = Gio.File.new_for_path(configPath)
-print(configPath)
 
 local config = {
 	theme = 'harmony',
@@ -31,16 +30,19 @@ else
 end
 
 function M.write()
-	file:replace_contents_async(json.encode(config), nil, false, Gio.FileCreateFlags.REPLACE_DESTINATION, nil, function(_, res) file:replace_contents_finish(res) end)
+	file:replace_contents_bytes_async(GLib.Bytes(json.encode(config)), nil, false, Gio.FileCreateFlags.REPLACE_DESTINATION, nil, function(_, res) file:replace_contents_finish(res) end)
 end
 
-function M.set(key, val)
+function M.set(key, val, write)
 	config[key] = val
-	M.write()
+	if write then M.write() end
 end
 
 return setmetatable(M,  {
 	__index = function(_, k)
 		return config[k]
+	end,
+	__newindex = function(_, k, v)
+		M.set(k, v, true)
 	end
 })
