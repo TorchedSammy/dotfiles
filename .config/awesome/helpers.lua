@@ -6,9 +6,8 @@ local naughty = require 'naughty'
 local wibox = require 'wibox'
 local rubato = require 'libs.rubato'
 local lgi = require 'lgi'
-local focus = require 'conf.focus'
 local easing = require 'modules.easing'
-local lock = require 'ui.panels.lock'
+local focus = require 'ui.focus'
 
 local Color = require 'lua-color'
 
@@ -186,7 +185,6 @@ function helpers.hideOnClick(w, cb)
   table.insert(onClickHiders, {func = hider, widget = w})
   client.connect_signal('button::press', hider)
   client.connect_signal('request::activate', function()
-   if focus.shouldUnfocus() then hider() end
   end)
   --wibox.connect_signal('button::press', hider)
 
@@ -269,7 +267,7 @@ function helpers.slidePlacement(wbx, opts)
   wbx.visible = true
   wbxOpen = true
 
-  lock.passthrough(wbx)
+  focus.passthrough(wbx)
   if opts.toggler then
     local continue = opts.toggler(wbxOpen)
     if continue == false then
@@ -281,6 +279,7 @@ function helpers.slidePlacement(wbx, opts)
  function wbx:off()
 		wbxOpen = false
 		animator.target = hideHeight
+		focus.unlock()
 
     if opts.toggler then
       local continue = opts.toggler(wbxOpen)

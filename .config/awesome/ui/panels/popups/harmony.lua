@@ -11,11 +11,11 @@ local caps = require 'modules.caps'
 local volumeDisplay = helpers.aaWibox {
 	width = beautiful.dpi(420),
 	height = beautiful.dpi(88),
-	bg = '#00000000',
 	ontop = true,
 	visible = false,
 	rrectRadius = beautiful.radius,
 	bg = beautiful.bg_sec,
+	popup = true
 }
 
 local displayTimer = gears.timer {
