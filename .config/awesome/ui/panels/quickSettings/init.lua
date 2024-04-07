@@ -7,6 +7,7 @@ local harmony = require 'ui.components.harmony'
 local helpers = require 'helpers'
 local rubato = require 'libs.rubato'
 local settings = require 'conf.settings'
+local sfx = require 'modules.sfx'
 local wibox = require 'wibox'
 local w = require 'ui.widgets'
 local util = require 'ui.panels.quickSettings.util'
@@ -230,8 +231,20 @@ end
 
 do
 	local volSlider = harmony.slider {
-		icon = 'volume2'
+		icon = 'volume2',
+		onChange = sfx.setVolume
 	}
+
+	awesome.connect_signal('syntax::volume', function(volume, muted, init)
+		if init then
+			volSlider.value = volume
+			return
+		end
+
+		volSlider.value = volume
+		volSlider.color = muted and beautiful.xcolor12 or beautiful.accent
+	end)
+
 	local brightSlider = harmony.slider {
 		icon = 'brightness'
 	}
