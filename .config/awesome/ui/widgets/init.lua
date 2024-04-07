@@ -495,8 +495,17 @@ function widgets.switch(opts)
 		handle_border_color = beautiful.accent,
 		handle_border_width = 0,
 		value = opts.on and 100 or 0,
-		on = opts.on
+		on = opts.on,
+		handler = opts.handler
 	}
+
+	local wid = wibox.widget {
+		widget = wibox.container.constraint,
+		height = size.h,
+		width = size.w,
+		switch
+	}
+
 	setmetatable(wibox.widget.slider, wibox.widget.slider.mt)
 
 	local animator = rubato.timed {
@@ -530,18 +539,18 @@ function widgets.switch(opts)
 	end
 
 	helpers.hoverCursor(switch)
-	switch.buttons = {
+	wid.buttons = {
 		awful.button({}, 1, function()
 			if switch.value > 50 then
 				switch:setState(false)
 			else
 				switch:setState(true)
 			end
-			if switch.handler then switch:handler(switch.on) end
+			if switch.handler then switch.handler(switch.on) end
 		end)
 	}
 
-	return switch
+	return wid
 end
 
 function widgets.coloredText(text, opts)
