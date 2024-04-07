@@ -28,14 +28,8 @@ local italicCodeFont = 'Monaspace Radon'
 local codefontStyleItalic = 'Medium'
 local fontSize = 14
 local ligs = {
-	ss01 = false,
---	ss03 = true,
---	ss05 = true,
---	ss06 = true,
-	ss07 = true,
-	ss08 = true,
-	calt = true,
-	dlig = true
+	'ss01', 'ss03', 'ss05', 'ss06', 'ss08', 'ss08',
+	'calt', 'dlig'
 }
 
 fontconfig.use_blocking {
@@ -110,29 +104,6 @@ keymap.add_direct {
 }
 
 lspconfig.gopls.setup {}
-lspconfig.sumneko_lua.setup {
-	command = {
-		HOME .. '/.local/share/lite-xl/lsp/lua-language-server/bin/lua-language-server',
-		'-E',
-		HOME .. '/.local/share/lite-xl/lsp/lua-language-server/main.lua',
-	},
-	settings = {
-		Lua = {
-			workspace = {
-				library = {
-					DATADIR,
-					'/usr/local/share/hilbish/emmyLuaDocs',
-					'/usr/local/share/hilbish/libs'
-				}
-			},
-			diagnostics = {
-				neededFileStatus = {
-					['lowercase-global'] = 'None'
-				}
-			}
-		}
-	}
-}
 
 lsp.add_server {
 	name = 'gleam',

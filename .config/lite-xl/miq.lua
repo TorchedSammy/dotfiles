@@ -40,6 +40,8 @@ config.plugins.miq.plugins = {
 
 	'lite-xl/lite-xl-lsp',
 	'TorchedSammy/lite-xl-lspkind',
+	'lsp_lua',
+
 	'~/Files/Projects/lspinstall.lxl',
 
 	-- others
