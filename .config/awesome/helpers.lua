@@ -218,7 +218,9 @@ end
 
 function helpers.slidePlacement(wbx, opts)
  local wbxOpen = false
- local hideHeight = awful.screen.focused().geometry.height
+ local hideHeight = awful.screen.focused().geometry.height - beautiful.wibar_height/2
+ local revealHeight = awful.screen.focused().geometry.height - (beautiful.wibar_height + beautiful.useless_gap * beautiful.dpi(2)) - wbx.height - (opts.hoffset or 0)
+
  local animator = (opts.animator and opts.animator(wbx)) or rubato.timed {
 		duration = 0.25,
 		rate = 120,
@@ -226,7 +228,7 @@ function helpers.slidePlacement(wbx, opts)
 		subscribed = function(y)
 			wbx.y = y
 			if y == hideHeight then
-    wbx.visible = false
+        wbx.visible = false
 			end
 		end,
 		pos = hideHeight,
@@ -235,7 +237,7 @@ function helpers.slidePlacement(wbx, opts)
 	}
 	local placer = type(opts.placement) == 'string' and awful.placement[opts.placement] or opts.placement
  local function doPlacement()
-		placer(wbx, {
+		placer(wbx, opts.placementArgs and opts.placementArgs or {
 			margins = {
 				left = beautiful.useless_gap * beautiful.dpi(2),
 				right = beautiful.useless_gap * beautiful.dpi(2),
@@ -243,6 +245,11 @@ function helpers.slidePlacement(wbx, opts)
 			},
 			parent = awful.screen.focused()
 		})
+		if opts.coords then
+      local coords = opts.coords()
+      if coords and coords.x then wbx.x = coords.x end
+      if coords and coords.y then wbx.y = coords.y end
+		end
 	end
 	doPlacement()
 	wbx.visible = false
@@ -258,10 +265,9 @@ function helpers.slidePlacement(wbx, opts)
 	end
 
  function wbx:on()
-  animator.target = awful.screen.focused().geometry.height - (beautiful.wibar_height + beautiful.useless_gap * beautiful.dpi(2)) - wbx.height
+  animator.target = revealHeight
   wbx.visible = true
   wbxOpen = true
-  wbx.displayed = true
 
   lock.passthrough(wbx)
   if opts.toggler then
@@ -274,8 +280,7 @@ function helpers.slidePlacement(wbx, opts)
 
  function wbx:off()
 		wbxOpen = false
-		animator.target = awful.screen.focused().geometry.height
-    wbx.displayed = false
+		animator.target = hideHeight
 
     if opts.toggler then
       local continue = opts.toggler(wbxOpen)

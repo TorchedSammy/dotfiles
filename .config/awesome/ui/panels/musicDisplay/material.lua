@@ -129,7 +129,7 @@ pctl.listenMetadata(function (title, artist, art, album)
                 easing = function(t) return t*t end -- f(x) = x^2, I just use t for "time"
             }
         }
-        if musicDisplay.displayed then
+        if musicDisplay.visible then
             animator.target = 100
         else
             local gradientColorHue = gradientColor:hsv()

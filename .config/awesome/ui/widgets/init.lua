@@ -307,7 +307,7 @@ function find_widget_in_wibox(wb, widget)
 end
 
 function widgets.systray(opts)
-	local systray_margin = (beautiful.wibar_height - beautiful.systray_icon_size) / 2
+	local systray_margin = (beautiful.wibar_height - beautiful.systray_icon_size) / 3
 	widgets.raw_systray = wibox.widget.systray()
 	widgets.raw_systray:set_base_size(beautiful.systray_icon_size)
 
@@ -316,18 +316,19 @@ function widgets.systray(opts)
 	local wid
 
 	local function adjustSystray()
-	local w = find_widget_in_wibox(opts.bar, wid)
-	if not w then return 0, 0 end
-	local bx, by, width, height = w:get_matrix_to_device():transform_rectangle(0, 0, w:get_size())
+		local w = find_widget_in_wibox(opts.bar, wid)
+		if not w then return 0, 0 end
 
-	local x = opts.vertical
-		and bx + width + beautiful.useless_gap
-		or bx + (width / 2) - (((beautiful.systray_icon_size * awesome.systray()) + (beautiful.systray_icon_spacing * (awesome.systray() - 1))) / 2)
-	local y = opts.vertical
-		and by + height + beautiful.useless_gap
-		or screen.primary.geometry.height - height - beautiful.wibar_height - beautiful.useless_gap - (opts.margin and opts.margin or 0)
+		local bx, by, width, height = w:get_matrix_to_device():transform_rectangle(0, 0, w:get_size())
 
-	return x, y
+		local x = opts.vertical
+			and bx + width + beautiful.useless_gap
+			or bx + (width / 2) - (((beautiful.systray_icon_size * awesome.systray()) + (beautiful.systray_icon_spacing * (awesome.systray() - 1))) / 2)
+		local y = opts.vertical
+			and by + height + beautiful.useless_gap
+			or screen.primary.geometry.height - height - beautiful.wibar_height - (beautiful.useless_gap * 2) - (opts.margin and opts.margin or 0)
+
+		return x, y
 	end
 
 	local function setPopupPos(px, py)
@@ -336,17 +337,16 @@ function widgets.systray(opts)
 	end
 
 	widgets.raw_systray:connect_signal('widget::layout_changed', function()
-		setPopupPos(adjustSystray())
+		--setPopupPos(adjustSystray())
 	end)
 
 	btn = widgets.button('expand-more', {
 		bg = opts.bg,
 		onClick = function()
 			if awesome.systray() ~= 0 then
-				setPopupPos(adjustSystray())
+				--setPopupPos(adjustSystray())
 				
-				popup.visible = not popup.visible
-				btn.icon = popup.visible and 'expand-less' or 'expand-more'
+				popup:toggle()
 			end
 		end
 	})
@@ -357,14 +357,9 @@ function widgets.systray(opts)
 	]]--
 
 	local systrayPopup = wibox.widget {
-		{
-			widgets.raw_systray,
-			top = systray_margin,
-			bottom = systray_margin,
-			widget = wibox.container.margin	
-		},
-		widget = wibox.container.background,
-		shape = helpers.rrect(6)
+		widgets.raw_systray,
+		margins = systray_margin,
+		widget = wibox.container.margin
 	}
 
 	popup = awful.popup {
@@ -372,7 +367,7 @@ function widgets.systray(opts)
 		shape = helpers.rrect(6),
 		ontop = true,
 		visible = false,
-		hide_on_right_click = true,
+		bg = beautiful.bg_popup
 		--[[
 		placement = function(w)
 			awful.placement.bottom_right(w, {
@@ -385,7 +380,6 @@ function widgets.systray(opts)
 		]]--
 	}
 	--popup:move_next_to(btn)
-	helpers.hideOnClick(popup)
 
 	if opts.vertical then
 		wid = wibox.widget {
@@ -396,6 +390,19 @@ function widgets.systray(opts)
 	else
 		wid = btn
 	end
+
+	helpers.slidePlacement(popup, {
+		placement = 'bottom_right',
+		toggler = function(state)
+			btn.icon = state and 'expand-less' or 'expand-more'
+		end,
+		hoffset = systray_margin * 3,
+		coords = function()
+			local x = adjustSystray()
+
+			return {x = x}
+		end
+	})
 
 	return wid, popup
 end
