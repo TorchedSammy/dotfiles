@@ -3,6 +3,7 @@ local beautiful = require 'beautiful'
 local compositor = require 'modules.compositor'
 local settings = require 'conf.settings'
 local naughty = require 'naughty'
+local sfx = require 'modules.sfx'
 
 -- Picom
 if settings.picom then
@@ -50,7 +51,7 @@ awful.spawn.easy_async_with_shell('wmctrl -m | grep PID', function(out)
 		if not out2:match 'y' then
 			awful.spawn.easy_async(string.format('touch /tmp/awesome', pid), function() end)
 			awful.spawn.easy_async('dex-autostart --environment Awesome --autostart', function() end)
-			awful.spawn.easy_async('pw-play .config/awesome/sounds/startup2.wav', function() end)
+			sfx.play 'startup'
 		end
 	end)
 end)
