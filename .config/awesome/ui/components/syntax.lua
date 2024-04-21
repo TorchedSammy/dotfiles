@@ -1,9 +1,11 @@
 local base = require 'ui.extras.syntax.base'
 local beautiful = require 'beautiful'
 local gears = require 'gears'
+local helpers = require 'helpers'
 local rubato = require 'libs.rubato'
 local wibox = require 'wibox'
 local widgets = require 'ui.widgets'
+local makeup = require 'ui.makeup'
 local M = {}
 
 function M.slider(opts)
@@ -22,10 +24,9 @@ function M.slider(opts)
 	}
 
 	local slider = wibox.widget {
-		widget = wibox.widget.slider,
+		widget = makeup.putOn(wibox.widget.slider, {bar_color = opts.bg or 'bg_sec'}),
 		forced_height = progress.forced_height,
 		forced_width = progress.forced_width,
-		bar_color = opts.bg or beautiful.bg_sec,
 		bar_shape = progressShape,
 		handle_color = '#00000000',
 		id = 'slider'
@@ -35,10 +36,10 @@ function M.slider(opts)
 		local posFraction = (pos / length)
 		local progressLength = opts.width
 		if progress.muted then
-			progress.color = opts.mutedColor or beautiful.fg_tert
+			progress.color = helpers.beautyVar(opts.mutedColor or 'fg_tert')
 		else
 			if opts.color and type(opts.color) == 'string' then
-				progress.color = opts.color
+				progress.color = helpers.beautyVar(opts.color)
 				goto cont
 			end
 
