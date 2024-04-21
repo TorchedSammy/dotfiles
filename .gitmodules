@@ -37,3 +37,6 @@
 [submodule ".config/awesome/libs/awexygen"]
 	path = .config/awesome/libs/awexygen
 	url = https://github.com/xinhaoyuan/awexygen
+[submodule ".config/awesome/libs/liblua_pam"]
+	path = .config/awesome/libs/liblua_pam
+	url = https://github.com/RMTT/lua-pam

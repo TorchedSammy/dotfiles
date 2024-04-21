@@ -26,6 +26,7 @@ local programs = {
 	'libinput-gestures-setup start',
 	'tym --daemon',
 	'xplugd',
+	[[xss-lock awesome-client "require 'ui.lockscreen'.lock()"]],
 	--'/usr/libexec/polkit-gnome-authentication-agent-1',
 	string.format('gsettings set org.gnome.desktop.interface color-scheme prefer-%s', beautiful.dark and 'dark' or 'light')
 }
