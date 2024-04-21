@@ -5,6 +5,7 @@ local sounds = {
 	notification = 'notify6.wav',
 	deviceAdded = 'device-added2.wav',
 	deviceRemoved = 'device-removed2.wav',
+	startup = 'startup2.wav'
 }
 
 local M = {
