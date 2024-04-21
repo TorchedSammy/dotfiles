@@ -5,7 +5,7 @@ local wibox = require 'wibox'
 local gears = require 'gears'
 local beautiful = require 'beautiful'
 local taglist = require 'ui.taglist-modern'
-local w = require 'ui.widgets.syntax'
+--local w = require 'ui.widgets.syntax'
 local widgets = require 'ui.widgets'
 local helpers = require 'helpers'
 screen.connect_signal('property::geometry', helpers.set_wallpaper)
@@ -262,7 +262,7 @@ awful.screen.connect_for_each_screen(function(s)
 	local logoBtn = widgets.imgwidget(gears.color.recolor_image(beautiful.config_path .. '/images/gradient-logo.svg', beautiful.fg_tert))
 	logoBtn.buttons = {
 		awful.button({}, 1, function()
-			w.startMenu.toggle()
+			--w.startMenu.toggle()
 		end)
 	}
 	helpers.displayClickable(logoBtn)
@@ -270,7 +270,7 @@ awful.screen.connect_for_each_screen(function(s)
 	local actionBtn = widgets.button('actionCenter', {
 		bg = beautiful.bg_normal_opposite,
 		size = beautiful.dpi(16),
-		onClick = w.quickSettings.toggle
+		--onClick = w.quickSettings.toggle
 	})
 
 	local ratio = wibox.layout.ratio.horizontal()

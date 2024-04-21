@@ -49,7 +49,9 @@ theme.xcolor13    = "#A4C8DE"
 theme.xcolor14    = "#EDCCD6"
 theme.xcolor15    = "#ebe1e7"
 
-theme.font          = "SF Pro Text Regular 10"
+theme.fontName = 'SF Pro Text'
+theme.font          = theme.fontName .. 'Regular 10'
+theme.radius = 2
 
 theme.bg_normal     = theme.xbackground
 theme.bg_focus      = theme.bg_normal

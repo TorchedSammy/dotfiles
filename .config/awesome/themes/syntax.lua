@@ -11,7 +11,8 @@ local theme = require 'themes.common'
 local gears = require 'gears'
 theme = gears.table.join(theme, colors)
 
-theme.font          = 'Nimbus Sans Regular 12'
+theme.fontName = 'Nimbus Sans'
+theme.font = 'Nimbus Sans Regular 12'
 theme.font_bold     = 'Nimbus Sans Bold 12'
 
 theme.gradientColors = {
@@ -45,7 +46,8 @@ theme.border_focus  = theme.fg_normal
 theme.titlebars = true
 theme.titlebar_type = 'syntax'
 theme.titlebar_height = dpi(32)
-theme.titlebar_bg = theme.xbackground
+theme.titlebar_bg = '#00000000'
+theme.titlebar_bg_real = theme.xbackground
 theme.titlebar_bg_sec = theme.xcolor8
 theme.titlebar_bg_sec2 = theme.xcolor10
 

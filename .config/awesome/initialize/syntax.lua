@@ -1,23 +1,20 @@
+local beautiful = require 'beautiful'
 local awful = require 'awful'
 local gears = require 'gears'
-local widgets = require 'ui.widgets.syntax'
 local caps = require 'modules.caps'
+local music = require 'ui.panels.musicDisplay'
 require 'ui.extras.syntax'
 
-local music = widgets.musicDisplay
-local powerMenu = widgets.powerMenu
+local music = music.create {
+	placement = awful.placement.under_mouse,
+	bg = beautiful.bg_sec
+}
 globalkeys = gears.table.join(globalkeys,
 	awful.key({modkey}, 'x', function()
-		music.toggle()
+		music:toggle()
 	end),
 	awful.key({modkey}, 'q', function()
-		powerMenu.toggle()
-	end),
-	awful.key({}, 'Caps_Lock', function()
-		gears.timer.start_new(0.4, function()
-			caps.state(widgets.capsIndicator.display)
-			caps.state(widgets.caps.display)
-		end)
+		--powerMenu.toggle()
 	end)
 )
 

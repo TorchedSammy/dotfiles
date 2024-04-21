@@ -219,12 +219,12 @@ local function setupTitlebar(c)
 			widget = wibox.widget.textbox
 		},
 		shape = gears.shape.rectangle,
-		bg = beautiful.titlebar_bg,
+		bg = beautiful.titlebar_bg_real,
 		widget = wibox.container.background,
 		forced_width = c.width
 	}
 
-	local realbar = wibox.widget {
+	return {
 		shape = gears.shape.rectangle,
 		bg = '#00000000',
 		widget = wibox.container.background,
@@ -238,7 +238,7 @@ local function setupTitlebar(c)
 					widget = wibox.widget.textbox
 				},
 				shape = gears.shape.rectangle,
-				bg = beautiful.titlebar_bg,
+				bg = beautiful.titlebar_bg_real,
 				widget = wibox.container.background,
 				forced_width = c.width - beautiful.dpi(120),
 				buttons = buttons,
@@ -265,7 +265,7 @@ local function setupTitlebar(c)
 						widget = wibox.widget.textbox
 					},
 					shape = function(cr, w, h) return gears.shape.partially_rounded_rect(cr, beautiful.dpi(24), h, false, true, false, false, 16) end,
-					bg = beautiful.titlebar_bg,
+					bg = beautiful.titlebar_bg_real,
 					widget = wibox.container.background,
 					forced_width = beautiful.dpi(20),
 				},
@@ -273,18 +273,6 @@ local function setupTitlebar(c)
 			},
 		},
 	}
-
-	awful.titlebar(c, {size = beautiful.titlebar_height, bg = '#00000000'}): setup {
-		layout = wibox.layout.fixed.vertical,
-		realbar
-	}
 end
 
-client.connect_signal('request::titlebars', function(c)
-	setupTitlebar(c)
-end)
-
-client.connect_signal('property::size', function(c)
-	setupTitlebar(c)
-end)
-
+return setupTitlebar
