@@ -3,17 +3,30 @@ local beautiful = require 'beautiful'
 local helpers = require 'helpers'
 local wibox = require 'wibox'
 
+local transitionSkip = {
+	'stylesheet',
+	'markup'
+}
+
+local function contains(tbl, val)
+	for _, v in ipairs(tbl) do
+		if v == val then return true end
+	end
+
+	return false
+end
+
 local oldBackgroundMt = wibox.container.background.mt
 setmetatable(wibox.container.background, {
 	__call = function(...)
 		local w = oldBackgroundMt.__call(...)
 		if w.bgKey then
-			w.bg = beautiful[bgKey]
+			w.bg = beautiful[w.bgKey]
 		end
 
 		awesome.connect_signal('makeup::put_on', function()
 			if w.bgKey then
-				w.bg = beautiful[beautifulKey]
+				w.bg = beautiful[w.beautifulKey]
 			end
 		end)
 
@@ -28,8 +41,8 @@ function M.putOn(widget, handle, opts)
 	return setmetatable({}, { __call = function(_, ...)
 		local w = widget(opts.args)
 
-		local function handleColor(v)
-			if type(v) == 'userdata' or type(v) == 'table' then return v end
+		local function handleColor(k, v)
+			if type(v) == 'userdata' or type(v) == 'table' or contains(transitionSkip, k) then return v end
 
 			return v:match '^#' and v or beautiful[v]
 		end
@@ -44,7 +57,7 @@ function M.putOn(widget, handle, opts)
 		end
 
 		for k, v in pairs(set) do
-			w[k] = handleColor(v)
+			w[k] = handleColor(k, v)
 		end
 
 		awesome.connect_signal('makeup::put_on', function()
@@ -64,8 +77,8 @@ function M.putOn(widget, handle, opts)
 			for k, v in pairs(changed) do
 				local colorizer = function()
 					helpers.transitionColor {
-						old = handleColor(w[k]),
-						new = handleColor(v),
+						old = handleColor(k, w[k]),
+						new = handleColor(k, v),
 						transformer = function(c) w[k] = c end,
 						duration = 4,
 						animate = visible
