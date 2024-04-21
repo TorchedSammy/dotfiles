@@ -10,18 +10,20 @@ Gio.File.new_for_path(configDir):make_directory()
 local configPath = configDir .. 'config.json'
 local file = Gio.File.new_for_path(configPath)
 
-local config = {
+local defaultConfig = {
 	theme = 'harmony',
 	picom = true,
-	noAnimate = false
+	noAnimate = false,
+	lockWallpaper = os.getenv 'HOME' .. '/.config/awesome/wallpapers/meadows.jpg'
 }
+local config
 
 local M = {}
 
 if not gears.filesystem.file_readable(configPath) then
 	file:create_async(Gio.FileCreateFlags.NONE, GLib.PRIORITY_DEFAULT, nil, function(_, res)
 		local stream = file:create_finish(res)
-		local encoded = json.encode(config)
+		local encoded = json.encode(defaultConfig)
 		stream:write_async(encoded, GLib.PRIORITY_DEFAULT, nil, function(_, res) stream:write_finish(res) end)
 	end)
 else
@@ -40,6 +42,8 @@ end
 
 return setmetatable(M,  {
 	__index = function(_, k)
+		if config[k] == nil then return defaultConfig[k] end
+
 		return config[k]
 	end,
 	__newindex = function(_, k, v)

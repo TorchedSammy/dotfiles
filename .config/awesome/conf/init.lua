@@ -34,7 +34,7 @@ terminalname = terminal:gsub('^%l', string.upper)
 
 editor = 'lite-xl'
 editorname = 'Lite XL'
-editorcmd = 'hilbish -ic "' .. editor .. ' && exit"'
+editorcmd = 'hilbish -c ' .. editor
 
 musicplayer = 'cmus'
 playername = musicplayer:gsub('^%l', string.upper)

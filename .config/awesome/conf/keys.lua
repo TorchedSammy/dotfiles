@@ -461,6 +461,16 @@ clientbuttons = gears.table.join(
     awful.button({ }, 1, function(c)
         c:emit_signal('request::activate', 'mouse_click', {raise = true})
     end),
+    awful.button({ modkey, altkey }, 1, function(c)
+		local cgeo = c:geometry()
+		if not c.floating then
+			awful.client.floating.toggle(c)
+			awful.placement.under_mouse(c)
+			c:geometry(cgeo)
+		end
+        c:emit_signal('request::activate', 'mouse_click', {raise = true})
+        awful.mouse.client.move(c)
+    end),
     awful.button({ modkey }, 1, function(c)
         c:emit_signal('request::activate', 'mouse_click', {raise = true})
         awful.mouse.client.move(c)
