@@ -47,7 +47,12 @@ widgets.imgwidget = function(icon, args)
 end
 
 function widgets.icon(name, opts)
-	opts = opts or {}
+	local opts = opts or {}
+	if type(name) == 'table' then
+		opts = name
+	else
+		opts.name = name
+	end
 
 	local ico = wibox.widget {
 		layout = wibox.container.place,
@@ -56,7 +61,7 @@ function widgets.icon(name, opts)
 			width = opts.size and opts.size or beautiful.dpi(18),
 			{
 				widget = wibox.widget.imagebox,
-				image = beautiful.config_path .. '/images/icons/' .. name .. '.svg',
+				image = beautiful.config_path .. '/images/icons/' .. opts.name .. '.svg',
 				stylesheet = string.format([[
 					* {
 						fill: %s;
@@ -92,15 +97,14 @@ function widgets.icon(name, opts)
 end
 
 function widgets.button(icon, opts)
-	local opts = opts
+	local opts = opts or {}
 	if type(icon) == 'table' then
 		opts = icon
 	else
 		opts.icon = icon
 	end
 
-	local color = opts.color or 'fg_normal'
-	local function handleColor() return color:match '^#' and color or beautiful[color] end
+	opts.color = opts.color or 'fg_normal'
 
 	local focused = false
 	local ico = wibox.widget {
@@ -135,22 +139,17 @@ function widgets.button(icon, opts)
 												* {
 													fill: %s;
 												}
-											]], helpers.beautyVar(opts.makeup or color))
+											]], helpers.beautyVar(opts.makeup or opts.color))
 										}
 									end),
 									image = beautiful.config_path .. '/images/icons/' .. opts.icon .. '.svg',
-									stylesheet = string.format([[
-										* {
-											fill: %s;
-										}
-									]], handleColor()),
 									id = 'icon'
 								},
 							},
 						} or nil,
 						{
 							widget = wibox.widget.textbox,
-							markup = helpers.colorize_text(opts.text or '', handleColor()),
+							markup = helpers.colorize_text(opts.text or '', helpers.beautyVar(opts.textColor or opts.color)),
 							font = opts.font or beautiful.font:gsub('%d+$', opts.fontSize or 14),
 							id = 'textbox',
 							valign = 'center'
@@ -188,17 +187,17 @@ function widgets.button(icon, opts)
 				ico:emit_signal 'widget::redraw_needed'
 			elseif k == 'color' then
 				local icon = ico:get_children_by_id'icon'[1]
-				color = v
+				opts.color = v
 				if icon then
 					icon.stylesheet = string.format([[
 						* {
 							fill: %s;
 						}
-					]], handleColor())
+					]], helpers.beautyVar(opts.iconColor or opts.color))
 					ico:emit_signal 'widget::redraw_needed'
 				end
 			elseif k == 'text' then
-				ico:get_children_by_id'textbox'[1].markup = helpers.colorize_text(v, handleColor())
+				ico:get_children_by_id'textbox'[1].markup = helpers.colorize_text(v, helpers.beautyVar(opts.textColor or opts.color))
 			elseif k == 'onClick' and type(v) == 'function' then
 				realWid.buttons = {
 					awful.button({}, 1, function()
@@ -207,7 +206,6 @@ function widgets.button(icon, opts)
 				}
 			elseif k == 'makeup' then
 				opts.makeup = v
-				print(opts.makeup)
 			end
 			ico[k] = v
 		end
