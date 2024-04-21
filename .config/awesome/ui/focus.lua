@@ -19,10 +19,12 @@ local function focusDone()
 
 	print 'THE REAL FOCUS TIMER IS UP'
 
-	M.currentObj:disconnect_signal('button::press', M.focusStop)
-	M.currentObj:disconnect_signal('button::release', M.focusStop)
-	M.currentObj:disconnect_signal('mouse::enter', M.panelFocusStart)
-	M.currentObj:disconnect_signal('mouse::leave', M.panelFocusStart)
+	if M.currentObj ~= nil then
+		M.currentObj:disconnect_signal('button::press', M.focusStop)
+		M.currentObj:disconnect_signal('button::release', M.focusStop)
+		M.currentObj:disconnect_signal('mouse::enter', M.panelFocusStart)
+		M.currentObj:disconnect_signal('mouse::leave', M.panelFocusStart)
+	end
 end
 
 local focusTimer = gears.timer {
@@ -56,16 +58,14 @@ function M.focusStop()
 end
 
 function M.passthrough(new)
-	if new.popup or not canFocus then return end
-
-	print 'passed through lol'
+	if new.popup then return end
 
 	if M.currentWidget and M.currentWidget ~= new then
 		M.currentWidget:off()
 	end
 
 	M.currentWidget = new
-	M.lock(new)
+	--M.lock(new)
 end
 
 function M.lock(obj)
