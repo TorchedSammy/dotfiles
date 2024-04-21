@@ -346,7 +346,7 @@ function widgets.systray(opts)
 
 		local x = opts.vertical
 			and bx + width + beautiful.useless_gap
-			or bx + (width / 2) - (((beautiful.systray_icon_size * awesome.systray()) + (beautiful.systray_icon_spacing * (awesome.systray() - 1))) / 2)
+			or bx + (width / 2) - (((beautiful.systray_icon_size * awesome.systray()) + (beautiful.systray_icon_spacing * (awesome.systray() - 1))) / 2) - systray_margin
 		local y = opts.vertical
 			and by + height + beautiful.useless_gap
 			or screen.primary.geometry.height - height - beautiful.wibar_height - (beautiful.useless_gap * 2) - (opts.margin and opts.margin or 0)
@@ -356,11 +356,11 @@ function widgets.systray(opts)
 
 	local function setPopupPos(px, py)
 		popup.x = px
-		popup.y = py
+		--popup.y = py
 	end
 
 	widgets.raw_systray:connect_signal('widget::layout_changed', function()
-		--setPopupPos(adjustSystray())
+		setPopupPos(adjustSystray())
 	end)
 
 	btn = widgets.button('expand-more', {
