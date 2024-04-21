@@ -3,6 +3,7 @@ local gears = require 'gears'
 local naughty = require 'naughty'
 local settings = require 'conf.settings'
 local sfx = require 'modules.sfx'
+local lockscreen = require 'ui.lockscreen'
 
 naughty.config.spacing = beautiful.notification_spacing
 naughty.config.padding = beautiful.notification_padding
@@ -11,7 +12,7 @@ naughty.config.defaults.position = beautiful.notification_position
 naughty.config.defaults.border_width = beautiful.notification_border_width
 
 naughty.connect_signal('added', function(notif)
-	if notif.category == 'system.playerctl' then return end
+	if notif.category == 'system.playerctl' or lockscreen.locked() then return end
 
 	local categorySound = {
 		['device.added'] = 'deviceAdded',

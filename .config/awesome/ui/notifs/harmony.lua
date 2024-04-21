@@ -5,6 +5,7 @@ local wibox = require 'wibox'
 local naughty = require 'naughty'
 local w = require 'ui.widgets'
 local helpers = require 'helpers'
+local lockscreen = require 'ui.lockscreen'
 
 local categoryMappings = {
 	['drive-removable-media'] = 'usb',
@@ -22,7 +23,7 @@ local function categoryToIcon(cat)
 end
 
 naughty.connect_signal('request::display', function(notification)
-	if skip[notification.category] == true then return end
+	if skip[notification.category] == true or lockscreen.locked() then return end
 
 	notification.timeout = 5
 
@@ -115,7 +116,7 @@ naughty.connect_signal('request::display', function(notification)
 										{
 											widget = wibox.widget.imagebox,
 											clip_shape = helpers.rrect(beautiful.radius / 2),
-											image = notifImage
+											image = gears.surface.load_uncached_silently(notifImage)
 										}
 									}
 								} or nil,
