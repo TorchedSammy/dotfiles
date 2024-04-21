@@ -128,7 +128,7 @@ function M.new(opts)
 							widget = wibox.container.margin,
 							bottom = beautiful.dpi(32),
 							{
-								widget = makeup.putOn(wibox.widget.separator, {color = 'bg_sec'}, {wibox = opts.menu}),
+								widget = makeup.putOn(wibox.widget.separator, {color = 'containerLow'}, {wibox = opts.menu}),
 								shape = gears.shape.rounded_bar,
 							}
 						}

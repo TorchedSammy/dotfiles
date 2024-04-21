@@ -2,11 +2,13 @@ local awful = require 'awful'
 local beautiful = require 'beautiful'
 local gears = require 'gears'
 local helpers = require 'helpers'
+local makeup = require 'ui.makeup'
 local wibox = require 'wibox'
 local w = require 'ui.widgets'
 local syntax = require 'ui.components.syntax'
 local sfx = require 'modules.sfx'
 local caps = require 'modules.caps'
+local lockscreen = require 'ui.lockscreen'
 
 local volumeDisplay = helpers.aaWibox {
 	width = beautiful.dpi(420),
@@ -14,7 +16,7 @@ local volumeDisplay = helpers.aaWibox {
 	ontop = true,
 	visible = false,
 	rrectRadius = beautiful.radius,
-	bg = beautiful.bg_sec,
+	bg = 'bg_popup',
 	popup = true
 }
 
@@ -29,7 +31,7 @@ local displayTimer = gears.timer {
 local spacing = beautiful.dpi(16)
 local volSlider = syntax.slider {
 	width = volumeDisplay.width - beautiful.dpi(100) - (spacing * 2) - (beautiful.dpi(16) * 4),
-	bg = beautiful.xcolor10,
+	bg = 'containerHigh',
 	color = beautiful.accent,
 	onChange = function(val)
 		sfx.setVolume(val)
@@ -66,8 +68,7 @@ local function createPopup(icon, layout)
 					width = volumeDisplay.height,
 					height = volumeDisplay.height,
 					{
-						widget = wibox.container.background,
-						bg = beautiful.xcolor9,
+						widget = makeup.putOn(wibox.container.background, {bg = 'containerLow'}),
 						icoWidget
 					}
 				},
@@ -106,6 +107,9 @@ awesome.connect_signal('syntax::volume', function(volume, muted, init)
 		volPercent.text = string.format('%s%%', volume)
 		return
 	end
+
+	if lockscreen.locked() then return end
+
 	volumeDisplay:setup {
 		layout = wibox.container.place,
 		volumePopupWid
@@ -124,6 +128,8 @@ awesome.connect_signal('syntax::volume', function(volume, muted, init)
 end)
 
 awesome.connect_signal('caps::state', function(state)
+	if lockscreen.locked() then return end
+
 	volumeDisplay:setup {
 		layout = wibox.container.place,
 		capsPopupWid

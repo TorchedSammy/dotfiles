@@ -39,7 +39,7 @@ function M.new(opts)
 	opts.width = opts.width or M.width
 	opts.height = opts.height or M.height
 	opts.sliderBg = opts.sliderBg or beautiful.xcolor9
-	opts.sliderColor = opts.sliderColor or beautiful.accent
+	opts.sliderColor = opts.sliderColor or 'accent'
 
 	local bgcolor = opts.bg
 	local horizMargin = beautiful.dpi(20)

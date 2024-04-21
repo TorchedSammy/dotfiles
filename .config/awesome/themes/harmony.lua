@@ -28,7 +28,7 @@ theme.bg_sec = theme.backgroundSecondary
 theme.bg_tert = theme.backgroundTertiary
 theme.bg_quad = theme.backgroundQuad
 
-theme.bg_popup = theme.bg_normal--helpers.shiftColor(theme.bg_normal, 2)
+theme.bg_popup = theme.containerLowest --helpers.shiftColor(theme.bg_normal, 2)
 theme.bg_focus = theme.bg_normal
 theme.bg_urgent = theme.bg_normal
 theme.bg_minimize = theme.bg_normal

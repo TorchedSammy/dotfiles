@@ -93,11 +93,11 @@ local function createToggle(type)
 	}
 
 	local function constructColors()
-		return 'accent', 'bg_tert'
+		return 'accent', 'containerHigh'
 	end
 	local toggleBg, toggleBgOff = constructColors()
 
-	local toggleFgColor = 'bg_popup'
+	local toggleFgColor = 'containerLowest'
 	local toggleFgColorOff = 'fg_normal'
 	local toggleMargin = beautiful.dpi(10)
 
@@ -180,7 +180,7 @@ local function createToggle(type)
 		quickSettingsAnimator.target = 1
 
 		contentSwitch.visible = control.toggle
-		contentSwitch:setState(on, true)
+		--contentSwitch:setState(on, true)
 		--[[function contentSwitch:handler()
 			local controlOn = control.toggle()
 			if controlOn == nil then return end

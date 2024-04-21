@@ -1,3 +1,4 @@
+local color = require 'modules.color'
 local colors = {}
 
 colors.name = 'stardew-night'
@@ -20,16 +21,30 @@ colors.xcolor13 = '#212126'
 colors.xcolor14 = '#9595ab'
 colors.xcolor15 = '#18181c'
 
+colors.foreground = colors.xforeground
+
 colors.background = colors.xbackground
 colors.backgroundSecondary = colors.xcolor8
 colors.backgroundTertiary = colors.xcolor9
 colors.backgroundQuad = colors.xcolor10
 
-colors.foreground = colors.xforeground
+colors.containerLowest = color.shift(colors.xbackground, -5)
+colors.containerLow = colors.xbackground
+colors.container = colors.backgroundSecondary
+colors.containerHigh = colors.backgroundTertiary
+colors.containerHighest = colors.backgroundQuad
+
+colors.background2 = colors.background
+
+colors.containerSecondary = colors.backgroundSecondary
+colors.containerSecondaryFg = colors.xforeground
 
 colors.accent = colors.xcolor6
 colors.accentforeground = colors.xcolor0
 colors.accentcontainer = colors.accent
+
+colors.secondary = colors.containerSecondary
+colors.secondaryFg = colors.xforeground
 
 colors.separator = colors.backgroundTertiary
 
