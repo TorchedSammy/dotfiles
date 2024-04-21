@@ -2,6 +2,7 @@
 -- found (e.g. lgi). If LuaRocks is not installed, do nothing.
 pcall(require, 'luarocks.loader')
 package.cpath = package.cpath .. ';' .. os.getenv 'HOME' .. '/.config/awesome/?/?.so'
+.. ';' .. os.getenv 'HOME' .. '/.config/awesome/libs/?.so'
 
 local awful = require 'awful'
 local beautiful = require 'beautiful'
@@ -108,7 +109,8 @@ ruled.client.connect_signal("request::rules", function()
 			instance = { "copyq", "pinentry" },
 			class    = {
 				"Arandr", "Blueman-manager", "Gpick", "Kruler", "Sxiv",
-				"Tor Browser", "Wpa_gui", "veromix", "xtightvncviewer"
+				"Tor Browser", "Wpa_gui", "veromix", "xtightvncviewer",
+				'awexygen'
 			},
 			-- Note that the name property shown in xprop might be set slightly after creation of the client
 			-- and the name shown there might not match defined rules here.
@@ -234,7 +236,7 @@ end)
 
 client.connect_signal('request::geometry', function(c)
 	if not c.fullscreen then
-		--awful.placement.no_offscreen(c, {honor_workarea = true, margins = beautiful.useless_gap * beautiful.dpi(2)})
+		--awful.placement.no_offscreen(c, {honor_workarea = true, margins = beautiful.useless_gap})
 	end
 end)
 
