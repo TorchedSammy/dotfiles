@@ -289,14 +289,12 @@ function M.create(opts)
 		w
 	}
 
-	--[[return {
-		toggle = function()
-			if not musicDisplay.visible then
-				opts.placement(musicDisplay)
-			end
-			musicDisplay.visible = not musicDisplay.visible -- invert
+	function musicDisplay:toggle()
+		if not musicDisplay.visible then
+			opts.placement(musicDisplay)
 		end
-	}]]--
+		musicDisplay.visible = not musicDisplay.visible -- invert
+	end
 
 	return musicDisplay
 end
