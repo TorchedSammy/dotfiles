@@ -36,7 +36,7 @@ end
 local pagesList = wibox.layout.fixed.vertical()
 local function createPageNavigator()
 	local btn = widgets.button {
-		bg = beautiful.bg_normal,
+		bg = 'bg_normal',
 		text = 'Theme',
 		icon = 'palette',
 		align = 'left',
@@ -155,7 +155,7 @@ local function setting(opts)
 		nil,
 		{
 			layout = wibox.container.margin,
-			right = beautiful.dpi(20),
+			--right = beautiful.dpi(20),
 			{
 				layout = wibox.container.place,
 				halign = 'right',
@@ -177,6 +177,17 @@ for _, var in ipairs {'xcolor1', 'xcolor2', 'xcolor3', 'xcolor4', 'xcolor5', 'xc
 	table.insert(colorSquares, square)
 end
 
+local settingPage = wibox.widget {
+	layout = wibox.layout.overflow.vertical,
+	step = beautiful.dpi(75),
+	scrollbar_widget = {
+		widget = wibox.widget.separator,
+		shape = gears.shape.rounded_bar,
+		color = beautiful.accent
+	},
+	scrollbar_width = beautiful.dpi(10)
+}
+
 local themePage = wibox.widget {
 	layout = wibox.layout.fixed.vertical,
 	spacing = beautiful.dpi(7),
@@ -189,13 +200,16 @@ local themePage = wibox.widget {
 			},
 			button {
 				halign = 'left',
-				bg = beautiful.bg_sec,
+				bg = 'secondary',
 				text = 'Choose Wallpaper',
+				color = 'secondaryFg',
 				icon = 'wallpaper',
-				height = beautiful.dpi(32),
+				height = beautiful.dpi(34),
+				fontSize = beautiful.dpi(16),
 				size = beautiful.dpi(24),
+				margin = beautiful.dpi(6),
 				onClick = function()
-					awful.spawn.with_line_callback(string.format('zenity --file-selection --file-filter="Images | %s")', table.concat(imageFileExts, ' ')), {
+					awful.spawn.with_line_callback(string.format('zenity --file-selection --file-filter="Images | %s ")', table.concat(imageFileExts, ' ')), {
 						stdout = function(out)
 							if out:match '^/' then
 								wallpaperShow.image = out
@@ -244,10 +258,11 @@ local themePage = wibox.widget {
 }
 
 pagesList:add(createPageNavigator())
+settingPage:add(themePage)
 
 local ratio = wibox.layout.ratio.horizontal()
 local app = wibox.widget {
-	layout = ratio,
+	layout = wibox.layout.align.horizontal,
 	spacing = beautiful.dpi(25),
 	spacing_widget = {
 		widget = wibox.container.constraint,
@@ -258,8 +273,33 @@ local app = wibox.widget {
 			thickness = beautiful.dpi(3),
 		}
 	},
-	pagesList,
-	themePage
+	{
+		layout = wibox.layout.fixed.horizontal,
+		{
+			layout = wibox.container.constraint,
+			strategy = 'exact',
+			width = beautiful.dpi(150),
+			pagesList,
+		},
+		{
+			widget = wibox.container.place,
+			halign = 'right',
+			{
+				widget = wibox.container.margin,
+				left = beautiful.dpi(12), right = beautiful.dpi(12),
+				{
+					widget = wibox.container.constraint,
+					width = beautiful.dpi(2),
+					{
+						widget = wibox.widget.separator,
+						color = beautiful.separator,
+						thickness = beautiful.dpi(3),
+					}
+				}
+			}
+		},
+	},
+	settingPage
 }
 ratio:adjust_ratio(1, 0, 0.2, 0.8)
 
