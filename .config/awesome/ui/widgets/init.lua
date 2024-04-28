@@ -664,37 +664,37 @@ function widgets.volume(opts)
 		icon.icon = muted and 'volume-muted' or 'volume'
 	end
 
-
 	awesome.connect_signal('syntax::volume', setState)
 
 	return icon
 end
 
 function widgets.wifi(opts)
-	local stateIcon = wifi.enabled and (wifi.activeSSID and 'wifi' or 'wifi-noap') or 'wifi-off'
-	local icon = widgets.icon(stateIcon, {size = opts.size})
+	local function stateIcon()
+		return wifi.enabled and (wifi.activeSSID and 'wifi' or 'wifi-noap') or 'wifi-off'
+	end
+	local function stateText()
+		return wifi.enabled and (wifi.activeSSID and wifi.activeSSID or 'Not connected') or 'Wi-fi Off'
+	end
+
+	local icon = widgets.icon(stateIcon(), {size = opts.size})
 	local tt = awful.tooltip {
 		objects = {icon},
 		preferred_alignments = {'middle'},
 		mode = 'outside',
 	}
 
-	local function setState(volume, muted, init)
-		tt.text = string.format('%d%% volume%s', volume, muted and ' (muted)' or '')
-		icon.icon = muted and 'volume-muted' or 'volume'
+	local function setState()
+		--tt.text = string.format('%d%% volume%s', volume, muted and ' (muted)' or '')
+		tt.text = stateText()
+		icon.icon = stateIcon()
 	end
 
-	awesome.connect_signal('wifi::toggle', function(on)
-		icon.icon = on and 'wifi-noap' or 'wifi-off'
-	end)
+	setState()
 
-	awesome.connect_signal('wifi::disconnected', function()
-		if wifi.enabled then icon.icon = 'wifi-noap' else icon.icon = 'wifi-off' end
-	end)
-
-	awesome.connect_signal('wifi::activeAP', function(ssid, ap)
-		icon.icon = 'wifi'
-	end)
+	awesome.connect_signal('wifi::toggle', setState)
+	awesome.connect_signal('wifi::disconnected', setState)
+	awesome.connect_signal('wifi::activeAP', setState)
 
 	return icon
 end
