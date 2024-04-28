@@ -5,15 +5,6 @@ local settings = require 'conf.settings'
 local naughty = require 'naughty'
 local sfx = require 'modules.sfx'
 
--- Picom
-if settings.picom then
-	--[[
-	awful.spawn.with_shell('picom --config ~/.config/picom/' .. beautiful.picom_conf
-	.. '.conf ' .. (beautiful.exp_picom_bknd and '--experimental-backends ' or '')
-	.. '-b')
-	]]--
-end
-
 local programs = {
 	-- 'xmodmap -e "pointer = 3 2 1"',
 	'gnome-keyring-daemon',
