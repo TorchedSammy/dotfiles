@@ -317,11 +317,20 @@ do
 								{
 									widget = wibox.container.place,
 									halign = 'right',
-									--[[
-									w.button('power2', {
-										bg = beautiful.bg_sec,
-									})
-									]]--
+									{
+										widget = wibox.container.constraint,
+										strategy = 'exact',
+										width = beautiful.dpi(52),
+										{
+											widget = wibox.container.background,
+											bg = beautiful.containerHigh,
+											shape = helpers.rrect(beautiful.radius / 2),
+											w.button('power2', {
+												size = beautiful.dpi(20),
+												margins = beautiful.dpi(5)
+											})
+										}
+									}
 								}
 							},
 							{
