@@ -9,6 +9,7 @@ local harmony = require 'ui.components.harmony'
 local gears = require 'gears'
 local Color = require 'lua-color'
 local w = require 'ui.widgets'
+local filters = require 'surface_filters'
 
 local albumArt = w.imgwidget('albumPlaceholder.png', {
     widget = wibox.widget.imagebox,
@@ -36,16 +37,20 @@ local musicDisplay = wibox {
 local titlebarColor = Color('#0f0f1f')
 local _, titlebarColorSat, titlebarColorVal = titlebarColor:hsv()
 
-local function makeGradient(solid, transparent)
+local function decToHex(dec)
+	return string.format('%0x', math.floor(dec * 255))
+end
+
+local function makeGradient(geo, solid, transparent)
     return {
         type  = 'linear' ,
         from  = {
             0,
-            musicDisplay.height
+            geo.height
         },
         to = {
-            musicDisplay.width,
-            musicDisplay.height
+            geo.width,
+            geo.height
         },
         stops = {
             {
@@ -53,20 +58,16 @@ local function makeGradient(solid, transparent)
                 solid
             },
             {
-                0.3,
-                solid .. 'e6'
-            },
-            {
                 0.5,
-                solid .. '99'
+                solid .. decToHex(0.8)
             },
             {
-                0.7,
-                solid .. 'cc'
+                0.6,
+                solid .. decToHex(0.6)
             },
             {
                 0.9,
-                solid .. 'e6'
+                solid .. decToHex(0.8)
             },
             {
                 1,
@@ -75,9 +76,10 @@ local function makeGradient(solid, transparent)
         }
     }
 end
+
 local gradient = wibox.widget {
     widget = wibox.container.background,
-    bg = makeGradient(beautiful.bg_sec, beautiful.bg_sec)
+    bg = makeGradient(musicDisplay, beautiful.bg_sec, beautiful.bg_sec)
 }
 
 local oldMusicColors = {
@@ -113,7 +115,7 @@ pctl.listenMetadata(function (title, artist, art, album)
                 local mixedColor = oldMusicColors.gradient:mix(gradientColor, perc / 100)
                 local mixedColorHue = mixedColor:hsv()
                 titlebarBg.bg = tostring(Color {h = mixedColorHue, s = titlebarColorSat, v = titlebarColorVal})
-                gradient.bg = makeGradient(tostring(mixedColor), beautiful.bg_sec)
+                gradient.bg = makeGradient(musicDisplay, tostring(mixedColor), beautiful.bg_sec)
                 mw.setColors {
                     shuffle = tostring(oldMusicColors.shuffle:mix(shuffleColor, perc / 100))
                 }
@@ -134,7 +136,7 @@ pctl.listenMetadata(function (title, artist, art, album)
         else
             local gradientColorHue = gradientColor:hsv()
             titlebarBg.bg = tostring(Color {h = gradientColorHue, s = titlebarColorSat, v = titlebarColorVal})
-            gradient.bg = makeGradient(tostring(gradientColor), beautiful.bg_sec)
+            gradient.bg = makeGradient(musicDisplay, tostring(gradientColor), beautiful.bg_sec)
             mw.setColors {
                 --shuffle = tostring(oldMusicColors.shuffle:mix(shuffleColor, perc / 100))
                 --shuffle = helpers.invertColor(tostring(shuffleColor), true)
@@ -172,7 +174,7 @@ musicDisplay:setup {
 				albumArt,
 			},
 			]]--
-            albumArt,
+			albumArt,
             gradient,
             mw
         }
