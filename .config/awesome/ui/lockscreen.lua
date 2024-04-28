@@ -308,6 +308,8 @@ function M.locked()
 end
 
 function M.lock()
+	if locked then return end
+
 	root.keys = {}
 	locked = true
 	lockscreenEntry.visible = true
