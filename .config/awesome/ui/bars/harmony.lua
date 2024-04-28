@@ -9,6 +9,7 @@ local helpers = require 'helpers'
 local rubato = require 'libs.rubato'
 local quickSettings = require 'ui.panels.quickSettings'
 local makeup = require 'ui.makeup'
+local notifsPanel = require 'ui.panels.notifications'
 --local filters = require 'surface_filters'
 
 screen.connect_signal('property::geometry', helpers.set_wallpaper)
@@ -231,7 +232,15 @@ awful.screen.connect_for_each_screen(function(s)
 						musicBtn,
 						controls,
 						widgets.textclock,
-						widgets.layout(s, beautiful.dpi(15))
+						widgets.layout(s, beautiful.dpi(15)),
+						widgets.button {
+							icon = 'notification',
+							onClick = function()
+								if notifsPanel then
+									notifsPanel:toggle()
+								end
+							end
+						}
 					},
 					left = beautiful.wibar_spacing,
 					right = beautiful.useless_gap,

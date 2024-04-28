@@ -117,7 +117,7 @@ function widgets.button(icon, opts)
 			shape = opts.shape or (opts.text and helpers.rrect(6) or gears.shape.circle),
 			{
 				widget = wibox.container.margin,
-				margins = opts.margin or beautiful.dpi(2),
+				margins = opts.margin or opts.margins or beautiful.dpi(2),
 				{
 					layout = wibox.container.place,
 					halign = opts.align or 'center',
