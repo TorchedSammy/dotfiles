@@ -29,13 +29,12 @@ local notificationsPanel = helpers.aaWibox  {
 	ontop = true,
 	visible = false
 }
-naughty.notify {
-	title = 'ssf',
-	text = 'Image uploaded!',
-	image = '/tmp/screenshot.png'
-}
 
 local panelLayout = wibox.layout.overflow.vertical()
+function panelLayout:add(widget)
+	-- add to top of layout
+	panelLayout:insert(1, widget)
+end
 panelLayout.step = beautiful.dpi(100)
 panelLayout.scrollbar_widget = {
 	widget = wibox.widget.separator,
