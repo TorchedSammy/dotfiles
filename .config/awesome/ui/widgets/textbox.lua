@@ -9,7 +9,7 @@ local coloredText = {mt = {}}
 function coloredText:set_text(text)
 	if not text then return end
 
-	self._private.settext(self, helpers.colorize_text(text, self._private.color))
+	self._private.settext(self, helpers.colorize_text(text, helpers.beautyVar(self._private.color)))
 end
 
 function coloredText:set_color(color)
@@ -23,6 +23,7 @@ local function new(args)
 	ltb._private.color = beautiful.fg_normal
 
 	gtable.crush(ltb, coloredText)
+	awesome.connect_signal('makeup::put_on', function() ltb:set_color(ltb._private.color) end)
 
 	return ltb
 end
