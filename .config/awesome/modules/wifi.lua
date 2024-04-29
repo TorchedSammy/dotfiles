@@ -1,3 +1,4 @@
+local helpers = require 'helpers'
 local lgi = require 'lgi'
 local p = require 'dbus_proxy'
 local nm = p.Proxy:new {
@@ -54,17 +55,23 @@ local function emitActiveAP()
 	awesome.emit_signal('wifi::activeAP', M.activeSSID, M.activeAP)
 end
 
-function setConnectingSSID()
+local function setConnectingSSID()
 	local ap = apPathToProxy(dev.ActiveAccessPoint)
 	M.connectingSSID = bytesToString(ap.Ssid)
 end
 
-function setActiveSSID()
+local function setActiveSSID()
 	if M.state >= 40 then
 		local ap = apPathToProxy(dev.ActiveAccessPoint)
-		M.activeSSID = bytesToString(ap.Ssid)
+		local ssid = bytesToString(ap.Ssid)
+		M.activeSSID = ssid
 		M.activeAP = ap
 
+		helpers.changedDBusProperty(ap, 'Strength', function(strength)
+			if M.activeSSID ~= ssid then return end
+
+			awesome.emit_signal('wifi::strength', M.strength(ap))
+		end)
 		emitActiveAP()
 	end
 	--if M.connectivity > M.CONNECTIVITY_NONE then
@@ -152,4 +159,16 @@ function M.getAccessPoints()
 	return aps
 end
 
+-- Returns the strength "tier" of the access point, with 4 being
+-- highest and 1 being lowest.
+function M.strength(ap)
+	if not ap then return end
+
+	local strength = ap.Strength
+	if not strength then return 4 end
+
+	local tier = math.floor((strength / 24) + 0.5) + 1
+
+	return tier
+end
 return M
