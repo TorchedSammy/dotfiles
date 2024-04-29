@@ -78,9 +78,10 @@ function M.new(opts)
 	local function scroll(widget)
 		return wibox.widget {
 			layout = wibox.container.scroll.horizontal,
-			step_function = wibox.container.scroll.step_functions.nonlinear_back_and_forth,
+			step_function = wibox.container.scroll.step_functions.waiting_nonlinear_back_and_forth,
 			max_size = 50,
 			speed = 80,
+			fps = 60,
 			widget
 		}
 	end
