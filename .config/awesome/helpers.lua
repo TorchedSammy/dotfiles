@@ -34,11 +34,11 @@ function helpers.set_wallpaper(s)
 end
 
 function helpers.maximize(c)
-				c.maximized = not c.maximized
-				if c.maximized then
-								helpers.winmaxer(c)
-				end
-				c:raise()
+	c.maximized = not c.maximized
+	if c.maximized then
+		helpers.winmaxer(c)
+	end
+	c:raise()
 end
 
 function helpers.minimize(c)
@@ -46,57 +46,57 @@ function helpers.minimize(c)
 end
 
 function helpers.winmaxer(c)
-		awful.placement.maximize(c, {
-				honor_padding = true,
-				honor_workarea = true,
-				--margins = beautiful.useless_gap * beautiful.dpi(2)
-		})
+	awful.placement.maximize(c, {
+		honor_padding = true,
+		honor_workarea = true,
+		--margins = beautiful.useless_gap * beautiful.dpi(2)
+	})
 end
 
 function helpers.hoverCursor(w, cursorType)
-		cursorType = cursorType or 'hand2'
-		local oldCursor = 'left_ptr'
-		local wbx
+	cursorType = cursorType or 'hand2'
+	local oldCursor = 'left_ptr'
+	local wbx
 
 	w.hcDisabled = false
-		local enterCb = function()
-				wbx = mouse.current_wibox
-				if wbx then wbx.cursor = cursorType end
-		end
-		local leaveCb = function()
-				if wbx then wbx.cursor = oldCursor end
-		end
+	local enterCb = function()
+		wbx = mouse.current_wibox
+		if wbx then wbx.cursor = cursorType end
+	end
+	local leaveCb = function()
+		if wbx then wbx.cursor = oldCursor end
+	end
 
-		w:connect_signal('hover::disconnect', function()
-				w:disconnect_signal('mouse::enter', enterCb)
-				w:disconnect_signal('mouse::leave', leaveCb)
-				leaveCb()
-		end)
+	w:connect_signal('hover::disconnect', function()
+		w:disconnect_signal('mouse::enter', enterCb)
+		w:disconnect_signal('mouse::leave', leaveCb)
+		leaveCb()
+	end)
 
-		function w:toggleHoverCursor()
-			w.hcDisabled = not w.hcDisabled
-			if w.hcDisabled then
-				leaveCb()
-			else
-				enterCb()
-			end
+	function w:toggleHoverCursor()
+		w.hcDisabled = not w.hcDisabled
+		if w.hcDisabled then
+			leaveCb()
+		else
+			enterCb()
 		end
+	end
 
-		w:connect_signal('mouse::enter', enterCb)
-		w:connect_signal('mouse::leave', leaveCb)
+	w:connect_signal('mouse::enter', enterCb)
+	w:connect_signal('mouse::leave', leaveCb)
 end
 
 local function clamp(component)
-		return math.min(math.max(component, 0), 255)
+	return math.min(math.max(component, 0), 255)
 end
 
 function helpers.shiftColor(color, percent)
-		local num = tonumber(color:sub(2), 16)
-		local r = math.floor(num / 0x10000) + percent
-		local g = (math.floor(num / 0x100) % 0x100) + percent
-		local b = (num % 0x100) + percent
+	local num = tonumber(color:sub(2), 16)
+	local r = math.floor(num / 0x10000) + percent
+	local g = (math.floor(num / 0x100) % 0x100) + percent
+	local b = (num % 0x100) + percent
 
-		return string.format('%#x', clamp(r) * 0x10000 + clamp(g) * 0x100 + clamp(b)):gsub('0x', '#')
+	return string.format('%#x', clamp(r) * 0x10000 + clamp(g) * 0x100 + clamp(b)):gsub('0x', '#')
 end
 
 function helpers.invertColor(color, bw)
@@ -117,61 +117,62 @@ function helpers.invertColor(color, bw)
 end
 
 function helpers.onLeftClick(w, cb)
-		w.buttons = {
-			awful.button({}, 1, function()
-				cb()
-			end),
-		}
+	w.buttons = {
+		awful.button({}, 1, function()
+			cb()
+		end),
+	}
 end
+
 function helpers.displayClickable(w, opts)
-		opts = type(opts) == 'table' and opts or {}
-		opts.shiftFactor = opts.shiftFactor or -15
-		if settings.theme:match '-dark$' or beautiful.dark then opts.shiftFactor = opts.shiftFactor * -1 end
+	opts = type(opts) == 'table' and opts or {}
+	opts.shiftFactor = opts.shiftFactor or -15
+	if settings.theme:match '-dark$' or beautiful.dark then opts.shiftFactor = opts.shiftFactor * -1 end
 
-		local bgWid = w:get_children_by_id 'bg'[1]
-		w.dcDisabled = false
+	local bgWid = w:get_children_by_id 'bg'[1]
+	w.dcDisabled = false
 
-		function ecb()
-			if bgWid and not w.dcDisabled and opts.bg then
-						bgWid.bg = opts.hoverColor and
-						(opts.hoverColor:match '^#' and opts.hoverColor or beautiful[opts.hoverColor])
-						or helpers.shiftColor((opts.bg or w.bg):match '^#' and (opts.bg or w.bg) or beautiful[opts.bg or w.bg], opts.shiftFactor)
-				end
+	function ecb()
+		if bgWid and not w.dcDisabled and opts.bg then
+			bgWid.bg = opts.hoverColor and
+			(opts.hoverColor:match '^#' and opts.hoverColor or beautiful[opts.hoverColor])
+			or helpers.shiftColor((opts.bg or w.bg):match '^#' and (opts.bg or w.bg) or beautiful[opts.bg or w.bg], opts.shiftFactor)
 		end
+	end
 
-		function lcb()
-				if bgWid and opts.bg then
-						bgWid.bg = opts.bg:match '^#' and opts.bg or beautiful[opts.bg]
-				end
+	function lcb()
+		if bgWid and opts.bg then
+			bgWid.bg = opts.bg:match '^#' and opts.bg or beautiful[opts.bg]
 		end
+	end
 
-		w:connect_signal('dc::disconnect', function()
-				w:disconnect_signal('mouse::enter', ecb)
-				w:disconnect_signal('mouse::leave', lcb)
-				lcb()
-		end)
+	w:connect_signal('dc::disconnect', function()
+		w:disconnect_signal('mouse::enter', ecb)
+		w:disconnect_signal('mouse::leave', lcb)
+		lcb()
+	end)
 
-		function w:toggleClickableDisplay()
-			w.dcDisabled = not w.dcDisabled
-			if w.dcDisabled then
-				bgWid.bg = opts.bg
-			else
-				bgWid.bg = opts.hoverColor and opts.hoverColor or helpers.shiftColor(opts.bg or w.bg, opts.shiftFactor)
-			end
+	function w:toggleClickableDisplay()
+		w.dcDisabled = not w.dcDisabled
+		if w.dcDisabled then
+			bgWid.bg = opts.bg
+		else
+			bgWid.bg = opts.hoverColor and opts.hoverColor or helpers.shiftColor(opts.bg or w.bg, opts.shiftFactor)
 		end
+	end
 
-		w:connect_signal('mouse::enter', ecb)
-		w:connect_signal('mouse::leave', lcb)
+	w:connect_signal('mouse::enter', ecb)
+	w:connect_signal('mouse::leave', lcb)
 
-		helpers.hoverCursor(w, opts.cursorType)
-		return w
+	helpers.hoverCursor(w, opts.cursorType)
+	return w
 end
 
 local onClickHiders = {}
 local onClickID = 0
 awful.mouse.append_global_mousebinding(awful.button({}, 1, function()
 	for _, hider in ipairs(onClickHiders) do
-				hider.func()
+		hider.func()
 	end
 end))
 
@@ -184,23 +185,23 @@ function helpers.hideOnClick(w, cb)
 		if cb then cb() else w.visible = false end
 	end
 
-		table.insert(onClickHiders, {func = hider, widget = w})
-		client.connect_signal('button::press', hider)
-		client.connect_signal('request::activate', function()
-		end)
-		--wibox.connect_signal('button::press', hider)
+	table.insert(onClickHiders, {func = hider, widget = w})
+	client.connect_signal('button::press', hider)
+	client.connect_signal('request::activate', function()
+	end)
+	--wibox.connect_signal('button::press', hider)
 
-		w:connect_signal('lol', function(w)
-				if not w.visible then
-						wibox.disconnect_signal('button::press', hider)
-						client.disconnect_signal('button::press', hider)
-						--awful.mouse.remove_global_mousebinding(btn)
-				else
-						awful.mouse.append_global_mousebinding(btn)
-						client.connect_signal('button::press', hider)
-						wibox.connect_signal('button::press', hider)
-				end
-		end)
+	w:connect_signal('lol', function(w)
+		if not w.visible then
+			wibox.disconnect_signal('button::press', hider)
+			client.disconnect_signal('button::press', hider)
+			--awful.mouse.remove_global_mousebinding(btn)
+		else
+			awful.mouse.append_global_mousebinding(btn)
+			client.connect_signal('button::press', hider)
+			wibox.connect_signal('button::press', hider)
+		end
+	end)
 end
 
 function helpers.unimplemented(mod, func)
@@ -314,17 +315,17 @@ function helpers.slidePlacement(wbx, opts)
 end
 
 function helpers.transitionColor(opts)
-		--local animate = animate == nil and settings.noAnimate or animate
-		if opts.animate ~= nil and opts.animate == false then
-				opts.transformer(opts.new)
-				return
-		end
+	--local animate = animate == nil and settings.noAnimate or animate
+	if opts.animate ~= nil and opts.animate == false then
+		opts.transformer(opts.new)
+		return
+	end
 
-		local old = opts.old
-		if type(old) == 'userdata' and tostring(old):match 'cairo.SolidPattern' then
-				local _, r, g, b, a = old:get_rgba()
-				old = {r = r, g = g, b = b}
-		end
+	local old = opts.old
+	if type(old) == 'userdata' and tostring(old):match 'cairo.SolidPattern' then
+		local _, r, g, b, a = old:get_rgba()
+		old = {r = r, g = g, b = b}
+	end
 
 	local old = Color(old)
 	local new = Color(opts.new)
@@ -358,7 +359,7 @@ function helpers.glibByteToVal(b)
 end
 
 function helpers.aaWibox(opts)
-		local makeup = require 'ui.makeup'
+	local makeup = require 'ui.makeup'
 	local bg = opts.bg
 
 	opts.bg = '#00000000'
@@ -400,10 +401,10 @@ function helpers.aaWibox(opts)
 end
 
 function helpers.beautyVar(var)
-		if type(var) == 'string' then
-				return var:match '^#' and var or beautiful[var]
-		end
+	if type(var) == 'string' then
+		return var:match '^#' and var or beautiful[var]
+	end
 
-		return var
+	return var
 end
 return helpers
