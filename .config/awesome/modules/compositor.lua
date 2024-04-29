@@ -1,5 +1,6 @@
 local awful = require 'awful'
 local beautiful = require 'beautiful'
+local settings = require 'conf.settings'
 
 local M = {
 	running = false,
@@ -16,7 +17,7 @@ function M.state()
 	return M.running
 end
 
-function M.on()
+function M.on(auto)
 	awesome.emit_signal('compositor::on')
 	M.pid = awful.spawn.easy_async(string.format('picom --config /home/%s/.config/picom/%s.conf', os.getenv 'USER', beautiful.picom_conf), function()
 		awesome.emit_signal('compositor::off')
@@ -24,14 +25,18 @@ function M.on()
 			M.awesomeKill = false
 			return
 		end
-		M.on()
+		M.on(true)
 	end)
 	M.running = true
+
+	if not auto then
+		settings.picom = true
+	end
 
 	return true
 end
 
-function M.off()
+function M.off(auto)
 	M.awesomeKill = true
 	if not M.pid then
 		awful.spawn.easy_async('pkill picom', function() end)
@@ -39,6 +44,10 @@ function M.off()
 		awful.spawn.easy_async(string.format('kill %d', M.pid), function() end)
 	end
 	M.running = false
+
+	if not auto then
+		settings.picom = false
+	end
 
 	return false
 end
