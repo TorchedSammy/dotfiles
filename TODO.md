@@ -11,7 +11,7 @@
 
 ## Misc
 - [x] Stop using menugen for start menu
-- [ ] Lock screen
+- [x] Lock screen
 - [ ] Focus mode (in action center)
 	- [ ] Filter notifications based on
 		- [ ] Title/Message
@@ -21,4 +21,5 @@
   * technically does this if the volume between headphones and speakers are different
 - [ ] Create widgets for every theme for interchangable use
 	- [x] Music
+	- [ ] Start Menu (do it in the style of widget_template for apps)
 - [x] Fix next music causing progress to jump to end then to beginning
