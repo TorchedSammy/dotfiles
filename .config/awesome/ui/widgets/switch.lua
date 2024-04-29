@@ -28,6 +28,7 @@ function switch:set_handler(cb)
 end
 
 local function new(args)
+	args = args or {}
 	local sldr = base.make_widget(nil, nil, {
 		enable_properties = true,
 	})
@@ -37,7 +38,6 @@ local function new(args)
 		h = beautiful.dpi(36),
 	}
 
-	local color = args.color or beautiful.accent
 
 	gtable.crush(sldr._private, args or {})
 	gtable.crush(sldr, slider, true)
@@ -48,16 +48,21 @@ local function new(args)
 		left = beautiful.dpi(4),
 		right = beautiful.dpi(4),
 	}
-	sldr.bar_color = beautiful.xcolor12
-	sldr.bar_active_color = color
-
-	sldr.handle_border_color = color
-	sldr.handle_color = beautiful.xcolor7
 	sldr.handle_border_width = 0
+
+	local function setupColor()
+		local color = args.color or 'accent'
+		sldr.bar_color = helpers.beautyVar(args.inactiveColor or 'xcolor12')
+		sldr.bar_active_color = helpers.beautyVar(color)
+
+		sldr.handle_border_color = helpers.beautyVar(color)
+		sldr.handle_color = helpers.beautyVar(args.handleColor or 'xcolor7')
+	end
+	setupColor()
+	awesome.connect_signal('makeup::put_on', setupColor)
 
 	sldr.bar_shape = gears.shape.rounded_bar
 	sldr.handle_shape = gears.shape.circle
-	sldr.value = args.on and 100 or 0
 
 	local ret = constraint(sldr, nil, size.w, size.h)
 	gtable.crush(ret, switch, true)
@@ -81,6 +86,8 @@ local function new(args)
 		end,
 		pos = sldr.value,
 	}
+	ret:set_handler(args.handler)
+	ret:set_state(args.on)
 
 	helpers.onLeftClick(ret, function()
 		ret:set_state(not ret._private.on)

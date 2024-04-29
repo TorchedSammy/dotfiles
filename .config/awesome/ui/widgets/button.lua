@@ -115,7 +115,7 @@ return function(icon, opts)
 
 	local focused = false
 	local ico = widget {
-		layout =constraint,
+		layout = constraint,
 		height = opts.height,
 		strategy = 'exact',
 		{

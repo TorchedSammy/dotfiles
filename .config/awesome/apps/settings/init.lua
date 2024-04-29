@@ -242,7 +242,7 @@ local themePage = wibox.widget {
 			description = 'Themes the environment based on the wallpaper.',
 			type = 'switch',
 			default = settings.dynamicTheme,
-			handler = function(on)
+			handler = function(_, on)
 				settings.set('dynamicTheme', on, false)
 
 				awful.spawn.easy_async(string.format([[ awesome-client "

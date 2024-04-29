@@ -56,7 +56,7 @@ local function contentBackCallback()
 	setupContentLayout()
 end
 
-local contentSwitch = w.switch {color = beautiful.accent}
+local contentSwitch = w.switch {}
 local contentBackButton = w.button {
 	icon = 'arrow-left',
 	bg = beautiful.bg_sec,
