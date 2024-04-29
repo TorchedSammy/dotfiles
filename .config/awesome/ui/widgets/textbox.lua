@@ -1,23 +1,34 @@
+local beautiful = require 'beautiful'
 local gtable = require 'gears.table'
 local helpers = require 'helpers'
 
 local textbox = require 'wibox.widget.textbox'
 
-local tb = {mt = {}}
+local coloredText = {mt = {}}
 
-function tb:set_color(color)
-	self.markup = helpers.colorize_text(self.text, helpers.beautyVar(color))
+function coloredText:set_text(text)
+	if not text then return end
+
+	self._private.settext(self, helpers.colorize_text(text, self._private.color))
 end
 
-local function new(...)
-	local ltb = textbox(...)
-	gtable.crush(ltb, tb)
+function coloredText:set_color(color)
+	self._private.color = color
+	self:set_text(self:get_text())
+end
+
+local function new(args)
+	local ltb = textbox()
+	ltb._private.settext = ltb.set_markup
+	ltb._private.color = beautiful.fg_normal
+
+	gtable.crush(ltb, coloredText)
 
 	return ltb
 end
 
-function tb.mt:__call(...)
+function coloredText.mt:__call(_, ...)
 	return new(...)
 end
 
-return setmetatable(tb, tb.mt)
+return setmetatable(coloredText, coloredText.mt)

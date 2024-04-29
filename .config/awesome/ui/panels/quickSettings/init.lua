@@ -16,7 +16,6 @@ local makeup = require 'ui.makeup'
 local btnSize = dpi(32)
 local quickSettingsMargin = dpi(20)
 local toggleSpacing = dpi(16)
-local widgets = {}
 local centers = {
 	wifi = require 'ui.panels.quickSettings.wifi',
 	battery = require 'ui.panels.quickSettings.battery',
@@ -307,8 +306,9 @@ do
 												font = beautiful.fontName .. ' Bold 12',
 											},
 											{
-												widget = wibox.widget.textbox,
-												markup = helpers.colorize_text('up 10 hours, 23 minutes', beautiful.fg_sec),
+												widget = w.textbox,
+												text = 'up 10 hours, 23 minutes',
+												color = beautiful.fg_sec,
 												font = beautiful.fontName .. ' Bold 12',
 											}
 										}

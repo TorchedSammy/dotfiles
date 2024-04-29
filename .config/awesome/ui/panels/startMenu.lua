@@ -235,9 +235,9 @@ function M.new(opts)
 										forced_width = beautiful.dpi(360),
 										forced_height = beautiful.dpi(22),
 										{
-											widget = widgets.textbox,
-											text = app.description or '',
+											widget = w.textbox,
 											color = beautiful.fg_sec,
+											text = app.description
 										}
 									} or nil
 								}
