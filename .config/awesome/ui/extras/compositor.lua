@@ -25,7 +25,9 @@ client.connect_signal('property::fullscreen', function(c)
 end)
 
 client.connect_signal('manage', function(c)
-	if beautiful.client_shape and not compositor.running and not c.fullscreen then
+	if c.fullscreen then return end
+
+	if beautiful.client_shape and not compositor.running then
 		c.shape = beautiful.client_shape
 	end
 end)

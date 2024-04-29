@@ -154,6 +154,7 @@ end)
 
 
 require 'ui'
+require 'notifiers'
 
 -- Signal function to execute when a new client appears.
 client.connect_signal('manage', function(c)

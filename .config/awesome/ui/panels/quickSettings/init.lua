@@ -58,10 +58,11 @@ local function contentBackCallback()
 end
 
 local contentSwitch = w.switch {color = beautiful.accent}
-local contentBackButton = w.button('arrow-left', {
+local contentBackButton = w.button {
+	icon = 'arrow-left',
 	bg = beautiful.bg_sec,
 	size = beautiful.dpi(20),
-})
+}
 
 local contentLabel = harmony.titlebar('Content', {
 	before = contentBackButton,
@@ -102,8 +103,8 @@ local function createToggle(type)
 	local toggleMargin = beautiful.dpi(10)
 
 	local on, textStatus = control.status()
-	local icon = w.icon(control.enabled() and type or type .. '-off', {size = btnSize, color = on and beautiful[toggleFgColor] or beautiful[toggleFgColorOff]})
-	local rightIcon = w.icon('arrow-right', {size = btnSize / 1.5, color = on and beautiful[toggleFgColor] or beautiful[toggleFgColorOff]})
+	local icon = w.icon {icon = control.enabled() and type or type .. '-off', size = btnSize, color = on and beautiful[toggleFgColor] or beautiful[toggleFgColorOff]}
+	local rightIcon = w.icon {icon = 'arrow-right', size = btnSize / 1.5, color = on and beautiful[toggleFgColor] or beautiful[toggleFgColorOff]}
 
 	local status = wibox.widget {
 		widget = wibox.widget.textbox,
@@ -175,26 +176,6 @@ local function createToggle(type)
 	end
 
 	--setToggleBackground(control.enabled())
-	local function displayControls()
-		contentLabel:text(control.title)
-		quickSettingsAnimator.target = 1
-
-		contentSwitch.visible = control.toggle
-		--contentSwitch:setState(on, true)
-		--[[function contentSwitch:handler()
-			local controlOn = control.toggle()
-			if controlOn == nil then return end
-
-			setupButtonState(controlOn)
-		end]]--
-
-		contentBackButton.onClick = function()
-			contentBackCallback()
-			if control.undisplay then control.undisplay() end
-		end
-		control.display(contentLayout)
-	end
-
 	local function setupButtonState(on)
 		setToggleBackground(on)
 		if on then
@@ -202,6 +183,26 @@ local function createToggle(type)
 		else
 			--icon.icon = type .. '-off'
 		end
+	end
+	local function displayControls()
+		contentLabel:text(control.title)
+		quickSettingsAnimator.target = 1
+
+		contentSwitch.visible = control.toggle
+		--contentSwitch:setState(on, true)
+		contentSwitch.state = on
+		function contentSwitch:handler()
+			local controlOn = control.toggle()
+			if controlOn == nil then return end
+
+			setupButtonState(controlOn)
+		end
+
+		contentBackButton.onClick = function()
+			contentBackCallback()
+			if control.undisplay then control.undisplay() end
+		end
+		control.display(contentLayout)
 	end
 
 	local function toggle()
@@ -325,10 +326,11 @@ do
 											widget = wibox.container.background,
 											bg = beautiful.containerHigh,
 											shape = helpers.rrect(beautiful.radius / 2),
-											w.button('power2', {
+											w.button {
+												icon = 'power2',
 												size = beautiful.dpi(20),
 												margins = beautiful.dpi(5)
-											})
+											}
 										}
 									}
 								}

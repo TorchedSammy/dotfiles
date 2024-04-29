@@ -18,35 +18,40 @@ return function(c)
 		end)
 	)
 
-	local close = widgets.button('close', {
+	local close = widgets.button{
+		icon = 'close',
 		onClick = function() c:kill() end,
 		size = beautiful.dpi(20)
-	})
+	}
 
-	local maximize
+	local function maximizeIcon(c)
+		if c and c.valid then
+			return c.maximized and 'expand-less' or 'expand-more'
+		end
 
-	maximize = widgets.button('expand-less', {
-		onClick = function() 
+		return ''
+	end
+
+	local maximize = widgets.button {
+		icon = maximizeIcon(c),
+		onClick = function(self)
 			helpers.maximize(c)
+			self.icon = c.maximized and 'expand-less' or 'expand-mode'
 		end,
 		size = beautiful.dpi(20)
-	})
+	}
 
-	local function maximizeIcon()
-		local valid = pcall(function() return c.valid end) and c.valid
-		if not valid then return end
+	client.connect_signal('property::maximized', function()
+		maximize.icon = maximizeIcon(c)
+	end)
 
-		return c.maximized and 'expand-less' or 'expand-more'
-	end
-	maximizeIcon()
-	client.connect_signal('property::maximized', maximizeIcon)
-
-	local minimize = widgets.button('minimize', {
+	local minimize = widgets.button {
+		icon = 'minimize',
 		onClick = function()
 			helpers.minimize(c)
 		end,
 		size = beautiful.dpi(20)
-	})
+	}
 
 	local spacing = beautiful.dpi(8)
 	return {

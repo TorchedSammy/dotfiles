@@ -39,6 +39,3 @@ if package.searchpath('ui.notifs.' .. settings.theme, package.path) then
 	end
 	]]--
 end
-
-require 'ui.notifs.playerctl'
-require 'ui.notifs.battery'

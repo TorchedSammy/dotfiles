@@ -50,10 +50,11 @@ local capsLabel = wibox.widget {
 }
 
 local function createPopup(icon, layout)
-	local icoWidget = w.icon(icon, {
+	local icoWidget = w.icon {
+		icon = icon,
 		size = beautiful.dpi(32),
 		color = beautiful.xcolor14
-	})
+	}
 
 	local popup = wibox.widget {
 		widget = wibox.container.constraint,

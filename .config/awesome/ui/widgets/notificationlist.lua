@@ -181,6 +181,7 @@ local function new(_, args)
         -- destroyed notifications.
         naughty.connect_signal('property::active', f)
         naughty.connect_signal('request::display', f)
+        wdg:connect_signal('widget::redraw_needed', f)
     end)
 
     return wdg

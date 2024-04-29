@@ -10,6 +10,7 @@ local settings = require 'conf.settings'
 local syntax = require 'ui.components.syntax'
 local w = require 'ui.widgets'
 local wibox = require 'wibox'
+local widgets = require 'ui.widgets'
 local extrautils = require 'libs.extrautils'()
 local inputbox = require 'ui.widgets.inputbox'
 local fzy = require 'fzy'
@@ -36,7 +37,7 @@ local searchInput = inputbox {
 	font = beautiful.fontName .. ' Bold 12'
 }
 
-function setupAppList()
+local function setupAppList()
 	-- setting spacing makes it have a wack amount of space
 	-- because awesome handles not visible widgets in a layout in a dumb way
 	--appList.spacing = beautiful.dpi(1)
@@ -89,23 +90,13 @@ searchInput:connect_signal('inputbox::keypressed', function() handleSearch() end
 function M.new(opts)
 	opts = opts or {}
 	opts.shape = opts.shape or helpers.rrect(6)
-
 	local bgcolor = opts.bg or 'bg_popup'
-
-	local function button(color_focus, icon, size, shape)
-		return w.button(icon, {bg = bgcolor, shape = shape, size = size})
-	end
 
 	local result = {}
 	local allApps = {}
 	local collision = {}
 	appList:reset()
 	setupAppList()
-
-	local power = button(buttonColor, 'power2', beautiful.dpi(18))
-	power:connect_signal('button::press', function()
-		widgets.powerMenu.toggle()
-	end)
 
 	local wid = {
 		widget = wibox.container.margin,
@@ -244,9 +235,9 @@ function M.new(opts)
 										forced_width = beautiful.dpi(360),
 										forced_height = beautiful.dpi(22),
 										{
-											widget = wibox.widget.textbox,
-											markup = helpers.colorize_text(app.description or '', beautiful.fg_sec),
-											--font = beautiful.fontName .. ' Medium 12',
+											widget = widgets.textbox,
+											text = app.description or '',
+											color = beautiful.fg_sec,
 										}
 									} or nil
 								}

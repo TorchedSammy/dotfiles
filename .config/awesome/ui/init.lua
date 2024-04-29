@@ -5,5 +5,5 @@ require('ui.bars.' .. (beautiful.bar and beautiful.bar or 'default'))
 require 'ui.titlebars'
 require 'ui.notifs'
 require 'ui.menu'
-require 'ui.panels.popups'
+require 'ui.popups'
 

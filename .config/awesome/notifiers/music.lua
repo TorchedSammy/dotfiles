@@ -12,6 +12,4 @@ playerctl.listenMetadata(function(title, artist, art)
 		category = 'system.playerctl'
 	}
 	]]--
-	local text = (artist and artist .. ' - ' or '') .. title
-	widgets.music_name:set_markup_silently(text)
 end)

@@ -12,8 +12,6 @@ local makeup = require 'ui.makeup'
 local notifsPanel = require 'ui.panels.notifications'
 --local filters = require 'surface_filters'
 
-screen.connect_signal('property::geometry', helpers.set_wallpaper)
-
 awful.screen.connect_for_each_screen(function(s)
 	s.bar = awful.wibar({
 		screen = s,
@@ -21,12 +19,6 @@ awful.screen.connect_for_each_screen(function(s)
 		height = beautiful.wibar_height,
 		width = s.geometry.width,
 		bg = '#00000000'
-	})
-
-	local actionBtn = widgets.button('actionCenter', {
-		bg = beautiful.bg_normal_opposite,
-		size = beautiful.dpi(16),
-		--onClick = w.quickSettings.toggle
 	})
 
 	local function backgroundBar(w)
@@ -59,10 +51,11 @@ awful.screen.connect_for_each_screen(function(s)
 	}
 	helpers.slidePlacement(musicDisplay, {placement = 'bottom_right'})
 
-	local musicBtn = widgets.button('music', {
+	local musicBtn = widgets.button {
+		icon = 'music',
 		bg = 'wibar_bg',
 		onClick = function() musicDisplay:toggle() end
-	})
+	}
 
 	local sm = require 'ui.panels.startMenu'
 	local startMenu = sm.create {
@@ -70,12 +63,13 @@ awful.screen.connect_for_each_screen(function(s)
 	}
 	sm.bindMethods(startMenu)
 	
-	local startMenu = widgets.button(beautiful.os_icon, {
+	local startMenu = widgets.button {
+		icon = beautiful.os_icon,
 		onClick = function() startMenu:toggle() end,
 		size = beautiful.dpi(25),
 		shape = gears.shape.rectangle,
 		color = 'accent'
-	})
+	}
 
 	local baseClientIndicator = {
 		height = beautiful.dpi(3),

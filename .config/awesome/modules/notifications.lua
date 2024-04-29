@@ -5,11 +5,16 @@ local categoryMappings = {
 }
 
 local M = {
-	all = {}
+	all = {},
+	keepNum = 20
 }
 
 naughty.connect_signal('added', function(n)
-	table.insert(M.all, n)
+	print(#M.all, M.keepNum, M.all[#M.all])
+	if #M.all > M.keepNum then
+		M.all[M.keepNum + 1] = nil
+	end
+	table.insert(M.all, 1, n)
 end)
 
 local function categoryToIcon(cat)
@@ -35,6 +40,10 @@ function M.icon(n)
 	if n.app_icon:match 'file://' or n.app_icon:match '^/' then
 		return n.app_icon:gsub('file://', '')
 	end
+end
+
+function M.clearAll()
+	M.all = {}
 end
 
 return M

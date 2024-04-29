@@ -8,8 +8,6 @@ local wibox = require 'wibox'
 local xresources = require 'beautiful.xresources'
 local dpi = xresources.apply_dpi
 
-screen.connect_signal('property::geometry', helpers.set_wallpaper)
-
 awful.screen.connect_for_each_screen(function(s)
 	swidgets.stardew_time(s)
 

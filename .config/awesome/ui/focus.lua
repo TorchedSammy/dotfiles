@@ -17,8 +17,6 @@ local function focusDone()
 	canFocus = true
 	focusTimerUp = true
 
-	print 'THE REAL FOCUS TIMER IS UP'
-
 	if M.currentObj ~= nil then
 		M.currentObj:disconnect_signal('button::press', M.focusStop)
 		M.currentObj:disconnect_signal('button::release', M.focusStop)
@@ -35,7 +33,6 @@ local focusTimer = gears.timer {
 
 function M.panelFocusStart()
 	if not focusTimer.started or focusTimer.timeout ~= 10 then
-		print 'LONGER FOCUS TIMEOUT'
 		focusTimer:stop()
 		focusTimer.timeout = 10
 		focusTimer:start()
@@ -46,13 +43,11 @@ function M.focusStart()
 	if focusTimer.started and focusTimer.timeout ~= 10 then
 		focusTimer:stop()
 		focusTimer.timeout = 2
-		print 'focus timer starting'
 		focusTimer:start()
 	end
 end
 
 function M.focusStop()
-	print('focus timer stopping')
 	focusTimer:stop()
 	focusTimer.timeout = 2
 end

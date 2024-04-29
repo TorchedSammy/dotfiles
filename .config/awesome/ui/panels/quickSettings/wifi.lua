@@ -37,7 +37,7 @@ M.layout = wibox.widget {
 local scanTimer = gears.timer {
 	timeout = 10,
 	callback = function()
-		wifi.scan()
+		--wifi.scan()
 		M.fetch()
 	end
 }
@@ -77,7 +77,7 @@ local function createAPWidget(ssid, ap)
 	}
 	helpers.hoverCursor(password.widget, 'xterm')
 
-	local connectBtn = w.button('', {
+	local connectBtn = w.button {
 		text = 'Connect',
 		bg = beautiful.xcolor11,
 		font = beautiful.fontName .. ' Medium 14',
@@ -87,8 +87,8 @@ local function createAPWidget(ssid, ap)
 		end,
 		margin = beautiful.dpi(4),
 		height = beautiful.dpi(32)
-	})
-	local connectCancelBtn = w.button('', {
+	}
+	local connectCancelBtn = w.button {
 		text = 'Cancel',
 		bg = beautiful.xcolor11,
 		font = beautiful.fontName .. ' Medium 14',
@@ -98,7 +98,7 @@ local function createAPWidget(ssid, ap)
 		end,
 		margin = beautiful.dpi(4),
 		height = beautiful.dpi(32)
-	})
+	}
 
 	local spacing = beautiful.dpi(10)
 	local bgcolor = beautiful.bg_sec
@@ -207,7 +207,8 @@ local function createAPWidget(ssid, ap)
 				{
 					widget = wibox.container.place,
 					halign = 'right',
-					w.button('visibility-off', {
+					w.button {
+						icon = 'visibility-off',
 						bg = beautiful.xcolor10,
 						color = beautiful.xcolor14,
 						size = beautiful.dpi(22),
@@ -220,7 +221,7 @@ local function createAPWidget(ssid, ap)
 							password.password_mode = not password.password_mode
 							password:set_text(password:get_text())
 						end
-					})
+					}
 				}
 			}
 		}

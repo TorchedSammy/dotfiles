@@ -95,7 +95,8 @@ function M.new(opts)
 	local shuffleState
 	local shuffleActive = 'accent'
 	local shuffleInactive = 'fg_normal'
-	local shuffle = w.button('shuffle', {
+	local shuffle = w.button {
+		icon = 'shuffle',
 		bg = bgcolor,
 		size = btnSize,
 		onClick = function()
@@ -104,12 +105,13 @@ function M.new(opts)
 			updateShuffle(true)
 		end,
 		makeup = shuffleInactive
-	})
+	}
 	if shuffleState then
 		shuffle.color = shuffleInactive
 	else
 		shuffle.color = shuffleActive
 	end
+	shuffle.color = shuffleActive
 
 	updateShuffle = function(toggle)
 		local shuffleNewColor = not shuffleState and helpers.beautyVar(shuffleInactive) or helpers.beautyVar(shuffleActive)
@@ -127,7 +129,8 @@ function M.new(opts)
 		updateShuffle()
 	end)
 
-	local prev = w.button('skip-previous', {
+	local prev = w.button {
+		icon = 'skip-previous',
 		bg = bgcolor,
 		size = btnSize,
 		onClick = function()
@@ -139,22 +142,24 @@ function M.new(opts)
 			end
 			playerctl:previous()
 		end
-	})
+	}
 
 	local playPauseIcons = {'play', 'pause'}
-	local playPause = w.button(playPauseIcons[2], {
+	local playPause = w.button {
+		icon = playPauseIcons[2],
 		bg = bgcolor,
 		size = btnSize,
 		onClick = function() playerctl:play_pause() end
-	})
-	local next = w.button('skip-next', {
+	}
+	local next = w.button {
+		icon = 'skip-next',
 		bg = bgcolor,
 		size = btnSize,
 		onClick = function()
 			playerctl:next()
 			progress.value = 0
 		end
-	})
+	}
 
 	pctl.listenMetadata(function (title, artist, art, album)
 		musicArtist.set('text', artist)

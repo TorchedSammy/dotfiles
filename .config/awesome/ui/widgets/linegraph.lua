@@ -1,9 +1,9 @@
 -- thanks delta!
 -- https://git.twoexem.com/delta/dots.git/tree/.config/awesome/ui/statusbar/panel/widgets/linegraph.lua
 
-local gcolor = require "gears.color"
-local gtable = require "gears.table"
-local wibox = require "wibox"
+local gcolor = require 'gears.color'
+local gtable = require 'gears.table'
+local wibox = require 'wibox'
 
 local linegraph = { mt = {} }
 
@@ -73,12 +73,12 @@ end
 
 function linegraph:set_values(values)
     self._private.values = values
-    self:emit_signal "widget::redraw_needed"
+    self:emit_signal 'widget::redraw_needed'
 end
 
 function linegraph:add_value(value)
     table.insert(self._private.values, value)
-    self:emit_signal "widget::redraw_needed"
+    self:emit_signal 'widget::redraw_needed'
 end
 
 function linegraph:get_values()
@@ -87,7 +87,7 @@ end
 
 function linegraph:set_draw_bg(draw_bg)
     self._private.draw_bg = draw_bg
-    self:emit_signal "widget::redraw_needed"
+    self:emit_signal 'widget::redraw_needed'
 end
 
 function linegraph:get_draw_bg()
@@ -96,7 +96,7 @@ end
 
 function linegraph:set_max(max)
     self._private.max = max
-    self:emit_signal "widget::redraw_needed"
+    self:emit_signal 'widget::redraw_needed'
 end
 
 function linegraph:get_max()
@@ -105,7 +105,7 @@ end
 
 function linegraph:set_min(min)
     self._private.max = min
-    self:emit_signal "widget::redraw_needed"
+    self:emit_signal 'widget::redraw_needed'
 end
 
 function linegraph:get_min()
@@ -114,12 +114,12 @@ end
 
 function linegraph:set_line_width(line_width)
     self._private.line_width = line_width
-    self:emit_signal "widget::redraw_needed"
+    self:emit_signal 'widget::redraw_needed'
 end
 
 function linegraph:set_color(color)
     self._private.color = color
-    self:emit_signal "widget::redraw_needed"
+    self:emit_signal 'widget::redraw_needed'
 end
 
 function linegraph:get_color()
@@ -128,7 +128,7 @@ end
 
 function linegraph:set_fill_color(fill_color)
     self._private.fill_color = fill_color
-    self:emit_signal "widget::redraw_needed"
+    self:emit_signal 'widget::redraw_needed'
 end
 
 function linegraph:get_fill_color()
@@ -137,7 +137,7 @@ end
 
 function linegraph:set_fill(fill)
     self._private.fill = fill
-    self:emit_signal "widget::redraw_needed"
+    self:emit_signal 'widget::redraw_needed'
 end
 
 function linegraph:get_fill()
@@ -150,8 +150,8 @@ local function new(args)
     gtable.crush(ret, linegraph, true)
 
     ret.line_width = args.line_width or 1
-    ret.color = args.color or "#ffffff"
-    ret.fill_color = args.fill_color or "#000000"
+    ret.color = args.color or '#ffffff'
+    ret.fill_color = args.fill_color or '#000000'
     ret.fill = args.fill or false
 
     return ret

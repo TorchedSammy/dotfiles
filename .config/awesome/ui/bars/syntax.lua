@@ -8,7 +8,6 @@ local taglist = require 'ui.taglist-modern'
 --local w = require 'ui.widgets.syntax'
 local widgets = require 'ui.widgets'
 local helpers = require 'helpers'
-screen.connect_signal('property::geometry', helpers.set_wallpaper)
 
 awful.screen.connect_for_each_screen(function(s)
 	s.bar = awful.wibar({

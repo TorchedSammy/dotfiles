@@ -18,7 +18,7 @@ local syntax = require 'ui.components.syntax'
 local bgcolor = beautiful.bg_sec
 local playerctl = bling.signal.playerctl.lib()
 local function button(color_focus, icon, size, shape)
-	return w.button(icon, {bg = bgcolor, shape = shape, size = size})
+	return w.button({ icon = icon, bg = bgcolor, shape = shape, size = size})
 end
 
 local widgets = {}

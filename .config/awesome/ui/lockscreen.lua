@@ -118,7 +118,7 @@ local bottomInfo = wibox.widget {
 			layout = wibox.layout.fixed.horizontal,
 			w.battery { size = beautiful.dpi(36) }
 		},
-		w.icon {name = 'notification', size = beautiful.dpi(36)}
+		w.icon {icon = 'notification', size = beautiful.dpi(36)}
 	}
 }
 
@@ -204,7 +204,8 @@ lockscreenEntry:setup {
 								{
 									widget = wibox.container.rotate,
 									direction = 'east',
-									w.button('expand-more', {
+									w.button {
+										icon = 'expand-more',
 										bg = '#00000000',
 										onClick = function()
 											local authenticated = pam.auth_current_user(passwordInput:get_text())
@@ -215,7 +216,7 @@ lockscreenEntry:setup {
 											end
 										end,
 										size = beautiful.dpi(32)
-									})
+									}
 								}
 							},
 							{

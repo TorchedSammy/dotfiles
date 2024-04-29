@@ -48,16 +48,17 @@ naughty.connect_signal('request::display', function(notification)
 		}
 	end
 	
-	local icoWidget = w.icon(category or 'notification', {
+	local icoWidget = w.icon {
+		icon = category or 'notification',
 		size = beautiful.dpi(32),
 		color = beautiful.xcolor14
-	})
+	}
 	local spacing = beautiful.dpi(16)
 
 	local notifActions = wibox.layout.fixed.horizontal()
 	notifActions.spacing = beautiful.dpi(8)
 	for _, action in ipairs(notification.actions) do
-		local btn = w.button('', {
+		local btn = w.button {
 			text = action.name,
 			bg = beautiful.xcolor10,
 			font = beautiful.fontName .. ' Medium 12',
@@ -67,7 +68,7 @@ naughty.connect_signal('request::display', function(notification)
 			end,
 			margin = beautiful.dpi(4),
 			height = beautiful.dpi(28)
-		})
+		}
 
 		notifActions:add(btn)
 	end
