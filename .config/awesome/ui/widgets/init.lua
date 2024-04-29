@@ -676,7 +676,6 @@ function widgets.wifi(opts)
 			if strength < 4 then
 				strengthExt = '-strength-' .. tostring(math.max(strength - 1, 1))
 			end
-			print(strengthExt == '' and 'full bars!' or strengthExt)
 		end
 		return wifi.enabled and (wifi.activeSSID and 'wifi' .. strengthExt or 'wifi-noap') or 'wifi-off'
 	end
