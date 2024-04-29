@@ -640,7 +640,9 @@ function widgets.battery(opts)
 		local batteryImg = gears.color.recolor_image(string.format('%s/images/icons/%s.svg', beautiful.config_path, batIcon), color)
 		local img = cairo.ImageSurface.create(cairo.Format.ARGB32, batteryImg:get_width(), batteryImg:get_height())
 		local cr = cairo.Context(img)
-		cr:set_source_surface(batteryImg, 0, batteryImg:get_height() - (batteryImg:get_height() * (battery.percentage() / 100)))
+		cr:rectangle(0, batteryImg:get_height() - (batteryImg:get_height() * (battery.percentage() / 100)), batteryImg:get_width(), (batteryImg:get_height() * (battery.percentage() / 100)))
+		cr:clip()
+		cr:set_source_surface(batteryImg, 0, 0)
 		cr:paint()
 
 		indicator.image = img
