@@ -695,7 +695,7 @@ function widgets.wifi(opts)
 	local function setState(strength)
 		--tt.text = string.format('%d%% volume%s', volume, muted and ' (muted)' or '')
 		tt.text = stateText()
-		icon.icon = stateIcon(3)
+		icon.icon = stateIcon(strength)
 		backgroundIcon.icon = stateIcon()
 	end
 
