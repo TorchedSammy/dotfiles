@@ -14,7 +14,11 @@ local function new(opts)
 				strengthExt = '-strength-' .. tostring(math.max(strength - 1, 1))
 			end
 		end
-		return wifi.enabled and (wifi.activeSSID and 'wifi' .. strengthExt or 'wifi-noap') or 'wifi-off'
+
+		if not wifi.enabled then return 'wifi-off' end
+		if not wifi.activeSSID then return 'wifi-noap' end
+
+		return 'wifi' .. (wifi.state < 70 and '-no-internet' or '') .. strengthExt
 	end
 	local function stateText()
 		return wifi.enabled and (wifi.activeSSID and wifi.activeSSID or 'Not connected') or 'Wi-fi Off'

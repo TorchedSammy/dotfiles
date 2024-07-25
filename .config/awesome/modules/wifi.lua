@@ -111,6 +111,10 @@ nm:on_properties_changed(function(p, changed)
 ]]--
 end)
 
+nm:connect_signal(function(_, state)
+	M.state = state
+end, 'StateChanged')
+
 dev:on_properties_changed(function(p, changed)
 	if changed.ActiveAccessPoint ~= nil then
 		setConnectingSSID()

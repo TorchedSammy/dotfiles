@@ -19,6 +19,8 @@ awesome.connect_signal('battery::status', function(status)
 end)
 
 local function checkPercent(percent)
+	if battery.status() == 'None' then return end
+
 	if battery.status() ~= 'Charging' then
 		if percent < 20 and (not lowNotified or not criticalNotified) then
 			battery.setProfile 'powerSave'
