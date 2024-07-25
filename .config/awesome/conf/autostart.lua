@@ -17,8 +17,9 @@ local programs = {
 	'libinput-gestures-setup start',
 	'tym --daemon',
 	'xplugd',
+	'unclutter',
 	[[xss-lock awesome-client "require 'ui.lockscreen'.lock()"]],
-	--'/usr/libexec/polkit-gnome-authentication-agent-1',
+	'/usr/libexec/polkit-gnome-authentication-agent-1 &',
 	string.format('gsettings set org.gnome.desktop.interface color-scheme prefer-%s', beautiful.dark and 'dark' or 'light')
 }
 
@@ -30,7 +31,7 @@ else
 end
 
 for _, p in ipairs(programs) do
-	awful.spawn.easy_async('pgrep ' .. p:match '^%w+', function(output)
+	awful.spawn.easy_async('pgrep ' .. (p:match '^%w+' or p), function(output)
 		if output == '' then
 			awful.spawn.easy_async(p, function() end)
 		end
