@@ -66,20 +66,26 @@ local function updateStats()
 	oldStates.status = state
 end
 
-updateStats()
-battery.on_notify = updateStats
+if battery then
+	updateStats()
+	battery.on_notify = updateStats
+end
 
 function M.status()
+	if not battery then return 'None' end
+
 	if M.percentage() == 100 then return 'Full' end
 
 	return statusNames[battery.state]
 end
 
 function M.percentage()
-	return battery.percentage
+	return battery and battery.percentage or 0
 end
 
 function M.time()
+	if not battery then return '' end
+
 	local state = M.status()
 
 	if state == 'Charging' then

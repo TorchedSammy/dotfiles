@@ -48,21 +48,30 @@ local function new(opts)
 		local time = battery.time()
 		if time ~= '' then time = '\n' .. time end
 		local text = string.format('%d%% on battery%s', battery.percentage(), time)
+		print(state)
+		local percentage = state ~= 'None' and battery.percentage() or 100
+
+		if battery.percentage() <= 15 then
+			batIcon = 'battery-critical'
+		end
 
 		if state == 'Charging' then
 			--batIcon = 'battery-charging'
 			color = beautiful.xcolor2
-		end
-
-		if state == 'Full' then
+		elseif state == 'Full' then
 			text = 'Full'
+		elseif state == 'None' then
+			batIcon = 'battery-none'
 		end
 
-		tt.text = text
+		if state ~= 'None' then
+			tt.text = text
+		end
+	
 		local batteryImg = gears.color.recolor_image(string.format('%s/images/icons/%s.svg', beautiful.config_path, batIcon), color)
 		local img = cairo.ImageSurface.create(cairo.Format.ARGB32, batteryImg:get_width(), batteryImg:get_height())
 		local cr = cairo.Context(img)
-		cr:rectangle(0, batteryImg:get_height() - (batteryImg:get_height() * (battery.percentage() / 100)), batteryImg:get_width(), (batteryImg:get_height() * (battery.percentage() / 100)))
+		cr:rectangle(0, batteryImg:get_height() - (batteryImg:get_height() * (percentage / 100)), batteryImg:get_width(), (batteryImg:get_height() * (percentage / 100)))
 		cr:clip()
 		cr:set_source_surface(batteryImg, 0, 0)
 		cr:paint()
@@ -71,6 +80,8 @@ local function new(opts)
 	end
 	handleBattery()
 	awesome.connect_signal('battery::percentage', handleBattery)
+
+	if battery.status() == 'None' then return nil end
 
 	return wid
 end
