@@ -13,7 +13,7 @@ awful.screen.connect_for_each_screen(function(s)
 			},
 			valign = 'center',
 			halign = 'center',
-			tiled = false,
+			tiled = settings.getConfig 'wallpaper'.home.tiled,
 			widget = wibox.container.tile
 		}
 	}
