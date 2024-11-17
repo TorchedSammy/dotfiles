@@ -1,18 +1,30 @@
 local awful = require 'awful'
 local beautiful = require 'beautiful'
---local gears = require 'gears'
+local gears = require 'gears'
 local wibox = require 'wibox'
 local settings = require 'sys.settings'
 local util = require 'sys.util'
+local startMenu = require 'ui.panels.startMenu'
+local widgetStore = require 'sys.widgetStore'
 
 local bars = settings.getConfig 'bars'
 
 for idx, barSetup in ipairs(bars) do
-	local function moduleWidgets(position)
+	local function moduleWidgets(position, barIdx)
 		local widgets = {}
+		local startMenuActivator = wibox.widget {
+			widget = wibox.widget.imagebox,
+			image = gears.filesystem.get_configuration_dir() .. 'assets/icons/fedora.svg'
+		}
+		startMenuActivator.buttons = {
+			awful.button({}, 1, function()
+				startMenu:toggle(barIdx)
+				--startMenu:toggle()
+			end)
+		}
 		local moduleList = {
-			startMenu = nil, -- TODO
-			time = require 'ui.widget.time' -- TODO
+			startMenu = startMenuActivator,
+			time = require 'ui.widget.time'
 		}
 		for _, moduleName in ipairs(barSetup.modules[position]) do
 			local module = moduleList[moduleName]
@@ -30,8 +42,9 @@ for idx, barSetup in ipairs(bars) do
 			table.unpack(widgets)
 		}
 	end
+	
 
-	local function createBarWidget()
+	local function createBarWidget(idx)
 		return {
 			widget = wibox.container.background,
 			bg = beautiful.barBackground,
@@ -42,9 +55,9 @@ for idx, barSetup in ipairs(bars) do
 				{
 					layout = (barSetup.position == 'bottom' or barSetup.position == 'top')
 					and wibox.layout.align.horizontal or wibox.layout.align.vertical,
-					moduleWidgets 'left',
-					moduleWidgets 'center',
-					moduleWidgets 'right',
+					moduleWidgets('left', idx),
+					moduleWidgets('center', idx),
+					moduleWidgets('right', idx),
 				}
 			}
 		}
@@ -57,10 +70,13 @@ for idx, barSetup in ipairs(bars) do
 				screen = s,
 				position = barSetup.position,
 				height = util.dpi(barSetup.height),
-				bg = '#00000000'
+				bg = '#00000000',
+				margins = {
+					top = barSetup.position == 'bottom' and beautiful.useless_gap
+				}
 			}
 
-			s.bar[idx]:setup(createBarWidget())
+			s.bar[idx]:setup(createBarWidget(idx))
 		end)
 	end
 end
