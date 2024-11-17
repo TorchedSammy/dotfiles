@@ -9,7 +9,7 @@ local coloredText = {mt = {}}
 function coloredText:set_text(text)
 	if not text then return end
 
-	self._private.settext(self, util.colorize_text(text, self._private.color))
+	self._private.settext(self, util.colorizeText(text, self._private.color))
 end
 
 function coloredText:set_color(color)

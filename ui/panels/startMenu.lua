@@ -110,6 +110,11 @@ local function fetchApps()
 									halign = 'left',
 									forced_width = util.dpi(360),
 									forced_height = util.dpi(22),
+									{
+										widget = textbox,
+										color = beautiful.foregroundSecondary,
+										text = app.description
+									}
 								} or nil
 							}
 						}
@@ -138,14 +143,33 @@ fetchApps()
 local startMenu = panels.create {
 	widget = {
 		layout = wibox.layout.fixed.vertical,
-		{
-			widget = titlebar,
+		titlebar {
 			title = 'Apps'
 		},
 		{
 			widget = wibox.container.margin,
 			margins = util.dpi(16),
-			appList
+			{
+				layout = wibox.layout.stack,
+				{
+					layout = wibox.container.place,
+					halign = 'right',
+					forced_width = util.dpi(10),
+					{
+						widget = wibox.container.constraint,
+						width = util.dpi(10),
+						{
+							widget = wibox.container.margin,
+							{
+								widget = wibox.widget.separator,
+								color = beautiful.backgroundTertiary,
+								shape = gears.shape.rounded_bar,
+							}
+						}
+					}
+				},
+				appList
+			}
 		}
 	},
 	height = util.dpi(580),

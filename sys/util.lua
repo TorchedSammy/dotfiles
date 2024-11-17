@@ -11,7 +11,7 @@ function M.rrect(rad)
 	end
 end
 
-function M.colorize_text(text, color)
+function M.colorizeText(text, color)
 	return '<span foreground="' .. color ..'">' .. text .. '</span>'
 end
 

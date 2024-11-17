@@ -1,4 +1,5 @@
 local beautiful = require 'beautiful'
+local gears = require 'gears'
 local settings = require 'sys.settings'
 local palettes = require 'ui.theme.palettes'
 local util = require 'sys.util'
@@ -8,7 +9,9 @@ local palette = palettes[themeSettings.name .. ':' .. themeSettings.type]
 
 local fontName = 'IBM Plex Sans'
 
-beautiful.init {
+beautiful.init(gears.table.crush({
+	accent = palette.color6,
+
 	fontName = fontName,
 	font = fontName .. ' Regular 12',
 
@@ -16,7 +19,7 @@ beautiful.init {
 	radius = 6,
 
 	barBackground = palette.background,
-	panelBackground = palette.shade1,
+	panelBackground = palette.background,
 	
 	useless_gap = util.dpi(6)
-}
+}, palette))
