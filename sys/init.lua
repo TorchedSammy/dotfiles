@@ -1,5 +1,6 @@
 local gfs = require 'gears.filesystem'
 local settings = require 'sys.settings'
+require 'awful.autofocus'
 
 -- Initialize settings stores
 settings.defineType('wallpaper', {
@@ -37,3 +38,8 @@ settings.defineType('bars', {
 		}
 	}
 })
+
+local command = require 'sys.command'
+command.defaults()
+
+require 'sys.keys'
