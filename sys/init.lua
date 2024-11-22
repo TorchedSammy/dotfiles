@@ -43,3 +43,5 @@ local command = require 'sys.command'
 command.defaults()
 
 require 'sys.keys'
+require 'sys.layout'
+require 'sys.client'

@@ -9,6 +9,15 @@ function M.add(args)
 	M.list[args.name] = args
 end
 
+function M.perform(name, ...)
+	local cmd = M.list[name]
+	if cmd then
+		--return pcall(cmd.action)
+		cmd.action(...)
+	else
+		error('attempt to perform unknown command ' .. name)
+	end
+end
 function M.get(name)
 	return M.list[name]
 end

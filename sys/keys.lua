@@ -147,7 +147,7 @@ local function parseKey(keyList)
 			table.insert(modifiers, modifierKey)
 		else
 			local isMouseKey = false
-			if key:match 'mouse' then
+			if key:match '[mM][oO][uU][sS][eE]' then
 				isMouseKey = true
 			end
 			return modifiers, adjustKey[key] or key, isMouseKey
@@ -161,18 +161,33 @@ local clientKeyBinds = {}
 
 for _, def in ipairs(keyDefs) do
 	local modifiers, key, mouse = parseKey(def.key)
+	print(def.key, modifiers, key, mouse)
+	local keyHandler = function(...)
+		local success = command.perform(def.action, ...)
+		print(success)
+	end
+	local awfulKey = awful.key(modifiers, key, keyHandler, {
+		description = def.description or (command.get(def.action) and command.get(def.action) or {}).description,
+		group = def.group
+	})
+
 	if def.group == 'client' then
 		if mouse then
-			table.insert(clientMouseBinds, awful.button(modifiers, key))
+			table.insert(clientMouseBinds, awful.button(modifiers, key, keyHandler))
+		else
+			table.insert(clientKeyBinds, awfulKey)
 		end
 	end
 
 	awful.keyboard.append_global_keybindings {
-		awful.key(modifiers, key, function()
-			local success = command.perform(def.action)
-		end, {
-			description = def.description or (command.get(def.action) and command.get(def.action) or {}).description,
-			group = def.group
-		})
+		awfulKey
 	}
 end
+
+client.connect_signal('request::default_mousebindings', function()
+	awful.mouse.append_client_mousebindings(clientMouseBinds)
+end)
+
+client.connect_signal('request::default_keybindings', function()
+	awful.keyboard.append_client_keybindings(clientKeyBinds)
+end)
