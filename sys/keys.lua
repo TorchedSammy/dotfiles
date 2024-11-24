@@ -117,6 +117,16 @@ settings.defineType('keys', {
 	},
 	{
 		group = 'client',
+		key = 'M-m',
+		action = 'client:maximize'
+	},
+	{
+		group = 'client',
+		key = 'M-n',
+		action = 'client:minimize'
+	},
+	{
+		group = 'client',
 		key = 'M-S-c',
 		action = 'client:close'
 	},
@@ -177,11 +187,11 @@ for _, def in ipairs(keyDefs) do
 		else
 			table.insert(clientKeyBinds, awfulKey)
 		end
+	else
+		awful.keyboard.append_global_keybindings {
+			awfulKey
+		}
 	end
-
-	awful.keyboard.append_global_keybindings {
-		awfulKey
-	}
 end
 
 client.connect_signal('request::default_mousebindings', function()
