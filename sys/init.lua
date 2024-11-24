@@ -45,3 +45,4 @@ command.defaults()
 require 'sys.keys'
 require 'sys.layout'
 require 'sys.client'
+require 'sys.signal'
