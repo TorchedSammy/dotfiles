@@ -5,7 +5,8 @@ local wibox = require 'wibox'
 local settings = require 'sys.settings'
 local util = require 'sys.util'
 local startMenu = require 'ui.panels.startMenu'
-local widgetStore = require 'sys.widgetStore'
+local rubato = require 'libs.rubato'
+local cairo = require 'lgi'.cairo
 
 local bars = settings.getConfig 'bars'
 
@@ -65,18 +66,82 @@ for idx, barSetup in ipairs(bars) do
 
 	if barSetup.screen == 'all' then
 		awful.screen.connect_for_each_screen(function(s)
+			local revealerBar
+			if barSetup.autohide then
+				local revealerHeight = util.dpi(1)
+				local img = cairo.ImageSurface(cairo.Format.A1, s.geometry.width, revealerHeight)
+				img:finish()
+				local revealerBar = awful.wibar {
+					screen = s,
+					position = barSetup.position,
+					height = revealerHeight,
+					bg = '#00000000',
+					restrict_workarea = false,
+					ontop = true,
+					--shape_input = img._native
+				}
+				revealerBar:setup {layout = wibox.container.place}
+			end
+
 			if not s.bar then s.bar = {} end
-			s.bar[idx] = awful.wibar {
+			local bar = awful.wibar {
 				screen = s,
 				position = barSetup.position,
 				height = util.dpi(barSetup.height),
 				bg = '#00000000',
 				margins = {
-					top = barSetup.position == 'bottom' and beautiful.useless_gap
-				}
+					--top = barSetup.position == 'bottom' and beautiful.useless_gap
+				},
+				--restrict_workarea = false
 			}
+			s.bar[idx] = bar
+			bar:setup(createBarWidget(idx))
 
-			s.bar[idx]:setup(createBarWidget(idx))
+			if barSetup.autohide then
+				local hideHeight = bar.y + bar.height
+				local revealHeight = bar.y
+				local barAnimator = rubato.timed {
+					duration = 0.1,
+					rate = 120,
+					override_dt = true,
+					subscribed = function(y)
+						bar.y = y
+						if y == hideHeight then
+							--bar.visible = false
+						end
+					end,
+					pos = bar.y
+				}
+
+				local function showBar()
+					bar.restrict_workarea = true
+					barAnimator.target = revealHeight
+				end
+				local function hideBar()
+					bar.restrict_workarea = false
+					barAnimator.target = hideHeight
+				end
+
+				local hideTimer = gears.timer {
+					autostart = true,
+					timeout = 2,
+					single_shot = true,
+					callback = function()
+						hideBar()
+					end
+				}
+
+				revealerBar:connect_signal('mouse::enter', function()
+					showBar()
+					print 'revealing the details'
+				end)
+				bar:connect_signal('mouse::enter', function()
+					hideTimer:stop()
+				end)
+				bar:connect_signal('mouse::leave', function()
+					hideTimer:start()
+				end)
+			end
 		end)
 	end
 end
