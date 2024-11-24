@@ -24,7 +24,7 @@ settings.defineType('theme', {
 settings.defineType('bars', {
 	{
 		screen = 'all',
-		height = 36,
+		height = 48,
 		position = 'bottom',
 		shape = 'rectangle',
 		modules = {
@@ -33,6 +33,7 @@ settings.defineType('bars', {
 			},
 			center = {},
 			right = {
+				'capslock',
 				'time'
 			}
 		}
