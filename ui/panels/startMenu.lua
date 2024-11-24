@@ -11,6 +11,7 @@ local extrautils = require 'libs.extrautils'()
 local titlebar = require 'ui.widget.titlebar'
 local panels = require 'ui.panels'
 local textbox = require 'ui.widget.textbox'
+local startMenu
 
 --local apps = {}
 local appList = wibox.widget {
@@ -126,6 +127,7 @@ local function fetchApps()
 		appWid.buttons = {
 			awful.button({}, 1, function()
 				--opts.menu:off()
+				startMenu:toggle()
 				app.launch()
 				--resetSearch()
 			end)
@@ -140,7 +142,7 @@ end
 
 fetchApps()
 
-local startMenu = panels.create {
+startMenu = panels.create {
 	widget = {
 		layout = wibox.layout.fixed.vertical,
 		titlebar {
