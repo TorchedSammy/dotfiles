@@ -1,4 +1,5 @@
 local awful = require 'awful'
+local beautiful = require 'beautiful'
 
 tag.connect_signal('request::default_layouts', function()
     awful.layout.append_default_layouts({
@@ -18,6 +19,7 @@ tag.connect_signal('request::default_layouts', function()
     })
 end)
 
-screen.connect_signal('request::desktop_decoration', function()
+awful.screen.connect_for_each_screen(function(s)
 	awful.tag({ '1', '2', '3', '4', '5', '6', '7', '8', '9' }, s, awful.layout.layouts[1])
+	s.padding = beautiful.useless_gap
 end)
