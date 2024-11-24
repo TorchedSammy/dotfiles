@@ -28,7 +28,7 @@ ruled.client.connect_signal('request::rules', function()
 end)
 
 local function restrictHeight(c)
-	if c:geometry().height > c.screen.workarea.height then
+	if c:geometry().height > c.screen.workarea.height and not c.fullscreen then
 		c:geometry {
 			height = c.screen.workarea.height
 		}
