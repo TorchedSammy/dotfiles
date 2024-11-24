@@ -34,4 +34,24 @@ function M.findWidgetInWibox(widget, wb)
 	return bx, by, width, height
 end
 
+local function clamp(component)
+	return math.min(math.max(component, 0), 255)
+end
+
+function M.invertColor(color, bw)
+	local num = tonumber(color:sub(2), 16)
+	local r = math.floor(num / 0x10000)
+	local g = (math.floor(num / 0x100) % 0x100)
+	local b = (num % 0x100)
+
+	if bw then
+		return (r * 0.299 + g * 0.587 + b * 0.114) > 186 and '#000000' or '#ffffff'
+	end
+
+	r = 0xff - math.floor(num / 0x10000)
+	g = 0xff - (math.floor(num / 0x100) % 0x100)
+	b = 0xff - (num % 0x100)
+
+	return string.format('%#x', clamp(r) * 0x10000 + clamp(g) * 0x100 + clamp(b)):gsub('0x', '#')
+end
 return M
