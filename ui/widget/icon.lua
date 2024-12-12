@@ -28,7 +28,7 @@ function icon:set_color(color)
 		* {
 			fill: %s;
 		}
-	]], beautiful[color])
+	]], util.beautyVar(color))
 	self._private.imagebox:emit_signal 'widget::redraw_needed'
 end
 
@@ -41,6 +41,11 @@ function icon:set_size(size)
 	self.width = size
 end
 
+function icon:fit(ctx, w, h)
+	local m = math.min(w, h)
+	return m
+end
+
 local function new(ico, args)
 	if type(ico) == 'string' then
 		args.icon = ico
@@ -50,7 +55,7 @@ local function new(ico, args)
 	args.size = args.size or util.dpi(18)
 
 	local ib = imagebox()
-	local ret = place(constraint(ib, args.size_strategy or 'exact', args.size, args.size))
+	local ret = place(ib)
 	gtable.crush(ret, icon, true)
 
 	ret._private.imagebox = ib

@@ -54,4 +54,15 @@ function M.invertColor(color, bw)
 
 	return string.format('%#x', clamp(r) * 0x10000 + clamp(g) * 0x100 + clamp(b)):gsub('0x', '#')
 end
+
+function M.beautyVar(var)
+	local beautiful = require 'beautiful'
+
+	if type(var) == 'string' then
+		return var:match '^#' and var or beautiful[var]
+	end
+
+	return var
+end
+
 return M

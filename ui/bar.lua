@@ -6,6 +6,7 @@ local settings = require 'sys.settings'
 local util = require 'sys.util'
 local startMenu = require 'ui.panels.startMenu'
 local rubato = require 'libs.rubato'
+local icon = require 'ui.widget.icon'
 local cairo = require 'lgi'.cairo
 
 local bars = settings.getConfig 'bars'
@@ -13,9 +14,9 @@ local bars = settings.getConfig 'bars'
 for idx, barSetup in ipairs(bars) do
 	local function moduleWidgets(position, barIdx)
 		local widgets = {}
-		local startMenuActivator = wibox.widget {
-			widget = wibox.widget.imagebox,
-			image = gears.filesystem.get_configuration_dir() .. 'assets/icons/fedora.svg'
+		local startMenuActivator = icon {
+			icon = 'fedora',
+			color = beautiful.accent
 		}
 		startMenuActivator.buttons = {
 			awful.button({}, 1, function()
