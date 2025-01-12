@@ -8,7 +8,7 @@ local icon = require 'ui.widget.icon'
 
 local button = {mt = {}}
 local defaults = {
-	size = beautiful.dpi(18),
+	size = util.dpi(18),
 	size_strategy = 'exact'
 }
 
@@ -41,29 +41,29 @@ local function new(args)
 		widget = wibox.widget.textbox,
 		--markup = helpers.colorize_text(args.text or '', helpers.beautyVar(args.textColor or args.color or 'fg_normal')),
 		markup = util.colorizeText(args.text or '', args.textColor or beautiful.foreground),
-		font = args.font or beautiful.font .. ' 14',
+		--font = args.font or beautiful.font .. ' 14',
 		valign = 'center'
 	}
 
 	local ret = wibox.widget {
 		layout = wibox.widget.constraint,
 		--height = args.size,
-		strategy = 'exact',
+		--strategy = 'exact',
 		{
 			id = 'bg',
 			--widget = makeup.putOn(background, {bg = args.bg}, {wibox = args.parentWibox}),
-			widget = wibox.widget.background,
+			widget = wibox.container.background,
 			--shape = args.shape or (args.text and helpers.rrect(6) or gears.shape.circle),
 			shape = gears.shape.circle,
 			{
 				widget = wibox.container.margin,
-				margins = args.margin or args.margins or beautiful.dpi(2),
+				margins = args.margin or args.margins or util.dpi(2),
 				{
 					layout = wibox.container.place,
 					halign = args.align or 'center',
 					{
 						layout = wibox.layout.fixed.horizontal,
-						--spacing = beautiful.dpi(4),
+						--spacing = util.dpi(4),
 						ico,
 						text,
 					}

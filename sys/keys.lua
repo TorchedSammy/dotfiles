@@ -172,6 +172,7 @@ local clientKeyBinds = {}
 for _, def in ipairs(keyDefs) do
 	local modifiers, key, mouse = parseKey(def.key)
 	local keyHandler = function(...)
+		print(def.action)
 		local success = command.perform(def.action, ...)
 		print(success)
 	end

@@ -83,10 +83,16 @@ function M.create(args)
 
 		panel.open = not panel.open
 		if panel.open then
+			if panel.manage then
+				panel:manage(panel.open)
+			end
 			animator.target = revealHeight
 			panel.visible = true
 		else
 			animator.target = hideHeight
+			if panel.manage then
+				panel:manage(panel.open)
+			end
 		end
 	end
 
